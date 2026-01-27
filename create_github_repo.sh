@@ -27,8 +27,8 @@ fi
 gh repo create $REPO_NAME \
     --description "$DESCRIPTION" \
     $(if [ "$PRIVATE" = true ]; then echo "--private"; else echo "--public"; fi) \
-    --remote=origin \
-    --push
+    --source=. \
+    --remote=origin
 
 if [ $? -eq 0 ]; then
     echo ""
