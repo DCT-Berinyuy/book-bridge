@@ -1,0 +1,194 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:book_bridge/core/error/exceptions.dart';
+import 'package:book_bridge/features/auth/data/models/user_model.dart';
+
+/// Data source for authentication operations using Supabase.
+///
+/// This class handles all authentication-related API calls to Supabase,
+/// including sign-up, sign-in, sign-out, and fetching user profiles.
+class SupabaseAuthDataSource {
+  final SupabaseClient supabaseClient;
+
+  SupabaseAuthDataSource({required this.supabaseClient});
+
+  /// Signs up a new user with email and password.
+  ///
+  /// Throws [AuthAppException] if the sign-up fails.
+  Future<UserModel> signUp({
+    required String email,
+    required String password,
+    required String fullName,
+    required String locality,
+  }) async {
+    try {
+      // Sign up with Supabase Auth
+      final authResponse = await supabaseClient.auth.signUp(
+        email: email,
+        password: password,
+        data: {'full_name': fullName, 'locality': locality},
+      );
+
+      final userId = authResponse.user?.id;
+      if (userId == null) {
+        throw AuthAppException(message: 'Failed to create user');
+      }
+
+      // Profile is created automatically by database trigger via metadata.
+      // We poll for the profile to ensure the trigger has completed.
+      return await _waitForProfileCreation(userId);
+    } on AuthException catch (e) {
+      if (e.statusCode == '429' ||
+          e.message.contains('rate limit') ||
+          e.code == 'over_email_send_rate_limit') {
+        throw AuthAppException(
+          message:
+              'Too many attempts. Please check your email inbox or wait a minute before trying again.',
+        );
+      }
+      throw AuthAppException(message: e.message);
+    } on AuthAppException {
+      rethrow;
+    } on PostgrestException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
+
+  /// Signs in a user with email and password.
+  ///
+  /// Throws [AuthAppException] if the sign-in fails.
+  Future<UserModel> signIn({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final authResponse = await supabaseClient.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      final userId = authResponse.user?.id;
+      if (userId == null) {
+        throw AuthAppException(message: 'Failed to sign in');
+      }
+
+      // Fetch and return the user profile
+      return _fetchUserProfile(userId);
+    } on AuthException catch (e) {
+      throw AuthAppException(message: e.message);
+    } on AuthAppException {
+      rethrow;
+    } on PostgrestException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw AuthAppException(message: e.toString());
+    }
+  }
+
+  /// Signs out the currently authenticated user.
+  ///
+  /// Throws [AuthAppException] if the sign-out fails.
+  Future<void> signOut() async {
+    try {
+      await supabaseClient.auth.signOut();
+    } catch (e) {
+      throw AuthAppException(message: 'Failed to sign out: ${e.toString()}');
+    }
+  }
+
+  /// Retrieves the profile of the currently authenticated user.
+  ///
+  /// Throws [UserNotFoundException] if no user is authenticated.
+  /// Throws [NotFoundException] if the user profile does not exist.
+  Future<UserModel> getCurrentUserProfile() async {
+    try {
+      final user = supabaseClient.auth.currentUser;
+      if (user == null) {
+        throw UserNotFoundException(
+          message: 'No user is currently authenticated',
+        );
+      }
+
+      return _fetchUserProfile(user.id);
+    } on UserNotFoundException {
+      rethrow;
+    } on NotFoundException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
+
+  /// Streams authentication state changes.
+  ///
+  /// Emits [UserModel] when a user signs in/up and null when they sign out.
+  Stream<UserModel?> authStateChanges() {
+    return supabaseClient.auth.onAuthStateChange.asyncMap((event) async {
+      if (event.session?.user != null) {
+        try {
+          return await _fetchUserProfile(event.session!.user.id);
+        } catch (e) {
+          return null;
+        }
+      }
+      return null;
+    });
+  }
+
+  /// Fetches a user's profile from the profiles table.
+  ///
+  /// Private helper method used internally.
+  Future<UserModel> _fetchUserProfile(String userId) async {
+    try {
+      final response = await supabaseClient
+          .from('profiles')
+          .select()
+          .eq('id', userId)
+          .single();
+
+      // Get the user from auth - this might be null immediately after sign-up
+      // so we'll use the userId and email from the response if needed
+      final user = supabaseClient.auth.currentUser;
+
+      // Combine auth user data with profile data
+      final profileData = response;
+      profileData['id'] = userId;
+      profileData['email'] = user?.email ?? response['email'] ?? '';
+      profileData['created_at'] = user?.createdAt is DateTime
+          ? (user!.createdAt as DateTime).toIso8601String()
+          : response['created_at']?.toString() ??
+                DateTime.now().toIso8601String();
+
+      return UserModel.fromJson(profileData);
+    } on PostgrestException catch (e) {
+      if (e.code == 'PGRST116') {
+        throw NotFoundException(message: 'User profile not found');
+      }
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
+
+  /// Polls for the user profile creation (waits for DB trigger).
+  Future<UserModel> _waitForProfileCreation(String userId) async {
+    int attempts = 0;
+    while (attempts < 5) {
+      try {
+        return await _fetchUserProfile(userId);
+      } catch (e) {
+        // If it's a "Not Found" error (PGRST116 handled in _fetchUserProfile as NotFoundException), wait and retry
+        if (e is NotFoundException ||
+            (e is ServerException && e.message.contains('not found'))) {
+          attempts++;
+          if (attempts >= 5) rethrow; // Give up after 5 attempts
+          await Future.delayed(const Duration(milliseconds: 500));
+        } else {
+          rethrow; // Propagate other errors immediately
+        }
+      }
+    }
+    throw ServerException(message: 'Timeout waiting for profile creation');
+  }
+}
