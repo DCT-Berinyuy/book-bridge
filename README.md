@@ -249,6 +249,16 @@ Contributions are welcome! Please follow these guidelines:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 📸 Screenshots
+
+Here are some screenshots of the BookBridge app:
+
+<div align="center">
+  <img src="assets/sreenshots/screenshot1.png" alt="Screenshot 1" width="30%">
+  <img src="assets/sreenshots/screenshot2.png" alt="Screenshot 2" width="30%">
+  <img src="assets/sreenshots/screenshot3.png" alt="Screenshot 3" width="30%">
+</div>
+
 ## 🙏 Acknowledgments
 
 - Flutter and Dart communities
