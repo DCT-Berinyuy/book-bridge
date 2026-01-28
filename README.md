@@ -7,6 +7,17 @@
 
 A peer-to-peer marketplace for Cameroonian students to buy and sell used physical books. Built with Flutter and powered by Supabase, BookBridge connects students locally to simplify the process of finding affordable books and monetizing used collections.
 
+## 📸 Screenshots
+
+Here are some screenshots of the BookBridge app:
+
+<div align="center">
+  <img src="assets/sreenshots/screenshot1.png" alt="Screenshot 1" width="30%">
+  <img src="assets/sreenshots/screenshot2.png" alt="Screenshot 2" width="30%">
+  <img src="assets/sreenshots/screenshot3.png" alt="Screenshot 3" width="30%">
+</div>
+
+
 ## 🌟 Features
 
 ### Core Functionality
