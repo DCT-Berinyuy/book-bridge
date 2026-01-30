@@ -1,69 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// App theme configuration for BookBridge.
 ///
 /// This class provides a centralized theme setup for the application,
-/// following the minimalist, dark-themed design specifications.
+/// following the "Knowledge & Trust" visual identity.
 class AppTheme {
   // Private constructor to prevent instantiation
   AppTheme._();
 
-  // Color palette
-  static const Color _background = Color(0xFF102216); // Background dark
-  static const Color _surface = Color(0xFF1C271F); // Surface dark
-  static const Color _primary = Color(0xFF13EC5B); // Primary green
-  static const Color _onBackground = Color(0xFFFFFFFF);
-  static const Color _onSurface = Color(0xFFE0E0E0);
-  static const Color _surfaceVariant = Color(
-    0xFF1A2E20,
-  ); // Surface dark variant
-  static const Color _divider = Color(0xFF28392E); // Border dark
-  static const Color _lightGray = Color(
-    0xFF9DB9A6,
-  ); // Light gray for secondary text
+  // "Knowledge & Trust" Palette
+  static const Color _scholarBlue = Color(0xFF1A4D8C); // Trust, stability
+  static const Color _bridgeOrange = Color(0xFFF2994A); // Action, energy
+  static const Color _growthGreen = Color(0xFF27AE60); // Impact, growth
+  static const Color _paperWhite = Color(0xFFF9F9F9); // Clean, accessible
+  static const Color _inkBlack = Color(0xFF2D3436); // Readability
+  static const Color _surface = Color(0xFFFFFFFF);
+  static const Color _divider = Color(0xFFE0E0E0);
+  static const Color _lightGray = Color(0xFF95A5A6);
 
-  /// Returns the dark theme for BookBridge.
-  ///
-  /// Features:
-  /// - Background: #102216 (dark green)
-  /// - Surface: #1C271F (darker green)
-  /// - Primary Accent: #13EC5B (bright green)
-  /// - Text colors optimized for dark backgrounds
-  static ThemeData get darkTheme {
+  /// Returns the light theme for BookBridge.
+  static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
+      brightness: Brightness.light,
       // Color scheme
-      colorScheme: const ColorScheme.dark(
+      colorScheme: ColorScheme.light(
         surface: _surface,
-        primary: _primary,
-        onSurface: _onSurface,
-        error: Color(0xFFE85D5D), // Soft red for errors
-        // background: _background, // Deprecated, mapped to surface usually, or let it fallback
-        surfaceContainerHighest: _surfaceVariant,
+        primary: _scholarBlue,
+        secondary: _bridgeOrange,
+        tertiary: _growthGreen,
+        onSurface: _inkBlack,
+        onPrimary: Colors.white,
+        error: const Color(0xFFE74C3C),
+        surfaceContainerHighest: _paperWhite,
         outline: _divider,
       ),
       // Scaffold background
-      scaffoldBackgroundColor: _background,
+      scaffoldBackgroundColor: _paperWhite,
       // AppBar theme
-      appBarTheme: const AppBarTheme(
-        backgroundColor: _background,
-        foregroundColor: _onSurface,
+      appBarTheme: AppBarTheme(
+        backgroundColor: _scholarBlue,
+        foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: TextStyle(
-          color: _onSurface,
+        titleTextStyle: GoogleFonts.montserrat(
+          color: Colors.white,
           fontSize: 20,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
       ),
       // Card theme
       cardTheme: CardThemeData(
         color: _surface,
-        elevation: 0,
+        elevation: 2,
+        shadowColor: Colors.black.withValues(alpha: 0.1),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
-      // Input decoration theme (for text fields)
+      // Input decoration theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: _surface,
@@ -73,91 +67,104 @@ class AppTheme {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderSide: const BorderSide(color: _divider),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderSide: const BorderSide(color: _divider),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: _primary, width: 2),
+          borderSide: const BorderSide(color: _scholarBlue, width: 2),
         ),
-        hintStyle: TextStyle(color: _lightGray, fontSize: 14),
-        labelStyle: TextStyle(color: _primary, fontSize: 14),
+        hintStyle: GoogleFonts.inter(color: _lightGray, fontSize: 14),
+        labelStyle: GoogleFonts.inter(color: _scholarBlue, fontSize: 14),
       ),
       // Button themes
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: _primary,
-          foregroundColor: Colors.black,
+          backgroundColor: _bridgeOrange,
+          foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+          textStyle: GoogleFonts.montserrat(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
+          elevation: 0,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: _primary,
-          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+          foregroundColor: _scholarBlue,
+          textStyle: GoogleFonts.inter(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: _primary,
-          side: const BorderSide(color: _primary, width: 1.5),
+          foregroundColor: _scholarBlue,
+          side: const BorderSide(color: _scholarBlue, width: 1.5),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+          textStyle: GoogleFonts.montserrat(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
       // Text themes
-      textTheme: const TextTheme(
-        displayLarge: TextStyle(
-          color: _onBackground,
+      textTheme: TextTheme(
+        displayLarge: GoogleFonts.montserrat(
+          color: _inkBlack,
           fontSize: 32,
           fontWeight: FontWeight.bold,
         ),
-        displayMedium: TextStyle(
-          color: _onBackground,
+        displayMedium: GoogleFonts.montserrat(
+          color: _inkBlack,
           fontSize: 28,
           fontWeight: FontWeight.bold,
         ),
-        displaySmall: TextStyle(
-          color: _onBackground,
+        displaySmall: GoogleFonts.montserrat(
+          color: _inkBlack,
           fontSize: 24,
           fontWeight: FontWeight.bold,
         ),
-        headlineMedium: TextStyle(
-          color: _onBackground,
+        headlineMedium: GoogleFonts.montserrat(
+          color: _inkBlack,
           fontSize: 20,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
-        headlineSmall: TextStyle(
-          color: _onBackground,
+        headlineSmall: GoogleFonts.montserrat(
+          color: _inkBlack,
           fontSize: 18,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
-        titleLarge: TextStyle(
-          color: _onBackground,
+        titleLarge: GoogleFonts.montserrat(
+          color: _inkBlack,
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
-        bodyLarge: TextStyle(color: _onSurface, fontSize: 16),
-        bodyMedium: TextStyle(color: _onSurface, fontSize: 14),
-        bodySmall: TextStyle(color: _lightGray, fontSize: 12),
-        labelLarge: TextStyle(
-          color: _primary,
+        bodyLarge: GoogleFonts.inter(color: _inkBlack, fontSize: 16),
+        bodyMedium: GoogleFonts.inter(color: _inkBlack, fontSize: 14),
+        bodySmall: GoogleFonts.inter(color: _lightGray, fontSize: 12),
+        labelLarge: GoogleFonts.inter(
+          color: _scholarBlue,
           fontSize: 14,
           fontWeight: FontWeight.w600,
         ),
       ),
       // Icon theme
-      iconTheme: const IconThemeData(color: _onSurface, size: 24),
+      iconTheme: const IconThemeData(color: _scholarBlue, size: 24),
     );
   }
+
+  // Keep darkTheme for now but it's not the primary identity
+  static ThemeData get darkTheme => lightTheme; // For transition
 }

@@ -222,17 +222,17 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                       margin: const EdgeInsets.only(bottom: 16),
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.blue.withValues(alpha: 0.1),
+                        color: const Color(0xFF27AE60).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: Colors.blue.withValues(alpha: 0.3),
+                          color: const Color(0xFF27AE60).withValues(alpha: 0.3),
                         ),
                       ),
-                      child: Row(
+                      child: const Row(
                         children: [
-                          const Icon(Icons.recycling, color: Colors.blue),
-                          const SizedBox(width: 12),
-                          const Expanded(
+                          Icon(Icons.recycling, color: Color(0xFF27AE60)),
+                          SizedBox(width: 12),
+                          Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -241,7 +241,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.blue,
+                                    color: Color(0xFF27AE60),
                                   ),
                                 ),
                                 Text(
@@ -277,7 +277,20 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                               listing.author,
                               style: const TextStyle(
                                 fontSize: 18,
-                                color: Color(0xFF9DB9A6), // Light gray
+                                color: Color(0xFF95A5A6),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              listing.sellerType == 'individual'
+                                  ? 'This student is selling to fund their next semester.'
+                                  : listing.sellerType == 'bookshop'
+                                  ? 'A verified local bookshop supporting the community.'
+                                  : 'Direct from the author. Supporting local creativity.',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Color(0xFF2D3436), // Ink Black
+                                height: 1.4,
                               ),
                             ),
                           ],
@@ -290,13 +303,13 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF13EC5B),
+                            color: const Color(0xFF1A4D8C),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
                             listing.sellerType.toUpperCase(),
                             style: const TextStyle(
-                              color: Colors.black,
+                              color: Colors.white,
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),
@@ -318,15 +331,8 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.primary.withValues(alpha: 0.3),
+                          color: const Color(0xFFF2994A).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(24),
-                          border: Border.all(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primary.withValues(alpha: 0.3),
-                          ),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -334,15 +340,15 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                             const Icon(
                               Icons.payments,
                               size: 20,
-                              color: Color(0xFF13EC5B), // Primary green
+                              color: Color(0xFFF2994A),
                             ),
                             const SizedBox(width: 4),
                             Text(
                               '${listing.priceFcfa} FCFA',
                               style: const TextStyle(
-                                fontSize: 12,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w700,
-                                color: Color(0xFF13EC5B), // Primary green
+                                color: Color(0xFFF2994A),
                               ),
                             ),
                           ],
@@ -360,30 +366,13 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                             context,
                           ).colorScheme.surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(24),
-                          border: Border.all(
-                            color: Theme.of(
-                              context,
-                            ).dividerColor.withValues(alpha: 0.3),
-                          ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.check_circle,
-                              size: 20,
-                              color: Color(0xFF9DB9A6), // Light gray
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              listing.condition,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
+                        child: Text(
+                          listing.condition.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                     ],
@@ -463,7 +452,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                                     : listing.sellerType == 'author'
                                     ? Icons.history_edu
                                     : Icons.person,
-                                color: const Color(0xFF13EC5B), // Primary green
+                                color: const Color(0xFF1A4D8C), // Primary green
                               ),
                             ),
                             const SizedBox(width: 16),
@@ -562,26 +551,19 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
           SizedBox(
             width: double.infinity,
             height: 56,
-            child: ElevatedButton(
+            child: ElevatedButton.icon(
               onPressed: () => _contactSeller(listing.sellerWhatsapp ?? ''),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF13EC5B), // Primary green
-                foregroundColor: Colors.black,
+                backgroundColor: const Color(0xFFF2994A), // Bridge Orange
+                foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                padding: EdgeInsets.zero,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.chat),
-                  const SizedBox(width: 8),
-                  const Text(
-                    'Contact on WhatsApp',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                  ),
-                ],
+              icon: const Icon(Icons.chat_bubble),
+              label: const Text(
+                'Contact Seller via WhatsApp',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
             ),
           ),

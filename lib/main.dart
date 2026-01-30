@@ -67,7 +67,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         title: 'BookBridge: Social Venture',
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.darkTheme,
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
         routerConfig: appRouter,
       ),
     );

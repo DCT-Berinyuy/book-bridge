@@ -101,7 +101,7 @@ class _SellScreenState extends State<SellScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Listing created successfully!'),
-                    backgroundColor: Color(0xFF13EC5B), // Primary green
+                    backgroundColor: const Color(0xFF1A4D8C), // Primary green
                     duration: Duration(seconds: 2),
                   ),
                 );
@@ -428,7 +428,7 @@ class _SellScreenState extends State<SellScreen> {
                     ),
                     value: viewModel.isBuyBackEligible,
                     onChanged: viewModel.setIsBuyBackEligible,
-                    activeColor: const Color(0xFF13EC5B),
+                    activeColor: const Color(0xFF1A4D8C),
                   ),
                   const SizedBox(height: 16),
                   // Stock Count (for non-individuals)
@@ -504,10 +504,10 @@ class _SellScreenState extends State<SellScreen> {
                               }
                             },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor: Theme.of(
-                          context,
-                        ).colorScheme.onPrimary,
+                        backgroundColor: const Color(
+                          0xFF1A4D8C,
+                        ), // Scholar Blue
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -517,7 +517,10 @@ class _SellScreenState extends State<SellScreen> {
                           ? const SizedBox(
                               height: 20,
                               width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
                             )
                           : const Text(
                               'Post Listing',

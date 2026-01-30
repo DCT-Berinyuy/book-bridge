@@ -114,12 +114,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: const Color(0xFF13EC5B), // Primary green
+                            color: const Color(0xFF1A4D8C), // Primary green
                             width: 4,
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF13EC5B).withValues(
+                              color: const Color(0xFF1A4D8C).withValues(
                                 alpha: 0.2,
                               ), // Primary green with opacity
                               blurRadius: 16,

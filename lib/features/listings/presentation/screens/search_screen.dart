@@ -42,7 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       children: [
                         const Icon(
                           Icons.menu_book,
-                          color: Color(0xFF13EC5B), // Primary green
+                          color: const Color(0xFF1A4D8C), // Primary green
                         ),
                         const SizedBox(width: 8),
                         const Text(
