@@ -28,6 +28,9 @@ class SellViewModel extends ChangeNotifier {
   String _condition = 'good';
   String? _imageUrl;
   String? _description;
+  String _sellerType = 'individual';
+  bool _isBuyBackEligible = false;
+  int _stockCount = 1;
 
   SellViewModel({required this.createListingUseCase, required this.repository});
 
@@ -43,6 +46,9 @@ class SellViewModel extends ChangeNotifier {
   String get condition => _condition;
   String? get imageUrl => _imageUrl;
   String? get description => _description;
+  String get sellerType => _sellerType;
+  bool get isBuyBackEligible => _isBuyBackEligible;
+  int get stockCount => _stockCount;
 
   /// Updates the title field.
   void setTitle(String title) {
@@ -80,6 +86,24 @@ class SellViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Updates the seller type field.
+  void setSellerType(String sellerType) {
+    _sellerType = sellerType;
+    notifyListeners();
+  }
+
+  /// Updates the buy-back eligibility field.
+  void setIsBuyBackEligible(bool isBuyBackEligible) {
+    _isBuyBackEligible = isBuyBackEligible;
+    notifyListeners();
+  }
+
+  /// Updates the stock count field.
+  void setStockCount(int stockCount) {
+    _stockCount = stockCount;
+    notifyListeners();
+  }
+
   /// Resets the form to initial state.
   void resetForm() {
     _title = null;
@@ -88,6 +112,9 @@ class SellViewModel extends ChangeNotifier {
     _condition = 'good';
     _imageUrl = null;
     _description = null;
+    _sellerType = 'individual';
+    _isBuyBackEligible = false;
+    _stockCount = 1;
     _sellState = SellState.initial;
     _errorMessage = null;
     _createdListing = null;
@@ -150,6 +177,9 @@ class SellViewModel extends ChangeNotifier {
       condition: _condition,
       imageUrl: _imageUrl!,
       description: _description,
+      sellerType: _sellerType,
+      isBuyBackEligible: _isBuyBackEligible,
+      stockCount: _stockCount,
     );
 
     final result = await createListingUseCase(params);

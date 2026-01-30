@@ -99,4 +99,12 @@ class ProfileViewModel extends ChangeNotifier {
       },
     );
   }
+
+  /// Removes a listing by its ID.
+  ///
+  /// Used to hide broken listings dynamically.
+  void removeListingById(String id) {
+    _userListings.removeWhere((l) => l.id == id);
+    notifyListeners();
+  }
 }

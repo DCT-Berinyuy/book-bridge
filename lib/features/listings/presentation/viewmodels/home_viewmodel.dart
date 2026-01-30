@@ -92,6 +92,14 @@ class HomeViewModel extends ChangeNotifier {
     await _fetchListings(offset: _currentOffset + _pageSize);
   }
 
+  /// Removes a listing by its ID.
+  ///
+  /// Used to hide broken listings dynamically.
+  void removeListingById(String id) {
+    _listings.removeWhere((l) => l.id == id);
+    notifyListeners();
+  }
+
   /// Clears the error message.
   void clearError() {
     _errorMessage = null;

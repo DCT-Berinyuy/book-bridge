@@ -128,6 +128,9 @@ class SupabaseListingsDataSource {
     required String condition,
     required String imageUrl,
     String? description,
+    String sellerType = 'individual',
+    bool isBuyBackEligible = false,
+    int stockCount = 1,
   }) async {
     try {
       final userId = supabaseClient.auth.currentUser?.id;
@@ -147,6 +150,9 @@ class SupabaseListingsDataSource {
             'seller_id': userId,
             'status': 'available',
             'created_at': DateTime.now().toIso8601String(),
+            'seller_type': sellerType,
+            'is_buy_back_eligible': isBuyBackEligible,
+            'stock_count': stockCount,
           })
           .select()
           .single();

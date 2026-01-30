@@ -70,12 +70,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   // Title
                   const Text(
-                    'Join BookBridge',
+                    'Join the Mission',
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Buy and sell used textbooks within your campus community.',
+                    'Connecting students, authors, and bookshops to end learning poverty.',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
@@ -290,11 +290,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(
-                                0xFF13EC5B,
-                              ), // Primary green
-                              foregroundColor: const Color(
-                                0xFF0A0C0A,
-                              ), // Background dark
+                                0xFF1A4D8C,
+                              ), // Scholar Blue
+                              foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -332,7 +330,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF13EC5B), // Primary green
+                          color: const Color(0xFF1A4D8C), // Scholar Blue
                         ),
                       ),
                       const SizedBox(height: 24),
@@ -354,7 +352,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF13EC5B), // Primary green
+                            color: Color(0xFF1A4D8C), // Scholar Blue
                           ),
                         ),
                       ),
@@ -366,7 +364,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: 96,
                         height: 4,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF13EC5B).withValues(
+                          color: const Color(0xFF1A4D8C).withValues(
                             alpha: 0.2,
                           ), // Primary green with opacity
                           borderRadius: BorderRadius.circular(2),

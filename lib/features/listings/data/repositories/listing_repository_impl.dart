@@ -92,6 +92,9 @@ class ListingRepositoryImpl implements ListingRepository {
     required String condition,
     required String imageUrl,
     String? description,
+    String sellerType = 'individual',
+    bool isBuyBackEligible = false,
+    int stockCount = 1,
   }) async {
     try {
       final listingModel = await dataSource.createListing(
@@ -101,6 +104,9 @@ class ListingRepositoryImpl implements ListingRepository {
         condition: condition,
         imageUrl: imageUrl,
         description: description,
+        sellerType: sellerType,
+        isBuyBackEligible: isBuyBackEligible,
+        stockCount: stockCount,
       );
       return Right(listingModel.toEntity());
     } on ServerException catch (e) {

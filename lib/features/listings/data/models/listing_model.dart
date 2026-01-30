@@ -16,6 +16,9 @@ class ListingModel extends Listing {
     required super.sellerId,
     required super.status,
     required super.createdAt,
+    super.sellerType = 'individual',
+    super.isBuyBackEligible = false,
+    super.stockCount = 1,
     super.sellerName,
     super.sellerLocality,
     super.sellerWhatsapp,
@@ -39,6 +42,9 @@ class ListingModel extends Listing {
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'] as String)
           : DateTime.now(),
+      sellerType: json['seller_type'] as String? ?? 'individual',
+      isBuyBackEligible: json['is_buy_back_eligible'] as bool? ?? false,
+      stockCount: json['stock_count'] as int? ?? 1,
       sellerName:
           (json['profiles'] as Map<String, dynamic>?)?['full_name'] as String?,
       sellerLocality:
@@ -64,6 +70,9 @@ class ListingModel extends Listing {
       'seller_id': sellerId,
       'status': status,
       'created_at': createdAt.toIso8601String(),
+      'seller_type': sellerType,
+      'is_buy_back_eligible': isBuyBackEligible,
+      'stock_count': stockCount,
     };
   }
 
@@ -80,6 +89,9 @@ class ListingModel extends Listing {
       sellerId: listing.sellerId,
       status: listing.status,
       createdAt: listing.createdAt,
+      sellerType: listing.sellerType,
+      isBuyBackEligible: listing.isBuyBackEligible,
+      stockCount: listing.stockCount,
       sellerName: listing.sellerName,
       sellerLocality: listing.sellerLocality,
       sellerWhatsapp: listing.sellerWhatsapp,
@@ -99,6 +111,9 @@ class ListingModel extends Listing {
       sellerId: sellerId,
       status: status,
       createdAt: createdAt,
+      sellerType: sellerType,
+      isBuyBackEligible: isBuyBackEligible,
+      stockCount: stockCount,
       sellerName: sellerName,
       sellerLocality: sellerLocality,
       sellerWhatsapp: sellerWhatsapp,

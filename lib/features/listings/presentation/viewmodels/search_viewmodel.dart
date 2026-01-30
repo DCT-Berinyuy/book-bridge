@@ -82,4 +82,12 @@ class SearchViewModel extends ChangeNotifier {
     _isSearching = false;
     notifyListeners();
   }
+
+  /// Removes a listing by its ID.
+  ///
+  /// Used to hide broken listings dynamically.
+  void removeListingById(String id) {
+    _searchResults.removeWhere((l) => l.id == id);
+    notifyListeners();
+  }
 }

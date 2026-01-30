@@ -67,30 +67,35 @@ class _SignInScreenState extends State<SignInScreen> {
                     children: [
                       DecoratedBox(
                         decoration: BoxDecoration(
-                          color: Color(0xFF13EC5B), // Primary green
+                          color: Color(0xFF1A4D8C), // Scholar Blue
                           shape: BoxShape.circle,
                         ),
                         child: Padding(
                           padding: EdgeInsets.all(12.0),
                           child: Icon(
                             Icons.menu_book,
-                            color: Colors.black,
+                            color: Color(0xFF2D3436),
                             size: 32,
                           ),
                         ),
                       ),
                       SizedBox(height: 16),
                       Text(
-                        'Welcome to BookBridge',
+                        'BookBridge: Knowledge for All',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
+                          color: Color(0xFF2D3436), // Ink Black
                         ),
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'Buy and sell used books in FCFA',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                        'Democratizing access to affordable books in Cameroon.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF95A5A6),
+                        ),
                       ),
                     ],
                   ),
@@ -114,7 +119,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               children: [
                                 const Icon(
                                   Icons.error_outline,
-                                  color: Colors.white,
+                                  color: Color(0xFF2D3436),
                                   size: 20,
                                 ),
                                 const SizedBox(width: 12),
@@ -122,7 +127,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   child: Text(
                                     authViewModel.errorMessage!,
                                     style: const TextStyle(
-                                      color: Colors.white,
+                                      color: Color(0xFF2D3436),
                                       fontSize: 14,
                                     ),
                                   ),
@@ -139,7 +144,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: Colors.white,
+                            color: Color(0xFF2D3436),
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -180,7 +185,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: Colors.white,
+                            color: Color(0xFF2D3436),
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -226,7 +231,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                color: Color(0xFF13EC5B), // Primary green
+                                color: const Color(0xFF1A4D8C), // Scholar Blue
                               ),
                             ),
                           ),
@@ -259,9 +264,9 @@ class _SignInScreenState extends State<SignInScreen> {
                                   },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(
-                                0xFF13EC5B,
-                              ), // Primary green
-                              foregroundColor: Colors.black,
+                                0xFF1A4D8C,
+                              ), // Scholar Blue
+                              foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),

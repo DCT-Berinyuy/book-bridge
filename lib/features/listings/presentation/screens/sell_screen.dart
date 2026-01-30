@@ -101,7 +101,7 @@ class _SellScreenState extends State<SellScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Listing created successfully!'),
-                    backgroundColor: Color(0xFF13EC5B), // Primary green
+                    backgroundColor: const Color(0xFF1A4D8C), // Primary green
                     duration: Duration(seconds: 2),
                   ),
                 );
@@ -178,7 +178,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Color(0xFF2D3436), // Ink Black
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -213,7 +213,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Color(0xFF2D3436), // Ink Black
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -248,7 +248,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Color(0xFF2D3436), // Ink Black
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -319,7 +319,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Color(0xFF2D3436), // Ink Black
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -346,7 +346,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: Color(0xFF2D3436), // Ink Black
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -361,24 +361,15 @@ class _SellScreenState extends State<SellScreen> {
                         value: viewModel.condition,
                         isExpanded: true,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        hint: const Text('Select condition'),
                         items: const [
+                          DropdownMenuItem(value: 'new', child: Text('New')),
                           DropdownMenuItem(
-                            value: 'new',
-                            child: Text('New (Unused)'),
+                            value: 'like_new',
+                            child: Text('Like New'),
                           ),
-                          DropdownMenuItem(
-                            value: 'good',
-                            child: Text('Good (Lightly used)'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'fair',
-                            child: Text('Fair (Visible wear)'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'poor',
-                            child: Text('Poor (Damaged pages/cover)'),
-                          ),
+                          DropdownMenuItem(value: 'good', child: Text('Good')),
+                          DropdownMenuItem(value: 'fair', child: Text('Fair')),
+                          DropdownMenuItem(value: 'poor', child: Text('Poor')),
                         ],
                         onChanged: (value) {
                           if (value != null) {
@@ -388,6 +379,116 @@ class _SellScreenState extends State<SellScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 24),
+                  // Social Venture Section
+                  const Text(
+                    'Social Venture Features',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF2D3436), // Ink Black
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Seller Type
+                  const Text(
+                    'Seller Type',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF2D3436), // Ink Black
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Theme.of(context).dividerColor),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: viewModel.sellerType,
+                        isExpanded: true,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'individual',
+                            child: Text('Individual Student'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'bookshop',
+                            child: Text('Verified Bookshop'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'author',
+                            child: Text('Local Author'),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          if (value != null) {
+                            viewModel.setSellerType(value);
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // Buy-Back Eligibility
+                  SwitchListTile(
+                    title: const Text(
+                      'Eligible for Buy-Back',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
+                    subtitle: const Text(
+                      'Permit students to sell this book back when finished.',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    value: viewModel.isBuyBackEligible,
+                    onChanged: viewModel.setIsBuyBackEligible,
+                    activeColor: const Color(0xFF1A4D8C),
+                  ),
+                  const SizedBox(height: 16),
+                  // Stock Count (for non-individuals)
+                  if (viewModel.sellerType != 'individual') ...[
+                    const Text(
+                      'Available Stock',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF2D3436), // Ink Black
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      initialValue: viewModel.stockCount.toString(),
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: 'e.g. 10',
+                        filled: true,
+                        fillColor: Theme.of(context).colorScheme.surface,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
+                      ),
+                      onChanged: (value) {
+                        final stock = int.tryParse(value);
+                        if (stock != null) {
+                          viewModel.setStockCount(stock);
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                  ],
                   const SizedBox(height: 16),
 
                   // Location info
@@ -425,10 +526,10 @@ class _SellScreenState extends State<SellScreen> {
                               }
                             },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor: Theme.of(
-                          context,
-                        ).colorScheme.onPrimary,
+                        backgroundColor: const Color(
+                          0xFF1A4D8C,
+                        ), // Scholar Blue
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -438,7 +539,10 @@ class _SellScreenState extends State<SellScreen> {
                           ? const SizedBox(
                               height: 20,
                               width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
                             )
                           : const Text(
                               'Post Listing',
@@ -473,7 +577,7 @@ class _SellScreenState extends State<SellScreen> {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Colors.white.withValues(alpha: 0.7),
+            color: const Color(0xFF2D3436).withValues(alpha: 0.7),
           ),
         ),
       ],

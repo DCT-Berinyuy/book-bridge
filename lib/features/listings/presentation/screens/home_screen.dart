@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
 
 /// Home screen displaying a grid of book listings.
@@ -13,6 +14,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String selectedCategory = 'all';
+
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -38,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(200),
+        preferredSize: const Size.fromHeight(220),
         child: SafeArea(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -57,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: const Icon(
                         Icons.menu_book,
-                        color: Color(0xFF13EC5B), // Primary green
+                        color: Color(0xFF1A4D8C), // Scholar Blue
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -98,52 +101,64 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 16),
 
                 // Search bar
-                Container(
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search by title, author, or course...',
-                      hintStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                GestureDetector(
+                  onTap: () => context.push('/search'),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: const Color(0xFF1A4D8C).withValues(alpha: 0.3),
                       ),
-                      prefixIcon: const Icon(Icons.search),
-                      suffixIcon: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.primary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
                         ),
-                        child: const Icon(
-                          Icons.tune,
-                          color: Color(0xFF13EC5B), // Primary green
+                      ],
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.search, color: Color(0xFF1A4D8C)),
+                        SizedBox(width: 12),
+                        Text(
+                          'Search your book title, author...',
+                          style: TextStyle(color: Colors.grey, fontSize: 14),
                         ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                      ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
-
-                // Category tabs
+                const SizedBox(height: 24),
+                // Categories
                 SizedBox(
-                  height: 40,
+                  height: 45,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      _buildCategoryTab('All Books', true),
-                      _buildCategoryTab('Textbooks', false),
-                      _buildCategoryTab('Novels', false),
-                      _buildCategoryTab('Study Guides', false),
-                      _buildCategoryTab('Engineering', false),
+                      _buildCategoryTab(
+                        'All Materials',
+                        selectedCategory == 'all',
+                      ),
+                      _buildCategoryTab(
+                        'Bookshops',
+                        selectedCategory == 'bookshops',
+                      ),
+                      _buildCategoryTab(
+                        'Used Books',
+                        selectedCategory == 'used',
+                      ),
+                      _buildCategoryTab(
+                        'Local Authors',
+                        selectedCategory == 'authors',
+                      ),
+                      _buildCategoryTab(
+                        'Buy-Back',
+                        selectedCategory == 'buyback',
+                      ),
                     ],
                   ),
                 ),
@@ -220,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            color: Color(0xFF13EC5B), // Primary green
+                            color: Color(0xFF1A4D8C), // Primary green
                           ),
                         ),
                       ),
@@ -274,13 +289,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         color: Theme.of(
                                           context,
                                         ).colorScheme.surfaceContainerHighest,
-                                        image: DecorationImage(
-                                          image: NetworkImage(listing.imageUrl),
-                                          fit: BoxFit.cover,
-                                          onError: (exception, stackTrace) {
-                                            // Fallback is handled by the decoration
-                                          },
-                                        ),
                                       ),
                                       child: listing.imageUrl.isEmpty
                                           ? Center(
@@ -293,7 +301,77 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     .withValues(alpha: 0.3),
                                               ),
                                             )
-                                          : null,
+                                          : Image.network(
+                                              listing.imageUrl,
+                                              fit: BoxFit.cover,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                    // Completely disappear the listing if image fails to load
+                                                    Future.microtask(() {
+                                                      if (context.mounted) {
+                                                        homeViewModel
+                                                            .removeListingById(
+                                                              listing.id,
+                                                            );
+                                                      }
+                                                    });
+                                                    return const SizedBox.shrink();
+                                                  },
+                                            ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 8,
+                                    left: 8,
+                                    child: Row(
+                                      children: [
+                                        if (listing.sellerType != 'individual')
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 4,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFF1A4D8C),
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                            ),
+                                            child: Text(
+                                              listing.sellerType.toUpperCase(),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        if (listing.isBuyBackEligible)
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 4,
+                                            ),
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 8,
+                                                    vertical: 4,
+                                                  ),
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xFF27AE60),
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                              ),
+                                              child: const Text(
+                                                'BUY-BACK',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
                                     ),
                                   ),
                                   Positioned(
@@ -389,28 +467,54 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildCategoryTab(String title, bool isSelected) {
     return Container(
       margin: const EdgeInsets.only(right: 8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? const Color(0xFF13EC5B) // Primary green
-              : Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            if (title == 'All Materials')
+              selectedCategory = 'all';
+            else if (title == 'Bookshops')
+              selectedCategory = 'bookshops';
+            else if (title == 'Used Books')
+              selectedCategory = 'used';
+            else if (title == 'Local Authors')
+              selectedCategory = 'authors';
+            else if (title == 'Buy-Back')
+              selectedCategory = 'buyback';
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
             color: isSelected
-                ? const Color(0xFF13EC5B) // Primary green
-                : Theme.of(context).dividerColor,
+                ? const Color(0xFF1A4D8C) // Scholar Blue
+                : Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: isSelected
+                  ? const Color(0xFF1A4D8C)
+                  : const Color(0xFF1A4D8C).withValues(alpha: 0.2),
+            ),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFF1A4D8C).withValues(alpha: 0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : null,
           ),
-        ),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-            color: isSelected
-                ? Colors
-                      .black // Black text for selected tab
-                : Theme.of(context).colorScheme.onSurfaceVariant,
+          child: Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                color: isSelected
+                    ? Colors.white
+                    : const Color(0xFF1A4D8C).withValues(alpha: 0.8),
+              ),
+            ),
           ),
         ),
       ),

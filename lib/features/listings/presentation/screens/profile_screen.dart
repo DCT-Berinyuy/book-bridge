@@ -114,12 +114,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: const Color(0xFF13EC5B), // Primary green
+                            color: const Color(0xFF1A4D8C), // Primary green
                             width: 4,
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF13EC5B).withValues(
+                              color: const Color(0xFF1A4D8C).withValues(
                                 alpha: 0.2,
                               ), // Primary green with opacity
                               blurRadius: 16,
@@ -167,14 +167,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           const Icon(
                             Icons.school,
                             size: 16,
-                            color: Color(0xFF13EC5B), // Primary green
+                            color: Color(0xFF1A4D8C), // Scholar Blue
                           ),
                           const SizedBox(width: 4),
                           const Text(
                             'University of Buea Student',
                             style: TextStyle(
                               fontSize: 16,
-                              color: Color(0xFF13EC5B), // Primary green
+                              color: Color(0xFF1A4D8C), // Scholar Blue
                             ),
                           ),
                         ],
@@ -210,133 +210,143 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Books Sold
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceContainerHighest
-                              .withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primary.withValues(alpha: 0.2),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerHighest
+                                .withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.2),
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              const Text(
+                                '12',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Text(
+                                'SOLD',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        child: Column(
-                          children: [
-                            const Text(
-                              '12',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Text(
-                              'BOOKS SOLD',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
-                                letterSpacing: 1.5,
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
+                      const SizedBox(width: 8),
 
                       // Rating
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceContainerHighest
-                              .withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primary.withValues(alpha: 0.2),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerHighest
+                                .withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.2),
+                            ),
                           ),
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(
-                                  Icons.star,
-                                  size: 16,
-                                  color: Color(0xFF13EC5B), // Primary green
-                                ),
-                                const SizedBox(width: 4),
-                                const Text(
-                                  '4.8',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700,
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.star,
+                                    size: 14,
+                                    color: Color(
+                                      0xFFF2994A,
+                                    ), // Bridge Orange for rating
                                   ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              'RATING',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
-                                letterSpacing: 1.5,
+                                  const SizedBox(width: 4),
+                                  const Text(
+                                    '4.8',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
+                              Text(
+                                'RATING',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
+                      const SizedBox(width: 8),
 
                       // FCFA Saved
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceContainerHighest
-                              .withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primary.withValues(alpha: 0.2),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerHighest
+                                .withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.2),
+                            ),
                           ),
-                        ),
-                        child: Column(
-                          children: [
-                            const Text(
-                              '25k',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700,
+                          child: Column(
+                            children: [
+                              const Text(
+                                '25k',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'FCFA SAVED',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
-                                letterSpacing: 1.5,
+                              const Text(
+                                'SAVED',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(
+                                    0xFF27AE60,
+                                  ), // Growth Green for savings
+                                  letterSpacing: 1.2,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -453,6 +463,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           child: Image.network(
                                             listing.imageUrl,
                                             fit: BoxFit.cover,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                                  // Completely disappear the listing if image fails to load
+                                                  Future.microtask(() {
+                                                    if (context.mounted) {
+                                                      profileViewModel
+                                                          .removeListingById(
+                                                            listing.id,
+                                                          );
+                                                    }
+                                                  });
+                                                  return const SizedBox.shrink();
+                                                },
                                           ),
                                         )
                                       : Icon(

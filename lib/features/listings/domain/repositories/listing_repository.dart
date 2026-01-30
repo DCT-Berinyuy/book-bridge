@@ -47,6 +47,9 @@ abstract class ListingRepository {
     required String condition,
     required String imageUrl,
     String? description,
+    String sellerType = 'individual',
+    bool isBuyBackEligible = false,
+    int stockCount = 1,
   });
 
   /// Deletes a listing.
