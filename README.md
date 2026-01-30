@@ -17,10 +17,10 @@ Here are some screenshots of the BookBridge app:
   <img src="assets/sreenshots/screenshot3.png" alt="Screenshot 3" width="30%">
 </div>
 
-
 ## 🌟 Features
 
 ### Core Functionality
+
 - **User Authentication**: Secure email/password signup and signin via Supabase
 - **Browse Listings**: Discover available books in a responsive grid layout with infinite scroll pagination
 - **Smart Search**: Full-text search across book titles and authors
@@ -30,6 +30,7 @@ Here are some screenshots of the BookBridge app:
 - **Direct Communication**: Contact sellers directly via WhatsApp for seamless transactions
 
 ### Technical Highlights
+
 - **Clean Architecture**: 3-layer architecture (Domain, Data, Presentation) with clear separation of concerns
 - **State Management**: Provider pattern with ChangeNotifier for efficient state handling
 - **Dependency Injection**: get_it for service locator pattern
@@ -65,6 +66,7 @@ lib/
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Flutter SDK (3.0+)
 - Dart SDK (included with Flutter)
 - A Supabase project account
@@ -72,12 +74,14 @@ lib/
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/book-bridge.git
 cd book-bridge
 ```
 
 2. Get dependencies:
+
 ```bash
 flutter pub get
 ```
@@ -94,11 +98,13 @@ flutter pub get
      - `listings`: Book listings with seller and book details
 
 4. Run the app with environment variables:
+
 ```bash
 flutter run --dart-define=SUPABASE_URL=$(cat .env | grep SUPABASE_URL | cut -d'=' -f2) --dart-define=SUPABASE_ANON_KEY=$(cat .env | grep SUPABASE_ANON_KEY | cut -d'=' -f2)
 ```
 
 Alternatively, you can define the environment variables directly when running the app:
+
 ```bash
 SUPABASE_URL=your_url SUPABASE_ANON_KEY=your_key flutter run
 ```
@@ -106,6 +112,7 @@ SUPABASE_URL=your_url SUPABASE_ANON_KEY=your_key flutter run
 ### Database Schema
 
 #### profiles table
+
 ```sql
 - id (UUID, primary key)
 - email (text)
@@ -116,6 +123,7 @@ SUPABASE_URL=your_url SUPABASE_ANON_KEY=your_key flutter run
 ```
 
 #### listings table
+
 ```sql
 - id (UUID, primary key)
 - title (text)
@@ -167,6 +175,7 @@ result.fold(
 ```
 
 Error types:
+
 - `AuthFailure`: Authentication-related errors
 - `ServerFailure`: Server and network errors
 - `UnknownFailure`: Unexpected errors
@@ -175,6 +184,7 @@ Error types:
 ## 🛠️ Development
 
 ### Code Quality
+
 The project maintains high code quality standards:
 
 - **dart fix --apply**: Automated code fixes
@@ -184,11 +194,13 @@ The project maintains high code quality standards:
 ### Implemented Phases
 
 #### Phase 1: Project Initialization ✅
+
 - Flutter project setup with all required dependencies
 - Boilerplate cleanup
 - Documentation and changelog creation
 
 #### Phase 2: Core Architecture and Theming ✅
+
 - Clean Architecture directory structure
 - Error handling system with Failure and Exception classes
 - Base UseCase classes
@@ -197,6 +209,7 @@ The project maintains high code quality standards:
 - App initialization and routing setup
 
 #### Phase 3: Authentication Feature ✅
+
 - Domain layer: User entity, AuthRepository interface, authentication use cases
 - Data layer: Supabase Auth integration, UserModel DTO, AuthRepositoryImpl
 - Presentation layer: AuthViewModel, SignInScreen, SignUpScreen
@@ -204,6 +217,7 @@ The project maintains high code quality standards:
 - Automatic navigation based on authentication state
 
 #### Phase 4: Listings Feature - Browse and View ✅
+
 - Domain layer: Listing entity, ListingRepository, GetListings and GetListingDetails use cases
 - Data layer: Supabase PostgreSQL integration, ListingModel, pagination support
 - Presentation layer: HomeViewModel, HomeScreen with GridView, ListingDetailsScreen
@@ -212,6 +226,7 @@ The project maintains high code quality standards:
 - Navigation integration
 
 #### Phase 5: Sell and Profile Features ✅
+
 - Domain layer: CreateListing, DeleteListing, GetUserListings use cases
 - Data layer: createListing and deleteListing methods in SupabaseListingsDataSource
 - Presentation layer: SellViewModel and SellScreen with form validation
@@ -220,6 +235,7 @@ The project maintains high code quality standards:
 - Form validation for listing creation (title, author, price, condition, image)
 
 #### Phase 6: Search and Finalization ✅
+
 - Domain layer: SearchListingsUseCase for full-text search
 - Presentation layer: SearchViewModel, SearchScreen with search results grid
 - Full-text search across book titles and authors
@@ -228,21 +244,40 @@ The project maintains high code quality standards:
 ## 🚧 Future Enhancements
 
 ### Short-term Roadmap
+
 - [ ] Image picker integration for listing creation
 - [ ] Image upload to Supabase Storage
 - [ ] Advanced filters (location-based, price range, condition)
 - [ ] Wishlist functionality
 - [ ] Multi-language support
 
-### Long-term Vision
-- [ ] **Reviews & Ratings**: User ratings and reviews system for both books and sellers
-- [ ] **In-app Chat Systems**: Direct messaging between buyers and sellers
-- [ ] **Online Payments**: Secure payment processing for transactions
-- [ ] **Delivery / Logistics**: Integration with local delivery services
-- [ ] **Digital Books (PDFs)**: Support for digital book listings and distribution
-- [ ] **Global Marketplace**: Expansion beyond Cameroon to serve students worldwide
-- [ ] Analytics and statistics
-- [ ] Admin dashboard
+### Long-term Vision: The "Amazon for Books" in Cameroon
+
+BookBridge aims to move beyond a peer-to-peer app to become a vital piece of national social infrastructure.
+
+- [ ] **Professional Vendor Ecosystem**:
+  - **Dedicated Storefronts**: Profile pages for established bookshops (e.g., Presbook, Messenger) to display their full inventory.
+  - **Bulk Inventory Tools**: Professional tools for shops and authors to manage large catalogs via CSV/Excel.
+  - **Verification System**: Trust badges for verified local businesses and authors.
+- [ ] **Integrated Financial Infrastructure**:
+  - **Mobile Money (MTN/Orange)**: Seamless in-app payments to move beyond the "WhatsApp struggle."
+  - **Automated Commission**: Automated processing of the 5-15% success fee to ensure venture sustainability.
+  - **Escrow System**: Protecting both buyer and seller until delivery is confirmed.
+- [ ] **Logistics & "Last-Mile" Solutions**:
+  - **Moto-Taxi Partnerships**: Integrating local transport networks to provide affordable, reliable delivery directly through the app.
+  - **Centralized Hubs**: Strategic pickup points in major student hubs like Molyko, Yaoundé I, and Dschang.
+- [ ] **The Circular Book Economy (SDG 12)**:
+  - **In-App Buy-Back**: Automated "Trade-In" system where students can sell books back into the cycle with one tap.
+  - **Digital Book Support**: Potential expansion into affordable e-books and PDFs for remote areas.
+- [ ] **Hyper-Local Geolocation Engine**:
+  - **Proximity Search**: Real-time filtering to show the nearest buyers and sellers, reducing transport costs.
+  - **Map Integration**: Visualizing pickup points and book density across neighborhoods.
+  - **Regional Analytics**: Tracking book demand by specific university campuses.
+- [ ] **AI-Powered Intelligence**:
+  - **Smart Recommendations**: A personalized discovery engine that learns your reading habits and academic needs.
+  - **AI Listing Assistant**: Automatically generating book descriptions and estimating fair market prices from a photo.
+  - **Educational Copilot**: An AI-driven tutor integrated into the platform to answer questions about the books being sold.
+- [ ] **Data-as-a-Service**: Providing publishers and government bodies with demand-side data to prevent textbook shortages and optimize local printing.
 
 ## 🤝 Contributing
 
@@ -271,6 +306,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Contact & Support
 
 For support, questions, or feedback, please:
+
 - Open an issue on the project repository
 - Contact the development team directly
 - Check our documentation for troubleshooting tips
