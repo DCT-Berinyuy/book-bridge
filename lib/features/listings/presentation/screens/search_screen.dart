@@ -134,7 +134,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
                     childAspectRatio:
-                        2.1, // Increased vertical space for categories
+                        1.8, // Decreased ratio to provide more height and prevent overflow
                     children: [
                       _buildCategoryItem(
                         'Engineering',

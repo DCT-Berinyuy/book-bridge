@@ -178,7 +178,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Color(0xFF2D3436), // Ink Black
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -213,7 +213,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Color(0xFF2D3436), // Ink Black
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -248,7 +248,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Color(0xFF2D3436), // Ink Black
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -319,7 +319,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Color(0xFF2D3436), // Ink Black
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -346,7 +346,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: Color(0xFF2D3436), // Ink Black
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -356,6 +356,28 @@ class _SellScreenState extends State<SellScreen> {
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: Theme.of(context).dividerColor),
                     ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: viewModel.condition,
+                        isExpanded: true,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        items: const [
+                          DropdownMenuItem(value: 'new', child: Text('New')),
+                          DropdownMenuItem(
+                            value: 'like_new',
+                            child: Text('Like New'),
+                          ),
+                          DropdownMenuItem(value: 'good', child: Text('Good')),
+                          DropdownMenuItem(value: 'fair', child: Text('Fair')),
+                          DropdownMenuItem(value: 'poor', child: Text('Poor')),
+                        ],
+                        onChanged: (value) {
+                          if (value != null) {
+                            viewModel.setCondition(value);
+                          }
+                        },
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 24),
                   // Social Venture Section
@@ -364,7 +386,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: Color(0xFF2D3436), // Ink Black
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -374,7 +396,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Color(0xFF2D3436), // Ink Black
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -438,7 +460,7 @@ class _SellScreenState extends State<SellScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                        color: Color(0xFF2D3436), // Ink Black
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -555,7 +577,7 @@ class _SellScreenState extends State<SellScreen> {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Colors.white.withValues(alpha: 0.7),
+            color: const Color(0xFF2D3436).withValues(alpha: 0.7),
           ),
         ),
       ],

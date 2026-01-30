@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
 
 /// Home screen displaying a grid of book listings.
@@ -40,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(200),
+        preferredSize: const Size.fromHeight(220),
         child: SafeArea(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: const Icon(
                         Icons.menu_book,
-                        color: const Color(0xFF1A4D8C), // Primary green
+                        color: Color(0xFF1A4D8C), // Scholar Blue
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -100,43 +101,47 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 16),
 
                 // Search bar
-                Container(
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: const Color(0xFF1A4D8C).withOpacity(0.3),
+                GestureDetector(
+                  onTap: () => context.push('/search'),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: const Color(0xFF1A4D8C).withValues(alpha: 0.3),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: const Row(
-                    children: [
-                      Icon(Icons.search, color: Color(0xFF1A4D8C)),
-                      SizedBox(width: 12),
-                      Text(
-                        'Search your book title, author...',
-                        style: TextStyle(color: Colors.grey, fontSize: 14),
-                      ),
-                    ],
+                    child: const Row(
+                      children: [
+                        Icon(Icons.search, color: Color(0xFF1A4D8C)),
+                        SizedBox(width: 12),
+                        Text(
+                          'Search your book title, author...',
+                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
                 // Categories
                 SizedBox(
-                  height: 40,
+                  height: 45,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
                       _buildCategoryTab(
                         'All Materials',
-                        selectedCategory == 'allmaterials',
+                        selectedCategory == 'all',
                       ),
                       _buildCategoryTab(
                         'Bookshops',
@@ -144,20 +149,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       _buildCategoryTab(
                         'Used Books',
-                        selectedCategory == 'usedbooks',
+                        selectedCategory == 'used',
                       ),
                       _buildCategoryTab(
                         'Local Authors',
-                        selectedCategory == 'localauthors',
+                        selectedCategory == 'authors',
                       ),
                       _buildCategoryTab(
                         'Buy-Back',
-                        selectedCategory == 'buy-back',
+                        selectedCategory == 'buyback',
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
               ],
             ),
           ),
@@ -231,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            color: const Color(0xFF1A4D8C), // Primary green
+                            color: Color(0xFF1A4D8C), // Primary green
                           ),
                         ),
                       ),
@@ -328,14 +332,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                               vertical: 4,
                                             ),
                                             decoration: BoxDecoration(
-                                              color: Color(0xFF1A4D8C),
+                                              color: const Color(0xFF1A4D8C),
                                               borderRadius:
                                                   BorderRadius.circular(4),
                                             ),
                                             child: Text(
                                               listing.sellerType.toUpperCase(),
                                               style: const TextStyle(
-                                                color: Colors.black,
+                                                color: Colors.white,
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.bold,
                                               ),
