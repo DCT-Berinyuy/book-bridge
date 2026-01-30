@@ -453,6 +453,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           child: Image.network(
                                             listing.imageUrl,
                                             fit: BoxFit.cover,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                                  // Completely disappear the listing if image fails to load
+                                                  Future.microtask(() {
+                                                    if (context.mounted) {
+                                                      profileViewModel
+                                                          .removeListingById(
+                                                            listing.id,
+                                                          );
+                                                    }
+                                                  });
+                                                  return const SizedBox.shrink();
+                                                },
                                           ),
                                         )
                                       : Icon(

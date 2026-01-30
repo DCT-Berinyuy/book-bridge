@@ -70,12 +70,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   // Title
                   const Text(
-                    'Join BookBridge',
+                    'Join the Mission',
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Buy and sell used textbooks within your campus community.',
+                    'Connecting students, authors, and bookshops to end learning poverty.',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),

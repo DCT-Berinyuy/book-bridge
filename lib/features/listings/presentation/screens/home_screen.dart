@@ -139,11 +139,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      _buildCategoryTab('All Books', true),
-                      _buildCategoryTab('Textbooks', false),
-                      _buildCategoryTab('Novels', false),
-                      _buildCategoryTab('Study Guides', false),
-                      _buildCategoryTab('Engineering', false),
+                      _buildCategoryTab('All Materials', true),
+                      _buildCategoryTab('Bookshops', false),
+                      _buildCategoryTab('Used Books', false),
+                      _buildCategoryTab('Local Authors', false),
+                      _buildCategoryTab('Buy-Back', false),
                     ],
                   ),
                 ),
@@ -274,13 +274,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         color: Theme.of(
                                           context,
                                         ).colorScheme.surfaceContainerHighest,
-                                        image: DecorationImage(
-                                          image: NetworkImage(listing.imageUrl),
-                                          fit: BoxFit.cover,
-                                          onError: (exception, stackTrace) {
-                                            // Fallback is handled by the decoration
-                                          },
-                                        ),
                                       ),
                                       child: listing.imageUrl.isEmpty
                                           ? Center(
@@ -293,7 +286,77 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     .withValues(alpha: 0.3),
                                               ),
                                             )
-                                          : null,
+                                          : Image.network(
+                                              listing.imageUrl,
+                                              fit: BoxFit.cover,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                    // Completely disappear the listing if image fails to load
+                                                    Future.microtask(() {
+                                                      if (context.mounted) {
+                                                        homeViewModel
+                                                            .removeListingById(
+                                                              listing.id,
+                                                            );
+                                                      }
+                                                    });
+                                                    return const SizedBox.shrink();
+                                                  },
+                                            ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 8,
+                                    left: 8,
+                                    child: Row(
+                                      children: [
+                                        if (listing.sellerType != 'individual')
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 4,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFF13EC5B),
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                            ),
+                                            child: Text(
+                                              listing.sellerType.toUpperCase(),
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        if (listing.isBuyBackEligible)
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 4,
+                                            ),
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 8,
+                                                    vertical: 4,
+                                                  ),
+                                              decoration: BoxDecoration(
+                                                color: Colors.blue,
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                              ),
+                                              child: const Text(
+                                                'BUY-BACK',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
                                     ),
                                   ),
                                   Positioned(

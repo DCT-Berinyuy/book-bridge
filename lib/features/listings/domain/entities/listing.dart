@@ -16,6 +16,11 @@ class Listing extends Equatable {
   final String status; // 'available', 'sold'
   final DateTime createdAt;
 
+  // Social Venture Features
+  final String sellerType; // 'individual', 'bookshop', 'author'
+  final bool isBuyBackEligible;
+  final int stockCount; // For bookshops
+
   // Seller info (populated from join)
   final String? sellerName;
   final String? sellerLocality;
@@ -32,6 +37,9 @@ class Listing extends Equatable {
     required this.sellerId,
     required this.status,
     required this.createdAt,
+    this.sellerType = 'individual',
+    this.isBuyBackEligible = false,
+    this.stockCount = 1,
     this.sellerName,
     this.sellerLocality,
     this.sellerWhatsapp,
@@ -49,6 +57,9 @@ class Listing extends Equatable {
     sellerId,
     status,
     createdAt,
+    sellerType,
+    isBuyBackEligible,
+    stockCount,
     sellerName,
     sellerLocality,
     sellerWhatsapp,

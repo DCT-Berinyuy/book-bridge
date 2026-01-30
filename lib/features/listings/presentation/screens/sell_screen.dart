@@ -356,38 +356,117 @@ class _SellScreenState extends State<SellScreen> {
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: Theme.of(context).dividerColor),
                     ),
+                  ),
+                  const SizedBox(height: 24),
+                  // Social Venture Section
+                  const Text(
+                    'Social Venture Features',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Seller Type
+                  const Text(
+                    'Seller Type',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Theme.of(context).dividerColor),
+                    ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
-                        value: viewModel.condition,
+                        value: viewModel.sellerType,
                         isExpanded: true,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        hint: const Text('Select condition'),
                         items: const [
                           DropdownMenuItem(
-                            value: 'new',
-                            child: Text('New (Unused)'),
+                            value: 'individual',
+                            child: Text('Individual Student'),
                           ),
                           DropdownMenuItem(
-                            value: 'good',
-                            child: Text('Good (Lightly used)'),
+                            value: 'bookshop',
+                            child: Text('Verified Bookshop'),
                           ),
                           DropdownMenuItem(
-                            value: 'fair',
-                            child: Text('Fair (Visible wear)'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'poor',
-                            child: Text('Poor (Damaged pages/cover)'),
+                            value: 'author',
+                            child: Text('Local Author'),
                           ),
                         ],
                         onChanged: (value) {
                           if (value != null) {
-                            viewModel.setCondition(value);
+                            viewModel.setSellerType(value);
                           }
                         },
                       ),
                     ),
                   ),
+                  const SizedBox(height: 24),
+                  // Buy-Back Eligibility
+                  SwitchListTile(
+                    title: const Text(
+                      'Eligible for Buy-Back',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
+                    subtitle: const Text(
+                      'Permit students to sell this book back when finished.',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    value: viewModel.isBuyBackEligible,
+                    onChanged: viewModel.setIsBuyBackEligible,
+                    activeColor: const Color(0xFF13EC5B),
+                  ),
+                  const SizedBox(height: 16),
+                  // Stock Count (for non-individuals)
+                  if (viewModel.sellerType != 'individual') ...[
+                    const Text(
+                      'Available Stock',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      initialValue: viewModel.stockCount.toString(),
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: 'e.g. 10',
+                        filled: true,
+                        fillColor: Theme.of(context).colorScheme.surface,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
+                      ),
+                      onChanged: (value) {
+                        final stock = int.tryParse(value);
+                        if (stock != null) {
+                          viewModel.setStockCount(stock);
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                  ],
                   const SizedBox(height: 16),
 
                   // Location info

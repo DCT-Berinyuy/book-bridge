@@ -168,15 +168,23 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                         listing.imageUrl,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Theme.of(context).colorScheme.surface,
-                            child: Icon(
-                              Icons.image_not_supported,
-                              size:
-                                  MediaQuery.of(context).size.height *
-                                  0.05, // Responsive size
-                              color: Colors.grey,
-                            ),
+                          // If image fails to load in details screen, it's likely a broken listing
+                          // Inform user and go back
+                          Future.microtask(() {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'This listing is no longer available.',
+                                  ),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                              Navigator.of(context).pop();
+                            }
+                          });
+                          return const Center(
+                            child: CircularProgressIndicator(),
                           );
                         },
                       )
@@ -209,21 +217,92 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (listing.isBuyBackEligible)
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.blue.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.recycling, color: Colors.blue),
+                          const SizedBox(width: 12),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Buy-Back Eligible',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                                Text(
+                                  'Sell this book back to the platform when you\'re done.',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   // Title and Author
-                  Text(
-                    listing.title,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    listing.author,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Color(0xFF9DB9A6), // Light gray
-                    ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              listing.title,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              listing.author,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Color(0xFF9DB9A6), // Light gray
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (listing.sellerType != 'individual')
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF13EC5B),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            listing.sellerType.toUpperCase(),
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                   const SizedBox(height: 16),
 
@@ -359,65 +438,91 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                         ).dividerColor.withValues(alpha: 0.2),
                       ),
                     ),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primary.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(24),
-                            border: Border.all(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.primary.withValues(alpha: 0.2),
-                            ),
-                          ),
-                          child: const Icon(
-                            Icons.person,
-                            color: Color(0xFF13EC5B), // Primary green
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                listing.sellerName ?? 'Unknown Seller',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
+                        Row(
+                          children: [
+                            Container(
+                              width: 48,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.primary.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(24),
+                                border: Border.all(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.primary.withValues(alpha: 0.2),
                                 ),
                               ),
-                              const SizedBox(height: 4),
-                              Row(
+                              child: Icon(
+                                listing.sellerType == 'bookshop'
+                                    ? Icons.store
+                                    : listing.sellerType == 'author'
+                                    ? Icons.history_edu
+                                    : Icons.person,
+                                color: const Color(0xFF13EC5B), // Primary green
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Icon(
-                                    Icons.location_on,
-                                    size: 14,
-                                    color: Color(0xFF9DB9A6), // Light gray
-                                  ),
-                                  const SizedBox(width: 4),
                                   Text(
-                                    listing.sellerLocality ??
-                                        'Unknown Location',
+                                    listing.sellerName ?? 'Unknown Seller',
                                     style: const TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xFF9DB9A6), // Light gray
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
                                     ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.location_on,
+                                        size: 14,
+                                        color: Color(0xFF9DB9A6), // Light gray
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        listing.sellerLocality ??
+                                            'Unknown Location',
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Color(
+                                            0xFF9DB9A6,
+                                          ), // Light gray
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
+                            const Icon(
+                              Icons.verified,
+                              color: Color(0xFF13EC5B), // Primary green
+                            ),
+                          ],
+                        ),
+                        if (listing.sellerType != 'individual') ...[
+                          const SizedBox(height: 16),
+                          const Divider(),
+                          const SizedBox(height: 8),
+                          Text(
+                            listing.sellerType == 'bookshop'
+                                ? 'Supporting local businesses democratizes access to knowledge.'
+                                : 'Supporting local authors fosters a vibrant culture of learning.',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Color(0xFF13EC5B),
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                        const Icon(
-                          Icons.verified,
-                          color: Color(0xFF13EC5B), // Primary green
-                        ),
+                        ],
                       ],
                     ),
                   ),

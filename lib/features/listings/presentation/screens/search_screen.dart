@@ -235,20 +235,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                           width: double.infinity,
                                           height:
                                               140, // Consistent fixed height
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .surfaceContainerHighest,
-                                            image: DecorationImage(
-                                              image: NetworkImage(
-                                                listing.imageUrl,
-                                              ),
-                                              fit: BoxFit.cover,
-                                              onError: (exception, stackTrace) {
-                                                // Fallback is handled by the decoration
-                                              },
-                                            ),
-                                          ),
                                           child: listing.imageUrl.isEmpty
                                               ? Center(
                                                   child: Icon(
@@ -260,7 +246,27 @@ class _SearchScreenState extends State<SearchScreen> {
                                                         .withValues(alpha: 0.3),
                                                   ),
                                                 )
-                                              : null,
+                                              : Image.network(
+                                                  listing.imageUrl,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder:
+                                                      (
+                                                        context,
+                                                        error,
+                                                        stackTrace,
+                                                      ) {
+                                                        // Completely disappear the listing if image fails to load
+                                                        Future.microtask(() {
+                                                          if (context.mounted) {
+                                                            viewModel
+                                                                .removeListingById(
+                                                                  listing.id,
+                                                                );
+                                                          }
+                                                        });
+                                                        return const SizedBox.shrink();
+                                                      },
+                                                ),
                                         ),
                                       ),
                                       Positioned(

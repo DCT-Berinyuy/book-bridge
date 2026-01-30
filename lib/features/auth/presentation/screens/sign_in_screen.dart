@@ -81,7 +81,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       SizedBox(height: 16),
                       Text(
-                        'Welcome to BookBridge',
+                        'BookBridge: Knowledge for All',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -89,7 +89,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'Buy and sell used books in FCFA',
+                        'Democratizing access to affordable books in Cameroon.',
+                        textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],

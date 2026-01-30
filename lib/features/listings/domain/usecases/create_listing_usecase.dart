@@ -19,6 +19,9 @@ class CreateListingUseCase implements UseCase<Listing, CreateListingParams> {
       condition: params.condition,
       imageUrl: params.imageUrl,
       description: params.description,
+      sellerType: params.sellerType,
+      isBuyBackEligible: params.isBuyBackEligible,
+      stockCount: params.stockCount,
     );
   }
 }
@@ -31,6 +34,9 @@ class CreateListingParams {
   final String condition;
   final String imageUrl;
   final String? description;
+  final String sellerType;
+  final bool isBuyBackEligible;
+  final int stockCount;
 
   CreateListingParams({
     required this.title,
@@ -39,5 +45,8 @@ class CreateListingParams {
     required this.condition,
     required this.imageUrl,
     this.description,
+    this.sellerType = 'individual',
+    this.isBuyBackEligible = false,
+    this.stockCount = 1,
   });
 }
