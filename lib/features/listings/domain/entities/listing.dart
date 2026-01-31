@@ -20,6 +20,7 @@ class Listing extends Equatable {
   final String sellerType; // 'individual', 'bookshop', 'author'
   final bool isBuyBackEligible;
   final int stockCount; // For bookshops
+  final bool isFeatured; // For featured listings
 
   // Seller info (populated from join)
   final String? sellerName;
@@ -40,6 +41,7 @@ class Listing extends Equatable {
     this.sellerType = 'individual',
     this.isBuyBackEligible = false,
     this.stockCount = 1,
+    this.isFeatured = false,
     this.sellerName,
     this.sellerLocality,
     this.sellerWhatsapp,
@@ -47,21 +49,22 @@ class Listing extends Equatable {
 
   @override
   List<Object?> get props => [
-    id,
-    title,
-    author,
-    priceFcfa,
-    condition,
-    imageUrl,
-    description,
-    sellerId,
-    status,
-    createdAt,
-    sellerType,
-    isBuyBackEligible,
-    stockCount,
-    sellerName,
-    sellerLocality,
-    sellerWhatsapp,
-  ];
+        id,
+        title,
+        author,
+        priceFcfa,
+        condition,
+        imageUrl,
+        description,
+        sellerId,
+        status,
+        createdAt,
+        sellerType,
+        isBuyBackEligible,
+        stockCount,
+        isFeatured,
+        sellerName,
+        sellerLocality,
+        sellerWhatsapp,
+      ];
 }
