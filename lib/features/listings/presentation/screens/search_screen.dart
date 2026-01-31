@@ -29,88 +29,92 @@ class _SearchScreenState extends State<SearchScreen> {
         return Scaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(180),
-            child: SafeArea(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: Column(
-                  children: [
-                    // Top bar with logo and notifications
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.menu_book,
-                          color: const Color(0xFF1A4D8C), // Primary green
-                        ),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'BookBridge',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
+            child: Container(
+              color: const Color(0xFF1A4D8C), // Scholar Blue
+              child: SafeArea(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Column(
+                    children: [
+                      // Top bar with logo and notifications
+                      Row(
+                        children: [
+                          const Icon(Icons.menu_book, color: Colors.white),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'BookBridge',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        const Spacer(),
-                        IconButton(
-                          icon: const Icon(Icons.notifications),
-                          onPressed: () {
-                            // Notifications functionality
-                          },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Search bar
-                    Container(
-                      height: 56,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .surfaceContainerHighest
-                            .withValues(alpha: 0.05),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Theme.of(
-                            context,
-                          ).dividerColor.withValues(alpha: 0.1),
-                        ),
+                          const Spacer(),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.notifications,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              // Notifications functionality
+                            },
+                          ),
+                        ],
                       ),
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          hintText: 'Search title, author, or ISBN...',
-                          hintStyle: TextStyle(
+                      const SizedBox(height: 24),
+
+                      // Search bar
+                      Container(
+                        height: 56,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHighest
+                              .withValues(alpha: 0.05),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
                             color: Theme.of(
                               context,
-                            ).colorScheme.onSurfaceVariant,
-                          ),
-                          prefixIcon: const Icon(
-                            Icons.search,
-                            color: Color(0xFF9DB9A6), // Light gray
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 16,
-                            horizontal: 16,
+                            ).dividerColor.withValues(alpha: 0.1),
                           ),
                         ),
-                        onChanged: (value) {
-                          setState(() {});
-                          if (value.isNotEmpty) {
-                            viewModel.search(value);
-                          } else {
-                            viewModel.clearSearch();
-                          }
-                        },
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            hintText: 'Search title, author, or ISBN...',
+                            hintStyle: TextStyle(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.search,
+                              color: Color(0xFF9DB9A6), // Light gray
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 16,
+                              horizontal: 16,
+                            ),
+                          ),
+                          onChanged: (value) {
+                            setState(() {});
+                            if (value.isNotEmpty) {
+                              viewModel.search(value);
+                            } else {
+                              viewModel.clearSearch();
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -231,7 +235,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                             const BorderRadius.vertical(
                                               top: Radius.circular(12),
                                             ),
-                                        child: Container(
+                                        child: SizedBox(
                                           width: double.infinity,
                                           height:
                                               140, // Consistent fixed height

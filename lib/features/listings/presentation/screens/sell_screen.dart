@@ -101,7 +101,7 @@ class _SellScreenState extends State<SellScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Listing created successfully!'),
-                    backgroundColor: const Color(0xFF1A4D8C), // Primary green
+                    backgroundColor: Color(0xFF1A4D8C), // Primary green
                     duration: Duration(seconds: 2),
                   ),
                 );
@@ -450,7 +450,7 @@ class _SellScreenState extends State<SellScreen> {
                     ),
                     value: viewModel.isBuyBackEligible,
                     onChanged: viewModel.setIsBuyBackEligible,
-                    activeColor: const Color(0xFF1A4D8C),
+                    activeThumbColor: const Color(0xFF1A4D8C),
                   ),
                   const SizedBox(height: 16),
                   // Stock Count (for non-individuals)

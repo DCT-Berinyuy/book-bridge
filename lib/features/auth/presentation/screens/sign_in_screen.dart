@@ -231,7 +231,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                color: const Color(0xFF1A4D8C), // Scholar Blue
+                                color: Color(0xFF1A4D8C), // Scholar Blue
                               ),
                             ),
                           ),
