@@ -25,27 +25,27 @@ This document outlines the steps to transform the BookBridge app from a prototyp
 
 ## Phase 2: Listings and Core Functionality
 
-- [ ] **Task 2.1: Implement Image Upload for Sell Screen**
-  - [ ] Integrate `image_picker` to allow users to select an image from their gallery or camera.
-  - [ ] Upload the selected image to a Supabase Storage bucket named `book_images`.
-  - [ ] On successful upload, retrieve the public URL of the image.
+- [x] **Task 2.1: Implement Image Upload for Sell Screen**
+  - [x] Integrate `image_picker` to allow users to select an image from their gallery or camera.
+  - [x] Upload the selected image to a Supabase Storage bucket named `book_images`.
+  - [x] On successful upload, retrieve the public URL of the image.
 
-- [ ] **Task 2.2: Implement "Sell a Book" Logic**
-  - [ ] On form submission, create a new record in the `listings` table with all book details and the public image URL.
-  - [ ] The `seller_id` must be the ID of the currently logged-in user.
-  - [ ] Provide clear user feedback on success or failure.
+- [x] **Task 2.2: Implement "Sell a Book" Logic**
+  - [x] On form submission, create a new record in the `listings` table with all book details and the public image URL.
+  - [x] The `seller_id` must be the ID of the currently logged-in user.
+  - [x] Provide clear user feedback on success or failure.
 
-- [ ] **Task 2.3: Real-time Data for Home and Details**
-  - [ ] Ensure the Home Screen fetches real listings from the `listings` table, including seller information via a table join.
-  - [ ] Ensure the Listing Details screen fetches all data for a specific listing.
+- [x] **Task 2.3: Real-time Data for Home and Details**
+  - [x] Ensure the Home Screen (`home_screen.dart`) fetches real listings from the `listings` table, including seller information via a table join.
+  - [x] Ensure the Listing Details screen fetches all data for a specific listing.
 
-- [ ] **Task 2.4: Implement Search Functionality**
-  - [ ] Connect the Search Screen UI to a Supabase RPC (Remote Procedure Call) for full-text search.
-  - [ ] Provide the SQL to create the `search_listings` function.
+- [x] **Task 2.4: Implement Search Functionality**
+  - [x] Connect the Search Screen UI to a Supabase RPC (Remote Procedure Call) for full-text search on the `listings` table.
+  - [x] Provide the SQL to create the `search_listings` function.
 
-- [ ] **Task 2.5: Secure `listings` and `book_images`**
-  - [ ] Provide SQL for RLS policies for the `listings` table (users can create listings, read all, and update/delete their own).
-  - [ ] Provide SQL for Storage policies for the `book_images` bucket (users can upload, all can read).
+- [x] **Task 2.5: Secure `listings` and `book_images`**
+  - [x] Provide SQL for RLS policies for the `listings` table (users can create listings, read all, and update/delete their own).
+  - [x] Provide SQL for Storage policies for the `book_images` bucket (users can upload, all can read).
 
 - [ ] **Git Commit: `feat(listings): Implement complete CRUD and search for listings`**
 

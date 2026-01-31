@@ -99,12 +99,16 @@ class SupabaseListingsDataSource {
   }) async {
     try {
       final response = await supabaseClient
-          .from('listings')
-          .select('*, profiles:seller_id(*)')
-          .or('title.ilike.%$query%,author.ilike.%$query%')
-          .eq('status', 'available')
-          .order('created_at', ascending: false)
-          .limit(limit);
+          .rpc(
+            'search_listings',
+            params: {
+              'query': query,
+              '_limit': limit,
+              '_offset': 0, // Assuming offset will be handled by the RPC if needed
+            },
+          )
+          .select('*, profiles:seller_id(*)') // Select the full listing and joined profile
+          .limit(limit); // Limit is applied after RPC returns results
 
       final listings = (response as List<dynamic>)
           .map((item) => ListingModel.fromJson(item as Map<String, dynamic>))

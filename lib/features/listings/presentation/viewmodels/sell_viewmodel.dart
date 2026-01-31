@@ -250,4 +250,11 @@ class SellViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  /// Clears the error message and resets the sell state to initial.
+  void clearState() {
+    _errorMessage = null;
+    _sellState = SellState.initial;
+    notifyListeners();
+  }
 }

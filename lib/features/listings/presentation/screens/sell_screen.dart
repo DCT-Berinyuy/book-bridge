@@ -23,12 +23,50 @@ class _SellScreenState extends State<SellScreen> {
   final _descriptionController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    // Add a listener to handle UI feedback
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final sellViewModel = context.read<SellViewModel>();
+      sellViewModel.addListener(_onSellStateChanged);
+    });
+  }
+
+  @override
   void dispose() {
+    context.read<SellViewModel>().removeListener(_onSellStateChanged);
     _titleController.dispose();
     _authorController.dispose();
     _priceController.dispose();
     _descriptionController.dispose();
     super.dispose();
+  }
+
+  void _onSellStateChanged() {
+    final sellViewModel = context.read<SellViewModel>();
+    if (sellViewModel.sellState == SellState.success) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: const Text('Listing created successfully!'),
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          ),
+        );
+      sellViewModel.resetForm(); // Reset form fields and state
+      context.go('/home'); // Navigate away after success
+    } else if (sellViewModel.sellState == SellState.error &&
+        sellViewModel.errorMessage != null) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(sellViewModel.errorMessage!),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      sellViewModel.clearState(); // Clear error after showing
+    }
   }
 
   /// Shows a dialog for selecting image source (gallery or camera).
@@ -75,63 +113,6 @@ class _SellScreenState extends State<SellScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () => context.go('/home'),
-        ),
-        title: const Text('Sell a Book'),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.help_outline),
-            onPressed: () {
-              // Help button functionality
-            },
-          ),
-        ],
-      ),
-      body: Consumer<SellViewModel>(
-        builder: (context, viewModel, _) {
-          if (viewModel.sellState == SellState.success) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted) {
-                context.go('/home');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Listing created successfully!'),
-                    backgroundColor: Color(0xFF1A4D8C), // Primary green
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-              }
-            });
-          } else if (viewModel.sellState == SellState.error &&
-              viewModel.errorMessage != null) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(viewModel.errorMessage!),
-                    backgroundColor: Theme.of(context).colorScheme.error,
-                    duration: const Duration(seconds: 3),
-                  ),
-                );
-                // Reset state to avoid repeated snackbars
-                // Note: Logic to reset state should ideally be in ViewModel or handled differently,
-                // but for now this ensures the user sees the error.
-              }
-            });
-          }
-
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: ListView(
-                children: [
-                  // Image upload area
                   GestureDetector(
                     onTap: () {
                       _showImageSelectionDialog(context, viewModel);

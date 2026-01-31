@@ -585,4 +585,80 @@ If you encounter any issues:
 **Status**: Ready for Integration ✅
 
 Good luck with your BookBridge integration! 🚀
-\n## Automatic Profile Creation on Sign-Up (Production Setup)\n\nThis SQL code creates a trigger that automatically adds a new user to the `profiles` table whenever they sign up through Supabase Authentication. This is crucial for the app to function correctly.\n\nPlease run this in your Supabase SQL Editor:\n\n```sql\n-- Function to create a profile for a new user\ncreate function public.handle_new_user()\nreturns trigger\nlanguage plpgsql\nsecurity definer set search_path = public\nas $$\nbegin\n  insert into public.profiles (id, full_name, email, locality, whatsapp_number)\n  values (\n    new.id,\n    new.raw_user_meta_data->>'full_name',\n    new.email,\n    new.raw_user_meta_data->>'locality',\n    new.raw_user_meta_data->>'whatsapp_number'\n  );\n  return new;\nend;\n$$\n\n-- Trigger to run the function after a new user is created\ncreate or replace trigger on_auth_user_created\n  after insert on auth.users\n  for each row execute procedure public.handle_new_user();\n```\n
+## Automatic Profile Creation on Sign-Up (Production Setup)
+
+This SQL code creates a trigger that automatically adds a new user to the `profiles` table whenever they sign up through Supabase Authentication. This is crucial for the app to function correctly.
+
+Please run this in your Supabase SQL Editor:
+
+```sql
+-- Function to create a profile for a new user
+create function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  insert into public.profiles (id, full_name, email, locality, whatsapp_number)
+  values (
+    new.id,
+    new.raw_user_meta_data->>'full_name',
+    new.email,
+    new.raw_user_meta_data->>'locality',
+    new.raw_user_meta_data->>'whatsapp_number'
+  );
+  return new;
+end;
+$$
+
+-- Trigger to run the function after a new user is created
+create or replace trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+```
+
+## Supabase Storage: `book_images` Bucket Setup
+
+To allow users to upload book images and display them in the app, you need to create a Supabase Storage bucket named `book_images` and configure its Row Level Security (RLS) policies.
+
+### Step 1: Create the `book_images` Storage Bucket
+
+1.  Go to your Supabase project dashboard.
+2.  In the left sidebar, click on **"Storage"**.
+3.  Click the **"New bucket"** button.
+4.  Enter the name: `book_images` (this name is critical and must match).
+5.  Set **"Public buckets"** to **ON** (so images can be publicly accessed after upload).
+6.  Click **"Create bucket"**.
+
+### Step 2: Configure RLS Policies for `book_images` Bucket
+
+After creating the bucket, you need to set up RLS policies to control who can upload and view images. Please run the following SQL code in your Supabase SQL Editor:
+
+```sql
+-- Policy for `book_images` bucket
+
+-- Allow authenticated users to upload files to their own folder
+CREATE POLICY "Allow authenticated users to upload book images" ON storage.objects FOR INSERT WITH CHECK (
+  bucket_id = 'book_images' AND auth.uid() = ((storage.foldername(name))[1])::uuid
+);
+
+-- Allow public access to view book images
+CREATE POLICY "Allow public access to view book images" ON storage.objects FOR SELECT USING (
+  bucket_id = 'book_images'
+);
+
+-- Allow authenticated users to delete their own book images
+CREATE POLICY "Allow authenticated users to delete own book images" ON storage.objects FOR DELETE USING (
+  bucket_id = 'book_images' AND auth.uid() = ((storage.foldername(name))[1])::uuid
+);
+```
+
+**Explanation of Policies:**
+
+*   **"Allow authenticated users to upload book images"**: This policy allows any authenticated user to upload a file to the `book_images` bucket. The `storage.foldername(name)[1]` part ensures that users can only upload into a folder named after their own User ID (UUID). This prevents users from overwriting or modifying other users' files.
+*   **"Allow public access to view book images"**: This policy makes all files in the `book_images` bucket publicly readable. This is necessary for the app to display the book images without requiring authentication tokens for every image fetch.
+*   **"Allow authenticated users to delete their own book images"**: This policy allows authenticated users to delete files only from their own user ID folder within the `book_images` bucket.
+
+**Important Note on Folder Structure:**
+
+With the upload policy above, images will be stored in a subfolder named after the user's UUID. For example, an image uploaded by user `a1b2c3d4-e5f6-7890-1234-567890abcdef` will be stored as `book_images/a1b2c3d4-e5f6-7890-1234-567890abcdef/book_timestamp_random.jpg`. The `SupabaseStorageDataSource` needs to be updated to account for this folder structure when generating file paths for upload.\n## Supabase Database: Full-Text Search Function `search_listings`\n\nTo enable efficient full-text search across book titles and authors, we will create a PostgreSQL function in Supabase. This function will use PostgreSQL's  and  for optimized text searching.\n\nPlease run the following SQL code in your Supabase SQL Editor:\n\n```sql\n-- Create a text search configuration if you don't have one (e.g., for English)\n-- You can use existing ones like 'english', 'simple', etc.\n-- CREATE TEXT SEARCH CONFIGURATION public.en (PARSER = pg_catalog."default");\n-- ALTER TEXT SEARCH CONFIGURATION public.en ALTER MAPPING FOR asciiword, asciihword, hword, hword_asciipart, hword_numpart, numword, latinword WITH unaccent, english_stem;\n\n-- Add a 'tsv' (text search vector) column to the listings table\nALTER TABLE listings ADD COLUMN tsv tsvector;\n\n-- Create a trigger function to automatically update 'tsv' on insert/update\nCREATE OR REPLACE FUNCTION listings_search_trigger()\nRETURNS trigger AS $$\nbegin\n  new.tsv := setweight(to_tsvector('english', new.title), 'A') ||\n             setweight(to_tsvector('english', new.author), 'B') ||\n             setweight(to_tsvector('english', new.description), 'C');\n  return new;\nend;\n$$\nlanguage plpgsql;\n\n-- Create the trigger\nCREATE TRIGGER tsv_listings_trigger\nBEFORE INSERT OR UPDATE ON listings\nFOR EACH ROW EXECUTE FUNCTION listings_search_trigger();\n\n-- Create the  function\nCREATE OR REPLACE FUNCTION search_listings(\n  query TEXT,\n  _limit INT DEFAULT 50,\n  _offset INT DEFAULT 0\n)\nRETURNS SETOF listings\nLANGUAGE plpgsql\nAS $$\nBEGIN\n  RETURN QUERY\n  SELECT * FROM listings\n  WHERE\n    status = 'available' AND\n    tsv @@ websearch_to_tsquery('english', query)\n  ORDER BY\n    ts_rank_cd(tsv, websearch_to_tsquery('english', query)) DESC,\n    created_at DESC\n  LIMIT _limit OFFSET _offset;\nEND;\n$$;\n```\n\n**Explanation:**\n\n1.  ** Column**: A new  (Text Search Vector) column is added to the  table. This column will store a processed version of the , , and  fields, optimized for full-text search.\n2.  ** Function and Trigger**: This trigger automatically updates the  column whenever a new listing is inserted or an existing one is updated. It assigns different weights ('A' for title, 'B' for author, 'C' for description) to prioritize matches in certain fields.\n3.  ** Function**: This is the RPC function that the Flutter app will call. It takes a  string, , and  as parameters. It performs a full-text search on the  column for available listings, orders them by relevance () and creation date, and then applies pagination.\n

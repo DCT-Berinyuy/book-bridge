@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math' as math;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:book_bridge/core/error/exceptions.dart';
 
@@ -18,19 +19,23 @@ class SupabaseStorageDataSource {
   /// Throws [ServerException] if the upload fails.
   Future<String> uploadBookImage(File imageFile) async {
     try {
+      final userId = supabaseClient.auth.currentUser?.id;
+      if (userId == null) {
+        throw AuthAppException(message: 'User not authenticated.');
+      }
+
       // Generate a unique filename using timestamp and random string
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final randomString = _generateRandomString(8);
-      final fileName = 'book_${timestamp}_$randomString.jpg';
+      // Store images in a subfolder named after the user's ID
+      final filePath = '$userId/book_${timestamp}_$randomString.jpg';
 
       // Read file bytes
       final bytes = await imageFile.readAsBytes();
 
-      // Upload the file to the 'books' bucket using binary upload
-      await Supabase.instance.client.storage
-          .from('books')
-          .uploadBinary(
-            fileName,
+      // Upload the file to the 'book_images' bucket using binary upload
+      await Supabase.instance.client.storage.from('book_images').uploadBinary(
+            filePath, // Use filePath instead of fileName
             bytes,
             fileOptions: const FileOptions(
               upsert: true,
@@ -40,9 +45,11 @@ class SupabaseStorageDataSource {
 
       // Return the public URL of the uploaded image
       final publicUrl = supabaseClient.storage
-          .from('books')
-          .getPublicUrl(fileName);
+          .from('book_images')
+          .getPublicUrl(filePath); // Use filePath instead of fileName
       return publicUrl;
+    } on AuthAppException {
+      rethrow;
     } on StorageException catch (e) {
       throw ServerException(message: 'Upload failed: ${e.message}');
     } catch (e) {
@@ -54,13 +61,9 @@ class SupabaseStorageDataSource {
   String _generateRandomString(int length) {
     const chars =
         'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    final random = StringBuffer();
-
-    for (int i = 0; i < length; i++) {
-      random.write(chars[DateTime.now().microsecondsSinceEpoch % chars.length]);
-    }
-
-    return random.toString();
+    final random = math.Random();
+    return String.fromCharCodes(Iterable.generate(
+        length, (_) => chars.codeUnitAt(random.nextInt(chars.length))));
   }
 
   /// Deletes an image from Supabase Storage.
@@ -68,13 +71,22 @@ class SupabaseStorageDataSource {
   /// Throws [ServerException] if the deletion fails.
   Future<void> deleteBookImage(String imagePath) async {
     try {
-      // Extract filename from the URL
+      final userId = supabaseClient.auth.currentUser?.id;
+      if (userId == null) {
+        throw AuthAppException(message: 'User not authenticated.');
+      }
+
+      // Extract filename from the URL and construct the full path with userId
       final uri = Uri.parse(imagePath);
       final pathSegments = uri.pathSegments;
+      // The last segment is the filename, we need to prepend the userId
       final fileName = pathSegments.last;
+      final filePath = '$userId/$fileName';
 
-      // Delete the file from the 'books' bucket
-      await supabaseClient.storage.from('books').remove([fileName]);
+      // Delete the file from the 'book_images' bucket
+      await supabaseClient.storage.from('book_images').remove([filePath]);
+    } on AuthAppException {
+      rethrow;
     } on StorageException catch (e) {
       throw ServerException(message: 'Deletion failed: ${e.message}');
     } catch (e) {
