@@ -1,7 +1,7 @@
 <script>
-  import '../app.css';
-  import { BookOpen, Menu, X, ArrowRight } from 'lucide-svelte';
-  import { onMount } from 'svelte';
+  import "../app.css";
+  import { BookOpen, Menu, X, ArrowRight, Github } from "lucide-svelte";
+  import { onMount } from "svelte";
 
   let isMenuOpen = false;
   let scrollY = 0;
@@ -28,7 +28,22 @@
         <a href="#features">Features</a>
         <a href="#how-it-works">How it Works</a>
         <a href="#showcase">Mobile App</a>
-        <button class="btn-primary">Download App</button>
+        <a
+          href="https://github.com/DCT-Berinyuy/book-bridge"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="github-link"
+          title="Source Code"
+        >
+          <Github size={20} />
+        </a>
+        <a
+          href="https://github.com/DCT-Berinyuy/book-bridge/releases"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-primary"
+          style="text-decoration: none;">Download App</a
+        >
       </div>
 
       <!-- Mobile Toggle -->
@@ -47,7 +62,23 @@
         <a href="#features" on:click={toggleMenu}>Features</a>
         <a href="#how-it-works" on:click={toggleMenu}>How it Works</a>
         <a href="#showcase" on:click={toggleMenu}>Mobile App</a>
-        <button class="btn-primary">Download App</button>
+        <a
+          href="https://github.com/DCT-Berinyuy/book-bridge"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="github-link"
+          on:click={toggleMenu}
+        >
+          <Github size={20} /> <span style="margin-left: 8px">GitHub</span>
+        </a>
+        <a
+          href="https://github.com/DCT-Berinyuy/book-bridge/releases"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-primary"
+          style="text-decoration: none;"
+          on:click={toggleMenu}>Download App</a
+        >
       </div>
     {/if}
   </nav>
@@ -65,9 +96,11 @@
           </div>
           <span>BookBridge</span>
         </div>
-        <p>Ending learning poverty in Cameroon through peer-to-peer book sharing.</p>
+        <p>
+          Ending learning poverty in Cameroon through peer-to-peer book sharing.
+        </p>
       </div>
-      
+
       <div class="footer-links">
         <h3>Quick Links</h3>
         <a href="#features">Features</a>
@@ -78,15 +111,27 @@
       <div class="footer-social">
         <h3>Follow Us</h3>
         <div class="social-icons">
-          <!-- Placeholder icons -->
-          <span>FB</span>
-          <span>TW</span>
-          <span>IG</span>
+          <a
+            href="https://github.com/DCT-Berinyuy/book-bridge"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="GitHub"
+          >
+            <Github size={20} />
+          </a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; {new Date().getFullYear()} BookBridge. All rights reserved.</p>
+      <p>
+        &copy; {new Date().getFullYear()} BookBridge. Built by
+        <a
+          href="https://linktr.ee/DeepCodeThinking"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="color: var(--scholar-blue); font-weight: 600;">Mr.DCT</a
+        >. All rights reserved.
+      </p>
     </div>
   </footer>
 </div>
@@ -113,6 +158,19 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .github-link {
+    color: var(--charcoal);
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+    text-decoration: none;
+    margin: 0 0.5rem;
+  }
+
+  .github-link:hover {
+    color: var(--scholar-blue);
   }
 
   .logo {
@@ -166,7 +224,7 @@
     flex-direction: column;
     gap: 1.5rem;
     border-top: 1px solid #eee;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
   }
 
   @media (max-width: 768px) {
@@ -207,7 +265,8 @@
     gap: 1rem;
   }
 
-  .footer-links h3, .footer-social h3 {
+  .footer-links h3,
+  .footer-social h3 {
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
   }
