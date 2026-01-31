@@ -7,13 +7,14 @@
     Smartphone,
   } from "lucide-svelte";
   import { onMount } from "svelte";
+  import screenshot from "$lib/assets/screenshot.png";
 
   // Micro-animations logic could go here
 </script>
 
 <div class="landing">
   <!-- Hero Section -->
-  <section class="hero">
+  <section id="showcase" class="hero">
     <div class="container hero-content">
       <div class="hero-text">
         <span class="badge">Marketplace for Students</span>
@@ -24,13 +25,18 @@
         </p>
 
         <div class="hero-actions">
-          <button class="btn-primary"
-            >Browse Books <ArrowRight
-              size={18}
-              style="margin-left: 8px"
-            /></button
+          <a
+            href="#features"
+            class="btn-primary"
+            style="text-decoration: none; display: flex; align-items: center;"
           >
-          <button class="btn-secondary">Learn More</button>
+            Browse Books <ArrowRight size={18} style="margin-left: 8px" />
+          </a>
+          <a
+            href="#features"
+            class="btn-secondary"
+            style="text-decoration: none;">Learn More</a
+          >
         </div>
 
         <div class="stats">
@@ -54,12 +60,11 @@
           <!-- Main App Mockup Placeholder -->
           <div class="phone-mockup">
             <div class="phone-screen">
-              <div class="app-header"></div>
-              <div class="app-body">
-                <div class="skeleton card"></div>
-                <div class="skeleton card"></div>
-                <div class="skeleton card"></div>
-              </div>
+              <img
+                src={screenshot}
+                alt="BookBridge App Preview"
+                class="screenshot-img"
+              />
             </div>
           </div>
           <div class="blob"></div>
@@ -70,6 +75,10 @@
 
   <!-- Features Section -->
   <section id="features" class="features">
+    <div
+      id="how-it-works"
+      style="position: absolute; transform: translateY(-100px);"
+    ></div>
     <div class="container">
       <div class="section-header">
         <h2>Built for the <span>Cameroonian</span> Student</h2>
@@ -135,12 +144,15 @@
         <p>
           Join thousands of students across Yaoundé, Buea, and Douala today.
         </p>
-        <button
+        <a
+          href="https://github.com/DCT-Berinyuy/book-bridge/releases"
+          target="_blank"
+          rel="noopener noreferrer"
           class="btn-primary"
-          style="background-color: white; color: var(--scholar-blue)"
+          style="background-color: white; color: var(--scholar-blue); text-decoration: none; display: inline-block;"
         >
           Download for Android
-        </button>
+        </a>
       </div>
     </div>
   </section>
@@ -245,27 +257,14 @@
     border-radius: 30px;
     overflow: hidden;
     position: relative;
-  }
-
-  .app-header {
-    height: 80px;
-    background: var(--scholar-blue);
-  }
-
-  .app-body {
-    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
   }
 
-  .skeleton {
-    background: #eee;
-    border-radius: 12px;
-  }
-
-  .skeleton.card {
-    height: 120px;
+  .screenshot-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .blob {
