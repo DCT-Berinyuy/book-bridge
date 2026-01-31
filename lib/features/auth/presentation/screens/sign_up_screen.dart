@@ -22,13 +22,50 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    // Add a listener to handle UI feedback
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authViewModel = context.read<AuthViewModel>();
+      authViewModel.addListener(_onAuthStateChanged);
+    });
+  }
+
+  @override
   void dispose() {
+    context.read<AuthViewModel>().removeListener(_onAuthStateChanged);
     _fullNameController.dispose();
     _emailController.dispose();
     _localityController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  void _onAuthStateChanged() {
+    final authViewModel = context.read<AuthViewModel>();
+    if (authViewModel.authState == AuthState.error) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+                authViewModel.errorMessage ?? 'An unknown error occurred.'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      // Clear the error in the view model after showing it
+      authViewModel.clearError();
+    } else if (authViewModel.authState == AuthState.authenticated) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: const Text('Sign up successful! Welcome.'),
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+          ),
+        );
+    }
   }
 
   @override
@@ -87,37 +124,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Error message
-                        if (authViewModel.errorMessage != null)
-                          Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.error,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.error_outline,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Text(
-                                    authViewModel.errorMessage!,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        if (authViewModel.errorMessage != null)
-                          const SizedBox(height: 24),
-
                         // Full Name
                         const Text(
                           'Full Name',
@@ -275,19 +281,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: ElevatedButton(
                             onPressed:
                                 authViewModel.authState == AuthState.loading
-                                ? null
-                                : () async {
-                                    FocusScope.of(context).unfocus();
-                                    if (_formKey.currentState?.validate() ??
-                                        false) {
-                                      await authViewModel.signUp(
-                                        email: _emailController.text,
-                                        password: _passwordController.text,
-                                        fullName: _fullNameController.text,
-                                        locality: _localityController.text,
-                                      );
-                                    }
-                                  },
+                                    ? null
+                                    : () {
+                                        FocusScope.of(context).unfocus();
+                                        if (_formKey.currentState
+                                                ?.validate() ??
+                                            false) {
+                                          authViewModel.signUp(
+                                            email: _emailController.text.trim(),
+                                            password:
+                                                _passwordController.text.trim(),
+                                            fullName:
+                                                _fullNameController.text.trim(),
+                                            locality:
+                                                _localityController.text.trim(),
+                                          );
+                                        }
+                                      },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(
                                 0xFF1A4D8C,

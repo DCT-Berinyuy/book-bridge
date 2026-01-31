@@ -7,6 +7,8 @@ import 'package:book_bridge/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/get_current_user_usecase.dart';
+import 'package:book_bridge/features/auth/domain/usecases/send_password_reset_email_usecase.dart';
+import 'package:book_bridge/features/auth/domain/usecases/update_user_usecase.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:book_bridge/features/listings/data/datasources/supabase_listings_data_source.dart';
 import 'package:book_bridge/features/listings/data/datasources/supabase_storage_data_source.dart';
@@ -69,6 +71,14 @@ Future<void> setupDependencyInjection() async {
     GetCurrentUserUseCase(repository: getIt<AuthRepository>()),
   );
 
+  getIt.registerSingleton<SendPasswordResetEmailUseCase>(
+    SendPasswordResetEmailUseCase(repository: getIt<AuthRepository>()),
+  );
+
+  getIt.registerSingleton<UpdateUserUseCase>(
+    UpdateUserUseCase(repository: getIt<AuthRepository>()),
+  );
+
   // Auth Feature - Presentation Layer (ViewModels)
   getIt.registerSingleton<AuthViewModel>(
     AuthViewModel(
@@ -76,6 +86,7 @@ Future<void> setupDependencyInjection() async {
       signInUseCase: getIt<SignInUseCase>(),
       signOutUseCase: getIt<SignOutUseCase>(),
       getCurrentUserUseCase: getIt<GetCurrentUserUseCase>(),
+      sendPasswordResetEmailUseCase: getIt<SendPasswordResetEmailUseCase>(),
       repository: getIt<AuthRepository>(),
     ),
   );
@@ -144,6 +155,7 @@ Future<void> setupDependencyInjection() async {
       getCurrentUserUseCase: getIt<GetCurrentUserUseCase>(),
       getUserListingsUseCase: getIt<GetUserListingsUseCase>(),
       deleteListingUseCase: getIt<DeleteListingUseCase>(),
+      updateUserUseCase: getIt<UpdateUserUseCase>(),
     ),
   );
 

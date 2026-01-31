@@ -21,6 +21,24 @@ class User extends Equatable {
     required this.createdAt,
   });
 
+  User copyWith({
+    String? id,
+    String? email,
+    String? fullName,
+    String? locality,
+    String? whatsappNumber,
+    DateTime? createdAt,
+  }) {
+    return User(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      fullName: fullName ?? this.fullName,
+      locality: locality ?? this.locality,
+      whatsappNumber: whatsappNumber ?? this.whatsappNumber,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
   @override
   List<Object?> get props => [
     id,

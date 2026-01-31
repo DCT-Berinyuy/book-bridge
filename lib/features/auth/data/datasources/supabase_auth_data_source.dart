@@ -120,6 +120,19 @@ class SupabaseAuthDataSource {
     }
   }
 
+  /// Sends a password reset email to the given email address.
+  ///
+  /// Throws [AuthAppException] if the operation fails.
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await supabaseClient.auth.resetPasswordForEmail(email);
+    } on AuthException catch (e) {
+      throw AuthAppException(message: e.message);
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
+
   /// Streams authentication state changes.
   ///
   /// Emits [UserModel] when a user signs in/up and null when they sign out.
@@ -189,6 +202,25 @@ class SupabaseAuthDataSource {
         }
       }
     }
-    throw ServerException(message: 'Timeout waiting for profile creation');
+  /// Updates a user's profile data.
+  Future<UserModel> updateUser(UserModel userToUpdate) async {
+    try {
+      final response = await supabaseClient
+          .from('profiles')
+          .update({
+            'full_name': userToUpdate.fullName,
+            'locality': userToUpdate.locality,
+            'whatsapp_number': userToUpdate.whatsappNumber,
+          })
+          .eq('id', userToUpdate.id)
+          .select()
+          .single();
+
+      return UserModel.fromJson(response);
+    } on PostgrestException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
   }
 }

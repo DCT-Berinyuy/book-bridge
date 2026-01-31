@@ -102,10 +102,10 @@ CREATE TABLE profiles (
 -- Enable Row Level Security
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 
--- Create RLS policy: Users can only see their own profile
-CREATE POLICY "Users can view their own profile"
+-- Create RLS policy: Authenticated users can view all profiles (for listings info)
+CREATE POLICY "Authenticated users can view all profiles"
   ON profiles FOR SELECT
-  USING (auth.uid() = id);
+  USING (auth.role() = 'authenticated');
 
 -- Create RLS policy: Users can update their own profile
 CREATE POLICY "Users can update their own profile"
@@ -585,3 +585,4 @@ If you encounter any issues:
 **Status**: Ready for Integration ✅
 
 Good luck with your BookBridge integration! 🚀
+\n## Automatic Profile Creation on Sign-Up (Production Setup)\n\nThis SQL code creates a trigger that automatically adds a new user to the `profiles` table whenever they sign up through Supabase Authentication. This is crucial for the app to function correctly.\n\nPlease run this in your Supabase SQL Editor:\n\n```sql\n-- Function to create a profile for a new user\ncreate function public.handle_new_user()\nreturns trigger\nlanguage plpgsql\nsecurity definer set search_path = public\nas $$\nbegin\n  insert into public.profiles (id, full_name, email, locality, whatsapp_number)\n  values (\n    new.id,\n    new.raw_user_meta_data->>'full_name',\n    new.email,\n    new.raw_user_meta_data->>'locality',\n    new.raw_user_meta_data->>'whatsapp_number'\n  );\n  return new;\nend;\n$$\n\n-- Trigger to run the function after a new user is created\ncreate or replace trigger on_auth_user_created\n  after insert on auth.users\n  for each row execute procedure public.handle_new_user();\n```\n

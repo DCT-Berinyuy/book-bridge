@@ -1,3 +1,4 @@
+import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -56,11 +57,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.settings, color: Colors.white),
-                    onPressed: () {
-                      // Settings functionality
+                  PopupMenuButton<String>(
+                    onSelected: (value) {
+                      if (value == 'signOut') {
+                        context.read<AuthViewModel>().signOut();
+                      }
                     },
+                    icon: const Icon(Icons.more_vert, color: Colors.white),
+                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                      const PopupMenuItem<String>(
+                        value: 'signOut',
+                        child: ListTile(
+                          leading: Icon(Icons.exit_to_app),
+                          title: Text('Sign Out'),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -162,12 +174,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(height: 24),
 
                       // User name
-                      Text(
-                        user.fullName.isNotEmpty ? user.fullName : user.email,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            user.fullName.isNotEmpty ? user.fullName : user.email,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.edit, size: 20, color: Colors.grey),
+                            onPressed: () => context.push('/edit-profile'),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 8),
 

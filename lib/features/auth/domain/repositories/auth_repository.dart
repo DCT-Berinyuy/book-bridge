@@ -35,9 +35,7 @@ abstract class AuthRepository {
   /// Returns either a [Failure] or the current [User].
   /// Returns [NotAuthenticatedFailure] if no user is authenticated.
   Future<Either<Failure, User>> getCurrentUser();
-
-  /// Streams changes to the authentication state.
-  ///
-  /// Emits the current user if authenticated, or null if not.
   Stream<User?> get authStateChanges;
+  Future<Either<Failure, void>> sendPasswordResetEmail(String email);
+  Future<Either<Failure, User>> updateUser(User user);
 }

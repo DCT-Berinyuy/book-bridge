@@ -19,10 +19,96 @@ class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    // Add a listener to handle UI feedback
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authViewModel = context.read<AuthViewModel>();
+      authViewModel.addListener(_onAuthStateChanged);
+    });
+  }
+
+  @override
   void dispose() {
+    context.read<AuthViewModel>().removeListener(_onAuthStateChanged);
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void _onAuthStateChanged() {
+    final authViewModel = context.read<AuthViewModel>();
+    if (authViewModel.authState == AuthState.error) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+                authViewModel.errorMessage ?? 'An unknown error occurred.'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      // Clear the error in the view model after showing it
+      authViewModel.clearError();
+    } else if (authViewModel.authStatus == AuthStatus.passwordResetSent) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(authViewModel.successMessage ??
+                'Password reset link sent!'),
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+          ),
+        );
+      authViewModel.clearStatus();
+    }
+  }
+
+  void _showForgotPasswordDialog(BuildContext context) {
+    final emailDialogController = TextEditingController();
+    final authViewModel = context.read<AuthViewModel>();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Reset Password'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                  'Enter your email address to receive a password reset link.'),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: emailDialogController,
+                autofocus: true,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  hintText: 'student@university.cm',
+                ),
+                keyboardType: TextInputType.emailAddress,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (emailDialogController.text.isNotEmpty) {
+                  authViewModel.sendPasswordResetEmail(
+                      email: emailDialogController.text.trim());
+                  Navigator.of(context).pop();
+                }
+              },
+              child: const Text('Send Link'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -107,37 +193,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Error message
-                        if (authViewModel.errorMessage != null)
-                          Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.error,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.error_outline,
-                                  color: Color(0xFF2D3436),
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Text(
-                                    authViewModel.errorMessage!,
-                                    style: const TextStyle(
-                                      color: Color(0xFF2D3436),
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        if (authViewModel.errorMessage != null)
-                          const SizedBox(height: 24),
-
                         // Email Field
                         const Text(
                           'Email Address',
@@ -223,9 +278,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                            onPressed: () {
-                              // Forgot password functionality
-                            },
+                            onPressed: () =>
+                                _showForgotPasswordDialog(context),
                             child: const Text(
                               'Forgot password?',
                               style: TextStyle(
@@ -244,24 +298,20 @@ class _SignInScreenState extends State<SignInScreen> {
                           child: ElevatedButton(
                             onPressed:
                                 authViewModel.authState == AuthState.loading
-                                ? null
-                                : () async {
-                                    FocusScope.of(context).unfocus();
-                                    if (_formKey.currentState?.validate() ??
-                                        false) {
-                                      final navigator = GoRouter.of(context);
-                                      await authViewModel.signIn(
-                                        email: _emailController.text,
-                                        password: _passwordController.text,
-                                      );
-
-                                      if (mounted &&
-                                          authViewModel.authState ==
-                                              AuthState.authenticated) {
-                                        navigator.go('/home');
-                                      }
-                                    }
-                                  },
+                                    ? null
+                                    : () {
+                                        FocusScope.of(context).unfocus();
+                                        if (_formKey.currentState
+                                                ?.validate() ??
+                                            false) {
+                                          authViewModel.signIn(
+                                            email:
+                                                _emailController.text.trim(),
+                                            password: _passwordController.text
+                                                .trim(),
+                                          );
+                                        }
+                                      },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(
                                 0xFF1A4D8C,

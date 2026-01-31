@@ -10,6 +10,7 @@ import 'package:book_bridge/features/listings/presentation/screens/sell_screen.d
 import 'package:book_bridge/features/listings/presentation/screens/profile_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/search_screen.dart';
 import 'package:book_bridge/core/presentation/widgets/scaffold_with_navbar.dart';
+import 'package:book_bridge/features/auth/presentation/screens/edit_profile_screen.dart';
 import 'package:book_bridge/injection_container.dart' as di;
 
 /// App router configuration using go_router.
@@ -136,6 +137,13 @@ final appRouter = GoRouter(
         final listingId = state.pathParameters['id']!;
         return ListingDetailsScreen(listingId: listingId);
       },
+    ),
+
+    // Edit Profile Route (Full Screen, outside shell)
+    GoRoute(
+      path: '/edit-profile',
+      name: 'editProfile',
+      builder: (context, state) => const EditProfileScreen(),
     ),
   ],
 );

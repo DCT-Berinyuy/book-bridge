@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:book_bridge/features/auth/domain/entities/user.dart';
 import 'package:book_bridge/features/auth/domain/usecases/get_current_user_usecase.dart';
+import 'package:book_bridge/features/auth/domain/usecases/update_user_usecase.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/listings/domain/usecases/get_user_listings_usecase.dart';
 import 'package:book_bridge/features/listings/domain/usecases/delete_listing_usecase.dart';
@@ -16,6 +17,7 @@ class ProfileViewModel extends ChangeNotifier {
   final GetCurrentUserUseCase getCurrentUserUseCase;
   final GetUserListingsUseCase getUserListingsUseCase;
   final DeleteListingUseCase deleteListingUseCase;
+  final UpdateUserUseCase updateUserUseCase;
 
   ProfileState _profileState = ProfileState.initial;
   String? _errorMessage;
@@ -27,6 +29,7 @@ class ProfileViewModel extends ChangeNotifier {
     required this.getCurrentUserUseCase,
     required this.getUserListingsUseCase,
     required this.deleteListingUseCase,
+    required this.updateUserUseCase,
   });
 
   // Getters
@@ -56,6 +59,44 @@ class ProfileViewModel extends ChangeNotifier {
         _loadUserListings(user.id);
       },
     );
+  }
+
+  /// Updates the current user's profile.
+  Future<void> updateUser({
+    String? fullName,
+    String? locality,
+    String? whatsappNumber,
+  }) async {
+    if (_currentUser == null) {
+      _errorMessage = 'No user to update.';
+      _profileState = ProfileState.error;
+      notifyListeners();
+      return;
+    }
+
+    _profileState = ProfileState.loading;
+    _errorMessage = null;
+    notifyListeners();
+
+    final updatedUser = _currentUser!.copyWith(
+      fullName: fullName ?? _currentUser!.fullName,
+      locality: locality ?? _currentUser!.locality,
+      whatsappNumber: whatsappNumber ?? _currentUser!.whatsappNumber,
+    );
+
+    final result = await updateUserUseCase(updatedUser);
+
+    result.fold(
+      (failure) {
+        _profileState = ProfileState.error;
+        _errorMessage = failure.message;
+      },
+      (user) {
+        _currentUser = user;
+        _profileState = ProfileState.loaded; // Back to loaded state
+      },
+    );
+    notifyListeners();
   }
 
   /// Loads listings for the current user.

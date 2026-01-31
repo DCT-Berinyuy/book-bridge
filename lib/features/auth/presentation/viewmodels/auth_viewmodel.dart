@@ -4,10 +4,12 @@ import 'package:book_bridge/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/get_current_user_usecase.dart';
+import 'package:book_bridge/features/auth/domain/usecases/send_password_reset_email_usecase.dart';
 import 'package:book_bridge/features/auth/domain/repositories/auth_repository.dart';
 
 /// Represents the different authentication states.
 enum AuthState { initial, loading, authenticated, unauthenticated, error }
+enum AuthStatus { none, passwordResetSent }
 
 /// ViewModel for managing authentication state and operations.
 ///
@@ -18,17 +20,22 @@ class AuthViewModel extends ChangeNotifier {
   final SignInUseCase signInUseCase;
   final SignOutUseCase signOutUseCase;
   final GetCurrentUserUseCase getCurrentUserUseCase;
+  final SendPasswordResetEmailUseCase sendPasswordResetEmailUseCase;
   final AuthRepository repository;
 
   // State
   AuthState _authState = AuthState.initial;
+  AuthStatus _authStatus = AuthStatus.none;
   User? _currentUser;
   String? _errorMessage;
+  String? _successMessage;
 
   // Getters
   AuthState get authState => _authState;
+  AuthStatus get authStatus => _authStatus;
   User? get currentUser => _currentUser;
   String? get errorMessage => _errorMessage;
+  String? get successMessage => _successMessage;
   bool get isAuthenticated =>
       _authState == AuthState.authenticated && _currentUser != null;
 
@@ -37,6 +44,7 @@ class AuthViewModel extends ChangeNotifier {
     required this.signInUseCase,
     required this.signOutUseCase,
     required this.getCurrentUserUseCase,
+    required this.sendPasswordResetEmailUseCase,
     required this.repository,
   }) {
     debugPrint('AuthViewModel: Initializing...');
@@ -197,9 +205,39 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Sends a password reset email.
+  Future<void> sendPasswordResetEmail({required String email}) async {
+    _authState = AuthState.loading;
+    _errorMessage = null;
+    _successMessage = null;
+    notifyListeners();
+
+    final result = await sendPasswordResetEmailUseCase(email);
+    result.fold(
+      (failure) {
+        _authState = AuthState.error;
+        _errorMessage = failure.message;
+      },
+      (_) {
+        _authState = AuthState.unauthenticated; // Stay on the same screen
+        _authStatus = AuthStatus.passwordResetSent;
+        _successMessage = 'Password reset link sent to your email.';
+      },
+    );
+    notifyListeners();
+  }
+
   /// Clears the error message.
   void clearError() {
     _errorMessage = null;
     notifyListeners();
+  }
+
+  /// Clears status messages.
+  void clearStatus() {
+    _errorMessage = null;
+    _successMessage = null;
+    _authStatus = AuthStatus.none;
+    // Don't notify listeners here to avoid unnecessary rebuilds if no message was there
   }
 }
