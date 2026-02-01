@@ -44,7 +44,8 @@ class _SignInScreenState extends State<SignInScreen> {
         ..showSnackBar(
           SnackBar(
             content: Text(
-                authViewModel.errorMessage ?? 'An unknown error occurred.'),
+              authViewModel.errorMessage ?? 'An unknown error occurred.',
+            ),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
@@ -55,8 +56,9 @@ class _SignInScreenState extends State<SignInScreen> {
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: Text(authViewModel.successMessage ??
-                'Password reset link sent!'),
+            content: Text(
+              authViewModel.successMessage ?? 'Password reset link sent!',
+            ),
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
         );
@@ -77,7 +79,8 @@ class _SignInScreenState extends State<SignInScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
-                  'Enter your email address to receive a password reset link.'),
+                'Enter your email address to receive a password reset link.',
+              ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: emailDialogController,
@@ -99,7 +102,8 @@ class _SignInScreenState extends State<SignInScreen> {
               onPressed: () {
                 if (emailDialogController.text.isNotEmpty) {
                   authViewModel.sendPasswordResetEmail(
-                      email: emailDialogController.text.trim());
+                    email: emailDialogController.text.trim(),
+                  );
                   Navigator.of(context).pop();
                 }
               },
@@ -278,8 +282,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                            onPressed: () =>
-                                _showForgotPasswordDialog(context),
+                            onPressed: () => _showForgotPasswordDialog(context),
                             child: const Text(
                               'Forgot password?',
                               style: TextStyle(
@@ -298,20 +301,18 @@ class _SignInScreenState extends State<SignInScreen> {
                           child: ElevatedButton(
                             onPressed:
                                 authViewModel.authState == AuthState.loading
-                                    ? null
-                                    : () {
-                                        FocusScope.of(context).unfocus();
-                                        if (_formKey.currentState
-                                                ?.validate() ??
-                                            false) {
-                                          authViewModel.signIn(
-                                            email:
-                                                _emailController.text.trim(),
-                                            password: _passwordController.text
-                                                .trim(),
-                                          );
-                                        }
-                                      },
+                                ? null
+                                : () {
+                                    FocusScope.of(context).unfocus();
+                                    if (_formKey.currentState?.validate() ??
+                                        false) {
+                                      authViewModel.signIn(
+                                        email: _emailController.text.trim(),
+                                        password: _passwordController.text
+                                            .trim(),
+                                      );
+                                    }
+                                  },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(
                                 0xFF1A4D8C,

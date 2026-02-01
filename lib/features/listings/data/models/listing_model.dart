@@ -15,6 +15,7 @@ class ListingModel extends Listing {
     required super.description,
     required super.sellerId,
     required super.status,
+    super.category,
     required super.createdAt,
     super.sellerType = 'individual',
     super.isBuyBackEligible = false,
@@ -39,6 +40,7 @@ class ListingModel extends Listing {
       description: json['description'] as String? ?? '',
       sellerId: json['seller_id'] as String? ?? '',
       status: json['status'] as String? ?? 'available',
+      category: json['category'] as String?,
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'] as String)
           : DateTime.now(),
@@ -69,6 +71,7 @@ class ListingModel extends Listing {
       'description': description,
       'seller_id': sellerId,
       'status': status,
+      'category': category,
       'created_at': createdAt.toIso8601String(),
       'seller_type': sellerType,
       'is_buy_back_eligible': isBuyBackEligible,
@@ -88,6 +91,7 @@ class ListingModel extends Listing {
       description: listing.description,
       sellerId: listing.sellerId,
       status: listing.status,
+      category: listing.category,
       createdAt: listing.createdAt,
       sellerType: listing.sellerType,
       isBuyBackEligible: listing.isBuyBackEligible,

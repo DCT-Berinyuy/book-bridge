@@ -18,6 +18,7 @@ class HomeViewModel extends ChangeNotifier {
   int _currentOffset = 0;
   bool _hasMoreListings = true;
   final int _pageSize = 50;
+  String? _selectedCategory;
 
   // Getters
   HomeState get homeState => _homeState;
@@ -25,6 +26,7 @@ class HomeViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
   bool get hasMoreListings => _hasMoreListings;
   bool get isLoading => _homeState == HomeState.loading;
+  String? get selectedCategory => _selectedCategory;
 
   HomeViewModel({required this.getListingsUseCase}) {
     _loadInitialListings();
@@ -44,6 +46,7 @@ class HomeViewModel extends ChangeNotifier {
   Future<void> _fetchListings({int offset = 0}) async {
     final params = GetListingsParams(
       status: 'available',
+      category: _selectedCategory,
       limit: _pageSize,
       offset: offset,
     );
@@ -104,5 +107,17 @@ class HomeViewModel extends ChangeNotifier {
   void clearError() {
     _errorMessage = null;
     notifyListeners();
+  }
+
+  /// Sets the selected category and reloads listings.
+  Future<void> setSelectedCategory(String? category) async {
+    _selectedCategory = category;
+    await _loadInitialListings();
+  }
+
+  /// Clears the selected category and reloads all listings.
+  Future<void> clearCategoryFilter() async {
+    _selectedCategory = null;
+    await _loadInitialListings();
   }
 }

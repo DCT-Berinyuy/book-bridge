@@ -50,7 +50,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ..showSnackBar(
           SnackBar(
             content: Text(
-                authViewModel.errorMessage ?? 'An unknown error occurred.'),
+              authViewModel.errorMessage ?? 'An unknown error occurred.',
+            ),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
@@ -281,23 +282,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: ElevatedButton(
                             onPressed:
                                 authViewModel.authState == AuthState.loading
-                                    ? null
-                                    : () {
-                                        FocusScope.of(context).unfocus();
-                                        if (_formKey.currentState
-                                                ?.validate() ??
-                                            false) {
-                                          authViewModel.signUp(
-                                            email: _emailController.text.trim(),
-                                            password:
-                                                _passwordController.text.trim(),
-                                            fullName:
-                                                _fullNameController.text.trim(),
-                                            locality:
-                                                _localityController.text.trim(),
-                                          );
-                                        }
-                                      },
+                                ? null
+                                : () {
+                                    FocusScope.of(context).unfocus();
+                                    if (_formKey.currentState?.validate() ??
+                                        false) {
+                                      authViewModel.signUp(
+                                        email: _emailController.text.trim(),
+                                        password: _passwordController.text
+                                            .trim(),
+                                        fullName: _fullNameController.text
+                                            .trim(),
+                                        locality: _localityController.text
+                                            .trim(),
+                                      );
+                                    }
+                                  },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(
                                 0xFF1A4D8C,

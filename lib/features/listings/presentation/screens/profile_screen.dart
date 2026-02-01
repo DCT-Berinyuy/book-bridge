@@ -64,15 +64,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       }
                     },
                     icon: const Icon(Icons.more_vert, color: Colors.white),
-                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                      const PopupMenuItem<String>(
-                        value: 'signOut',
-                        child: ListTile(
-                          leading: Icon(Icons.exit_to_app),
-                          title: Text('Sign Out'),
-                        ),
-                      ),
-                    ],
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<String>>[
+                          const PopupMenuItem<String>(
+                            value: 'signOut',
+                            child: ListTile(
+                              leading: Icon(Icons.exit_to_app),
+                              title: Text('Sign Out'),
+                            ),
+                          ),
+                        ],
                   ),
                 ],
               ),
@@ -178,14 +179,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            user.fullName.isNotEmpty ? user.fullName : user.email,
+                            user.fullName.isNotEmpty
+                                ? user.fullName
+                                : user.email,
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.edit, size: 20, color: Colors.grey),
+                            icon: const Icon(
+                              Icons.edit,
+                              size: 20,
+                              color: Colors.grey,
+                            ),
                             onPressed: () => context.push('/edit-profile'),
                           ),
                         ],

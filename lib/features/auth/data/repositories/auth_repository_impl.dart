@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:book_bridge/core/error/failures.dart';
 import 'package:book_bridge/core/error/exceptions.dart';
 import 'package:book_bridge/features/auth/data/datasources/supabase_auth_data_source.dart';
+import 'package:book_bridge/features/auth/data/models/user_model.dart';
 import 'package:book_bridge/features/auth/domain/entities/user.dart';
 import 'package:book_bridge/features/auth/domain/repositories/auth_repository.dart';
 

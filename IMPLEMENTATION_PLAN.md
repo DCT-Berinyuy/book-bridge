@@ -51,16 +51,16 @@ This document outlines the steps to transform the BookBridge app from a prototyp
 
 ## Phase 3: Final Polishing
 
-- [ ] **Task 3.1: Category Filtering**
-  - [ ] Add a `category` column to the `listings` table and provide the `ALTER TABLE` SQL.
-  - [ ] Implement the filtering logic in the `HomeViewModel` and data source when a category chip is selected.
+- [x] **Task 3.1: Category Filtering**
+  - [x] Add a `category` column to the `listings` table and provide the `ALTER TABLE` SQL.
+  - [x] Implement the filtering logic in the `HomeViewModel` and data source when a category chip is selected.
 
-- [ ] **Task 3.2: Notifications (UI Placeholder)**
-  - [ ] Create a basic, empty notifications screen to make the app bar icon functional.
+- [x] **Task 3.2: Notifications (UI Placeholder)**
+  - [x] Create a basic, empty notifications screen to make the app bar icon functional.
 
-- [ ] **Task 3.3: Code Cleanup and Final Review**
-  - [ ] Remove any remaining mock data or hardcoded values.
-  - [ ] Run `flutter analyze` and `dart format .` to ensure code quality.
-  - [ ] Review the entire app for any UI/UX inconsistencies.
+- [x] **Task 3.3: Code Cleanup and Final Review**
+  - [x] Remove any remaining mock data or hardcoded values.
+  - [x] Run `flutter analyze` and `dart format .` to ensure code quality.
+  - [x] Review the entire app for any UI/UX inconsistencies.
 
 - [ ] **Git Commit: `fix(app): Final polishing and feature completion`**

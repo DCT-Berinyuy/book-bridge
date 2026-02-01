@@ -28,6 +28,7 @@ class SellViewModel extends ChangeNotifier {
   String _condition = 'good';
   String? _imageUrl;
   String? _description;
+  String? _category;
   String _sellerType = 'individual';
   bool _isBuyBackEligible = false;
   int _stockCount = 1;
@@ -46,6 +47,7 @@ class SellViewModel extends ChangeNotifier {
   String get condition => _condition;
   String? get imageUrl => _imageUrl;
   String? get description => _description;
+  String? get category => _category;
   String get sellerType => _sellerType;
   bool get isBuyBackEligible => _isBuyBackEligible;
   int get stockCount => _stockCount;
@@ -86,6 +88,12 @@ class SellViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Updates the category field.
+  void setCategory(String? category) {
+    _category = category;
+    notifyListeners();
+  }
+
   /// Updates the seller type field.
   void setSellerType(String sellerType) {
     _sellerType = sellerType;
@@ -112,6 +120,7 @@ class SellViewModel extends ChangeNotifier {
     _condition = 'good';
     _imageUrl = null;
     _description = null;
+    _category = null;
     _sellerType = 'individual';
     _isBuyBackEligible = false;
     _stockCount = 1;
@@ -177,6 +186,7 @@ class SellViewModel extends ChangeNotifier {
       condition: _condition,
       imageUrl: _imageUrl!,
       description: _description,
+      category: _category,
       sellerType: _sellerType,
       isBuyBackEligible: _isBuyBackEligible,
       stockCount: _stockCount,

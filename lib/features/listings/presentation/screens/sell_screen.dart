@@ -113,6 +113,17 @@ class _SellScreenState extends State<SellScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Sell a Book'), centerTitle: true),
+      body: Consumer<SellViewModel>(
+        builder: (context, viewModel, child) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   GestureDetector(
                     onTap: () {
                       _showImageSelectionDialog(context, viewModel);
@@ -356,6 +367,72 @@ class _SellScreenState extends State<SellScreen> {
                           if (value != null) {
                             viewModel.setCondition(value);
                           }
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Category
+                  const Text(
+                    'Category',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF2D3436), // Ink Black
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Theme.of(context).dividerColor),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String?>(
+                        value: viewModel.category,
+                        isExpanded: true,
+                        hint: const Text('Select a category'),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        items: const [
+                          DropdownMenuItem(value: null, child: Text('None')),
+                          DropdownMenuItem(
+                            value: 'Textbooks',
+                            child: Text('Textbooks'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Fiction',
+                            child: Text('Fiction'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Science',
+                            child: Text('Science'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'History',
+                            child: Text('History'),
+                          ),
+                          DropdownMenuItem(value: 'GCE', child: Text('GCE')),
+                          DropdownMenuItem(
+                            value: 'Language',
+                            child: Text('Language'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Mathematics',
+                            child: Text('Mathematics'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Engineering',
+                            child: Text('Engineering'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'Medicine',
+                            child: Text('Medicine'),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          viewModel.setCategory(value);
                         },
                       ),
                     ),

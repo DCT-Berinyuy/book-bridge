@@ -18,12 +18,14 @@ class ListingRepositoryImpl implements ListingRepository {
   @override
   Future<Either<Failure, List<Listing>>> getListings({
     String status = 'available',
+    String? category,
     int limit = 50,
     int offset = 0,
   }) async {
     try {
       final listingModels = await dataSource.getListings(
         status: status,
+        category: category,
         limit: limit,
         offset: offset,
       );
@@ -92,6 +94,7 @@ class ListingRepositoryImpl implements ListingRepository {
     required String condition,
     required String imageUrl,
     String? description,
+    String? category,
     String sellerType = 'individual',
     bool isBuyBackEligible = false,
     int stockCount = 1,
@@ -104,6 +107,7 @@ class ListingRepositoryImpl implements ListingRepository {
         condition: condition,
         imageUrl: imageUrl,
         description: description,
+        category: category,
         sellerType: sellerType,
         isBuyBackEligible: isBuyBackEligible,
         stockCount: stockCount,

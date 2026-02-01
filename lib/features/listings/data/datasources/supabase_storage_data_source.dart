@@ -34,7 +34,9 @@ class SupabaseStorageDataSource {
       final bytes = await imageFile.readAsBytes();
 
       // Upload the file to the 'book_images' bucket using binary upload
-      await Supabase.instance.client.storage.from('book_images').uploadBinary(
+      await Supabase.instance.client.storage
+          .from('book_images')
+          .uploadBinary(
             filePath, // Use filePath instead of fileName
             bytes,
             fileOptions: const FileOptions(
@@ -62,8 +64,12 @@ class SupabaseStorageDataSource {
     const chars =
         'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     final random = math.Random();
-    return String.fromCharCodes(Iterable.generate(
-        length, (_) => chars.codeUnitAt(random.nextInt(chars.length))));
+    return String.fromCharCodes(
+      Iterable.generate(
+        length,
+        (_) => chars.codeUnitAt(random.nextInt(chars.length)),
+      ),
+    );
   }
 
   /// Deletes an image from Supabase Storage.

@@ -14,6 +14,7 @@ class GetListingsUseCase extends UseCase<List<Listing>, GetListingsParams> {
   Future<Either<Failure, List<Listing>>> call(GetListingsParams params) {
     return repository.getListings(
       status: params.status,
+      category: params.category,
       limit: params.limit,
       offset: params.offset,
     );
@@ -23,11 +24,13 @@ class GetListingsUseCase extends UseCase<List<Listing>, GetListingsParams> {
 /// Parameters for the GetListings use case.
 class GetListingsParams {
   final String status;
+  final String? category;
   final int limit;
   final int offset;
 
   GetListingsParams({
     this.status = 'available',
+    this.category,
     this.limit = 50,
     this.offset = 0,
   });

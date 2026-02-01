@@ -14,6 +14,7 @@ class Listing extends Equatable {
   final String sellerId;
   final String description;
   final String status; // 'available', 'sold'
+  final String? category; // Category of the book
   final DateTime createdAt;
 
   // Social Venture Features
@@ -37,6 +38,7 @@ class Listing extends Equatable {
     required this.description,
     required this.sellerId,
     required this.status,
+    this.category,
     required this.createdAt,
     this.sellerType = 'individual',
     this.isBuyBackEligible = false,
@@ -49,22 +51,23 @@ class Listing extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        title,
-        author,
-        priceFcfa,
-        condition,
-        imageUrl,
-        description,
-        sellerId,
-        status,
-        createdAt,
-        sellerType,
-        isBuyBackEligible,
-        stockCount,
-        isFeatured,
-        sellerName,
-        sellerLocality,
-        sellerWhatsapp,
-      ];
+    id,
+    title,
+    author,
+    priceFcfa,
+    condition,
+    imageUrl,
+    description,
+    sellerId,
+    status,
+    category,
+    createdAt,
+    sellerType,
+    isBuyBackEligible,
+    stockCount,
+    isFeatured,
+    sellerName,
+    sellerLocality,
+    sellerWhatsapp,
+  ];
 }

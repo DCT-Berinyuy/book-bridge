@@ -9,6 +9,7 @@ import 'package:book_bridge/features/auth/domain/repositories/auth_repository.da
 
 /// Represents the different authentication states.
 enum AuthState { initial, loading, authenticated, unauthenticated, error }
+
 enum AuthStatus { none, passwordResetSent }
 
 /// ViewModel for managing authentication state and operations.

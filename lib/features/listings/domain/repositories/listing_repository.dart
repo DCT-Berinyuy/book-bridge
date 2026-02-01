@@ -10,10 +10,11 @@ import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 abstract class ListingRepository {
   /// Fetches all available listings.
   ///
-  /// Optionally filters by [status] (defaults to 'available').
+  /// Optionally filters by [status] (defaults to 'available') and [category].
   /// Returns either a [Failure] or a list of [Listing] entities.
   Future<Either<Failure, List<Listing>>> getListings({
     String status = 'available',
+    String? category,
     int limit = 50,
     int offset = 0,
   });
@@ -47,6 +48,7 @@ abstract class ListingRepository {
     required String condition,
     required String imageUrl,
     String? description,
+    String? category,
     String sellerType = 'individual',
     bool isBuyBackEligible = false,
     int stockCount = 1,

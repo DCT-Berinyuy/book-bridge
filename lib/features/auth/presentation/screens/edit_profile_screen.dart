@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
-import 'package:book_bridge/features/auth/domain/entities/user.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -21,12 +20,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     super.initState();
     final profileViewModel = context.read<ProfileViewModel>();
-    _fullNameController =
-        TextEditingController(text: profileViewModel.currentUser?.fullName ?? '');
-    _localityController =
-        TextEditingController(text: profileViewModel.currentUser?.locality ?? '');
-    _whatsappController =
-        TextEditingController(text: profileViewModel.currentUser?.whatsappNumber ?? '');
+    _fullNameController = TextEditingController(
+      text: profileViewModel.currentUser?.fullName ?? '',
+    );
+    _localityController = TextEditingController(
+      text: profileViewModel.currentUser?.locality ?? '',
+    );
+    _whatsappController = TextEditingController(
+      text: profileViewModel.currentUser?.whatsappNumber ?? '',
+    );
 
     // Add a listener to handle UI feedback after profile update
     profileViewModel.addListener(_onProfileStateChanged);
@@ -49,7 +51,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ..showSnackBar(
           SnackBar(
             content: Text(
-                profileViewModel.errorMessage ?? 'Failed to update profile.'),
+              profileViewModel.errorMessage ?? 'Failed to update profile.',
+            ),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
@@ -70,9 +73,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Profile'),
-      ),
+      appBar: AppBar(title: const Text('Edit Profile')),
       body: Consumer<ProfileViewModel>(
         builder: (context, profileViewModel, child) {
           return SingleChildScrollView(
@@ -97,13 +98,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   TextFormField(
                     controller: _localityController,
                     enabled: !profileViewModel.isLoading,
-                    decoration: const InputDecoration(labelText: 'Locality / Neighborhood'),
+                    decoration: const InputDecoration(
+                      labelText: 'Locality / Neighborhood',
+                    ),
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _whatsappController,
                     enabled: !profileViewModel.isLoading,
-                    decoration: const InputDecoration(labelText: 'WhatsApp Number'),
+                    decoration: const InputDecoration(
+                      labelText: 'WhatsApp Number',
+                    ),
                     keyboardType: TextInputType.phone,
                   ),
                   const SizedBox(height: 32),

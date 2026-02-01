@@ -202,6 +202,10 @@ class SupabaseAuthDataSource {
         }
       }
     }
+    // If we reach here, it means we've exhausted all attempts
+    throw ServerException(message: 'Profile creation timed out');
+  }
+
   /// Updates a user's profile data.
   Future<UserModel> updateUser(UserModel userToUpdate) async {
     try {

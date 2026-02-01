@@ -21,14 +21,21 @@ class SupabaseListingsDataSource {
   /// Throws [ServerException] if the query fails.
   Future<List<ListingModel>> getListings({
     String status = 'available',
+    String? category,
     int limit = 50,
     int offset = 0,
   }) async {
     try {
-      final response = await supabaseClient
+      var query = supabaseClient
           .from('listings')
           .select('*, profiles:seller_id(*)')
-          .eq('status', status)
+          .eq('status', status);
+
+      if (category != null && category.isNotEmpty) {
+        query = query.eq('category', category);
+      }
+
+      final response = await query
           .order('created_at', ascending: false)
           .range(offset, offset + limit - 1);
 
@@ -104,10 +111,13 @@ class SupabaseListingsDataSource {
             params: {
               'query': query,
               '_limit': limit,
-              '_offset': 0, // Assuming offset will be handled by the RPC if needed
+              '_offset':
+                  0, // Assuming offset will be handled by the RPC if needed
             },
           )
-          .select('*, profiles:seller_id(*)') // Select the full listing and joined profile
+          .select(
+            '*, profiles:seller_id(*)',
+          ) // Select the full listing and joined profile
           .limit(limit); // Limit is applied after RPC returns results
 
       final listings = (response as List<dynamic>)
@@ -132,6 +142,7 @@ class SupabaseListingsDataSource {
     required String condition,
     required String imageUrl,
     String? description,
+    String? category,
     String sellerType = 'individual',
     bool isBuyBackEligible = false,
     int stockCount = 1,
@@ -151,6 +162,7 @@ class SupabaseListingsDataSource {
             'condition': condition,
             'image_url': imageUrl,
             'description': description,
+            'category': category,
             'seller_id': userId,
             'status': 'available',
             'created_at': DateTime.now().toIso8601String(),

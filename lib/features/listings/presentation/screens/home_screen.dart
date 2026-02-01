@@ -14,7 +14,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
-  int _selectedCategoryIndex = 0; // New state variable
 
   @override
   void initState() {
@@ -34,14 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
         _scrollController.position.maxScrollExtent - 300) {
       context.read<HomeViewModel>().loadMoreListings();
     }
-  }
-
-  // New method to handle category selection
-  void _onCategorySelected(int index) {
-    setState(() {
-      _selectedCategoryIndex = index;
-      // In a real app, this would trigger filtering logic in the ViewModel
-    });
   }
 
   @override
@@ -66,7 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBody(HomeViewModel viewModel) {
-    if (viewModel.homeState == HomeState.loading && viewModel.listings.isEmpty) {
+    if (viewModel.homeState == HomeState.loading &&
+        viewModel.listings.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -79,10 +71,12 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     // Combine featured and regular listings
-    final featuredListings =
-        viewModel.listings.where((l) => l.isFeatured).toList();
-    final regularListings =
-        viewModel.listings.where((l) => !l.isFeatured).toList();
+    final featuredListings = viewModel.listings
+        .where((l) => l.isFeatured)
+        .toList();
+    final regularListings = viewModel.listings
+        .where((l) => !l.isFeatured)
+        .toList();
 
     return CustomScrollView(
       controller: _scrollController,
@@ -115,18 +109,26 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.cloud_off_rounded,
-                size: 80, color: Theme.of(context).colorScheme.error),
+            Icon(
+              Icons.cloud_off_rounded,
+              size: 80,
+              color: Theme.of(context).colorScheme.error,
+            ),
             const SizedBox(height: 24),
-            Text('Oops! Something Went Wrong',
-                style: GoogleFonts.lato(
-                    fontSize: 22, fontWeight: FontWeight.bold)),
+            Text(
+              'Oops! Something Went Wrong',
+              style: GoogleFonts.lato(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 8),
             Text(
               viewModel.errorMessage ?? 'Please check your connection.',
               textAlign: TextAlign.center,
-              style:
-                  TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
@@ -149,9 +151,13 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             const Icon(Icons.search_off_rounded, size: 80, color: Colors.grey),
             const SizedBox(height: 24),
-            Text('No Books Found',
-                style: GoogleFonts.lato(
-                    fontSize: 22, fontWeight: FontWeight.bold)),
+            Text(
+              'No Books Found',
+              style: GoogleFonts.lato(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 8),
             const Text(
               'Be the first to list a book in your area!',
@@ -172,19 +178,20 @@ class _HomeScreenState extends State<HomeScreen> {
       elevation: 2,
       backgroundColor: theme.appBarTheme.backgroundColor,
       foregroundColor: theme.appBarTheme.foregroundColor,
-      title: Text(
-        'BookBridge',
-        style: theme.appBarTheme.titleTextStyle,
-      ),
+      title: Text('BookBridge', style: theme.appBarTheme.titleTextStyle),
       actions: [
         IconButton(
-          icon: Icon(Icons.notifications_none_rounded,
-              color: theme.appBarTheme.foregroundColor),
-          onPressed: () {},
+          icon: Icon(
+            Icons.notifications_none_rounded,
+            color: theme.appBarTheme.foregroundColor,
+          ),
+          onPressed: () => context.push('/notifications'),
         ),
         IconButton(
-          icon: Icon(Icons.person_outline_rounded,
-              color: theme.appBarTheme.foregroundColor),
+          icon: Icon(
+            Icons.person_outline_rounded,
+            color: theme.appBarTheme.foregroundColor,
+          ),
           onPressed: () => context.push('/profile'),
         ),
       ],
@@ -202,12 +209,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.search,
-                      color: theme.colorScheme.onSurfaceVariant),
+                  Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
                   const SizedBox(width: 8),
-                  Text('Search by title or author...',
-                      style: TextStyle(
-                          color: theme.colorScheme.onSurfaceVariant)),
+                  Text(
+                    'Search by title or author...',
+                    style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+                  ),
                 ],
               ),
             ),
@@ -236,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
       'Fiction',
       'Science',
       'History',
-      'GCE'
+      'GCE',
     ];
     return SliverToBoxAdapter(
       child: SizedBox(
@@ -246,7 +253,10 @@ class _HomeScreenState extends State<HomeScreen> {
           itemCount: categories.length,
           padding: const EdgeInsets.symmetric(horizontal: 12),
           itemBuilder: (context, index) {
-            final isSelected = _selectedCategoryIndex == index;
+            final isSelected = index == 0
+                ? context.watch<HomeViewModel>().selectedCategory == null
+                : context.watch<HomeViewModel>().selectedCategory ==
+                      categories[index];
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: ChoiceChip(
@@ -254,12 +264,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 selected: isSelected,
                 onSelected: (selected) {
                   if (selected) {
-                    _onCategorySelected(index);
+                    if (index == 0) {
+                      // 'All' category - clear filter
+                      context.read<HomeViewModel>().clearCategoryFilter();
+                    } else {
+                      // Specific category
+                      context.read<HomeViewModel>().setSelectedCategory(
+                        categories[index],
+                      );
+                    }
                   }
                 },
                 selectedColor: Theme.of(context).colorScheme.primary,
-                backgroundColor:
-                    Theme.of(context).colorScheme.surfaceContainerHighest,
+                backgroundColor: Theme.of(
+                  context,
+                ).colorScheme.surfaceContainerHighest,
                 labelStyle: TextStyle(
                   color: isSelected
                       ? Theme.of(context).colorScheme.onPrimary
@@ -268,7 +287,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 side: BorderSide.none,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
             );
           },
@@ -309,13 +329,10 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
         ),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final listing = listings[index];
-            return _ListingCard(listing: listing);
-          },
-          childCount: listings.length,
-        ),
+        delegate: SliverChildBuilderDelegate((context, index) {
+          final listing = listings[index];
+          return _ListingCard(listing: listing);
+        }, childCount: listings.length),
       ),
     );
   }
@@ -344,10 +361,7 @@ class _ListingCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildImage(context),
-            _buildContent(context),
-          ],
+          children: [_buildImage(context), _buildContent(context)],
         ),
       ),
     );
@@ -370,15 +384,27 @@ class _ListingCard extends StatelessWidget {
                         // Notify view model to remove broken listing
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           if (context.mounted) {
-                            context
-                                .read<HomeViewModel>()
-                                .removeListingById(listing.id);
+                            context.read<HomeViewModel>().removeListingById(
+                              listing.id,
+                            );
                           }
                         });
-                        return const Center(child: Icon(Icons.broken_image, size: 32, color: Colors.grey));
+                        return const Center(
+                          child: Icon(
+                            Icons.broken_image,
+                            size: 32,
+                            color: Colors.grey,
+                          ),
+                        );
                       },
                     )
-                  : const Center(child: Icon(Icons.book_rounded, size: 48, color: Colors.grey)),
+                  : const Center(
+                      child: Icon(
+                        Icons.book_rounded,
+                        size: 48,
+                        color: Colors.grey,
+                      ),
+                    ),
             ),
             if (listing.sellerType != 'individual') _buildVerifiedBadge(),
           ],
@@ -433,8 +459,9 @@ class _ListingCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                fontSize: 12),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 12,
+            ),
           ),
           const SizedBox(height: 8),
           Row(
@@ -481,7 +508,10 @@ class _ListingCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         shape: BoxShape.circle,
-        border: Border.all(color: Theme.of(context).colorScheme.outline, width: 1),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline,
+          width: 1,
+        ),
       ),
     );
   }
