@@ -18,21 +18,23 @@ class _SignInScreenState extends State<SignInScreen> {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  // Save reference to avoid accessing context in dispose()
+  late AuthViewModel _authViewModel;
+
   @override
   void initState() {
     super.initState();
     // Add a listener to handle UI feedback
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final authViewModel = context.read<AuthViewModel>();
-      authViewModel.addListener(_onAuthStateChanged);
+      _authViewModel = context.read<AuthViewModel>();
+      _authViewModel.addListener(_onAuthStateChanged);
     });
   }
 
   @override
   void dispose() {
-    // Remove the listener before disposing
-    final authViewModel = context.read<AuthViewModel>();
-    authViewModel.removeListener(_onAuthStateChanged);
+    // Remove the listener before disposing using saved reference
+    _authViewModel.removeListener(_onAuthStateChanged);
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();

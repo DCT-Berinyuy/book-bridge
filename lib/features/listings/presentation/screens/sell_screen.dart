@@ -22,21 +22,23 @@ class _SellScreenState extends State<SellScreen> {
   final _priceController = TextEditingController();
   final _descriptionController = TextEditingController();
 
+  // Save reference to avoid accessing context in dispose()
+  late SellViewModel _sellViewModel;
+
   @override
   void initState() {
     super.initState();
     // Add a listener to handle UI feedback
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final sellViewModel = context.read<SellViewModel>();
-      sellViewModel.addListener(_onSellStateChanged);
+      _sellViewModel = context.read<SellViewModel>();
+      _sellViewModel.addListener(_onSellStateChanged);
     });
   }
 
   @override
   void dispose() {
-    // Remove the listener before disposing
-    final sellViewModel = context.read<SellViewModel>();
-    sellViewModel.removeListener(_onSellStateChanged);
+    // Remove the listener before disposing using saved reference
+    _sellViewModel.removeListener(_onSellStateChanged);
     _titleController.dispose();
     _authorController.dispose();
     _priceController.dispose();

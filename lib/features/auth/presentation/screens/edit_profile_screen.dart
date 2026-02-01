@@ -16,29 +16,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController _localityController;
   late TextEditingController _whatsappController;
 
+  // Save reference to avoid accessing context in dispose()
+  late ProfileViewModel _profileViewModel;
+
   @override
   void initState() {
     super.initState();
-    final profileViewModel = context.read<ProfileViewModel>();
+    _profileViewModel = context.read<ProfileViewModel>();
     _fullNameController = TextEditingController(
-      text: profileViewModel.currentUser?.fullName ?? '',
+      text: _profileViewModel.currentUser?.fullName ?? '',
     );
     _localityController = TextEditingController(
-      text: profileViewModel.currentUser?.locality ?? '',
+      text: _profileViewModel.currentUser?.locality ?? '',
     );
     _whatsappController = TextEditingController(
-      text: profileViewModel.currentUser?.whatsappNumber ?? '',
+      text: _profileViewModel.currentUser?.whatsappNumber ?? '',
     );
 
     // Add a listener to handle UI feedback after profile update
-    profileViewModel.addListener(_onProfileStateChanged);
+    _profileViewModel.addListener(_onProfileStateChanged);
   }
 
   @override
   void dispose() {
-    // Remove the listener before disposing
-    final profileViewModel = context.read<ProfileViewModel>();
-    profileViewModel.removeListener(_onProfileStateChanged);
+    // Remove the listener before disposing using saved reference
+    _profileViewModel.removeListener(_onProfileStateChanged);
     _fullNameController.dispose();
     _localityController.dispose();
     _whatsappController.dispose();
