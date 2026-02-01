@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/listing_details_viewmodel.dart';
@@ -76,7 +77,15 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.arrow_back_ios, size: 24),
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () {
+                        // Check if we can pop before attempting to do so
+                        if (Navigator.of(context).canPop()) {
+                          Navigator.of(context).pop();
+                        } else {
+                          // If we can't pop, navigate to home using go_router
+                          context.go('/home');
+                        }
+                      },
                     ),
                     const Expanded(
                       child: Text(
@@ -180,7 +189,15 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                                   duration: Duration(seconds: 2),
                                 ),
                               );
-                              Navigator.of(context).pop();
+                              // Check if we can pop before attempting to do so
+                              if (Navigator.of(context).canPop()) {
+                                Navigator.of(context).pop();
+                              } else {
+                                // If we can't pop, navigate to home using go_router
+                                if (context.mounted) {
+                                  context.go('/home');
+                                }
+                              }
                             }
                           });
                           return const Center(

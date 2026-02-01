@@ -33,7 +33,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void dispose() {
-    context.read<AuthViewModel>().removeListener(_onAuthStateChanged);
+    // Remove the listener before disposing
+    final authViewModel = context.read<AuthViewModel>();
+    authViewModel.removeListener(_onAuthStateChanged);
     _fullNameController.dispose();
     _emailController.dispose();
     _localityController.dispose();
@@ -43,6 +45,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _onAuthStateChanged() {
+    // Check if the widget is still mounted before accessing context
+    if (!mounted) return;
+
     final authViewModel = context.read<AuthViewModel>();
     if (authViewModel.authState == AuthState.error) {
       ScaffoldMessenger.of(context)
@@ -141,7 +146,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           decoration: InputDecoration(
                             hintText: 'e.g. John Doe',
                             filled: true,
-                            fillColor: const Color(0xFF161B17), // Field dark
+                            fillColor: Theme.of(context).colorScheme.surface,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide.none,
@@ -176,7 +181,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           decoration: InputDecoration(
                             hintText: 'student@university.cm',
                             filled: true,
-                            fillColor: const Color(0xFF161B17), // Field dark
+                            fillColor: Theme.of(context).colorScheme.surface,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide.none,
@@ -217,7 +222,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           decoration: InputDecoration(
                             hintText: 'e.g. Molyko, Buea',
                             filled: true,
-                            fillColor: const Color(0xFF161B17), // Field dark
+                            fillColor: Theme.of(context).colorScheme.surface,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide.none,
@@ -252,7 +257,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           decoration: InputDecoration(
                             hintText: 'Min. 6 characters',
                             filled: true,
-                            fillColor: const Color(0xFF161B17), // Field dark
+                            fillColor: Theme.of(context).colorScheme.surface,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide.none,

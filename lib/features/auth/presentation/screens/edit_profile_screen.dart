@@ -36,7 +36,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   void dispose() {
-    context.read<ProfileViewModel>().removeListener(_onProfileStateChanged);
+    // Remove the listener before disposing
+    final profileViewModel = context.read<ProfileViewModel>();
+    profileViewModel.removeListener(_onProfileStateChanged);
     _fullNameController.dispose();
     _localityController.dispose();
     _whatsappController.dispose();
@@ -44,6 +46,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void _onProfileStateChanged() {
+    // Check if the widget is still mounted before accessing context
+    if (!mounted) return;
+
     final profileViewModel = context.read<ProfileViewModel>();
     if (profileViewModel.profileState == ProfileState.error) {
       ScaffoldMessenger.of(context)
@@ -66,7 +71,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
         );
-      context.pop(); // Navigate back after successful update
+      // Navigate back after a short delay to ensure UI updates
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          // Check again if still mounted before navigating
+          context.pop(); // Navigate back after successful update
+        }
+      });
     }
   }
 

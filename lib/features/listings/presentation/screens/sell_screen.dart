@@ -34,7 +34,9 @@ class _SellScreenState extends State<SellScreen> {
 
   @override
   void dispose() {
-    context.read<SellViewModel>().removeListener(_onSellStateChanged);
+    // Remove the listener before disposing
+    final sellViewModel = context.read<SellViewModel>();
+    sellViewModel.removeListener(_onSellStateChanged);
     _titleController.dispose();
     _authorController.dispose();
     _priceController.dispose();
@@ -43,8 +45,12 @@ class _SellScreenState extends State<SellScreen> {
   }
 
   void _onSellStateChanged() {
+    // Check if the widget is still mounted before accessing context
+    if (!mounted) return;
+
     final sellViewModel = context.read<SellViewModel>();
     if (sellViewModel.sellState == SellState.success) {
+      // Show the snackbar first
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
@@ -53,8 +59,15 @@ class _SellScreenState extends State<SellScreen> {
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),
         );
-      sellViewModel.resetForm(); // Reset form fields and state
-      context.go('/home'); // Navigate away after success
+      // Reset form fields and state
+      sellViewModel.resetForm();
+      // Navigate away after a short delay to ensure UI updates
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          // Check again if still mounted before navigating
+          context.go('/home'); // Navigate away after success
+        }
+      });
     } else if (sellViewModel.sellState == SellState.error &&
         sellViewModel.errorMessage != null) {
       ScaffoldMessenger.of(context)

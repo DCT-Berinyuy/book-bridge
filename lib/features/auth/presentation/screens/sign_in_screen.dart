@@ -30,13 +30,18 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   void dispose() {
-    context.read<AuthViewModel>().removeListener(_onAuthStateChanged);
+    // Remove the listener before disposing
+    final authViewModel = context.read<AuthViewModel>();
+    authViewModel.removeListener(_onAuthStateChanged);
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
   void _onAuthStateChanged() {
+    // Check if the widget is still mounted before accessing context
+    if (!mounted) return;
+
     final authViewModel = context.read<AuthViewModel>();
     if (authViewModel.authState == AuthState.error) {
       ScaffoldMessenger.of(context)
