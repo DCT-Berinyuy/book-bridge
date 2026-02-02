@@ -83,11 +83,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
         preferredSize: const Size.fromHeight(60),
         child: SafeArea(
           child: Container(
+            color: const Color(0xFF1A4D8C), // Scholar Blue
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.arrow_back_ios, size: 24),
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    size: 24,
+                    color: Colors.white,
+                  ),
                   onPressed: () =>
                       context.canPop() ? context.pop() : context.go('/sign-in'),
                 ),
@@ -95,7 +100,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: Text(
                     'Create Account',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 40), // Spacer for alignment
@@ -116,10 +125,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   // Logo
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(
-                      'assets/logo.png',
-                      height: 100,
-                    ),
+                    child: Image.asset('assets/logo.png', height: 100),
                   ),
                   const SizedBox(height: 24),
                   const SizedBox(height: 8),
@@ -173,7 +179,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                         // Email
                         const Text(
-                          'University Email',
+                          'School/Personal Email',
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
@@ -373,7 +379,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF1A4D8C), // Scholar Blue
+                            color: Color(0xFF13EC5B), // Scholar Blue
                           ),
                         ),
                       ),

@@ -198,6 +198,56 @@ class SupabaseListingsDataSource {
     }
   }
 
+  /// Updates an existing listing.
+  ///
+  /// Throws [NotFoundException] if listing not found.
+  /// Throws [ServerException] if the operation fails.
+  Future<ListingModel> updateListing({
+    required String id,
+    String? title,
+    String? author,
+    int? priceFcfa,
+    String? condition,
+    String? imageUrl,
+    String? description,
+    String? category,
+    String? sellerType,
+    bool? isBuyBackEligible,
+    int? stockCount,
+  }) async {
+    try {
+      final updates = <String, dynamic>{};
+      if (title != null) updates['title'] = title;
+      if (author != null) updates['author'] = author;
+      if (priceFcfa != null) updates['price_fcfa'] = priceFcfa;
+      if (condition != null) updates['condition'] = condition;
+      if (imageUrl != null) updates['image_url'] = imageUrl;
+      if (description != null) updates['description'] = description;
+      if (category != null) updates['category'] = category;
+      if (sellerType != null) updates['seller_type'] = sellerType;
+      if (isBuyBackEligible != null) {
+        updates['is_buy_back_eligible'] = isBuyBackEligible;
+      }
+      if (stockCount != null) updates['stock_count'] = stockCount;
+
+      final response = await supabaseClient
+          .from('listings')
+          .update(updates)
+          .eq('id', id)
+          .select('*, profiles:seller_id(*)')
+          .single();
+
+      return ListingModel.fromJson(response);
+    } on PostgrestException catch (e) {
+      if (e.code == 'PGRST116') {
+        throw NotFoundException(message: 'Listing not found');
+      }
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
+
   /// Uploads a book image to Supabase Storage.
   ///
   /// Throws [ServerException] if the upload fails.

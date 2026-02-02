@@ -12,6 +12,8 @@ import 'package:book_bridge/features/listings/presentation/screens/search_screen
 import 'package:book_bridge/core/presentation/widgets/scaffold_with_navbar.dart';
 import 'package:book_bridge/features/auth/presentation/screens/edit_profile_screen.dart';
 import 'package:book_bridge/features/notifications/presentation/screens/notifications_screen.dart';
+import 'package:book_bridge/features/listings/presentation/screens/about_screen.dart';
+import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/injection_container.dart' as di;
 
 /// App router configuration using go_router.
@@ -112,7 +114,8 @@ final appRouter = GoRouter(
             GoRoute(
               path: '/sell',
               name: 'sell',
-              builder: (context, state) => const SellScreen(),
+              builder: (context, state) =>
+                  SellScreen(listing: state.extra as Listing?),
             ),
           ],
         ),
@@ -153,6 +156,13 @@ final appRouter = GoRouter(
       name: 'notifications',
       builder: (context, state) => const NotificationsScreen(),
     ),
+
+    // About Route (Full Screen, outside shell)
+    GoRoute(
+      path: '/about',
+      name: 'about',
+      builder: (context, state) => const AboutScreen(),
+    ),
   ],
 );
 
@@ -169,10 +179,7 @@ class SplashScreen extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
-              child: Image.asset(
-                'assets/logo.png',
-                height: 150,
-              ),
+              child: Image.asset('assets/logo.png', height: 150),
             ),
             const SizedBox(height: 32),
             const CircularProgressIndicator(),

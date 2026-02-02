@@ -46,12 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/sell'),
-        label: const Text('Sell a Book'),
-        icon: const Icon(Icons.add),
+        tooltip: 'Sell a Book',
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -176,6 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
       pinned: true,
       floating: true,
       elevation: 2,
+      centerTitle: false,
       backgroundColor: theme.appBarTheme.backgroundColor,
       foregroundColor: theme.appBarTheme.foregroundColor,
       title: Row(

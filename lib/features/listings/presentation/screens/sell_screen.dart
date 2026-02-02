@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/sell_viewmodel.dart';
+import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 
 /// Screen for creating and selling a new book listing.
 ///
 /// This screen provides a form for users to input book details,
 /// select a condition, upload an image, and create a new listing.
 class SellScreen extends StatefulWidget {
-  const SellScreen({super.key});
+  final Listing? listing;
+
+  const SellScreen({super.key, this.listing});
 
   @override
   State<SellScreen> createState() => _SellScreenState();
@@ -32,6 +35,18 @@ class _SellScreenState extends State<SellScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _sellViewModel = context.read<SellViewModel>();
       _sellViewModel.addListener(_onSellStateChanged);
+
+      // If we're editing a listing, populate the view model and controllers
+      if (widget.listing != null) {
+        _sellViewModel.setEditingListing(widget.listing!);
+        _titleController.text = widget.listing!.title;
+        _authorController.text = widget.listing!.author;
+        _priceController.text = widget.listing!.priceFcfa.toString();
+        _descriptionController.text = widget.listing!.description;
+      } else {
+        // Otherwise reset the form to start fresh
+        _sellViewModel.resetForm();
+      }
     });
   }
 
@@ -52,12 +67,16 @@ class _SellScreenState extends State<SellScreen> {
 
     final sellViewModel = context.read<SellViewModel>();
     if (sellViewModel.sellState == SellState.success) {
+      final message = sellViewModel.isEditing
+          ? 'Listing updated successfully!'
+          : 'Listing created successfully!';
+
       // Show the snackbar first
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: const Text('Listing created successfully!'),
+            content: Text(message),
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),
         );
@@ -129,7 +148,10 @@ class _SellScreenState extends State<SellScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sell a Book'), centerTitle: true),
+      appBar: AppBar(
+        title: Text(widget.listing != null ? 'Edit Listing' : 'Sell a Book'),
+        centerTitle: true,
+      ),
       body: Consumer<SellViewModel>(
         builder: (context, viewModel, child) {
           return SingleChildScrollView(
@@ -514,7 +536,7 @@ class _SellScreenState extends State<SellScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                        color: Color(0xFF2D3436),
                       ),
                     ),
                     subtitle: const Text(
@@ -595,7 +617,11 @@ class _SellScreenState extends State<SellScreen> {
                           ? null
                           : () {
                               if (_formKey.currentState!.validate()) {
-                                viewModel.createListing();
+                                if (viewModel.isEditing) {
+                                  viewModel.updateListing();
+                                } else {
+                                  viewModel.createListing();
+                                }
                               }
                             },
                       style: ElevatedButton.styleFrom(
@@ -617,9 +643,11 @@ class _SellScreenState extends State<SellScreen> {
                                 color: Colors.white,
                               ),
                             )
-                          : const Text(
-                              'Post Listing',
-                              style: TextStyle(
+                          : Text(
+                              viewModel.isEditing
+                                  ? 'Update Listing'
+                                  : 'Post Listing',
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),

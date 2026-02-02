@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/listings/domain/usecases/search_listings_usecase.dart';
 
@@ -11,21 +12,69 @@ enum SearchState { initial, loading, success, error, empty }
 /// search results with debouncing.
 class SearchViewModel extends ChangeNotifier {
   final SearchListingsUseCase searchListingsUseCase;
+  static const String _recentSearchesKey = 'recent_searches';
 
   SearchState _searchState = SearchState.initial;
   String? _errorMessage;
   List<Listing> _searchResults = [];
+  List<String> _recentSearches = [];
   String _currentQuery = '';
   bool _isSearching = false;
 
-  SearchViewModel({required this.searchListingsUseCase});
+  SearchViewModel({required this.searchListingsUseCase}) {
+    loadRecentSearches();
+  }
 
   // Getters
   SearchState get searchState => _searchState;
   String? get errorMessage => _errorMessage;
   List<Listing> get searchResults => _searchResults;
+  List<String> get recentSearches => _recentSearches;
   String get currentQuery => _currentQuery;
   bool get isSearching => _isSearching;
+
+  /// Loads recent searches from SharedPreferences.
+  Future<void> loadRecentSearches() async {
+    final prefs = await SharedPreferences.getInstance();
+    _recentSearches = prefs.getStringList(_recentSearchesKey) ?? [];
+    notifyListeners();
+  }
+
+  /// Adds a query to recent searches.
+  Future<void> addRecentSearch(String query) async {
+    if (query.trim().isEmpty) return;
+
+    // Remove if already exists to move it to top
+    _recentSearches.remove(query);
+    _recentSearches.insert(0, query);
+
+    // Limit to 10 stored searches
+    if (_recentSearches.length > 10) {
+      _recentSearches = _recentSearches.sublist(0, 10);
+    }
+
+    notifyListeners();
+    await _saveRecentSearches();
+  }
+
+  /// Removes a specific search term.
+  Future<void> removeRecentSearch(String query) async {
+    _recentSearches.remove(query);
+    notifyListeners();
+    await _saveRecentSearches();
+  }
+
+  /// Clears all recent searches.
+  Future<void> clearRecentSearches() async {
+    _recentSearches.clear();
+    notifyListeners();
+    await _saveRecentSearches();
+  }
+
+  Future<void> _saveRecentSearches() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_recentSearchesKey, _recentSearches);
+  }
 
   /// Performs a search with the given query.
   ///
@@ -42,6 +91,9 @@ class SearchViewModel extends ChangeNotifier {
       notifyListeners();
       return;
     }
+
+    // Add to recent searches
+    addRecentSearch(_currentQuery);
 
     _isSearching = true;
     _searchState = SearchState.loading;

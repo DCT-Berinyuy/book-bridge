@@ -135,6 +135,44 @@ class ListingRepositoryImpl implements ListingRepository {
   }
 
   @override
+  Future<Either<Failure, Listing>> updateListing({
+    required String id,
+    String? title,
+    String? author,
+    int? priceFcfa,
+    String? condition,
+    String? imageUrl,
+    String? description,
+    String? category,
+    String? sellerType,
+    bool? isBuyBackEligible,
+    int? stockCount,
+  }) async {
+    try {
+      final listingModel = await dataSource.updateListing(
+        id: id,
+        title: title,
+        author: author,
+        priceFcfa: priceFcfa,
+        condition: condition,
+        imageUrl: imageUrl,
+        description: description,
+        category: category,
+        sellerType: sellerType,
+        isBuyBackEligible: isBuyBackEligible,
+        stockCount: stockCount,
+      );
+      return Right(listingModel.toEntity());
+    } on NotFoundException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(UnknownFailure(message: e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, String>> uploadBookImage(File imageFile) async {
     try {
       final imageUrl = await dataSource.uploadBookImage(imageFile);
