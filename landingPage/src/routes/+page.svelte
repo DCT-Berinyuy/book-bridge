@@ -412,6 +412,12 @@
     .hero-visual {
       margin-top: 4rem;
     }
+    .hero-text h1 {
+      font-size: 2.5rem;
+    }
+    .hero-text p {
+      font-size: 1.1rem;
+    }
     .cta-box {
       padding: 4rem 2rem;
     }

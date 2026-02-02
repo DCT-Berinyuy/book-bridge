@@ -201,12 +201,13 @@
   .desktop-links {
     display: flex;
     align-items: center;
-    gap: 2.5rem;
+    gap: 1.5rem;
   }
 
   .desktop-links a {
     font-weight: 500;
     font-size: 0.95rem;
+    color: var(--charcoal);
   }
 
   .desktop-links a:hover {
@@ -216,28 +217,75 @@
   .mobile-toggle {
     display: none;
     background: transparent;
+    border: none;
     color: var(--charcoal);
+    padding: 0.5rem;
+    cursor: pointer;
+    z-index: 1001;
   }
 
   .mobile-menu {
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: 0;
     left: 0;
     right: 0;
-    background: white;
-    padding: 2rem;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    border-top: 1px solid #eee;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem;
+    z-index: 999;
+    animation: fadeIn 0.3s ease-out;
   }
 
-  @media (max-width: 768px) {
+  .btn-primary {
+    background-color: var(--scholar-blue);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--scholar-blue-hover);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .mobile-menu a {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .mobile-menu a:hover {
+    color: var(--scholar-blue);
+  }
+
+  @media (max-width: 992px) {
     .desktop-links {
       display: none;
     }
     .mobile-toggle {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
@@ -297,6 +345,18 @@
     .footer-content {
       grid-template-columns: 1fr;
       gap: 2rem;
+    }
+    .btn-primary {
+      background-color: var(--scholar-blue);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--scholar-blue-hover);
     }
   }
 </style>
