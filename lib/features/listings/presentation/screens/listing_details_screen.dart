@@ -87,15 +87,14 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                         }
                       },
                     ),
-                    const Expanded(
-                      child: Text(
-                        'Book Details',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
+                    Expanded(
+                      child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset(
+                        'assets/logo.png',
+                        height: 36, // Adjust height as needed
                       ),
+                    ),
                     ),
                     IconButton(
                       icon: const Icon(Icons.share),

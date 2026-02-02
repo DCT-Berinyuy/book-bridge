@@ -178,7 +178,22 @@ class _HomeScreenState extends State<HomeScreen> {
       elevation: 2,
       backgroundColor: theme.appBarTheme.backgroundColor,
       foregroundColor: theme.appBarTheme.foregroundColor,
-      title: Text('BookBridge', style: theme.appBarTheme.titleTextStyle),
+      title: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image.asset(
+              'assets/logo.png',
+              height: 32,
+              width: 32,
+              fit: BoxFit.contain,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text('BookBridge', style: theme.appBarTheme.titleTextStyle),
+        ],
+      ),
       actions: [
         IconButton(
           icon: Icon(

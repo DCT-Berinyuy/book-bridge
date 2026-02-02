@@ -113,11 +113,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 children: [
                   const SizedBox(height: 24),
 
-                  // Title
-                  const Text(
-                    'Join the Mission',
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
+                  // Logo
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.asset(
+                      'assets/logo.png',
+                      height: 100,
+                    ),
                   ),
+                  const SizedBox(height: 24),
                   const SizedBox(height: 8),
                   const Text(
                     'Connecting students, authors, and bookshops to end learning poverty.',

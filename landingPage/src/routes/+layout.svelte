@@ -188,7 +188,7 @@
   .bookbridge-logo {
     height: 36px; /* Adjust height as needed */
     width: auto;
-    border-radius: 50px;
+    border-radius: 12px;
   }
 
   /* Adjustments for logo-icon when containing an image */

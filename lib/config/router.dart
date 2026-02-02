@@ -167,9 +167,12 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'BookBridge',
-              style: Theme.of(context).textTheme.displayMedium,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Image.asset(
+                'assets/logo.png',
+                height: 150,
+              ),
             ),
             const SizedBox(height: 32),
             const CircularProgressIndicator(),
