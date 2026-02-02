@@ -1,10 +1,12 @@
 <script>
   import "../app.css";
-  import { BookOpen, Menu, X, ArrowRight, Github } from "lucide-svelte";
+  import { Menu, X, ArrowRight, Github } from "lucide-svelte";
+  import logo from "$lib/assets/logo.png"; // Import the logo image
   import { onMount } from "svelte";
 
-  let isMenuOpen = false;
-  let scrollY = 0;
+  let { children } = $props();
+  let isMenuOpen = $state(false);
+  let scrollY = $state(0);
 
   function toggleMenu() {
     isMenuOpen = !isMenuOpen;
@@ -18,7 +20,7 @@
     <div class="container nav-content">
       <a href="/" class="logo">
         <div class="logo-icon">
-          <BookOpen size={24} color="white" />
+          <img src={logo} alt="BookBridge Logo" class="bookbridge-logo" />
         </div>
         <span>BookBridge</span>
       </a>
@@ -47,7 +49,7 @@
       </div>
 
       <!-- Mobile Toggle -->
-      <button class="mobile-toggle" on:click={toggleMenu}>
+      <button class="mobile-toggle" onclick={toggleMenu}>
         {#if isMenuOpen}
           <X size={24} />
         {:else}
@@ -59,15 +61,15 @@
     <!-- Mobile Menu -->
     {#if isMenuOpen}
       <div class="mobile-menu">
-        <a href="#features" on:click={toggleMenu}>Features</a>
-        <a href="#how-it-works" on:click={toggleMenu}>How it Works</a>
-        <a href="#showcase" on:click={toggleMenu}>Mobile App</a>
+        <a href="#features" onclick={toggleMenu}>Features</a>
+        <a href="#how-it-works" onclick={toggleMenu}>How it Works</a>
+        <a href="#showcase" onclick={toggleMenu}>Mobile App</a>
         <a
           href="https://github.com/DCT-Berinyuy/book-bridge"
           target="_blank"
           rel="noopener noreferrer"
           class="github-link"
-          on:click={toggleMenu}
+          onclick={toggleMenu}
         >
           <Github size={20} /> <span style="margin-left: 8px">GitHub</span>
         </a>
@@ -77,14 +79,14 @@
           rel="noopener noreferrer"
           class="btn-primary"
           style="text-decoration: none;"
-          on:click={toggleMenu}>Download App</a
+          onclick={toggleMenu}>Download App</a
         >
       </div>
     {/if}
   </nav>
 
   <main>
-    <slot />
+    {@render children()}
   </main>
 
   <footer>
@@ -92,7 +94,7 @@
       <div class="footer-brand">
         <div class="logo">
           <div class="logo-icon">
-            <BookOpen size={20} color="white" />
+            <img src={logo} alt="BookBridge Logo" class="bookbridge-logo" />
           </div>
           <span>BookBridge</span>
         </div>
@@ -183,13 +185,17 @@
     font-family: var(--font-header);
   }
 
+  .bookbridge-logo {
+    height: 36px; /* Adjust height as needed */
+    width: auto;
+    border-radius: 50px;
+  }
+
+  /* Adjustments for logo-icon when containing an image */
   .logo-icon {
-    background-color: var(--scholar-blue);
-    padding: 6px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background-color: transparent; /* Remove background color */
+    padding: 0; /* Remove padding */
+    border-radius: 0; /* Remove border-radius */
   }
 
   .desktop-links {
@@ -220,7 +226,6 @@
     right: 0;
     background: white;
     padding: 2rem;
-    display: flex;
     flex-direction: column;
     gap: 1.5rem;
     border-top: 1px solid #eee;
