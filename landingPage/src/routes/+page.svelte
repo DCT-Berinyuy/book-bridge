@@ -6,7 +6,6 @@
     Heart,
     Smartphone,
   } from "lucide-svelte";
-  import { onMount } from "svelte";
   import screenshot from "$lib/assets/screenshot.png";
 
   // Micro-animations logic could go here
@@ -145,7 +144,7 @@
           Join thousands of students across Yaoundé, Buea, and Douala today.
         </p>
         <a
-          href="https://github.com/DCT-Berinyuy/book-bridge/releases"
+          href="https://github.com/dct-berinyuy/book-bridge/releases/latest"
           target="_blank"
           rel="noopener noreferrer"
           class="btn-primary"
