@@ -1,5 +1,5 @@
 /// Environment configuration for the app
-/// This file loads environment variables from the environment
+/// This file loads environment variables from the build environment.
 class AppConfig {
   // Supabase configuration
   static const String supabaseUrl = String.fromEnvironment(
@@ -10,6 +10,4 @@ class AppConfig {
     'SUPABASE_ANON_KEY',
     defaultValue: '',
   );
-
-  // Other environment-specific configurations can be added here
 }
