@@ -10,6 +10,7 @@ import 'package:book_bridge/features/listings/presentation/viewmodels/listing_de
 import 'package:book_bridge/features/listings/presentation/viewmodels/sell_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:book_bridge/config/app_config.dart';
 
 void main() async {
@@ -66,6 +67,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp.router(
         title: 'BookBridge: Social Venture', //TODO: translate
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
