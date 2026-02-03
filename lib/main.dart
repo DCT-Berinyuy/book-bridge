@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -10,7 +11,6 @@ import 'package:book_bridge/features/listings/presentation/viewmodels/listing_de
 import 'package:book_bridge/features/listings/presentation/viewmodels/sell_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
-import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:book_bridge/config/app_config.dart';
 
 void main() async {
@@ -32,7 +32,9 @@ void main() async {
                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphY25zdmN3bWhvaWN1dXptcm1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzOTAwOTEsImV4cCI6MjA4NDk2NjA5MX0.utrEmY1iIEwYCmbvLt96sCn1cXGRLFGWc7Mc9UmbILk',
           ),
   );
+  AppLocalizations.of(context)!.helloWorld
 
+  AppLocalizations.of(context)!.helloLeMonde
   // Initialize dependency injection
   await di.setupDependencyInjection();
 
