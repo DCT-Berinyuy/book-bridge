@@ -59,6 +59,23 @@ abstract class ListingRepository {
   /// Returns either a [Failure] or void on success.
   Future<Either<Failure, void>> deleteListing(String listingId);
 
+  /// Updates an existing listing.
+  ///
+  /// Returns either a [Failure] or the updated [Listing] entity.
+  Future<Either<Failure, Listing>> updateListing({
+    required String id,
+    String? title,
+    String? author,
+    int? priceFcfa,
+    String? condition,
+    String? imageUrl,
+    String? description,
+    String? category,
+    String? sellerType,
+    bool? isBuyBackEligible,
+    int? stockCount,
+  });
+
   /// Uploads a book image to storage.
   ///
   /// Returns either a [Failure] or the public URL of the uploaded image.

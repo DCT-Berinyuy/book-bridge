@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
+import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:intl/intl.dart';
 
 /// User profile screen displaying user information and their listings.
 ///
@@ -17,6 +19,132 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  void _showListingActions(BuildContext context, Listing listing) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 8),
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 8),
+              ListTile(
+                leading: const Icon(Icons.edit, color: Color(0xFF1A4D8C)),
+                title: const Text('Edit Listing'),
+                onTap: () {
+                  Navigator.pop(context);
+                  context.push('/sell', extra: listing);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.delete_outline, color: Colors.red),
+                title: const Text(
+                  'Delete Listing',
+                  style: TextStyle(color: Colors.red),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _confirmDeleteListing(context, listing);
+                },
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _confirmDeleteListing(BuildContext context, Listing listing) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete Listing?'),
+          content: Text(
+            'Are you sure you want to delete "${listing.title}"? This action cannot be undone.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                context.read<ProfileViewModel>().deleteListing(listing.id);
+              },
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildStatCard(
+    BuildContext context,
+    String value,
+    String label,
+    IconData icon,
+    Color color,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Theme.of(
+          context,
+        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 16, color: color),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              letterSpacing: 1.2,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -64,6 +192,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         context.read<AuthViewModel>().signOut();
                       } else if (value == 'settings') {
                         context.push('/settings');
+                      } else if (value == 'about') {
+                        context.push('/about');
                       }
                     },
                     icon: const Icon(Icons.more_vert, color: Colors.white),
@@ -76,13 +206,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               title: Text('Settings'),
                             ),
                           ),
-                          PopupMenuItem<String>(
+                          const PopupMenuItem<String>(
+                            value: 'about',
+                            child: ListTile(
+                              leading: Icon(Icons.info_outline),
+                              title: Text('About Us'),
+                              contentPadding: EdgeInsets.zero,
+                            ),
+                          ),
+                          const PopupMenuItem<String>(
                             value: 'signOut',
                             child: ListTile(
                               leading: Icon(Icons.exit_to_app),
-                              title: Text(
-                                AppLocalizations.of(context)!.signOut,
-                              ),
+                              title: Text('Sign Out'),
+                              contentPadding: EdgeInsets.zero,
                             ),
                           ),
                         ],
@@ -214,21 +351,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       const SizedBox(height: 8),
 
-                      // University info
+                      // Member since
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(
-                            Icons.school,
+                          Icon(
+                            Icons.calendar_month,
                             size: 16,
-                            color: Color(0xFF1A4D8C), // Scholar Blue
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                           const SizedBox(width: 4),
-                          const Text(
-                            'University of Buea Student',
+                          Text(
+                            'Member since ${DateFormat.yMMMM().format(user.createdAt)}',
                             style: TextStyle(
-                              fontSize: 16,
-                              color: Color(0xFF1A4D8C), // Scholar Blue
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
@@ -264,143 +402,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Books Sold
+                      // Active Listings
                       Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .surfaceContainerHighest
-                                .withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.primary.withValues(alpha: 0.2),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              const Text(
-                                '12',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              Text(
-                                'SOLD',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                  letterSpacing: 1.2,
-                                ),
-                              ),
-                            ],
-                          ),
+                        child: _buildStatCard(
+                          context,
+                          profileViewModel.userListings.length.toString(),
+                          'ACTIVE BOOKS',
+                          Icons.book,
+                          const Color(0xFF1A4D8C), // Scholar Blue
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 16),
 
-                      // Rating
+                      // Total Value
                       Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .surfaceContainerHighest
-                                .withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.primary.withValues(alpha: 0.2),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    Icons.star,
-                                    size: 14,
-                                    color: Color(
-                                      0xFFF2994A,
-                                    ), // Bridge Orange for rating
-                                  ),
-                                  const SizedBox(width: 4),
-                                  const Text(
-                                    '4.8',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                'RATING',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                  letterSpacing: 1.2,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-
-                      // FCFA Saved
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .surfaceContainerHighest
-                                .withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.primary.withValues(alpha: 0.2),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              const Text(
-                                '25k',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              const Text(
-                                'SAVED',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(
-                                    0xFF27AE60,
-                                  ), // Growth Green for savings
-                                  letterSpacing: 1.2,
-                                ),
-                              ),
-                            ],
-                          ),
+                        child: _buildStatCard(
+                          context,
+                          '${NumberFormat.compact().format(profileViewModel.userListings.fold<int>(0, (sum, item) => sum + item.priceFcfa))} FCFA',
+                          'TOTAL VALUE',
+                          Icons.savings,
+                          const Color(0xFF27AE60), // Growth Green
                         ),
                       ),
                     ],
@@ -596,7 +618,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ).colorScheme.primary,
                                         ),
                                         onPressed: () {
-                                          // Edit functionality
+                                          _showListingActions(context, listing);
                                         },
                                       ),
                                 onTap: () {

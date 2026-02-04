@@ -128,19 +128,28 @@ class _SignInScreenState extends State<SignInScreen> {
         preferredSize: const Size.fromHeight(60),
         child: SafeArea(
           child: Container(
+            color: const Color(0xFF1A4D8C), // Scholar Blue
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
                 if (context.canPop())
                   IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new, size: 24),
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new,
+                      size: 24,
+                      color: Colors.white,
+                    ),
                     onPressed: () => context.pop(),
                   ),
                 const Expanded(
                   child: Text(
                     'Sign In',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 const LanguageSwitcher(),
@@ -159,24 +168,14 @@ class _SignInScreenState extends State<SignInScreen> {
                   const SizedBox(height: 40),
 
                   // Branding & Headline
-                  const Column(
+                  Column(
                     children: [
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: Color(0xFF1A4D8C), // Scholar Blue
-                          shape: BoxShape.circle,
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(12.0),
-                          child: Icon(
-                            Icons.menu_book,
-                            color: Color(0xFF2D3436),
-                            size: 32,
-                          ),
-                        ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.asset('assets/logo.png', height: 100),
                       ),
-                      SizedBox(height: 16),
-                      Text(
+                      const SizedBox(height: 16),
+                      const Text(
                         'BookBridge: Knowledge for All',
                         style: TextStyle(
                           fontSize: 24,
@@ -184,8 +183,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           color: Color(0xFF2D3436), // Ink Black
                         ),
                       ),
-                      SizedBox(height: 8),
-                      Text(
+                      const SizedBox(height: 8),
+                      const Text(
                         'Democratizing access to affordable books in Cameroon.',
                         textAlign: TextAlign.center,
                         style: TextStyle(

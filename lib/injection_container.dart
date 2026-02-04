@@ -19,6 +19,7 @@ import 'package:book_bridge/features/listings/domain/usecases/create_listing_use
 import 'package:book_bridge/features/listings/domain/usecases/delete_listing_usecase.dart';
 import 'package:book_bridge/features/listings/domain/usecases/get_user_listings_usecase.dart';
 import 'package:book_bridge/features/listings/domain/usecases/search_listings_usecase.dart';
+import 'package:book_bridge/features/listings/domain/usecases/update_listing_usecase.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/listing_details_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/sell_viewmodel.dart';
@@ -136,6 +137,10 @@ Future<void> setupDependencyInjection() async {
     SearchListingsUseCase(repository: getIt<ListingRepository>()),
   );
 
+  getIt.registerSingleton<UpdateListingUseCase>(
+    UpdateListingUseCase(getIt<ListingRepository>()),
+  );
+
   // Listings Feature - Presentation Layer (ViewModels)
   getIt.registerSingleton<HomeViewModel>(
     HomeViewModel(getListingsUseCase: getIt<GetListingsUseCase>()),
@@ -150,6 +155,7 @@ Future<void> setupDependencyInjection() async {
   getIt.registerSingleton<SellViewModel>(
     SellViewModel(
       createListingUseCase: getIt<CreateListingUseCase>(),
+      updateListingUseCase: getIt<UpdateListingUseCase>(),
       repository: getIt<ListingRepository>(),
     ),
   );

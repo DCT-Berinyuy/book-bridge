@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/listings/domain/repositories/listing_repository.dart';
 import 'package:book_bridge/features/listings/domain/usecases/create_listing_usecase.dart';
+import 'package:book_bridge/features/listings/domain/usecases/update_listing_usecase.dart';
 import 'package:book_bridge/core/error/exceptions.dart';
 
 /// State enum for the Sell screen.
@@ -15,11 +16,13 @@ enum SellState { initial, loading, success, error }
 /// form state management and API interactions.
 class SellViewModel extends ChangeNotifier {
   final CreateListingUseCase createListingUseCase;
+  final UpdateListingUseCase updateListingUseCase;
   final ListingRepository repository;
 
   SellState _sellState = SellState.initial;
   String? _errorMessage;
   Listing? _createdListing;
+  Listing? _editingListing;
 
   // Form fields
   String? _title;
@@ -33,13 +36,19 @@ class SellViewModel extends ChangeNotifier {
   bool _isBuyBackEligible = false;
   int _stockCount = 1;
 
-  SellViewModel({required this.createListingUseCase, required this.repository});
+  SellViewModel({
+    required this.createListingUseCase,
+    required this.updateListingUseCase,
+    required this.repository,
+  });
 
   // Getters
   SellState get sellState => _sellState;
   String? get errorMessage => _errorMessage;
   Listing? get createdListing => _createdListing;
+  Listing? get editingListing => _editingListing;
   bool get isLoading => _sellState == SellState.loading;
+  bool get isEditing => _editingListing != null;
 
   String? get title => _title;
   String? get author => _author;
@@ -112,6 +121,22 @@ class SellViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Sets the listing to be edited and populates form fields.
+  void setEditingListing(Listing listing) {
+    _editingListing = listing;
+    _title = listing.title;
+    _author = listing.author;
+    _priceFcfa = listing.priceFcfa;
+    _condition = listing.condition;
+    _imageUrl = listing.imageUrl;
+    _description = listing.description;
+    _category = listing.category;
+    _sellerType = listing.sellerType;
+    _isBuyBackEligible = listing.isBuyBackEligible;
+    _stockCount = listing.stockCount;
+    notifyListeners();
+  }
+
   /// Resets the form to initial state.
   void resetForm() {
     _title = null;
@@ -127,6 +152,7 @@ class SellViewModel extends ChangeNotifier {
     _sellState = SellState.initial;
     _errorMessage = null;
     _createdListing = null;
+    _editingListing = null;
     notifyListeners();
   }
 
@@ -202,6 +228,45 @@ class SellViewModel extends ChangeNotifier {
       },
       (listing) {
         _createdListing = listing;
+        _sellState = SellState.success;
+        _errorMessage = null;
+        notifyListeners();
+      },
+    );
+  }
+
+  /// Updates an existing listing.
+  Future<void> updateListing() async {
+    if (_editingListing == null || !validateForm()) return;
+
+    _sellState = SellState.loading;
+    _errorMessage = null;
+    notifyListeners();
+
+    final params = UpdateListingParams(
+      id: _editingListing!.id,
+      title: _title,
+      author: _author,
+      priceFcfa: _priceFcfa,
+      condition: _condition,
+      imageUrl: _imageUrl,
+      description: _description,
+      category: _category,
+      sellerType: _sellerType,
+      isBuyBackEligible: _isBuyBackEligible,
+      stockCount: _stockCount,
+    );
+
+    final result = await updateListingUseCase(params);
+
+    result.fold(
+      (failure) {
+        _sellState = SellState.error;
+        _errorMessage = failure.message;
+        notifyListeners();
+      },
+      (listing) {
+        _editingListing = null; // Clear editing state after success
         _sellState = SellState.success;
         _errorMessage = null;
         notifyListeners();

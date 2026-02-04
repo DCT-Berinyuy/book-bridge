@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/listing_details_viewmodel.dart';
 
 /// Listing details screen showing comprehensive information about a book.
@@ -32,17 +33,39 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
     });
   }
 
-  Future<void> _contactSeller(
-    BuildContext context,
-    String whatsappNumber,
-  ) async {
-    final message = AppLocalizations.of(
-      context,
-    )!.hiCommaIAmInterestedInYourBookListingExclamation_mark;
-    final whatsappUrl =
-        'https://wa.me/${whatsappNumber.replaceAll(RegExp(r'[^\d+]'), '')}?text=${Uri.encodeComponent(message)}';
+  Future<void> _shareListing() async {
+    final viewModel = context.read<ListingDetailsViewModel>();
+    final listing = viewModel.listing;
 
-    if (!mounted) return;
+    if (listing == null) return;
+
+    final shareText =
+        '''
+Check out this book on BookBridge:
+📚 ${listing.title} by ${listing.author}
+💰 ${listing.priceFcfa} FCFA
+🔍 Condition: ${listing.condition}
+
+Download BookBridge to view more details!
+''';
+
+    await Share.share(shareText);
+  }
+
+  Future<void> _contactSeller(String whatsappNumber) async {
+    if (whatsappNumber.isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No WhatsApp number available')),
+        );
+      }
+      return;
+    }
+
+    final cleanNumber = whatsappNumber.replaceAll(RegExp(r'[^\d+]'), '');
+    final message = 'Hi, I saw your book on BookBridge and I am interested!';
+    final whatsappUrl =
+        'https://wa.me/$cleanNumber?text=${Uri.encodeComponent(message)}';
 
     try {
       if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
@@ -70,6 +93,40 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
     }
   }
 
+  Future<void> _callSeller(String phoneNumber) async {
+    if (phoneNumber.isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No phone number available')),
+        );
+      }
+      return;
+    }
+
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber.replaceAll(RegExp(r'[^\d+]'), ''),
+    );
+
+    try {
+      if (await canLaunchUrl(launchUri)) {
+        await launchUrl(launchUri);
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Could not launch dialer')),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ListingDetailsViewModel>(
@@ -77,43 +134,47 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
         return Scaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(60),
-            child: SafeArea(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_ios, size: 24),
-                      onPressed: () {
-                        // Check if we can pop before attempting to do so
-                        if (Navigator.of(context).canPop()) {
-                          Navigator.of(context).pop();
-                        } else {
-                          // If we can't pop, navigate to home using go_router
-                          context.go('/home');
-                        }
-                      },
-                    ),
-                    Expanded(
-                      child: Text(
-                        AppLocalizations.of(context)!.bookDetails,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
+            child: Container(
+              color: const Color(0xFF1A4D8C), // Scholar Blue
+              child: SafeArea(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back_ios,
+                          size: 24,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          // Check if we can pop before attempting to do so
+                          if (Navigator.of(context).canPop()) {
+                            Navigator.of(context).pop();
+                          } else {
+                            // If we can't pop, navigate to home using go_router
+                            context.go('/home');
+                          }
+                        },
+                      ),
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.asset(
+                            'assets/logo.png',
+                            height: 36, // Adjust height as needed
+                          ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.share),
-                      onPressed: () {
-                        // Share functionality
-                      },
-                    ),
-                  ],
+                      IconButton(
+                        icon: const Icon(Icons.share, color: Colors.white),
+                        onPressed: () => _shareListing(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -439,7 +500,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                     style: const TextStyle(
                       fontSize: 16,
                       height: 1.5,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -621,9 +682,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
           ),
           const SizedBox(height: 8),
           TextButton(
-            onPressed: () {
-              // Call seller functionality
-            },
+            onPressed: () => _callSeller(listing.sellerWhatsapp ?? ''),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

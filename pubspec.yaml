@@ -21,6 +21,8 @@ dependencies:
   google_fonts: ^6.2.1
   flutter_localizations:
     sdk: flutter
+  share_plus: ^10.1.4
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
@@ -33,6 +35,7 @@ flutter:
   generate: true
   assets:
     - assets/app_icon.png
+    - assets/logo.png
 
 flutter_launcher_icons:
   android: true
