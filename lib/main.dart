@@ -32,9 +32,6 @@ void main() async {
                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphY25zdmN3bWhvaWN1dXptcm1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzOTAwOTEsImV4cCI6MjA4NDk2NjA5MX0.utrEmY1iIEwYCmbvLt96sCn1cXGRLFGWc7Mc9UmbILk',
           ),
   );
-  AppLocalizations.of(context)!.helloWorld
-
-  AppLocalizations.of(context)!.helloLeMonde
   // Initialize dependency injection
   await di.setupDependencyInjection();
 
