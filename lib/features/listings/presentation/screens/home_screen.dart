@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton.icon(
               onPressed: viewModel.refreshListings,
               icon: const Icon(Icons.refresh),
-              label: const Text(AppLocalizations.of(context)!.tryAgain),
+              label: Text(AppLocalizations.of(context)!.tryAgain),
             ),
           ],
         ),
@@ -446,13 +446,13 @@ class _ListingCard extends StatelessWidget {
           color: Colors.black.withAlpha(153),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Row(
+        child: Row(
           children: [
-            Icon(Icons.verified, size: 12, color: Colors.white),
-            SizedBox(width: 4),
+            const Icon(Icons.verified, size: 12, color: Colors.white),
+            const SizedBox(width: 4),
             Text(
               AppLocalizations.of(context)!.verified,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 10,
                 fontWeight: FontWeight.bold,

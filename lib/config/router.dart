@@ -1,3 +1,4 @@
+import 'package:book_bridge/features/settings/presentation/screens/settings_screen.dart';
 import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -153,6 +154,13 @@ final appRouter = GoRouter(
       path: '/notifications',
       name: 'notifications',
       builder: (context, state) => const NotificationsScreen(),
+    ),
+
+    // Settings Route (Full Screen, outside shell)
+    GoRoute(
+      path: '/settings',
+      name: 'settings',
+      builder: (context, state) => const SettingsScreen(),
     ),
   ],
 );

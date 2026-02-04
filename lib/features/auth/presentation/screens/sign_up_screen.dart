@@ -1,3 +1,4 @@
+import 'package:book_bridge/core/presentation/widgets/language_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -62,8 +63,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
-      // Clear the error in the view model after showing it
-      authViewModel.clearError();
     } else if (authViewModel.authState == AuthState.authenticated) {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
@@ -98,7 +97,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                   ),
                 ),
-                const SizedBox(width: 40), // Spacer for alignment
+                const LanguageSwitcher(),
               ],
             ),
           ),
@@ -289,22 +288,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: ElevatedButton(
                             onPressed:
                                 authViewModel.authState == AuthState.loading
-                                ? null
-                                : () {
-                                    FocusScope.of(context).unfocus();
-                                    if (_formKey.currentState?.validate() ??
-                                        false) {
-                                      authViewModel.signUp(
-                                        email: _emailController.text.trim(),
-                                        password: _passwordController.text
-                                            .trim(),
-                                        fullName: _fullNameController.text
-                                            .trim(),
-                                        locality: _localityController.text
-                                            .trim(),
-                                      );
-                                    }
-                                  },
+                                    ? null
+                                    : () {
+                                        FocusScope.of(context).unfocus();
+                                        if (_formKey.currentState?.validate() ??
+                                            false) {
+                                          authViewModel.signUp(
+                                            email: _emailController.text.trim(),
+                                            password: _passwordController.text
+                                                .trim(),
+                                            fullName: _fullNameController.text
+                                                .trim(),
+                                            locality: _localityController.text
+                                                .trim(),
+                                          );
+                                        }
+                                      },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(
                                 0xFF1A4D8C,
@@ -400,3 +399,4 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 }
+

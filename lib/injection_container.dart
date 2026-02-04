@@ -1,5 +1,4 @@
-import 'package:get_it/get_it.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:book_bridge/core/providers/locale_provider.dart';
 import 'package:book_bridge/features/auth/data/datasources/supabase_auth_data_source.dart';
 import 'package:book_bridge/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:book_bridge/features/auth/domain/repositories/auth_repository.dart';
@@ -25,6 +24,8 @@ import 'package:book_bridge/features/listings/presentation/viewmodels/listing_de
 import 'package:book_bridge/features/listings/presentation/viewmodels/sell_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
+import 'package:get_it/get_it.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Service locator for dependency injection.
 ///
@@ -41,6 +42,9 @@ final getIt = GetIt.instance;
 /// - Core dependencies (error handling, usecases, theme)
 /// - Feature-specific dependencies (auth, listings)
 Future<void> setupDependencyInjection() async {
+  // Core Providers
+  getIt.registerSingleton<LocaleProvider>(LocaleProvider());
+
   // Initialize Supabase (must be done before other setup)
   final supabase = Supabase.instance.client;
   getIt.registerSingleton<SupabaseClient>(supabase);

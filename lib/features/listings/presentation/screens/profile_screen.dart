@@ -62,11 +62,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onSelected: (value) {
                       if (value == 'signOut') {
                         context.read<AuthViewModel>().signOut();
+                      } else if (value == 'settings') {
+                        context.push('/settings');
                       }
                     },
                     icon: const Icon(Icons.more_vert, color: Colors.white),
                     itemBuilder: (BuildContext context) =>
                         <PopupMenuEntry<String>>[
+                          PopupMenuItem<String>(
+                            value: 'settings',
+                            child: ListTile(
+                              leading: Icon(Icons.settings),
+                              title: Text('Settings'),
+                            ),
+                          ),
                           PopupMenuItem<String>(
                             value: 'signOut',
                             child: ListTile(

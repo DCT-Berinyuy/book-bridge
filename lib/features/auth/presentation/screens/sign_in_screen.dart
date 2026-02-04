@@ -1,3 +1,4 @@
+import 'package:book_bridge/core/presentation/widgets/language_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -56,8 +57,6 @@ class _SignInScreenState extends State<SignInScreen> {
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
-      // Clear the error in the view model after showing it
-      authViewModel.clearError();
     } else if (authViewModel.authStatus == AuthStatus.passwordResetSent) {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
@@ -144,7 +143,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                 ),
-                const SizedBox(width: 40), // Spacer for alignment
+                const LanguageSwitcher(),
               ],
             ),
           ),
@@ -308,18 +307,18 @@ class _SignInScreenState extends State<SignInScreen> {
                           child: ElevatedButton(
                             onPressed:
                                 authViewModel.authState == AuthState.loading
-                                ? null
-                                : () {
-                                    FocusScope.of(context).unfocus();
-                                    if (_formKey.currentState?.validate() ??
-                                        false) {
-                                      authViewModel.signIn(
-                                        email: _emailController.text.trim(),
-                                        password: _passwordController.text
-                                            .trim(),
-                                      );
-                                    }
-                                  },
+                                    ? null
+                                    : () {
+                                        FocusScope.of(context).unfocus();
+                                        if (_formKey.currentState?.validate() ??
+                                            false) {
+                                          authViewModel.signIn(
+                                            email: _emailController.text.trim(),
+                                            password: _passwordController.text
+                                                .trim(),
+                                          );
+                                        }
+                                      },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(
                                 0xFF1A4D8C,
@@ -412,3 +411,4 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 }
+

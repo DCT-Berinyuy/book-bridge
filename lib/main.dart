@@ -1,3 +1,4 @@
+import 'package:book_bridge/core/providers/locale_provider.dart';
 import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -45,6 +46,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<LocaleProvider>(
+          create: (_) => di.getIt<LocaleProvider>(),
+        ),
         ChangeNotifierProvider<AuthViewModel>(
           create: (_) => di.getIt<AuthViewModel>(),
         ),
@@ -64,16 +68,19 @@ class MyApp extends StatelessWidget {
           create: (_) => di.getIt<SearchViewModel>(),
         ),
       ],
-      child: MaterialApp.router(
-        title: AppLocalizations.of(
-          context,
-        )!.bookbridgeColonSocialVenture, //TODO: translate
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        routerConfig: appRouter,
+      child: Consumer<LocaleProvider>(
+        builder: (context, localeProvider, child) {
+          return MaterialApp.router(
+            title: 'BookBridge',
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: localeProvider.locale,
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            routerConfig: appRouter,
+          );
+        },
       ),
     );
   }

@@ -22,7 +22,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get all => 'Tous';
 
   @override
-  String get author => '#Author';
+  String get author => 'Auteur';
 
   @override
   String get availableStock => 'Stock disponible';
@@ -96,10 +96,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'D\'après l\'auteur. Apporter soutien à la créativité locale.';
 
   @override
-  String get ePeriodGPeriod10 => '10';
+  String get ePeriodGPeriod10 => 'e.g 10';
 
   @override
-  String get ePeriodGPeriodNelkonAmpersandParker => 'Nelkon & Parker';
+  String get ePeriodGPeriodNelkonAmpersandParker => 'e.g Nelkon & Parker';
 
   @override
   String get ePeriodGPeriodPurePhysics => 'e.g. Physique pure';
@@ -158,7 +158,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get gallery => 'Galerie';
 
   @override
-  String get gce => 'GCE - GCE - GCE';
+  String get gce => 'GCE';
 
   @override
   String get good => 'Bon';
@@ -331,7 +331,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Recherche titre, auteur ou ISBN...';
 
   @override
-  String get selectACategory => '#Select a category';
+  String get selectACategory => 'Choisissez une catégorie.';
 
   @override
   String get selectImageSource => 'Choisissez une source d\'image';
