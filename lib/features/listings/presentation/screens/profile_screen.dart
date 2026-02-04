@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -46,9 +47,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     onPressed: () => context.pop(),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'Profile',
+                      AppLocalizations.of(context)!.profile,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 18,
@@ -66,11 +67,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     icon: const Icon(Icons.more_vert, color: Colors.white),
                     itemBuilder: (BuildContext context) =>
                         <PopupMenuEntry<String>>[
-                          const PopupMenuItem<String>(
+                          PopupMenuItem<String>(
                             value: 'signOut',
                             child: ListTile(
                               leading: Icon(Icons.exit_to_app),
-                              title: Text('Sign Out'),
+                              title: Text(
+                                AppLocalizations.of(context)!.signOut,
+                              ),
                             ),
                           ),
                         ],
@@ -99,19 +102,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Failed to load profile',
+                    AppLocalizations.of(context)!.failedToLoadProfile,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    profileViewModel.errorMessage ?? 'Unknown error',
+                    profileViewModel.errorMessage ??
+                        AppLocalizations.of(context)!.unknownError,
                     style: Theme.of(context).textTheme.bodyMedium,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: profileViewModel.loadProfile,
-                    child: const Text('Retry'),
+                    child: Text(AppLocalizations.of(context)!.retry),
                   ),
                 ],
               ),
@@ -120,7 +124,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           final user = profileViewModel.currentUser;
           if (user == null) {
-            return const Center(child: Text('User not found'));
+            return Center(
+              child: Text(AppLocalizations.of(context)!.userNotFound),
+            );
           }
 
           return SingleChildScrollView(
@@ -441,12 +447,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
-                                  'No listings yet',
+                                  AppLocalizations.of(context)!.noListingsYet,
                                   style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'Create your first listing to get started',
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.createYourFirstListingToGetStarted,
                                   style: Theme.of(context).textTheme.bodySmall,
                                   textAlign: TextAlign.center,
                                 ),
@@ -546,7 +554,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
                                     Text(
-                                      'Listed ${DateTime.now().difference(listing.createdAt).inDays} days ago',
+                                      DateTime.now()
+                                              .difference(listing.createdAt)
+                                              .inDays
+                                              .toString() +
+                                          AppLocalizations.of(context)!.daysAgo,
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Theme.of(

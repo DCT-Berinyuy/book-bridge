@@ -65,7 +65,9 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp.router(
-        title: 'BookBridge: Social Venture', //TODO: translate
+        title: AppLocalizations.of(
+          context,
+        )!.bookbridgeColonSocialVenture, //TODO: translate
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         debugShowCheckedModeBanner: false,

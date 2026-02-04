@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -39,26 +40,26 @@ class ScaffoldWithNavBar extends StatelessWidget {
           indicatorColor: Theme.of(
             context,
           ).colorScheme.primary.withValues(alpha: 0.2),
-          destinations: const [
+          destinations: [
             NavigationDestination(
               icon: Icon(Icons.home_outlined),
               selectedIcon: Icon(Icons.home),
-              label: 'Home',
+              label: AppLocalizations.of(context)!.home,
             ),
             NavigationDestination(
               icon: Icon(Icons.search_outlined),
               selectedIcon: Icon(Icons.search),
-              label: 'Search',
+              label: AppLocalizations.of(context)!.search,
             ),
             NavigationDestination(
               icon: Icon(Icons.add_circle_outline),
               selectedIcon: Icon(Icons.add_circle),
-              label: 'Sell',
+              label: AppLocalizations.of(context)!.sell,
             ),
             NavigationDestination(
               icon: Icon(Icons.person_outline),
               selectedIcon: Icon(Icons.person),
-              label: 'Profile',
+              label: AppLocalizations.of(context)!.profile,
             ),
           ],
         ),

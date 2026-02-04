@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -31,8 +32,13 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
     });
   }
 
-  Future<void> _contactSeller(String whatsappNumber) async {
-    final message = 'Hi, I am interested in your book listing!';
+  Future<void> _contactSeller(
+    BuildContext context,
+    String whatsappNumber,
+  ) async {
+    final message = AppLocalizations.of(
+      context,
+    )!.hiCommaIAmInterestedInYourBookListingExclamation_mark;
     final whatsappUrl =
         'https://wa.me/${whatsappNumber.replaceAll(RegExp(r'[^\d+]'), '')}?text=${Uri.encodeComponent(message)}';
 
@@ -47,7 +53,11 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Could not launch WhatsApp')),
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)!.couldNotLaunchWhatsapp,
+              ),
+            ),
           );
         }
       }
@@ -55,7 +65,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+        ).showSnackBar(SnackBar(content: Text(e.toString())));
       }
     }
   }
@@ -87,9 +97,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                         }
                       },
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'Book Details',
+                        AppLocalizations.of(context)!.bookDetails,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 18,
@@ -132,12 +142,13 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Failed to load listing',
+              AppLocalizations.of(context)!.failedToLoadListing,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 8),
             Text(
-              viewModel.errorMessage ?? 'Unknown error',
+              viewModel.errorMessage ??
+                  AppLocalizations.of(context)!.unknownError,
               style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
@@ -148,7 +159,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
 
     final listing = viewModel.listing;
     if (listing == null) {
-      return const Center(child: Text('No listing found'));
+      return Center(child: Text(AppLocalizations.of(context)!.noListingFound));
     }
 
     return Column(
@@ -182,9 +193,11 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                           Future.microtask(() {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
+                                SnackBar(
                                   content: Text(
-                                    'This listing is no longer available.',
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.thisListingIsNoLongerAvailablePeriod,
                                   ),
                                   duration: Duration(seconds: 2),
                                 ),
@@ -245,7 +258,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                           color: const Color(0xFF27AE60).withValues(alpha: 0.3),
                         ),
                       ),
-                      child: const Row(
+                      child: Row(
                         children: [
                           Icon(Icons.recycling, color: Color(0xFF27AE60)),
                           SizedBox(width: 12),
@@ -254,7 +267,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Buy-Back Eligible',
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.buyHyphenBackEligible,
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
@@ -262,7 +277,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                                   ),
                                 ),
                                 Text(
-                                  'Sell this book back to the platform when you\'re done.',
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.sellThisBookBackToThePlatformWhenYouBackslashApostropheReDonePeriod,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey,
@@ -300,10 +317,16 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                             const SizedBox(height: 8),
                             Text(
                               listing.sellerType == 'individual'
-                                  ? 'This student is selling to fund their next semester.'
+                                  ? AppLocalizations.of(
+                                      context,
+                                    )!.thisStudentIsSellingToFundTheirNextSemesterPeriod
                                   : listing.sellerType == 'bookshop'
-                                  ? 'A verified local bookshop supporting the community.'
-                                  : 'Direct from the author. Supporting local creativity.',
+                                  ? AppLocalizations.of(
+                                      context,
+                                    )!.aVerifiedLocalBookshopSupportingTheCommunityPeriod
+                                  : AppLocalizations.of(
+                                      context,
+                                    )!.directFromTheAuthorPeriodSupportingLocalCreativityPeriod,
                               style: const TextStyle(
                                 fontSize: 13,
                                 color: Color(0xFF2D3436), // Ink Black
@@ -397,8 +420,8 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                   const SizedBox(height: 16),
 
                   // Description / Details
-                  const Text(
-                    'DESCRIPTION',
+                  Text(
+                    AppLocalizations.of(context)!.description,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -410,7 +433,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                   Text(
                     listing.description.isNotEmpty
                         ? listing.description
-                        : 'No description provided.',
+                        : AppLocalizations.of(
+                            context,
+                          )!.noDescriptionProvidedPeriod,
                     style: const TextStyle(
                       fontSize: 16,
                       height: 1.5,
@@ -420,8 +445,8 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                   const SizedBox(height: 24),
 
                   // Seller Section
-                  const Text(
-                    'SELLER INFORMATION',
+                  Text(
+                    AppLocalizations.of(context)!.sellerInformation,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -478,7 +503,10 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    listing.sellerName ?? 'Unknown Seller',
+                                    listing.sellerName ??
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.unknownSeller,
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
@@ -495,7 +523,9 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                                       const SizedBox(width: 4),
                                       Text(
                                         listing.sellerLocality ??
-                                            'Unknown Location',
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.unknownLocation,
                                         style: const TextStyle(
                                           fontSize: 14,
                                           color: Color(
@@ -520,8 +550,12 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                           const SizedBox(height: 8),
                           Text(
                             listing.sellerType == 'bookshop'
-                                ? 'Supporting local businesses democratizes access to knowledge.'
-                                : 'Supporting local authors fosters a vibrant culture of learning.',
+                                ? AppLocalizations.of(
+                                    context,
+                                  )!.supportingLocalBusinessesDemocratizesAccessToKnowledgePeriod
+                                : AppLocalizations.of(
+                                    context,
+                                  )!.supportingLocalAuthorsFostersAVibrantCultureOfLearningPeriod,
                             style: const TextStyle(
                               fontSize: 12,
                               color: Color(0xFF13EC5B),
@@ -569,7 +603,8 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
             width: double.infinity,
             height: 56,
             child: ElevatedButton.icon(
-              onPressed: () => _contactSeller(listing.sellerWhatsapp ?? ''),
+              onPressed: () =>
+                  _contactSeller(context, listing.sellerWhatsapp ?? ''),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFF2994A), // Bridge Orange
                 foregroundColor: Colors.white,
@@ -578,8 +613,8 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                 ),
               ),
               icon: const Icon(Icons.chat_bubble),
-              label: const Text(
-                'Contact Seller via WhatsApp',
+              label: Text(
+                AppLocalizations.of(context)!.contactSellerViaWhatsapp,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
             ),
@@ -599,7 +634,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Call Seller',
+                  AppLocalizations.of(context)!.callSeller,
                   style: TextStyle(
                     fontSize: 14,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,

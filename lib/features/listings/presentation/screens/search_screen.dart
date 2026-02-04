@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
@@ -44,8 +45,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         children: [
                           const Icon(Icons.menu_book, color: Colors.white),
                           const SizedBox(width: 8),
-                          const Text(
-                            'BookBridge',
+                          Text(
+                            AppLocalizations.of(context)!.bookbridge,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
@@ -84,7 +85,9 @@ class _SearchScreenState extends State<SearchScreen> {
                         child: TextField(
                           controller: _searchController,
                           decoration: InputDecoration(
-                            hintText: 'Search title, author, or ISBN...',
+                            hintText: AppLocalizations.of(
+                              context,
+                            )!.searchTitleCommaAuthorCommaOrIsbnPeriodPeriodPeriod,
                             hintStyle: TextStyle(
                               color: Theme.of(
                                 context,
@@ -126,8 +129,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Academic Categories
-                  const Text(
-                    'Academic Categories',
+                  Text(
+                    AppLocalizations.of(context)!.academicCategories,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 16),
@@ -141,17 +144,25 @@ class _SearchScreenState extends State<SearchScreen> {
                         1.8, // Decreased ratio to provide more height and prevent overflow
                     children: [
                       _buildCategoryItem(
-                        'Engineering',
+                        AppLocalizations.of(context)!.engineering,
                         Icons.engineering,
-                        'Polytechnique',
+                        AppLocalizations.of(context)!.polytechnique,
                       ),
-                      _buildCategoryItem('Law', Icons.gavel, 'FSJP'),
                       _buildCategoryItem(
-                        'Medicine',
+                        AppLocalizations.of(context)!.law,
+                        Icons.gavel,
+                        'FSJP',
+                      ),
+                      _buildCategoryItem(
+                        AppLocalizations.of(context)!.medicine,
                         Icons.medical_services,
                         'FMSB',
                       ),
-                      _buildCategoryItem('Economics', Icons.payments, 'FSEG'),
+                      _buildCategoryItem(
+                        AppLocalizations.of(context)!.economics,
+                        Icons.payments,
+                        'FSEG',
+                      ),
                     ],
                   ),
                   const SizedBox(height: 32),
@@ -160,8 +171,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Recent Searches',
+                      Text(
+                        AppLocalizations.of(context)!.recentSearches,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
@@ -171,8 +182,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         onPressed: () {
                           // Clear all functionality
                         },
-                        child: const Text(
-                          'Clear All',
+                        child: Text(
+                          AppLocalizations.of(context)!.clearAll,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
@@ -187,9 +198,19 @@ class _SearchScreenState extends State<SearchScreen> {
                   // Recent search items
                   Column(
                     children: [
-                      _buildRecentSearchItem('Organic Chemistry Vol. 2'),
-                      _buildRecentSearchItem('Criminal Procedure Code'),
-                      _buildRecentSearchItem('Introduction to Macroeconomics'),
+                      _buildRecentSearchItem(
+                        AppLocalizations.of(
+                          context,
+                        )!.organicChemistryVolPeriod2,
+                      ),
+                      _buildRecentSearchItem(
+                        AppLocalizations.of(context)!.criminalProcedureCode,
+                      ),
+                      _buildRecentSearchItem(
+                        AppLocalizations.of(
+                          context,
+                        )!.introductionToMacroeconomics,
+                      ),
                     ],
                   ),
 
@@ -201,7 +222,11 @@ class _SearchScreenState extends State<SearchScreen> {
                       children: [
                         const SizedBox(height: 24),
                         Text(
-                          '${viewModel.searchResults.length} result${viewModel.searchResults.length != 1 ? 's' : ''} found',
+                          viewModel.searchResults.length.toString() +
+                              AppLocalizations.of(
+                                context,
+                              )!.resultOpen_parenthesisSClose_parenthesisFound,
+
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                         const SizedBox(height: 12),

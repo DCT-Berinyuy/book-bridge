@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -168,7 +169,7 @@ class SplashScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'BookBridge',
+              AppLocalizations.of(context)!.bookbridge,
               style: Theme.of(context).textTheme.displayMedium,
             ),
             const SizedBox(height: 32),
