@@ -166,6 +166,9 @@ Future<void> setupDependencyInjection() async {
   );
 
   getIt.registerSingleton<SearchViewModel>(
-    SearchViewModel(searchListingsUseCase: getIt<SearchListingsUseCase>()),
+    SearchViewModel(
+      searchListingsUseCase: getIt<SearchListingsUseCase>(),
+      repository: getIt<ListingRepository>(),
+    ),
   );
 }

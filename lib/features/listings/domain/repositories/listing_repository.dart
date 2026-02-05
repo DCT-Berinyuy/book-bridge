@@ -2,12 +2,16 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:book_bridge/core/error/failures.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/features/listings/domain/entities/category.dart';
 
 /// Abstract repository for listing operations.
 ///
 /// This interface defines the contract for all listing-related
 /// data operations. The actual implementation is in the data layer.
 abstract class ListingRepository {
+  /// Fetches all academic categories.
+  Future<Either<Failure, List<Category>>> getCategories();
+
   /// Fetches all available listings.
   ///
   /// Optionally filters by [status] (defaults to 'available') and [category].

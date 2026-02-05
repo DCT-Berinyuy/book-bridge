@@ -16,6 +16,50 @@ class SupabaseListingsDataSource {
     required this.storageDataSource,
   });
 
+  /// Fetches all academic categories.
+  Future<List<Map<String, dynamic>>> getCategories() async {
+    // For now, we return a hardcoded list of real Cameroonian categories.
+    // In a future update, this could fetch from a 'categories' table in Supabase.
+    return [
+      {
+        'id': 'eng',
+        'name': 'Engineering',
+        'icon': 'engineering',
+        'subtitle': 'Polytechnique / HTTC',
+      },
+      {
+        'id': 'law',
+        'name': 'Law',
+        'icon': 'gavel',
+        'subtitle': 'FSJP / Political Science',
+      },
+      {
+        'id': 'med',
+        'name': 'Medicine',
+        'icon': 'medical_services',
+        'subtitle': 'FMSB / Health Sciences',
+      },
+      {
+        'id': 'eco',
+        'name': 'Economics',
+        'icon': 'payments',
+        'subtitle': 'FSEG / Management',
+      },
+      {
+        'id': 'art',
+        'name': 'Arts & Letters',
+        'icon': 'menu_book',
+        'subtitle': 'FALSH / Social Sci.',
+      },
+      {
+        'id': 'sci',
+        'name': 'Science',
+        'icon': 'science',
+        'subtitle': 'FS / Technology',
+      },
+    ];
+  }
+
   /// Fetches all available listings with pagination.
   ///
   /// Throws [ServerException] if the query fails.

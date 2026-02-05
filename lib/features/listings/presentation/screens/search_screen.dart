@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/features/listings/domain/entities/category.dart'
+    as entity;
 
 /// Search screen for finding book listings.
 ///
@@ -154,28 +156,29 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    GridView.count(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: 1.8,
-                      children: [
-                        _buildCategoryItem(
-                          'Engineering',
-                          Icons.engineering,
-                          'Polytechnique',
-                        ),
-                        _buildCategoryItem('Law', Icons.gavel, 'FSJP'),
-                        _buildCategoryItem(
-                          'Medicine',
-                          Icons.medical_services,
-                          'FMSB',
-                        ),
-                        _buildCategoryItem('Economics', Icons.payments, 'FSEG'),
-                      ],
-                    ),
+                    if (viewModel.categories.isEmpty)
+                      const Center(child: Text('No categories available'))
+                    else
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                              childAspectRatio: 1.8,
+                            ),
+                        itemCount: viewModel.categories.length,
+                        itemBuilder: (context, index) {
+                          final category = viewModel.categories[index];
+                          return _buildCategoryItem(
+                            context,
+                            category,
+                            viewModel,
+                          );
+                        },
+                      ),
                     const SizedBox(height: 32),
 
                     // Recent Searches Section
@@ -336,7 +339,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
-                                childAspectRatio: 0.68,
+                                childAspectRatio:
+                                    0.6, // Further increased space for text
                                 crossAxisSpacing: 16,
                                 mainAxisSpacing: 16,
                               ),
@@ -409,6 +413,10 @@ class _SearchScreenState extends State<SearchScreen> {
                             listing.imageUrl,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
+                              // Notify view model to remove broken listing
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                viewModel.removeListingById(listing.id);
+                              });
                               return Container(
                                 color: Colors.grey[200],
                                 child: const Icon(
@@ -493,55 +501,74 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildCategoryItem(String title, IconData icon, String subtitle) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(
-          context,
-        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
+  Widget _buildCategoryItem(
+    BuildContext context,
+    entity.Category category,
+    SearchViewModel viewModel,
+  ) {
+    return GestureDetector(
+      onTap: () {
+        viewModel.searchByCategory(category);
+        _searchController.text = category.name;
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(
+            context,
+          ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: viewModel.selectedCategory?.id == category.id
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).dividerColor.withValues(alpha: 0.1),
+            width: viewModel.selectedCategory?.id == category.id ? 2 : 1,
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Theme.of(
-                  context,
-                ).colorScheme.primary.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primary.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  category.icon,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
-              child: Icon(icon, color: Theme.of(context).colorScheme.primary),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      category.name,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    Text(
+                      category.subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

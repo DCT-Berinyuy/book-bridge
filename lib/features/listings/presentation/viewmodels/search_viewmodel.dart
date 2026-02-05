@@ -1,6 +1,8 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' hide Category;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/features/listings/domain/entities/category.dart';
+import 'package:book_bridge/features/listings/domain/repositories/listing_repository.dart';
 import 'package:book_bridge/features/listings/domain/usecases/search_listings_usecase.dart';
 
 /// State enum for the Search screen.
@@ -12,17 +14,24 @@ enum SearchState { initial, loading, success, error, empty }
 /// search results with debouncing.
 class SearchViewModel extends ChangeNotifier {
   final SearchListingsUseCase searchListingsUseCase;
+  final ListingRepository repository;
   static const String _recentSearchesKey = 'recent_searches';
 
   SearchState _searchState = SearchState.initial;
   String? _errorMessage;
   List<Listing> _searchResults = [];
   List<String> _recentSearches = [];
+  List<Category> _categories = [];
   String _currentQuery = '';
+  Category? _selectedCategory;
   bool _isSearching = false;
 
-  SearchViewModel({required this.searchListingsUseCase}) {
+  SearchViewModel({
+    required this.searchListingsUseCase,
+    required this.repository,
+  }) {
     loadRecentSearches();
+    loadCategories();
   }
 
   // Getters
@@ -30,8 +39,24 @@ class SearchViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
   List<Listing> get searchResults => _searchResults;
   List<String> get recentSearches => _recentSearches;
+  List<Category> get categories => _categories;
   String get currentQuery => _currentQuery;
+  Category? get selectedCategory => _selectedCategory;
   bool get isSearching => _isSearching;
+
+  /// Loads academic categories.
+  Future<void> loadCategories() async {
+    final result = await repository.getCategories();
+    result.fold(
+      (failure) {
+        // We can ignore category loading errors or handle them silently
+      },
+      (categories) {
+        _categories = categories;
+        notifyListeners();
+      },
+    );
+  }
 
   /// Loads recent searches from SharedPreferences.
   Future<void> loadRecentSearches() async {
@@ -128,11 +153,45 @@ class SearchViewModel extends ChangeNotifier {
   /// Clears the current search and results.
   void clearSearch() {
     _currentQuery = '';
+    _selectedCategory = null;
     _searchResults = [];
     _searchState = SearchState.initial;
     _errorMessage = null;
     _isSearching = false;
     notifyListeners();
+  }
+
+  /// Searches listings by category.
+  Future<void> searchByCategory(Category category) async {
+    _selectedCategory = category;
+    _currentQuery = category.name;
+    _isSearching = true;
+    _searchState = SearchState.loading;
+    _errorMessage = null;
+    notifyListeners();
+
+    final result = await repository.getListings(category: category.name);
+
+    result.fold(
+      (failure) {
+        _searchState = SearchState.error;
+        _errorMessage = failure.message;
+        _searchResults = [];
+        _isSearching = false;
+        notifyListeners();
+      },
+      (listings) {
+        if (listings.isEmpty) {
+          _searchState = SearchState.empty;
+        } else {
+          _searchState = SearchState.success;
+        }
+        _searchResults = listings;
+        _isSearching = false;
+        _errorMessage = null;
+        notifyListeners();
+      },
+    );
   }
 
   /// Removes a listing by its ID.

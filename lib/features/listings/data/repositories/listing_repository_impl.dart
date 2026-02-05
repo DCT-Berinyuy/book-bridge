@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:dartz/dartz.dart';
 import 'package:book_bridge/core/error/failures.dart';
 import 'package:book_bridge/core/error/exceptions.dart';
 import 'package:book_bridge/features/listings/data/datasources/supabase_listings_data_source.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/features/listings/domain/entities/category.dart';
 import 'package:book_bridge/features/listings/domain/repositories/listing_repository.dart';
 
 /// Implementation of the ListingRepository interface using Supabase.
@@ -14,6 +16,45 @@ class ListingRepositoryImpl implements ListingRepository {
   final SupabaseListingsDataSource dataSource;
 
   ListingRepositoryImpl({required this.dataSource});
+
+  @override
+  Future<Either<Failure, List<Category>>> getCategories() async {
+    try {
+      final categoryData = await dataSource.getCategories();
+      final categories = categoryData.map((data) {
+        return Category(
+          id: data['id'] as String,
+          name: data['name'] as String,
+          icon: _getIconData(data['icon'] as String),
+          subtitle: data['subtitle'] as String,
+        );
+      }).toList();
+      return Right(categories);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(UnknownFailure(message: e.toString()));
+    }
+  }
+
+  IconData _getIconData(String iconName) {
+    switch (iconName) {
+      case 'engineering':
+        return Icons.engineering;
+      case 'gavel':
+        return Icons.gavel;
+      case 'medical_services':
+        return Icons.medical_services;
+      case 'payments':
+        return Icons.currency_exchange;
+      case 'menu_book':
+        return Icons.menu_book;
+      case 'science':
+        return Icons.science;
+      default:
+        return Icons.book;
+    }
+  }
 
   @override
   Future<Either<Failure, List<Listing>>> getListings({

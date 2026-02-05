@@ -62,22 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (viewModel.homeState == HomeState.error && viewModel.listings.isEmpty) {
-      return _buildErrorState(viewModel);
-    }
-
-    if (viewModel.listings.isEmpty) {
-      return _buildEmptyState();
-    }
-
-    // Combine featured and regular listings
-    final featuredListings = viewModel.listings
-        .where((l) => l.isFeatured)
-        .toList();
-    final regularListings = viewModel.listings
-        .where((l) => !l.isFeatured)
-        .toList();
-
     return CustomScrollView(
       controller: _scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
@@ -85,87 +69,127 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildSliverAppBar(),
         _buildSectionHeader('Categories'),
         _buildCategoryChips(),
-        if (featuredListings.isNotEmpty) ...[
-          _buildSectionHeader('Featured Books'),
-          _buildFeaturedListings(featuredListings),
-        ],
-        _buildSectionHeader('Recently Added'),
-        _buildListingsGrid(regularListings, viewModel),
-        if (viewModel.hasMoreListings && viewModel.isLoading)
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Center(child: CircularProgressIndicator()),
+        if (viewModel.homeState == HomeState.error &&
+            viewModel.listings.isEmpty)
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: _buildErrorState(viewModel),
+          )
+        else if (viewModel.listings.isEmpty)
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: _buildEmptyState(viewModel),
+          )
+        else ...[
+          // Featured listings logic
+          if (viewModel.listings.any((l) => l.isFeatured)) ...[
+            _buildSectionHeader('Featured Books'),
+            _buildFeaturedListings(
+              viewModel.listings.where((l) => l.isFeatured).toList(),
             ),
+          ],
+          _buildSectionHeader('Recently Added'),
+          _buildListingsGrid(
+            viewModel.listings.where((l) => !l.isFeatured).toList(),
+            viewModel,
           ),
+          if (viewModel.hasMoreListings && viewModel.isLoading)
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+            ),
+        ],
       ],
     );
   }
 
   Widget _buildErrorState(HomeViewModel viewModel) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.cloud_off_rounded,
-              size: 80,
-              color: Theme.of(context).colorScheme.error,
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.cloud_off_rounded,
+            size: 80,
+            color: Theme.of(context).colorScheme.error,
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'Oops! Something Went Wrong',
+            style: GoogleFonts.lato(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            viewModel.errorMessage ?? 'Please check your connection.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
-            const SizedBox(height: 24),
-            Text(
-              'Oops! Something Went Wrong',
-              style: GoogleFonts.lato(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+          ),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton.icon(
+                onPressed: viewModel.refreshListings,
+                icon: const Icon(Icons.refresh),
+                label: const Text('Try Again'),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              viewModel.errorMessage ?? 'Please check your connection.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: viewModel.refreshListings,
-              icon: const Icon(Icons.refresh),
-              label: const Text('Try Again'),
-            ),
-          ],
-        ),
+              if (viewModel.selectedCategory != null) ...[
+                const SizedBox(width: 12),
+                OutlinedButton(
+                  onPressed: viewModel.clearCategoryFilter,
+                  child: const Text('Back to Home'),
+                ),
+              ],
+            ],
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildEmptyState() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.search_off_rounded, size: 80, color: Colors.grey),
+  Widget _buildEmptyState(HomeViewModel viewModel) {
+    final isFiltered = viewModel.selectedCategory != null;
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.search_off_rounded, size: 80, color: Colors.grey),
+          const SizedBox(height: 24),
+          Text(
+            isFiltered
+                ? 'No Books in ${viewModel.selectedCategory}'
+                : 'No Books Found',
+            style: GoogleFonts.lato(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            isFiltered
+                ? 'Try another category or clear the filter.'
+                : 'Be the first to list a book in your area!',
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.grey),
+          ),
+          if (isFiltered) ...[
             const SizedBox(height: 24),
-            Text(
-              'No Books Found',
-              style: GoogleFonts.lato(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+            ElevatedButton.icon(
+              onPressed: viewModel.clearCategoryFilter,
+              icon: const Icon(Icons.home_rounded),
+              label: const Text('Back to Home'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
               ),
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'Be the first to list a book in your area!',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey),
-            ),
           ],
-        ),
+        ],
       ),
     );
   }
