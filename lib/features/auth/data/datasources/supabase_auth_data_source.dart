@@ -19,13 +19,18 @@ class SupabaseAuthDataSource {
     required String password,
     required String fullName,
     required String locality,
+    required String whatsappNumber,
   }) async {
     try {
       // Sign up with Supabase Auth
       final authResponse = await supabaseClient.auth.signUp(
         email: email,
         password: password,
-        data: {'full_name': fullName, 'locality': locality},
+        data: {
+          'full_name': fullName,
+          'locality': locality,
+          'whatsapp_number': whatsappNumber,
+        },
       );
 
       final userId = authResponse.user?.id;

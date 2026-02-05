@@ -133,6 +133,7 @@ class AuthViewModel extends ChangeNotifier {
     required String password,
     required String fullName,
     required String locality,
+    required String whatsappNumber,
   }) async {
     _authState = AuthState.loading;
     _errorMessage = null;
@@ -143,6 +144,7 @@ class AuthViewModel extends ChangeNotifier {
       password: password,
       fullName: fullName,
       locality: locality,
+      whatsappNumber: whatsappNumber,
     );
 
     final result = await signUpUseCase(params);

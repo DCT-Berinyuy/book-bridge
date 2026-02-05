@@ -21,6 +21,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
     required String fullName,
     required String locality,
+    required String whatsappNumber,
   }) async {
     try {
       final userModel = await dataSource.signUp(
@@ -28,6 +29,7 @@ class AuthRepositoryImpl implements AuthRepository {
         password: password,
         fullName: fullName,
         locality: locality,
+        whatsappNumber: whatsappNumber,
       );
       return Right(userModel.toEntity());
     } on AuthAppException catch (e) {

@@ -17,6 +17,7 @@ class SignUpUseCase extends UseCase<User, SignUpParams> {
       password: params.password,
       fullName: params.fullName,
       locality: params.locality,
+      whatsappNumber: params.whatsappNumber,
     );
   }
 }
@@ -27,11 +28,13 @@ class SignUpParams {
   final String password;
   final String fullName;
   final String locality;
+  final String whatsappNumber;
 
   SignUpParams({
     required this.email,
     required this.password,
     required this.fullName,
     required this.locality,
+    required this.whatsappNumber,
   });
 }

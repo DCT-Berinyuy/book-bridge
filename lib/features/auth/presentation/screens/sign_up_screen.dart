@@ -17,9 +17,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _fullNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _localityController = TextEditingController();
+  final _whatsappController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _obscurePassword = true;
 
   // Save reference to avoid accessing context in dispose()
   late AuthViewModel _authViewModel;
@@ -41,6 +43,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _fullNameController.dispose();
     _emailController.dispose();
     _localityController.dispose();
+    _whatsappController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -253,6 +256,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         const SizedBox(height: 16),
 
+                        // WhatsApp Number
+                        const Text(
+                          'WhatsApp Number',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          controller: _whatsappController,
+                          enabled: authViewModel.authState != AuthState.loading,
+                          decoration: InputDecoration(
+                            hintText: 'e.g. 677... or 699...',
+                            filled: true,
+                            fillColor: Theme.of(context).colorScheme.surface,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 15,
+                            ),
+                          ),
+                          keyboardType: TextInputType.phone,
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'WhatsApp number is required';
+                            }
+                            // Basic Cameroon phone number validation (9 digits)
+                            if (!RegExp(r'^\d{9}$').hasMatch(value!)) {
+                              return 'Enter a valid 9-digit number';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+
                         // Password
                         const Text(
                           'Password',
@@ -278,9 +321,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               horizontal: 15,
                               vertical: 15,
                             ),
-                            suffixIcon: const Icon(Icons.visibility),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscurePassword = !_obscurePassword;
+                                });
+                              },
+                            ),
                           ),
-                          obscureText: true,
+                          obscureText: _obscurePassword,
                           validator: (value) {
                             if (value?.isEmpty ?? true) {
                               return 'Password is required';
@@ -311,6 +365,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         fullName: _fullNameController.text
                                             .trim(),
                                         locality: _localityController.text
+                                            .trim(),
+                                        whatsappNumber: _whatsappController.text
                                             .trim(),
                                       );
                                     }

@@ -15,6 +15,7 @@ abstract class AuthRepository {
     required String password,
     required String fullName,
     required String locality,
+    required String whatsappNumber,
   });
 
   /// Signs in a user with email and password.

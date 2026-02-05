@@ -17,6 +17,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _obscurePassword = true;
 
   // Save reference to avoid accessing context in dispose()
   late AuthViewModel _authViewModel;
@@ -269,9 +270,20 @@ class _SignInScreenState extends State<SignInScreen> {
                               horizontal: 16,
                               vertical: 16,
                             ),
-                            suffixIcon: const Icon(Icons.visibility),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscurePassword = !_obscurePassword;
+                                });
+                              },
+                            ),
                           ),
-                          obscureText: true,
+                          obscureText: _obscurePassword,
                           validator: (value) {
                             if (value?.isEmpty ?? true) {
                               return 'Password is required';
