@@ -122,6 +122,24 @@ abstract class AppLocalizations {
   /// **'All'**
   String get all;
 
+  /// No description provided for @alreadyHaveAnAccountQuestion_mark.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get alreadyHaveAnAccountQuestion_mark;
+
+  /// No description provided for @anErrorOccurredWhileSearching.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while searching'**
+  String get anErrorOccurredWhileSearching;
+
+  /// No description provided for @anUnknownErrorOccurredPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occurred.'**
+  String get anUnknownErrorOccurredPeriod;
+
   /// No description provided for @author.
   ///
   /// In en, this message translates to:
@@ -163,6 +181,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'BookBridge'**
   String get bookbridge;
+
+  /// No description provided for @bookbridgeColonKnowledgeForAll.
+  ///
+  /// In en, this message translates to:
+  /// **'BookBridge: Knowledge for All'**
+  String get bookbridgeColonKnowledgeForAll;
 
   /// No description provided for @bookbridgeColonSocialVenture.
   ///
@@ -212,6 +236,13 @@ abstract class AppLocalizations {
   /// **'Clear All'**
   String get clearAll;
 
+  /// No description provided for @connectingStudentsCommaAuthorsCommaAndBookshopsToEndLearningPovertyPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting students, authors, and bookshops to end learning poverty.'**
+  String
+  get connectingStudentsCommaAuthorsCommaAndBookshopsToEndLearningPovertyPeriod;
+
   /// No description provided for @contactSellerViaWhatsapp.
   ///
   /// In en, this message translates to:
@@ -223,6 +254,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not launch WhatsApp'**
   String get couldNotLaunchWhatsapp;
+
+  /// No description provided for @createAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get createAccount;
 
   /// No description provided for @createYourFirstListingToGetStarted.
   ///
@@ -242,6 +279,12 @@ abstract class AppLocalizations {
   /// **' days ago'**
   String get daysAgo;
 
+  /// No description provided for @democratizingAccessToAffordableBooksInCameroonPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Democratizing access to affordable books in Cameroon.'**
+  String get democratizingAccessToAffordableBooksInCameroonPeriod;
+
   /// No description provided for @describeTheBookOpen_parenthesisEditionCommaLanguageCommaEtcPeriodClose_parenthesis.
   ///
   /// In en, this message translates to:
@@ -260,6 +303,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Direct from the author. Supporting local creativity.'**
   String get directFromTheAuthorPeriodSupportingLocalCreativityPeriod;
+
+  /// No description provided for @don.
+  ///
+  /// In en, this message translates to:
+  /// **'Don'**
+  String get don;
+
+  /// No description provided for @donBackslashApostropheTHaveAnAccountQuestion_mark.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\\\'t have an account?'**
+  String get donBackslashApostropheTHaveAnAccountQuestion_mark;
 
   /// No description provided for @ePeriodGPeriod10.
   ///
@@ -303,11 +358,41 @@ abstract class AppLocalizations {
   /// **'Eligible for Buy-Back'**
   String get eligibleForBuyHyphenBack;
 
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// No description provided for @emailAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Address'**
+  String get emailAddress;
+
+  /// No description provided for @emailIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get emailIsRequired;
+
   /// No description provided for @engineering.
   ///
   /// In en, this message translates to:
   /// **'Engineering'**
   String get engineering;
+
+  /// No description provided for @enterAValidEmailAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address'**
+  String get enterAValidEmailAddress;
+
+  /// No description provided for @enterYourEmailAddressToReceiveAPasswordResetLinkPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address to receive a password reset link.'**
+  String get enterYourEmailAddressToReceiveAPasswordResetLinkPeriod;
 
   /// No description provided for @failedToCreateUser.
   ///
@@ -369,11 +454,23 @@ abstract class AppLocalizations {
   /// **'Fiction'**
   String get fiction;
 
+  /// No description provided for @forgotPasswordQuestion_mark.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPasswordQuestion_mark;
+
   /// No description provided for @fullName.
   ///
   /// In en, this message translates to:
   /// **'Full Name'**
   String get fullName;
+
+  /// No description provided for @fullNameIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name is required'**
+  String get fullNameIsRequired;
 
   /// No description provided for @gallery.
   ///
@@ -471,6 +568,18 @@ abstract class AppLocalizations {
   /// **'Locality / Neighborhood'**
   String get localityForward_slashNeighborhood;
 
+  /// No description provided for @localityIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Locality is required'**
+  String get localityIsRequired;
+
+  /// No description provided for @logIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Log In'**
+  String get logIn;
+
   /// No description provided for @mathematics.
   ///
   /// In en, this message translates to:
@@ -482,6 +591,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Medicine'**
   String get medicine;
+
+  /// No description provided for @minPeriod6Characters.
+  ///
+  /// In en, this message translates to:
+  /// **'Min. 6 characters'**
+  String get minPeriod6Characters;
 
   /// No description provided for @myActiveBooks.
   ///
@@ -555,6 +670,30 @@ abstract class AppLocalizations {
   /// **'Organic Chemistry Vol. 2'**
   String get organicChemistryVolPeriod2;
 
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @passwordIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get passwordIsRequired;
+
+  /// No description provided for @passwordMustBeAtLeast6Characters.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters'**
+  String get passwordMustBeAtLeast6Characters;
+
+  /// No description provided for @passwordResetLinkSentExclamation_mark.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset link sent!'**
+  String get passwordResetLinkSentExclamation_mark;
+
   /// No description provided for @permitStudentsToSellThisBookBackWhenFinishedPeriod.
   ///
   /// In en, this message translates to:
@@ -621,6 +760,12 @@ abstract class AppLocalizations {
   /// **'Price (FCFA)'**
   String get priceOpen_parenthesisFcfaClose_parenthesis;
 
+  /// No description provided for @pricesAreListedInFcfa.
+  ///
+  /// In en, this message translates to:
+  /// **'PRICES ARE LISTED IN FCFA'**
+  String get pricesAreListedInFcfa;
+
   /// No description provided for @profile.
   ///
   /// In en, this message translates to:
@@ -657,6 +802,12 @@ abstract class AppLocalizations {
   /// **'Recently Added'**
   String get recentlyAdded;
 
+  /// No description provided for @resetPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get resetPassword;
+
   /// No description provided for @resultOpen_parenthesisSClose_parenthesisFound.
   ///
   /// In en, this message translates to:
@@ -680,6 +831,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'SAVED'**
   String get saved;
+
+  /// No description provided for @schoolForward_slashPersonalEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'School/Personal Email'**
+  String get schoolForward_slashPersonalEmail;
 
   /// No description provided for @science.
   ///
@@ -754,11 +911,35 @@ abstract class AppLocalizations {
   /// **'Seller Type'**
   String get sellerType;
 
+  /// No description provided for @sendLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Link'**
+  String get sendLink;
+
+  /// No description provided for @signIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get signIn;
+
   /// No description provided for @signOut.
   ///
   /// In en, this message translates to:
   /// **'Sign Out'**
   String get signOut;
+
+  /// No description provided for @signUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get signUp;
+
+  /// No description provided for @signUpSuccessfulExclamation_markWelcomePeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up successful! Welcome.'**
+  String get signUpSuccessfulExclamation_markWelcomePeriod;
 
   /// No description provided for @socialVentureFeatures.
   ///

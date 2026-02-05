@@ -22,6 +22,17 @@ class AppLocalizationsFr extends AppLocalizations {
   String get all => 'Tous';
 
   @override
+  String get alreadyHaveAnAccountQuestion_mark => 'J\'ai déjà un compte ?';
+
+  @override
+  String get anErrorOccurredWhileSearching =>
+      '#An error occurred while searching';
+
+  @override
+  String get anUnknownErrorOccurredPeriod =>
+      'Une erreur inconnue s\'est produite.';
+
+  @override
   String get author => 'Auteur';
 
   @override
@@ -42,6 +53,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get bookbridge => 'BookBridge';
+
+  @override
+  String get bookbridgeColonKnowledgeForAll =>
+      'BookBridge: Connaissance pour tous';
 
   @override
   String get bookbridgeColonSocialVenture => 'BookBridge: Entreprise sociale';
@@ -68,10 +83,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get clearAll => 'Effacer Tous';
 
   @override
+  String
+  get connectingStudentsCommaAuthorsCommaAndBookshopsToEndLearningPovertyPeriod =>
+      'Connecter les étudiants, les auteurs et les librairies pour endre la pauvreté de l\'apprentissage.';
+
+  @override
   String get contactSellerViaWhatsapp => 'Contactez le vendeur par WhatsApp';
 
   @override
   String get couldNotLaunchWhatsapp => 'Je ne peux pas lancer WhatsApp';
+
+  @override
+  String get createAccount => 'Crée un compte';
 
   @override
   String get createYourFirstListingToGetStarted =>
@@ -84,6 +107,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get daysAgo => 'Il y a des jours';
 
   @override
+  String get democratizingAccessToAffordableBooksInCameroonPeriod =>
+      'Démocratisant l\'accès aux livres abordables en Cameroun.';
+
+  @override
   String
   get describeTheBookOpen_parenthesisEditionCommaLanguageCommaEtcPeriodClose_parenthesis =>
       'Je décris le livre (édition, langue, etc.)';
@@ -94,6 +121,13 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get directFromTheAuthorPeriodSupportingLocalCreativityPeriod =>
       'D\'après l\'auteur. Apporter soutien à la créativité locale.';
+
+  @override
+  String get don => 'Don\'t';
+
+  @override
+  String get donBackslashApostropheTHaveAnAccountQuestion_mark =>
+      'Pas d\\\'account ?';
 
   @override
   String get ePeriodGPeriod10 => 'e.g 10';
@@ -117,7 +151,24 @@ class AppLocalizationsFr extends AppLocalizations {
   String get eligibleForBuyHyphenBack => 'Admissible pour une rachat';
 
   @override
+  String get email => 'Email';
+
+  @override
+  String get emailAddress => 'Adresse e-mail';
+
+  @override
+  String get emailIsRequired => 'L\'email est obligatoire.';
+
+  @override
   String get engineering => 'Ingénierie';
+
+  @override
+  String get enterAValidEmailAddress =>
+      'Veuillez saisir une adresse e-mail valide.';
+
+  @override
+  String get enterYourEmailAddressToReceiveAPasswordResetLinkPeriod =>
+      'Veuillez entrer votre adresse e-mail pour recevoir un lien de réinitialisation de mot de passe.';
 
   @override
   String get failedToCreateUser => 'Échec de la création d\'utilisateur';
@@ -152,7 +203,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get fiction => 'fiction';
 
   @override
+  String get forgotPasswordQuestion_mark => 'Mot de passe oublié ?';
+
+  @override
   String get fullName => 'Nom complet';
+
+  @override
+  String get fullNameIsRequired => 'Le nom complet est requis';
 
   @override
   String get gallery => 'Galerie';
@@ -207,10 +264,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get localityForward_slashNeighborhood => 'Localité / Quartier';
 
   @override
+  String get localityIsRequired => 'Lieu est requis';
+
+  @override
+  String get logIn => 'Connexion';
+
+  @override
   String get mathematics => 'Mathématiques';
 
   @override
   String get medicine => 'Médecine';
+
+  @override
+  String get minPeriod6Characters => 'Minimum 6 caractères.';
 
   @override
   String get myActiveBooks => 'Mes Livres Activités';
@@ -251,6 +317,20 @@ class AppLocalizationsFr extends AppLocalizations {
   String get organicChemistryVolPeriod2 => 'Chimie organique, volume 2';
 
   @override
+  String get password => 'Mot de passe';
+
+  @override
+  String get passwordIsRequired => 'Le mot de passe est requis';
+
+  @override
+  String get passwordMustBeAtLeast6Characters =>
+      'Le mot de passe doit contenir au moins 6 caractères.';
+
+  @override
+  String get passwordResetLinkSentExclamation_mark =>
+      'Un lien de réinitialisation de mot de passe a été envoyé !';
+
+  @override
   String get permitStudentsToSellThisBookBackWhenFinishedPeriod =>
       'Permet aux étudiants de revendre ce livre quand ils auront terminé.';
 
@@ -285,6 +365,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get priceOpen_parenthesisFcfaClose_parenthesis => 'Prix (FCFA)';
 
   @override
+  String get pricesAreListedInFcfa => 'Les PRICES sont listés en FCFA.';
+
+  @override
   String get profile => 'Profil';
 
   @override
@@ -304,6 +387,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get recentlyAdded => 'Derniers ajouts';
 
   @override
+  String get resetPassword => 'Réinitialiser le mot de passe';
+
+  @override
   String get resultOpen_parenthesisSClose_parenthesisFound =>
       'Vous avez trouvé(s) un(s) résultat(s).';
 
@@ -315,6 +401,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get saved => 'Sauvée';
+
+  @override
+  String get schoolForward_slashPersonalEmail =>
+      'Courriel scolaire/Email personnel';
 
   @override
   String get science => 'Sciences';
@@ -357,7 +447,20 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sellerType => 'Type de vendeur';
 
   @override
+  String get sendLink => 'Envoyer un lien';
+
+  @override
+  String get signIn => 'Se connecter';
+
+  @override
   String get signOut => 'Déconnexion';
+
+  @override
+  String get signUp => 'S\'inscrire';
+
+  @override
+  String get signUpSuccessfulExclamation_markWelcomePeriod =>
+      'Vous avez été inscrit avec succès ! Bienvenue.';
 
   @override
   String get socialVentureFeatures => 'Caracteristiques de la Venture Sociale';

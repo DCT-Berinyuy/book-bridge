@@ -98,7 +98,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           decoration: InputDecoration(
                             hintText: AppLocalizations.of(
                               context,
-                            )!.searchTitleCommaAuthorCommaOrIsbnPeriodPeriodPeriod,
+                            )!
+                                .searchTitleCommaAuthorCommaOrIsbnPeriodPeriodPeriod,
                             hintStyle: const TextStyle(color: Colors.grey),
                             prefixIcon: const Icon(
                               Icons.search,
@@ -151,10 +152,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     // Academic Categories
                     Text(
                       AppLocalizations.of(context)!.academicCategories,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(height: 16),
                     GridView.count(
@@ -291,10 +290,10 @@ class _SearchScreenState extends State<SearchScreen> {
                   if (viewModel.searchState == SearchState.error)
                     Center(
                       child: Padding(
-                        padding: EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.all(20.0),
                         child: Text(
                           viewModel.errorMessage ??
-                              AppLocalizations.of(context)!.anErrorOccurredWhileSearching,
+                              AppLocalizations.of(context)!.anErrorOccurred,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.error,
                           ),
@@ -347,11 +346,11 @@ class _SearchScreenState extends State<SearchScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 0.68,
-                                crossAxisSpacing: 16,
-                                mainAxisSpacing: 16,
-                              ),
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.68,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                          ),
                           itemCount: viewModel.searchResults.length,
                           itemBuilder: (context, index) {
                             final listing = viewModel.searchResults[index];
@@ -461,16 +460,16 @@ class _SearchScreenState extends State<SearchScreen> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                          fontWeight: FontWeight.w600,
+                        ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     '${listing.priceFcfa} FCFA',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 4),
                   Row(
@@ -524,7 +523,9 @@ class _SearchScreenState extends State<SearchScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: Theme.of(context).colorScheme.primary),

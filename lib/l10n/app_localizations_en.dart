@@ -22,6 +22,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get all => 'All';
 
   @override
+  String get alreadyHaveAnAccountQuestion_mark => 'Already have an account?';
+
+  @override
+  String get anErrorOccurredWhileSearching =>
+      'An error occurred while searching';
+
+  @override
+  String get anUnknownErrorOccurredPeriod => 'An unknown error occurred.';
+
+  @override
   String get author => 'Author';
 
   @override
@@ -42,6 +52,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bookbridge => 'BookBridge';
+
+  @override
+  String get bookbridgeColonKnowledgeForAll => 'BookBridge: Knowledge for All';
 
   @override
   String get bookbridgeColonSocialVenture => 'BookBridge: Social Venture';
@@ -68,10 +81,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clearAll => 'Clear All';
 
   @override
+  String
+  get connectingStudentsCommaAuthorsCommaAndBookshopsToEndLearningPovertyPeriod =>
+      'Connecting students, authors, and bookshops to end learning poverty.';
+
+  @override
   String get contactSellerViaWhatsapp => 'Contact Seller via WhatsApp';
 
   @override
   String get couldNotLaunchWhatsapp => 'Could not launch WhatsApp';
+
+  @override
+  String get createAccount => 'Create Account';
 
   @override
   String get createYourFirstListingToGetStarted =>
@@ -84,6 +105,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get daysAgo => ' days ago';
 
   @override
+  String get democratizingAccessToAffordableBooksInCameroonPeriod =>
+      'Democratizing access to affordable books in Cameroon.';
+
+  @override
   String
   get describeTheBookOpen_parenthesisEditionCommaLanguageCommaEtcPeriodClose_parenthesis =>
       'Describe the book (edition, language, etc.)';
@@ -94,6 +119,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get directFromTheAuthorPeriodSupportingLocalCreativityPeriod =>
       'Direct from the author. Supporting local creativity.';
+
+  @override
+  String get don => 'Don';
+
+  @override
+  String get donBackslashApostropheTHaveAnAccountQuestion_mark =>
+      'Don\\\'t have an account?';
 
   @override
   String get ePeriodGPeriod10 => 'e.g. 10';
@@ -117,7 +149,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get eligibleForBuyHyphenBack => 'Eligible for Buy-Back';
 
   @override
+  String get email => 'Email';
+
+  @override
+  String get emailAddress => 'Email Address';
+
+  @override
+  String get emailIsRequired => 'Email is required';
+
+  @override
   String get engineering => 'Engineering';
+
+  @override
+  String get enterAValidEmailAddress => 'Enter a valid email address';
+
+  @override
+  String get enterYourEmailAddressToReceiveAPasswordResetLinkPeriod =>
+      'Enter your email address to receive a password reset link.';
 
   @override
   String get failedToCreateUser => 'Failed to create user';
@@ -150,7 +198,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fiction => 'Fiction';
 
   @override
+  String get forgotPasswordQuestion_mark => 'Forgot password?';
+
+  @override
   String get fullName => 'Full Name';
+
+  @override
+  String get fullNameIsRequired => 'Full name is required';
 
   @override
   String get gallery => 'Gallery';
@@ -204,10 +258,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get localityForward_slashNeighborhood => 'Locality / Neighborhood';
 
   @override
+  String get localityIsRequired => 'Locality is required';
+
+  @override
+  String get logIn => 'Log In';
+
+  @override
   String get mathematics => 'Mathematics';
 
   @override
   String get medicine => 'Medicine';
+
+  @override
+  String get minPeriod6Characters => 'Min. 6 characters';
 
   @override
   String get myActiveBooks => 'My Active Books';
@@ -248,6 +311,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get organicChemistryVolPeriod2 => 'Organic Chemistry Vol. 2';
 
   @override
+  String get password => 'Password';
+
+  @override
+  String get passwordIsRequired => 'Password is required';
+
+  @override
+  String get passwordMustBeAtLeast6Characters =>
+      'Password must be at least 6 characters';
+
+  @override
+  String get passwordResetLinkSentExclamation_mark =>
+      'Password reset link sent!';
+
+  @override
   String get permitStudentsToSellThisBookBackWhenFinishedPeriod =>
       'Permit students to sell this book back when finished.';
 
@@ -282,6 +359,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get priceOpen_parenthesisFcfaClose_parenthesis => 'Price (FCFA)';
 
   @override
+  String get pricesAreListedInFcfa => 'PRICES ARE LISTED IN FCFA';
+
+  @override
   String get profile => 'Profile';
 
   @override
@@ -301,6 +381,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recentlyAdded => 'Recently Added';
 
   @override
+  String get resetPassword => 'Reset Password';
+
+  @override
   String get resultOpen_parenthesisSClose_parenthesisFound =>
       ' result(s) found';
 
@@ -312,6 +395,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saved => 'SAVED';
+
+  @override
+  String get schoolForward_slashPersonalEmail => 'School/Personal Email';
 
   @override
   String get science => 'Science';
@@ -354,7 +440,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sellerType => 'Seller Type';
 
   @override
+  String get sendLink => 'Send Link';
+
+  @override
+  String get signIn => 'Sign In';
+
+  @override
   String get signOut => 'Sign Out';
+
+  @override
+  String get signUp => 'Sign Up';
+
+  @override
+  String get signUpSuccessfulExclamation_markWelcomePeriod =>
+      'Sign up successful! Welcome.';
 
   @override
   String get socialVentureFeatures => 'Social Venture Features';

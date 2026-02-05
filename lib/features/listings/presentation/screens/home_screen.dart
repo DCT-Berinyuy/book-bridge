@@ -49,8 +49,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/sell'),
-        label: Text(AppLocalizations.of(context)!.sellABook),
-        icon: const Icon(Icons.add),
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         child: const Icon(Icons.add),
@@ -199,7 +197,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(width: 12),
-          Text(AppLocalizations.of(context)!.bookbridge, style: theme.appBarTheme.titleTextStyle),
+          Text(
+            AppLocalizations.of(context)!.bookbridge,
+            style: theme.appBarTheme.titleTextStyle,
+          ),
         ],
       ),
       actions: [
