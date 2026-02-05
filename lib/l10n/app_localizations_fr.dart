@@ -226,7 +226,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get hiCommaISawYourBookOnBookbridgeAndIAmInterestedExclamation_mark =>
-      '#Hi, I saw your book on BookBridge and I am interested!';
+      'Bonjour, j\'ai vu votre livre sur BookBridge et je suis intéressé!';
 
   @override
   String get history => 'Histoire';
@@ -308,7 +308,8 @@ class AppLocalizationsFr extends AppLocalizations {
       'Aucune utilisateur est actuellement authentifié.';
 
   @override
-  String get noWhatsappNumberAvailable => '#No WhatsApp number available';
+  String get noWhatsappNumberAvailable =>
+      'Il n\'y a pas de numéro WhatsApp disponible.';
 
   @override
   String get none => 'Rien';
