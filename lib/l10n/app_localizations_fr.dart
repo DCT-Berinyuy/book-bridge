@@ -26,7 +26,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get anErrorOccurredWhileSearching =>
-      '#An error occurred while searching';
+      'Une erreur s\'est produite lors de la recherche';
 
   @override
   String get anUnknownErrorOccurredPeriod =>
@@ -225,6 +225,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Bonjour, je suis intéressé par votre liste de livres !';
 
   @override
+  String get hiCommaISawYourBookOnBookbridgeAndIAmInterestedExclamation_mark =>
+      '#Hi, I saw your book on BookBridge and I am interested!';
+
+  @override
   String get history => 'Histoire';
 
   @override
@@ -302,6 +306,9 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get noUserIsCurrentlyAuthenticated =>
       'Aucune utilisateur est actuellement authentifié.';
+
+  @override
+  String get noWhatsappNumberAvailable => '#No WhatsApp number available';
 
   @override
   String get none => 'Rien';

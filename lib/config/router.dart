@@ -164,6 +164,7 @@ final appRouter = GoRouter(
       path: '/settings',
       name: 'settings',
       builder: (context, state) => const SettingsScreen(),
+    ),
     // About Route (Full Screen, outside shell)
     GoRoute(
       path: '/about',

@@ -220,6 +220,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Hi, I am interested in your book listing!';
 
   @override
+  String get hiCommaISawYourBookOnBookbridgeAndIAmInterestedExclamation_mark =>
+      'Hi, I saw your book on BookBridge and I am interested!';
+
+  @override
   String get history => 'History';
 
   @override
@@ -296,6 +300,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get noUserIsCurrentlyAuthenticated =>
       'No user is currently authenticated';
+
+  @override
+  String get noWhatsappNumberAvailable => 'No WhatsApp number available';
 
   @override
   String get none => 'None';

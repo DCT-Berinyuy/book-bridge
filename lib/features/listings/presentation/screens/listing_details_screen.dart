@@ -52,18 +52,21 @@ Download BookBridge to view more details!
     await Share.share(shareText);
   }
 
-  Future<void> _contactSeller(String whatsappNumber) async {
+  Future<void> _contactSeller(
+    BuildContext context,
+    String whatsappNumber,
+  ) async {
     if (whatsappNumber.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No WhatsApp number available')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.noWhatsappNumberAvailable)),
         );
       }
       return;
     }
 
     final cleanNumber = whatsappNumber.replaceAll(RegExp(r'[^\d+]'), '');
-    final message = 'Hi, I saw your book on BookBridge and I am interested!';
+    final message = AppLocalizations.of(context)!.hiCommaISawYourBookOnBookbridgeAndIAmInterestedExclamation_mark;
     final whatsappUrl =
         'https://wa.me/$cleanNumber?text=${Uri.encodeComponent(message)}';
 
@@ -497,7 +500,7 @@ Download BookBridge to view more details!
                         : AppLocalizations.of(
                             context,
                           )!.noDescriptionProvidedPeriod,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       height: 1.5,
                       color: Theme.of(context).colorScheme.onSurface,

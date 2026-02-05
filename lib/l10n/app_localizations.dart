@@ -496,6 +496,12 @@ abstract class AppLocalizations {
   /// **'Hi, I am interested in your book listing!'**
   String get hiCommaIAmInterestedInYourBookListingExclamation_mark;
 
+  /// No description provided for @hiCommaISawYourBookOnBookbridgeAndIAmInterestedExclamation_mark.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi, I saw your book on BookBridge and I am interested!'**
+  String get hiCommaISawYourBookOnBookbridgeAndIAmInterestedExclamation_mark;
+
   /// No description provided for @history.
   ///
   /// In en, this message translates to:
@@ -645,6 +651,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No user is currently authenticated'**
   String get noUserIsCurrentlyAuthenticated;
+
+  /// No description provided for @noWhatsappNumberAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No WhatsApp number available'**
+  String get noWhatsappNumberAvailable;
 
   /// No description provided for @none.
   ///
