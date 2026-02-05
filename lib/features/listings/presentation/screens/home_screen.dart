@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/sell'),
-        tooltip: 'Sell a Book',
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         child: const Icon(Icons.add),
@@ -82,14 +82,14 @@ class _HomeScreenState extends State<HomeScreen> {
       controller: _scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
-        _buildSliverAppBar(),
-        _buildSectionHeader('Categories'),
+        _buildSliverAppBar(context),
+        _buildSectionHeader(AppLocalizations.of(context)!.categories),
         _buildCategoryChips(),
         if (featuredListings.isNotEmpty) ...[
-          _buildSectionHeader('Featured Books'),
+          _buildSectionHeader(AppLocalizations.of(context)!.featuredBooks),
           _buildFeaturedListings(featuredListings),
         ],
-        _buildSectionHeader('Recently Added'),
+        _buildSectionHeader(AppLocalizations.of(context)!.recentlyAdded),
         _buildListingsGrid(regularListings, viewModel),
         if (viewModel.hasMoreListings && viewModel.isLoading)
           const SliverToBoxAdapter(
@@ -116,7 +116,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Oops! Something Went Wrong',
+              AppLocalizations.of(
+                context,
+              )!.oopsExclamation_markSomethingWentWrong,
               style: GoogleFonts.lato(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -124,7 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              viewModel.errorMessage ?? 'Please check your connection.',
+              viewModel.errorMessage ??
+                  AppLocalizations.of(context)!.pleaseCheckYourConnectionPeriod,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -134,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton.icon(
               onPressed: viewModel.refreshListings,
               icon: const Icon(Icons.refresh),
-              label: const Text('Try Again'),
+              label: Text(AppLocalizations.of(context)!.tryAgain),
             ),
           ],
         ),
@@ -152,15 +155,17 @@ class _HomeScreenState extends State<HomeScreen> {
             const Icon(Icons.search_off_rounded, size: 80, color: Colors.grey),
             const SizedBox(height: 24),
             Text(
-              'No Books Found',
+              AppLocalizations.of(context)!.noBooksFound,
               style: GoogleFonts.lato(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Be the first to list a book in your area!',
+            Text(
+              AppLocalizations.of(
+                context,
+              )!.beTheFirstToListABookInYourAreaExclamation_mark,
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.grey),
             ),
@@ -170,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  SliverAppBar _buildSliverAppBar() {
+  SliverAppBar _buildSliverAppBar(BuildContext context) {
     final theme = Theme.of(context);
     return SliverAppBar(
       pinned: true,
@@ -192,7 +197,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(width: 12),
-          Text('BookBridge', style: theme.appBarTheme.titleTextStyle),
+          Text(
+            AppLocalizations.of(context)!.bookbridge,
+            style: theme.appBarTheme.titleTextStyle,
+          ),
         ],
       ),
       actions: [
@@ -228,7 +236,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
                   const SizedBox(width: 8),
                   Text(
-                    'Search by title or author...',
+                    AppLocalizations.of(
+                      context,
+                    )!.searchByTitleOrAuthorPeriodPeriodPeriod,
                     style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
                   ),
                 ],
@@ -254,13 +264,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCategoryChips() {
     final categories = [
-      'All',
-      'Textbooks',
-      'Fiction',
-      'Science',
-      'History',
-      'GCE',
+      AppLocalizations.of(context)!.all,
+      AppLocalizations.of(context)!.textbooks,
+      AppLocalizations.of(context)!.fiction,
+      AppLocalizations.of(context)!.science,
+      AppLocalizations.of(context)!.history,
+      AppLocalizations.of(context)!.gce,
     ];
+    // final categories = [
+    //      'All',
+    //      'Textbooks',
+    //      'Fiction',
+    //      'Science',
+    //      'History',
+    //      'GCE',
+    //    ];
     return SliverToBoxAdapter(
       child: SizedBox(
         height: 40,
@@ -425,14 +443,15 @@ class _ListingCard extends StatelessWidget {
                       ),
                     ),
             ),
-            if (listing.sellerType != 'individual') _buildVerifiedBadge(),
+            if (listing.sellerType != 'individual')
+              _buildVerifiedBadge(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildVerifiedBadge() {
+  Widget _buildVerifiedBadge(BuildContext context) {
     return Positioned(
       top: 8,
       left: 8,
@@ -442,13 +461,13 @@ class _ListingCard extends StatelessWidget {
           color: Colors.black.withAlpha(153),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Row(
+        child: Row(
           children: [
-            Icon(Icons.verified, size: 12, color: Colors.white),
-            SizedBox(width: 4),
+            const Icon(Icons.verified, size: 12, color: Colors.white),
+            const SizedBox(width: 4),
             Text(
-              'VERIFIED',
-              style: TextStyle(
+              AppLocalizations.of(context)!.verified,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 10,
                 fontWeight: FontWeight.bold,

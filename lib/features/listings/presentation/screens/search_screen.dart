@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -60,8 +61,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         children: [
                           const Icon(Icons.menu_book, color: Colors.white),
                           const SizedBox(width: 8),
-                          const Text(
-                            'BookBridge',
+                          Text(
+                            AppLocalizations.of(context)!.bookbridge,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
@@ -95,7 +96,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           style: const TextStyle(color: Colors.black),
                           cursorColor: Colors.black,
                           decoration: InputDecoration(
-                            hintText: 'Search title, author, or ISBN...',
+                            hintText: AppLocalizations.of(
+                              context,
+                            )!.searchTitleCommaAuthorCommaOrIsbnPeriodPeriodPeriod,
                             hintStyle: const TextStyle(color: Colors.grey),
                             prefixIcon: const Icon(
                               Icons.search,
@@ -146,8 +149,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       (viewModel.searchState == SearchState.success &&
                           _searchController.text.isEmpty)) ...[
                     // Academic Categories
-                    const Text(
-                      'Academic Categories',
+                    Text(
+                      AppLocalizations.of(context)!.academicCategories,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
@@ -163,17 +166,25 @@ class _SearchScreenState extends State<SearchScreen> {
                       childAspectRatio: 1.8,
                       children: [
                         _buildCategoryItem(
-                          'Engineering',
+                          AppLocalizations.of(context)!.engineering,
                           Icons.engineering,
-                          'Polytechnique',
+                          AppLocalizations.of(context)!.polytechnique,
                         ),
-                        _buildCategoryItem('Law', Icons.gavel, 'FSJP'),
                         _buildCategoryItem(
-                          'Medicine',
+                          AppLocalizations.of(context)!.law,
+                          Icons.gavel,
+                          'FSJP',
+                        ),
+                        _buildCategoryItem(
+                          AppLocalizations.of(context)!.medicine,
                           Icons.medical_services,
                           'FMSB',
                         ),
-                        _buildCategoryItem('Economics', Icons.payments, 'FSEG'),
+                        _buildCategoryItem(
+                          AppLocalizations.of(context)!.economics,
+                          Icons.payments,
+                          'FSEG',
+                        ),
                       ],
                     ),
                     const SizedBox(height: 32),
@@ -183,8 +194,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Recent Searches',
+                          Text(
+                            AppLocalizations.of(context)!.recentSearches,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
@@ -194,8 +205,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             onPressed: () {
                               viewModel.clearRecentSearches();
                             },
-                            child: const Text(
-                              'Clear All',
+                            child: Text(
+                              AppLocalizations.of(context)!.clearAll,
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
@@ -220,7 +231,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 bottom: BorderSide(
                                   color: Theme.of(
                                     context,
-                                  ).dividerColor.withValues(alpha: 0.1),
+                                  ).dividerColor.withOpacity(0.1),
                                 ),
                               ),
                             ),
@@ -280,9 +291,10 @@ class _SearchScreenState extends State<SearchScreen> {
                   if (viewModel.searchState == SearchState.error)
                     Center(
                       child: Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: EdgeInsets.all(20.0),
                         child: Text(
-                          viewModel.errorMessage ?? 'An error occurred',
+                          viewModel.errorMessage ??
+                              AppLocalizations.of(context)!.anErrorOccurredWhileSearching,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.error,
                           ),
@@ -326,7 +338,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       children: [
                         const SizedBox(height: 24),
                         Text(
-                          '${viewModel.searchResults.length} result${viewModel.searchResults.length != 1 ? 's' : ''} found',
+                          '${viewModel.searchResults.length} ${AppLocalizations.of(context)!.resultOpen_parenthesisSClose_parenthesisFound}',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                         const SizedBox(height: 12),
@@ -376,7 +388,7 @@ class _SearchScreenState extends State<SearchScreen> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: Colors.black.withOpacity(0.05),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -402,7 +414,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               size: 48,
                               color: Theme.of(
                                 context,
-                              ).colorScheme.onSurface.withValues(alpha: 0.3),
+                              ).colorScheme.onSurface.withOpacity(0.3),
                             ),
                           )
                         : Image.network(
@@ -426,7 +438,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.4),
+                      color: Colors.black.withOpacity(0.4),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Icon(
@@ -498,10 +510,10 @@ class _SearchScreenState extends State<SearchScreen> {
       decoration: BoxDecoration(
         color: Theme.of(
           context,
-        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.05),
+        ).colorScheme.surfaceContainerHighest.withOpacity(0.05),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
+          color: Theme.of(context).dividerColor.withOpacity(0.1),
         ),
       ),
       child: Padding(
@@ -512,9 +524,7 @@ class _SearchScreenState extends State<SearchScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Theme.of(
-                  context,
-                ).colorScheme.primary.withValues(alpha: 0.2),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: Theme.of(context).colorScheme.primary),

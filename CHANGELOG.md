@@ -1,106 +1,77 @@
-# CHANGELOG
+# Changelog
 
-## 1.1.0 - February 1, 2026
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [1.1.0] - 2026-02-01
 
 ### Added
-
-- **Custom App Launcher Icon**: Beautiful BookBridge logo with intricate patterns on an open book design
-- **App Icon Assets**: Added `assets/app_icon.png` to project resources
-- **Adaptive Icons**: Configured adaptive icons for Android with black background
+- Custom App Launcher Icon: Beautiful BookBridge logo with intricate patterns on an open book design
+- App Icon Assets: Added `assets/app_icon.png` to project resources
+- Adaptive Icons: Configured adaptive icons for Android with black background
 
 ### Changed
-
 - Updated `pubspec.yaml` to include app icon configuration
 - Integrated `flutter_launcher_icons` package for icon generation
 
-### Technical
+## [1.0.0] - 2026-01-xx
 
-- Generated launcher icons for both Android and iOS platforms
-- Configured adaptive icon foreground and background for Android
-
----
-
-## 1.0.0 - January 2026
-
-### Features Implemented
-
-#### Authentication
-
-- Email/password sign-up and sign-in via Supabase Auth
+### Added
+- Authentication system with email/password sign-up and sign-in via Supabase Auth
 - User profile creation with full name and locality
 - Password reset functionality
 - Automatic profile creation via database trigger
 - Auth state-based navigation
-
-#### Listings Management
-
 - Browse available book listings in grid layout
 - Infinite scroll pagination (50 items per page)
 - Create new listings with image upload
 - Image upload to Supabase Storage (`book_images` bucket)
 - Delete own listings with confirmation
 - View listing details with seller information
-
-#### Search
-
 - Full-text search across book titles and authors
 - PostgreSQL tsvector-based search with ranking
 - Real-time search results
-
-#### Profile
-
 - View and edit user profile
 - Manage user's own listings
 - WhatsApp contact integration
 - Sign out functionality
-
-#### UI/UX
-
 - Material Design 3 implementation
-- "Knowledge & Trust" visual identity
-  - Scholar Blue (#1A4D8C) primary color
-  - Bridge Orange (#F2994A) secondary color
-  - Growth Green (#27AE60) tertiary color
+- "Knowledge & Trust" visual identity with Scholar Blue, Bridge Orange, and Growth Green colors
 - Google Fonts integration (Montserrat, Inter)
 - Bottom navigation bar (Home, Search, Sell, Profile)
 - Pull-to-refresh on home screen
 - Loading states and error handling
 - Empty states with helpful messages
 
-### Architecture
-
-- Clean Architecture with Domain/Data/Presentation layers
-- Provider state management with ChangeNotifier
-- Dependency injection with GetIt
-- Navigation with go_router and auth-based redirection
-- Error handling with Either<Failure, Success> pattern (dartz)
-
-### Database
-
-- PostgreSQL tables: `profiles`, `listings`
-- Row Level Security (RLS) policies
-- Full-text search function
-- Automatic profile creation trigger
-- Indexes for optimized queries
-
-### Storage
-
-- Supabase Storage for book images
-- Public bucket with RLS policies
-- User-specific folder structure
+### Changed
+- Implemented Clean Architecture with Domain/Data/Presentation layers
+- Used Provider state management with ChangeNotifier
+- Implemented dependency injection with GetIt
+- Used Navigation with go_router and auth-based redirection
+- Implemented Error handling with Either<Failure, Success> pattern (dartz)
+- Set up PostgreSQL tables: `profiles`, `listings`
+- Configured Row Level Security (RLS) policies
+- Added full-text search function
+- Created automatic profile creation trigger
+- Added indexes for optimized queries
+- Set up Supabase Storage for book images
+- Configured public bucket with RLS policies
+- Implemented user-specific folder structure
 
 ### Documentation
+- Added comprehensive README with architecture overview
+- Included detailed Supabase setup guide (665 lines)
+- Added implementation documentation
+- Created brand identity guide
+- Developed social venture vision document
 
-- Comprehensive README with architecture overview
-- Detailed Supabase setup guide (665 lines)
-- Implementation documentation
-- Brand identity guide
-- Social venture vision document
+## [0.1.0] - 2026-01-xx
 
----
-
-## 0.1.0 - Initial Setup
-
+### Added
 - Initial release of BookBridge application
 - Flutter project setup with Clean Architecture and MVVM
 - Supabase integration planned for Auth, PostgreSQL, and Storage

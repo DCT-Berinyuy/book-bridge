@@ -1,3 +1,5 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
+import 'package:book_bridge/core/presentation/widgets/language_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -57,19 +59,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ..showSnackBar(
           SnackBar(
             content: Text(
-              authViewModel.errorMessage ?? 'An unknown error occurred.',
+              authViewModel.errorMessage ??
+                  AppLocalizations.of(context)!.anUnknownErrorOccurredPeriod,
             ),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
-      // Clear the error in the view model after showing it
-      authViewModel.clearError();
     } else if (authViewModel.authState == AuthState.authenticated) {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: const Text('Sign up successful! Welcome.'),
+            content: Text(
+              AppLocalizations.of(
+                context,
+              )!.signUpSuccessfulExclamation_markWelcomePeriod,
+            ),
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
         );
@@ -96,9 +101,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   onPressed: () =>
                       context.canPop() ? context.pop() : context.go('/sign-in'),
                 ),
-                const Expanded(
+                Expanded(
                   child: Text(
-                    'Create Account',
+                    AppLocalizations.of(context)!.createAccount,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
@@ -107,7 +112,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 40), // Spacer for alignment
+                const LanguageSwitcher(),
               ],
             ),
           ),
@@ -129,8 +134,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   const SizedBox(height: 24),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Connecting students, authors, and bookshops to end learning poverty.',
+                  Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.connectingStudentsCommaAuthorsCommaAndBookshopsToEndLearningPovertyPeriod,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
@@ -143,8 +150,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // Full Name
-                        const Text(
-                          'Full Name',
+                        Text(
+                          AppLocalizations.of(context)!.fullName,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
@@ -170,7 +177,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           validator: (value) {
                             if (value?.isEmpty ?? true) {
-                              return 'Full name is required';
+                              return AppLocalizations.of(
+                                context,
+                              )!.fullNameIsRequired;
                             }
                             return null;
                           },
@@ -178,8 +187,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         const SizedBox(height: 16),
 
                         // Email
-                        const Text(
-                          'School/Personal Email',
+                        Text(
+                          AppLocalizations.of(
+                            context,
+                          )!.schoolForward_slashPersonalEmail,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
@@ -206,12 +217,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value?.isEmpty ?? true) {
-                              return 'Email is required';
+                              return AppLocalizations.of(
+                                context,
+                              )!.emailIsRequired;
                             }
                             if (!RegExp(
                               r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
                             ).hasMatch(value!)) {
-                              return 'Enter a valid email address';
+                              return AppLocalizations.of(
+                                context,
+                              )!.enterAValidEmailAddress;
                             }
                             return null;
                           },
@@ -219,8 +234,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         const SizedBox(height: 16),
 
                         // Locality
-                        const Text(
-                          'Locality / Neighborhood',
+                        Text(
+                          AppLocalizations.of(
+                            context,
+                          )!.localityForward_slashNeighborhood,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
@@ -246,7 +263,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           validator: (value) {
                             if (value?.isEmpty ?? true) {
-                              return 'Locality is required';
+                              return AppLocalizations.of(
+                                context,
+                              )!.localityIsRequired;
                             }
                             return null;
                           },
@@ -254,8 +273,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         const SizedBox(height: 16),
 
                         // Password
-                        const Text(
-                          'Password',
+                        Text(
+                          AppLocalizations.of(context)!.password,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
@@ -267,7 +286,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           controller: _passwordController,
                           enabled: authViewModel.authState != AuthState.loading,
                           decoration: InputDecoration(
-                            hintText: 'Min. 6 characters',
+                            hintText: AppLocalizations.of(
+                              context,
+                            )!.minPeriod6Characters,
                             filled: true,
                             fillColor: Theme.of(context).colorScheme.surface,
                             border: OutlineInputBorder(
@@ -283,10 +304,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           obscureText: true,
                           validator: (value) {
                             if (value?.isEmpty ?? true) {
-                              return 'Password is required';
+                              return AppLocalizations.of(
+                                context,
+                              )!.passwordIsRequired;
                             }
                             if (value!.length < 6) {
-                              return 'Password must be at least 6 characters';
+                              return AppLocalizations.of(
+                                context,
+                              )!.passwordMustBeAtLeast6Characters;
                             }
                             return null;
                           },
@@ -333,8 +358,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       strokeWidth: 2,
                                     ),
                                   )
-                                : const Text(
-                                    'Sign Up',
+                                : Text(
+                                    AppLocalizations.of(context)!.signUp,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
@@ -352,8 +377,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(height: 16),
 
                       // FCFA indicator
-                      const Text(
-                        'PRICES ARE LISTED IN FCFA',
+                      Text(
+                        AppLocalizations.of(context)!.pricesAreListedInFcfa,
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -364,7 +389,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                       // Sign In link
                       Text(
-                        'Already have an account?',
+                        AppLocalizations.of(
+                          context,
+                        )!.alreadyHaveAnAccountQuestion_mark,
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey.shade400,
@@ -374,8 +401,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         onPressed: () => context.canPop()
                             ? context.pop()
                             : context.go('/sign-in'),
-                        child: const Text(
-                          'Log In',
+                        child: Text(
+                          AppLocalizations.of(context)!.logIn,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,

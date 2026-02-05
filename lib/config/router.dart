@@ -1,3 +1,5 @@
+import 'package:book_bridge/features/settings/presentation/screens/settings_screen.dart';
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -157,6 +159,12 @@ final appRouter = GoRouter(
       builder: (context, state) => const NotificationsScreen(),
     ),
 
+    // Settings Route (Full Screen, outside shell)
+    GoRoute(
+      path: '/settings',
+      name: 'settings',
+      builder: (context, state) => const SettingsScreen(),
+    ),
     // About Route (Full Screen, outside shell)
     GoRoute(
       path: '/about',
@@ -177,6 +185,10 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              AppLocalizations.of(context)!.bookbridge,
+              style: Theme.of(context).textTheme.displayMedium,
+            ),
             ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
               child: Image.asset('assets/logo.png', height: 150),

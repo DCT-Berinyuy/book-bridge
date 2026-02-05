@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,7 +13,10 @@ class NotificationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Notifications'), centerTitle: true),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.notifications),
+        centerTitle: true,
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -26,7 +30,7 @@ class NotificationsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Text(
-                'No Notifications Yet',
+                AppLocalizations.of(context)!.noNotificationsYet,
                 style: GoogleFonts.lato(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -34,7 +38,9 @@ class NotificationsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'You\'ll see alerts about your listings, messages, and activity here.',
+                AppLocalizations.of(
+                  context,
+                )!.youBackslashApostropheLlSeeAlertsAboutYourListingsCommaMessagesCommaAndActivityHerePeriod,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -44,7 +50,9 @@ class NotificationsScreen extends StatelessWidget {
               Opacity(
                 opacity: 0.6,
                 child: Text(
-                  'Feature coming soon!',
+                  AppLocalizations.of(
+                    context,
+                  )!.featureComingSoonExclamation_mark,
                   style: TextStyle(
                     fontStyle: FontStyle.italic,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,

@@ -1,8 +1,5 @@
 /// Environment configuration for the app
-/// This file loads environment variables from the .env file
-///
-/// NOTE: The .env file should never be committed to version control
-/// and should be added to .gitignore
+/// This file loads environment variables from the build environment.
 class AppConfig {
   // Supabase configuration
   static const String supabaseUrl = String.fromEnvironment(
@@ -13,6 +10,4 @@ class AppConfig {
     'SUPABASE_ANON_KEY',
     defaultValue: '',
   );
-
-  // Other environment-specific configurations can be added here
 }
