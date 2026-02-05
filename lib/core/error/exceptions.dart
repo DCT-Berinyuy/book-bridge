@@ -5,7 +5,7 @@ abstract class AppException implements Exception {
   AppException({required this.message});
 
   @override
-  String toString() => "$runtimeType: $message"; // Popolar way of representing errors using their type.
+  String toString() => "$runtimeType: $message"; // Popular way of representing errors using their type.
 }
 
 /// Exception thrown when authentication fails.
