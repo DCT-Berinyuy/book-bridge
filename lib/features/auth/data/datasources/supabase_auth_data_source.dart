@@ -10,8 +10,7 @@ import 'package:book_bridge/features/auth/data/models/user_model.dart';
 class SupabaseAuthDataSource {
   final SupabaseClient supabaseClient;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
-    serverClientId:
-        '194898141638-eqdpgq5n7t2o7itnf1okkvcicqt6tg0a.apps.googleusercontent.com',
+    serverClientId: const String.fromEnvironment('GOOGLE_CLIENT_ID'),
   );
 
   SupabaseAuthDataSource({required this.supabaseClient});
