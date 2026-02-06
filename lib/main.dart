@@ -19,17 +19,10 @@ void main() async {
   await Supabase.initialize(
     url: AppConfig.supabaseUrl.isNotEmpty
         ? AppConfig.supabaseUrl
-        : String.fromEnvironment(
-            'SUPABASE_URL',
-            defaultValue: 'https://jacnsvcwmhoicuuzmrmr.supabase.co',
-          ),
+        : const String.fromEnvironment('SUPABASE_URL'),
     anonKey: AppConfig.supabaseAnonKey.isNotEmpty
         ? AppConfig.supabaseAnonKey
-        : String.fromEnvironment(
-            'SUPABASE_ANON_KEY',
-            defaultValue:
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphY25zdmN3bWhvaWN1dXptcm1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzOTAwOTEsImV4cCI6MjA4NDk2NjA5MX0.utrEmY1iIEwYCmbvLt96sCn1cXGRLFGWc7Mc9UmbILk',
-          ),
+        : const String.fromEnvironment('SUPABASE_ANON_KEY'),
   );
 
   // Initialize dependency injection
