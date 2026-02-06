@@ -1,3 +1,4 @@
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:book_bridge/core/error/exceptions.dart';
 import 'package:book_bridge/features/auth/data/models/user_model.dart';
@@ -8,6 +9,10 @@ import 'package:book_bridge/features/auth/data/models/user_model.dart';
 /// including sign-up, sign-in, sign-out, and fetching user profiles.
 class SupabaseAuthDataSource {
   final SupabaseClient supabaseClient;
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    serverClientId:
+        '194898141638-eqdpgq5n7t2o7itnf1okkvcicqt6tg0a.apps.googleusercontent.com',
+  );
 
   SupabaseAuthDataSource({required this.supabaseClient});
 
@@ -91,12 +96,68 @@ class SupabaseAuthDataSource {
     }
   }
 
+  /// Signs in a user using Google Sign-In.
+  ///
+  /// This method handles the OAuth2 flow with Google and then
+  /// authenticates with Supabase using the ID token.
+  Future<UserModel> signInWithGoogle() async {
+    try {
+      // 1. Clear previous Google sign-in state to force account selection if needed
+      await _googleSignIn.signOut();
+
+      // 2. Start the sign-in flow
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        throw AuthAppException(message: 'Google Sign-In was cancelled');
+      }
+
+      // 3. Get the authentication details
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final String? idToken = googleAuth.idToken;
+      final String? accessToken = googleAuth.accessToken;
+
+      if (idToken == null) {
+        throw AuthAppException(message: 'No ID Token found.');
+      }
+
+      // 4. Sign in to Supabase with the ID token
+      final authResponse = await supabaseClient.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+
+      final userId = authResponse.user?.id;
+      if (userId == null) {
+        throw AuthAppException(message: 'Failed to sign in with Google');
+      }
+
+      // 5. Fetch and return the user profile
+      // If it's a new user, the database trigger should have created the profile
+      try {
+        return await _fetchUserProfile(userId);
+      } catch (e) {
+        // If profile doesn't exist yet, wait for creation (trigger might be slow)
+        return await _waitForProfileCreation(userId);
+      }
+    } on AuthException catch (e) {
+      throw AuthAppException(message: e.message);
+    } catch (e) {
+      if (e is AuthAppException) rethrow;
+      throw AuthAppException(message: e.toString());
+    }
+  }
+
   /// Signs out the currently authenticated user.
   ///
   /// Throws [AuthAppException] if the sign-out fails.
   Future<void> signOut() async {
     try {
-      await supabaseClient.auth.signOut();
+      await Future.wait([
+        supabaseClient.auth.signOut(),
+        _googleSignIn.signOut(),
+      ]);
     } catch (e) {
       throw AuthAppException(message: 'Failed to sign out: ${e.toString()}');
     }

@@ -97,6 +97,20 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<Either<Failure, User>> signInWithGoogle() async {
+    try {
+      final userModel = await dataSource.signInWithGoogle();
+      return Right(userModel.toEntity());
+    } on AuthAppException catch (e) {
+      return Left(AuthFailure(message: e.message));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(UnknownFailure(message: e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> sendPasswordResetEmail(String email) async {
     try {
       await dataSource.sendPasswordResetEmail(email);

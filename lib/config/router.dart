@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:book_bridge/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:book_bridge/features/auth/presentation/screens/sign_up_screen.dart';
+import 'package:book_bridge/features/auth/presentation/screens/complete_profile_screen.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/screens/home_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/listing_details_screen.dart';
@@ -48,10 +49,22 @@ final appRouter = GoRouter(
       return '/sign-in';
     }
 
-    // If authenticated and trying to go to auth screen or splash, redirect to home
-    if (isAuthenticated && (isGoingToAuth || location == '/')) {
-      debugPrint('Router: Redirecting authenticated user to /home');
-      return '/home';
+    // If authenticated...
+    if (isAuthenticated) {
+      // 1. Check if profile is incomplete
+      if (!authViewModel.isProfileComplete && location != '/complete-profile') {
+        debugPrint('Router: Redirecting to /complete-profile');
+        return '/complete-profile';
+      }
+
+      // 2. If profile is complete but trying to go to auth/splash
+      if (authViewModel.isProfileComplete &&
+          (isGoingToAuth ||
+              location == '/' ||
+              location == '/complete-profile')) {
+        debugPrint('Router: Redirecting to /home');
+        return '/home';
+      }
     }
 
     debugPrint('Router: No redirection needed for $location');
@@ -78,6 +91,11 @@ final appRouter = GoRouter(
       path: '/sign-up',
       name: 'signUp',
       builder: (context, state) => const SignUpScreen(),
+    ),
+    GoRoute(
+      path: '/complete-profile',
+      name: 'completeProfile',
+      builder: (context, state) => const CompleteProfileScreen(),
     ),
 
     // Main Shell Route (with Bottom Navigation)

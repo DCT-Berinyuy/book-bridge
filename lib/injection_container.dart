@@ -8,6 +8,7 @@ import 'package:book_bridge/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/send_password_reset_email_usecase.dart';
+import 'package:book_bridge/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/update_user_usecase.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:book_bridge/features/listings/data/datasources/supabase_listings_data_source.dart';
@@ -76,6 +77,10 @@ Future<void> setupDependencyInjection() async {
     SendPasswordResetEmailUseCase(repository: getIt<AuthRepository>()),
   );
 
+  getIt.registerSingleton<SignInWithGoogleUseCase>(
+    SignInWithGoogleUseCase(repository: getIt<AuthRepository>()),
+  );
+
   getIt.registerSingleton<UpdateUserUseCase>(
     UpdateUserUseCase(repository: getIt<AuthRepository>()),
   );
@@ -88,6 +93,7 @@ Future<void> setupDependencyInjection() async {
       signOutUseCase: getIt<SignOutUseCase>(),
       getCurrentUserUseCase: getIt<GetCurrentUserUseCase>(),
       sendPasswordResetEmailUseCase: getIt<SendPasswordResetEmailUseCase>(),
+      signInWithGoogleUseCase: getIt<SignInWithGoogleUseCase>(),
       repository: getIt<AuthRepository>(),
     ),
   );

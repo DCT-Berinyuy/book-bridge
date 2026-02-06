@@ -5,6 +5,7 @@ import 'package:book_bridge/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/send_password_reset_email_usecase.dart';
+import 'package:book_bridge/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
 import 'package:book_bridge/features/auth/domain/repositories/auth_repository.dart';
 
 /// Represents the different authentication states.
@@ -22,6 +23,7 @@ class AuthViewModel extends ChangeNotifier {
   final SignOutUseCase signOutUseCase;
   final GetCurrentUserUseCase getCurrentUserUseCase;
   final SendPasswordResetEmailUseCase sendPasswordResetEmailUseCase;
+  final SignInWithGoogleUseCase signInWithGoogleUseCase;
   final AuthRepository repository;
 
   // State
@@ -46,6 +48,7 @@ class AuthViewModel extends ChangeNotifier {
     required this.signOutUseCase,
     required this.getCurrentUserUseCase,
     required this.sendPasswordResetEmailUseCase,
+    required this.signInWithGoogleUseCase,
     required this.repository,
   }) {
     debugPrint('AuthViewModel: Initializing...');
@@ -101,6 +104,20 @@ class AuthViewModel extends ChangeNotifier {
 
     debugPrint('AuthViewModel: [INIT] Finalizing state: $_authState');
     notifyListeners();
+  }
+
+  /// Refreshes the current user data from the database.
+  Future<void> refreshUser() async {
+    final result = await getCurrentUserUseCase();
+    result.fold(
+      (failure) =>
+          debugPrint('AuthViewModel: Refresh failed: ${failure.message}'),
+      (user) {
+        debugPrint('AuthViewModel: User refreshed: ${user.fullName}');
+        _currentUser = user;
+        notifyListeners();
+      },
+    );
   }
 
   /// Listens to authentication state changes from the repository.
@@ -187,6 +204,37 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Performs user sign-in with Google.
+  Future<void> signInWithGoogle() async {
+    _authState = AuthState.loading;
+    _errorMessage = null;
+    notifyListeners();
+
+    final result = await signInWithGoogleUseCase();
+    result.fold(
+      (failure) {
+        _authState = AuthState.error;
+        _errorMessage = failure.message;
+        _currentUser = null;
+      },
+      (user) {
+        _authState = AuthState.authenticated;
+        _currentUser = user;
+        _errorMessage = null;
+      },
+    );
+    notifyListeners();
+  }
+
+  /// Checks if the current user profile is complete.
+  ///
+  /// Returns true if Locality and WhatsApp Number are filled.
+  bool get isProfileComplete {
+    if (_currentUser == null) return false;
+    return (_currentUser!.locality?.isNotEmpty ?? false) &&
+        (_currentUser!.whatsappNumber?.isNotEmpty ?? false);
+  }
+
   /// Performs user sign-out.
   Future<void> signOut() async {
     _authState = AuthState.loading;
@@ -233,6 +281,9 @@ class AuthViewModel extends ChangeNotifier {
   /// Clears the error message.
   void clearError() {
     _errorMessage = null;
+    if (_authState == AuthState.error) {
+      _authState = AuthState.unauthenticated;
+    }
     notifyListeners();
   }
 
