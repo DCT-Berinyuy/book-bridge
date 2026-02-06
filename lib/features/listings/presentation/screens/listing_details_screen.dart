@@ -61,7 +61,17 @@ Download BookBridge to view more details!
       return;
     }
 
-    final cleanNumber = whatsappNumber.replaceAll(RegExp(r'[^\d+]'), '');
+    // WhatsApp (wa.me) links require the full international format without the '+' prefix.
+    // Most users in Cameroon enter their 9-digit number. We ensure the country code (237) is present.
+    String cleanNumber = whatsappNumber.replaceAll(RegExp(r'\D'), '');
+
+    if (cleanNumber.length == 9) {
+      cleanNumber = '237$cleanNumber';
+    }
+
+    debugPrint('ListingDetailsScreen: Original WhatsApp: $whatsappNumber');
+    debugPrint('ListingDetailsScreen: Cleaned WhatsApp: $cleanNumber');
+
     final message = 'Hi, I saw your book on BookBridge and I am interested!';
     final whatsappUrl =
         'https://wa.me/$cleanNumber?text=${Uri.encodeComponent(message)}';
@@ -156,11 +166,14 @@ Download BookBridge to view more details!
                         },
                       ),
                       Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.asset(
-                            'assets/logo.png',
-                            height: 36, // Adjust height as needed
+                        child: Center(
+                          child: Text(
+                            'Book Details',
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                         ),
                       ),
@@ -529,13 +542,49 @@ Download BookBridge to view more details!
                                   ).colorScheme.primary.withValues(alpha: 0.2),
                                 ),
                               ),
-                              child: Icon(
-                                listing.sellerType == 'bookshop'
-                                    ? Icons.store
-                                    : listing.sellerType == 'author'
-                                    ? Icons.history_edu
-                                    : Icons.person,
-                                color: const Color(0xFF1A4D8C), // Primary green
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(24),
+                                child:
+                                    listing.sellerAvatarUrl != null &&
+                                        listing.sellerAvatarUrl!.isNotEmpty
+                                    ? Image.network(
+                                        listing.sellerAvatarUrl!,
+                                        fit: BoxFit.cover,
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+                                              return const Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                    ),
+                                              );
+                                            },
+                                        errorBuilder:
+                                            (
+                                              context,
+                                              error,
+                                              stackTrace,
+                                            ) => Icon(
+                                              listing.sellerType == 'bookshop'
+                                                  ? Icons.store
+                                                  : listing.sellerType ==
+                                                        'author'
+                                                  ? Icons.history_edu
+                                                  : Icons.person,
+                                              color: const Color(0xFF1A4D8C),
+                                            ),
+                                      )
+                                    : Icon(
+                                        listing.sellerType == 'bookshop'
+                                            ? Icons.store
+                                            : listing.sellerType == 'author'
+                                            ? Icons.history_edu
+                                            : Icons.person,
+                                        color: const Color(0xFF1A4D8C),
+                                      ),
                               ),
                             ),
                             const SizedBox(width: 16),

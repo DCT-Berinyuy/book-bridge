@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:book_bridge/features/auth/domain/entities/user.dart';
 import 'package:book_bridge/features/auth/domain/usecases/get_current_user_usecase.dart';
@@ -5,6 +6,7 @@ import 'package:book_bridge/features/auth/domain/usecases/update_user_usecase.da
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/listings/domain/usecases/get_user_listings_usecase.dart';
 import 'package:book_bridge/features/listings/domain/usecases/delete_listing_usecase.dart';
+import 'package:book_bridge/features/listings/data/datasources/supabase_storage_data_source.dart';
 
 /// State enum for the Profile screen.
 enum ProfileState { initial, loading, loaded, error }
@@ -18,6 +20,7 @@ class ProfileViewModel extends ChangeNotifier {
   final GetUserListingsUseCase getUserListingsUseCase;
   final DeleteListingUseCase deleteListingUseCase;
   final UpdateUserUseCase updateUserUseCase;
+  final SupabaseStorageDataSource storageDataSource;
 
   ProfileState _profileState = ProfileState.initial;
   String? _errorMessage;
@@ -30,6 +33,7 @@ class ProfileViewModel extends ChangeNotifier {
     required this.getUserListingsUseCase,
     required this.deleteListingUseCase,
     required this.updateUserUseCase,
+    required this.storageDataSource,
   });
 
   // Getters
@@ -82,6 +86,7 @@ class ProfileViewModel extends ChangeNotifier {
       fullName: fullName ?? _currentUser!.fullName,
       locality: locality ?? _currentUser!.locality,
       whatsappNumber: whatsappNumber ?? _currentUser!.whatsappNumber,
+      avatarUrl: _currentUser!.avatarUrl,
     );
 
     final result = await updateUserUseCase(updatedUser);
@@ -146,6 +151,39 @@ class ProfileViewModel extends ChangeNotifier {
   /// Used to hide broken listings dynamically.
   void removeListingById(String id) {
     _userListings.removeWhere((l) => l.id == id);
+    notifyListeners();
+  }
+
+  /// Uploads and updates the profile picture.
+  Future<void> uploadProfilePicture(File imageFile) async {
+    if (_currentUser == null) return;
+
+    _profileState = ProfileState.loading;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      // 1. Upload the image to storage
+      final imageUrl = await storageDataSource.uploadProfilePicture(imageFile);
+
+      // 2. Update the user profile in the database
+      final updatedUser = _currentUser!.copyWith(avatarUrl: imageUrl);
+      final result = await updateUserUseCase(updatedUser);
+
+      result.fold(
+        (failure) {
+          _profileState = ProfileState.error;
+          _errorMessage = failure.message;
+        },
+        (user) {
+          _currentUser = user;
+          _profileState = ProfileState.loaded;
+        },
+      );
+    } catch (e) {
+      _profileState = ProfileState.error;
+      _errorMessage = e.toString();
+    }
     notifyListeners();
   }
 }

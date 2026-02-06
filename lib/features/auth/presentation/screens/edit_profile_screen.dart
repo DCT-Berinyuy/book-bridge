@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 
@@ -83,6 +85,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
+  Future<void> _pickAndUploadImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 70, // Compress image
+    );
+
+    if (pickedFile != null) {
+      final file = File(pickedFile.path);
+      await _profileViewModel.uploadProfilePicture(file);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,6 +111,104 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // Profile Picture Upload
+                  Center(
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color(0xFF1A4D8C),
+                              width: 3,
+                            ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(60),
+                            child:
+                                profileViewModel.currentUser?.avatarUrl !=
+                                        null &&
+                                    profileViewModel
+                                        .currentUser!
+                                        .avatarUrl!
+                                        .isNotEmpty
+                                ? Image.network(
+                                    profileViewModel.currentUser!.avatarUrl!,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          }
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        },
+                                  )
+                                : Container(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                    child: Center(
+                                      child: Text(
+                                        profileViewModel
+                                                    .currentUser
+                                                    ?.fullName
+                                                    .isNotEmpty ??
+                                                false
+                                            ? profileViewModel
+                                                  .currentUser!
+                                                  .fullName[0]
+                                                  .toUpperCase()
+                                            : '?',
+                                        style: const TextStyle(
+                                          fontSize: 40,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                        ),
+                        if (profileViewModel.isLoading)
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.3),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: CircleAvatar(
+                            backgroundColor: const Color(0xFF1A4D8C),
+                            radius: 18,
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.camera_alt,
+                                size: 18,
+                                color: Colors.white,
+                              ),
+                              onPressed: profileViewModel.isLoading
+                                  ? null
+                                  : _pickAndUploadImage,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 32),
                   TextFormField(
                     controller: _fullNameController,
                     enabled: !profileViewModel.isLoading,

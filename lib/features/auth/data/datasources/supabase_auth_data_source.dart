@@ -280,6 +280,7 @@ class SupabaseAuthDataSource {
             'full_name': userToUpdate.fullName,
             'locality': userToUpdate.locality,
             'whatsapp_number': userToUpdate.whatsappNumber,
+            'avatar_url': userToUpdate.avatarUrl,
           })
           .eq('id', userToUpdate.id)
           .select()

@@ -297,17 +297,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             shape: BoxShape.circle,
                             color: Theme.of(context).colorScheme.primary,
                           ),
-                          child: Center(
-                            child: Text(
-                              user.fullName.isNotEmpty
-                                  ? user.fullName.split(' ')[0][0].toUpperCase()
-                                  : user.email[0].toUpperCase(),
-                              style: Theme.of(context).textTheme.headlineSmall
-                                  ?.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              MediaQuery.of(context).size.width * 0.15,
                             ),
+                            child:
+                                user.avatarUrl != null &&
+                                    user.avatarUrl!.isNotEmpty
+                                ? Image.network(
+                                    user.avatarUrl!,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          }
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        },
+                                  )
+                                : Center(
+                                    child: Text(
+                                      user.fullName.isNotEmpty
+                                          ? user.fullName
+                                                .split(' ')[0][0]
+                                                .toUpperCase()
+                                          : user.email[0].toUpperCase(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall
+                                          ?.copyWith(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ),
                           ),
                         ),
                       ),

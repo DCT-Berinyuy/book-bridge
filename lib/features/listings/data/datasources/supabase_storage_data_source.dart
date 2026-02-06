@@ -48,7 +48,7 @@ class SupabaseStorageDataSource {
       // Return the public URL of the uploaded image
       final publicUrl = supabaseClient.storage
           .from('book_images')
-          .getPublicUrl(filePath); // Use filePath instead of fileName
+          .getPublicUrl(filePath);
       return publicUrl;
     } on AuthAppException {
       rethrow;
@@ -56,6 +56,57 @@ class SupabaseStorageDataSource {
       throw ServerException(message: 'Upload failed: ${e.message}');
     } catch (e) {
       throw ServerException(message: 'Upload failed: ${e.toString()}');
+    }
+  }
+
+  /// Uploads a profile picture to Supabase Storage.
+  ///
+  /// The image is uploaded to the 'profiles' bucket with a unique filename.
+  /// Returns the public URL of the uploaded image.
+  ///
+  /// Throws [ServerException] if the upload fails.
+  Future<String> uploadProfilePicture(File imageFile) async {
+    try {
+      final userId = supabaseClient.auth.currentUser?.id;
+      if (userId == null) {
+        throw AuthAppException(message: 'User not authenticated.');
+      }
+
+      // We use a simple filename like avatar.jpg within the user's folder
+      // so that it's easy to manage and replace.
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final filePath = '$userId/avatar_$timestamp.jpg';
+
+      // Read file bytes
+      final bytes = await imageFile.readAsBytes();
+
+      // Upload the file to the 'profiles' bucket
+      await supabaseClient.storage
+          .from('profiles')
+          .uploadBinary(
+            filePath,
+            bytes,
+            fileOptions: const FileOptions(
+              upsert: true,
+              contentType: 'image/jpeg',
+            ),
+          );
+
+      // Return the public URL
+      final publicUrl = supabaseClient.storage
+          .from('profiles')
+          .getPublicUrl(filePath);
+      return publicUrl;
+    } on AuthAppException {
+      rethrow;
+    } on StorageException catch (e) {
+      throw ServerException(
+        message: 'Profile picture upload failed: ${e.message}',
+      );
+    } catch (e) {
+      throw ServerException(
+        message: 'Profile picture upload failed: ${e.toString()}',
+      );
     }
   }
 

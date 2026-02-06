@@ -23,6 +23,7 @@ class ListingModel extends Listing {
     super.sellerName,
     super.sellerLocality,
     super.sellerWhatsapp,
+    super.sellerAvatarUrl,
   });
 
   /// Creates a ListingModel instance from JSON.
@@ -54,6 +55,8 @@ class ListingModel extends Listing {
       sellerWhatsapp:
           (json['profiles'] as Map<String, dynamic>?)?['whatsapp_number']
               as String?,
+      sellerAvatarUrl:
+          (json['profiles'] as Map<String, dynamic>?)?['avatar_url'] as String?,
     );
   }
 
@@ -99,6 +102,7 @@ class ListingModel extends Listing {
       sellerName: listing.sellerName,
       sellerLocality: listing.sellerLocality,
       sellerWhatsapp: listing.sellerWhatsapp,
+      sellerAvatarUrl: listing.sellerAvatarUrl,
     );
   }
 
@@ -121,6 +125,7 @@ class ListingModel extends Listing {
       sellerName: sellerName,
       sellerLocality: sellerLocality,
       sellerWhatsapp: sellerWhatsapp,
+      sellerAvatarUrl: sellerAvatarUrl,
     );
   }
 }

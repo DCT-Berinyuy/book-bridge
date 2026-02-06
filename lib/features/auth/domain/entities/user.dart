@@ -10,6 +10,7 @@ class User extends Equatable {
   final String fullName;
   final String? locality;
   final String? whatsappNumber;
+  final String? avatarUrl;
   final DateTime createdAt;
 
   const User({
@@ -18,6 +19,7 @@ class User extends Equatable {
     required this.fullName,
     this.locality,
     this.whatsappNumber,
+    this.avatarUrl,
     required this.createdAt,
   });
 
@@ -27,6 +29,7 @@ class User extends Equatable {
     String? fullName,
     String? locality,
     String? whatsappNumber,
+    String? avatarUrl,
     DateTime? createdAt,
   }) {
     return User(
@@ -35,6 +38,7 @@ class User extends Equatable {
       fullName: fullName ?? this.fullName,
       locality: locality ?? this.locality,
       whatsappNumber: whatsappNumber ?? this.whatsappNumber,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -46,6 +50,7 @@ class User extends Equatable {
     fullName,
     locality,
     whatsappNumber,
+    avatarUrl,
     createdAt,
   ];
 }

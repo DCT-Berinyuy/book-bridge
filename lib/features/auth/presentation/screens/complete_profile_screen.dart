@@ -138,6 +138,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                                   'CompleteProfileScreen: Current User: ${user?.id}',
                                 );
                                 if (user != null) {
+                                  final messenger = ScaffoldMessenger.of(
+                                    context,
+                                  );
                                   await profileViewModel.updateUser(
                                     fullName: user.fullName,
                                     locality: _localityController.text.trim(),
@@ -151,9 +154,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                                       'CompleteProfileScreen: Update error: ${profileViewModel.errorMessage}',
                                     );
                                     if (mounted) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
+                                      messenger.showSnackBar(
                                         SnackBar(
                                           content: Text(
                                             profileViewModel.errorMessage ??

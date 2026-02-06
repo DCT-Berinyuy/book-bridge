@@ -168,6 +168,7 @@ Future<void> setupDependencyInjection() async {
       getUserListingsUseCase: getIt<GetUserListingsUseCase>(),
       deleteListingUseCase: getIt<DeleteListingUseCase>(),
       updateUserUseCase: getIt<UpdateUserUseCase>(),
+      storageDataSource: getIt<SupabaseStorageDataSource>(),
     ),
   );
 

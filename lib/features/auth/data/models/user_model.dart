@@ -11,6 +11,7 @@ class UserModel extends User {
     required super.fullName,
     super.locality,
     super.whatsappNumber,
+    super.avatarUrl,
     required super.createdAt,
   });
 
@@ -25,6 +26,7 @@ class UserModel extends User {
       fullName: json['full_name'] as String? ?? '',
       locality: json['locality'] as String?,
       whatsappNumber: json['whatsapp_number'] as String?,
+      avatarUrl: json['avatar_url'] as String?,
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'] as String)
           : DateTime.now(),
@@ -41,6 +43,7 @@ class UserModel extends User {
       'full_name': fullName,
       'locality': locality,
       'whatsapp_number': whatsappNumber,
+      'avatar_url': avatarUrl,
       'created_at': createdAt.toIso8601String(),
     };
   }
@@ -53,6 +56,7 @@ class UserModel extends User {
       fullName: user.fullName,
       locality: user.locality,
       whatsappNumber: user.whatsappNumber,
+      avatarUrl: user.avatarUrl,
       createdAt: user.createdAt,
     );
   }
@@ -65,6 +69,7 @@ class UserModel extends User {
       fullName: fullName,
       locality: locality,
       whatsappNumber: whatsappNumber,
+      avatarUrl: avatarUrl,
       createdAt: createdAt,
     );
   }
