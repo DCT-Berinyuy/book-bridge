@@ -33,9 +33,9 @@
             Browse Books <ArrowRight size={18} style="margin-left: 8px" />
           </a>
           <a
-            href="#features"
+            href="https://youtu.be/Qv7cNot85iI?si=NTMftPbRBZIN9_xz"
             class="btn-secondary"
-            style="text-decoration: none;">Learn More</a
+            style="text-decoration: none;">Demo</a
           >
         </div>
 
