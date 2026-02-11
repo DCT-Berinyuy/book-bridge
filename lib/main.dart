@@ -10,7 +10,9 @@ import 'package:book_bridge/features/listings/presentation/viewmodels/listing_de
 import 'package:book_bridge/features/listings/presentation/viewmodels/sell_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
-import 'config/app_config.dart';
+import 'package:book_bridge/config/app_config.dart';
+import 'package:book_bridge/l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,6 +65,8 @@ class MyApp extends StatelessWidget {
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         routerConfig: appRouter,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
       ),
     );
   }
