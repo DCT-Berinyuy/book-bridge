@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:locale_switcher/locale_switcher.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
@@ -154,7 +155,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 40), // Spacer for alignment
+                const Expanded(child: LocaleSwitcher.menu()), // similar ratio
               ],
             ),
           ),
@@ -178,7 +179,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       const SizedBox(height: 16),
                       const Text(
-                        'BookBridge: Knowledge for All',
+                        'BookBridge: for All',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
