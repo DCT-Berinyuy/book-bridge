@@ -929,6 +929,12 @@ abstract class AppLocalizations {
   /// **'Send Link'**
   String get sendLink;
 
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
   /// No description provided for @signIn.
   ///
   /// In en, this message translates to:

@@ -458,6 +458,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sendLink => 'Envoyer un lien';
 
   @override
+  String get settings => 'Paramètres';
+
+  @override
   String get signIn => 'Se connecter';
 
   @override

@@ -59,17 +59,25 @@ Download BookBridge to view more details!
     if (whatsappNumber.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.noWhatsappNumberAvailable)),
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.noWhatsappNumberAvailable,
+            ),
+          ),
         );
       }
       return;
     }
 
     final cleanNumber = whatsappNumber.replaceAll(RegExp(r'[^\d+]'), '');
-    final message = AppLocalizations.of(context)!.hiCommaISawYourBookOnBookbridgeAndIAmInterestedExclamation_mark;
+    final message = AppLocalizations.of(
+      context,
+    )!.hiCommaISawYourBookOnBookbridgeAndIAmInterestedExclamation_mark;
     final whatsappUrl =
         'https://wa.me/$cleanNumber?text=${Uri.encodeComponent(message)}';
 
+    final messenger = ScaffoldMessenger.of(context);
+    final localizations = AppLocalizations.of(context)!;
     try {
       if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
         await launchUrl(
@@ -78,20 +86,14 @@ Download BookBridge to view more details!
         );
       } else {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                AppLocalizations.of(context)!.couldNotLaunchWhatsapp,
-              ),
-            ),
+          messenger.showSnackBar(
+            SnackBar(content: Text(localizations.couldNotLaunchWhatsapp)),
           );
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(e.toString())));
+        messenger.showSnackBar(SnackBar(content: Text(e.toString())));
       }
     }
   }

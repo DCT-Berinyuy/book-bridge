@@ -231,7 +231,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 bottom: BorderSide(
                                   color: Theme.of(
                                     context,
-                                  ).dividerColor.withOpacity(0.1),
+                                  ).dividerColor.withValues(alpha: 0.1),
                                 ),
                               ),
                             ),
@@ -294,7 +294,9 @@ class _SearchScreenState extends State<SearchScreen> {
                         padding: EdgeInsets.all(20.0),
                         child: Text(
                           viewModel.errorMessage ??
-                              AppLocalizations.of(context)!.anErrorOccurredWhileSearching,
+                              AppLocalizations.of(
+                                context,
+                              )!.anErrorOccurredWhileSearching,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.error,
                           ),
@@ -388,7 +390,7 @@ class _SearchScreenState extends State<SearchScreen> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -414,7 +416,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               size: 48,
                               color: Theme.of(
                                 context,
-                              ).colorScheme.onSurface.withOpacity(0.3),
+                              ).colorScheme.onSurface.withValues(alpha: 0.3),
                             ),
                           )
                         : Image.network(
@@ -438,7 +440,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.4),
+                      color: Colors.black.withValues(alpha: 0.4),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Icon(
@@ -510,10 +512,10 @@ class _SearchScreenState extends State<SearchScreen> {
       decoration: BoxDecoration(
         color: Theme.of(
           context,
-        ).colorScheme.surfaceContainerHighest.withOpacity(0.05),
+        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Theme.of(context).dividerColor.withOpacity(0.1),
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
         ),
       ),
       child: Padding(
@@ -524,7 +526,9 @@ class _SearchScreenState extends State<SearchScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: Theme.of(context).colorScheme.primary),

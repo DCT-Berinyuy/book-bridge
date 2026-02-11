@@ -450,6 +450,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sendLink => 'Send Link';
 
   @override
+  String get settings => 'Settings';
+
+  @override
   String get signIn => 'Sign In';
 
   @override
