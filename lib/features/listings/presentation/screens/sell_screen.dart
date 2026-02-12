@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -68,8 +69,12 @@ class _SellScreenState extends State<SellScreen> {
     final sellViewModel = context.read<SellViewModel>();
     if (sellViewModel.sellState == SellState.success) {
       final message = sellViewModel.isEditing
-          ? 'Listing updated successfully!'
-          : 'Listing created successfully!';
+          ? AppLocalizations.of(
+              context,
+            )!.listingUpdatedSuccessfullyExclamation_mark
+          : AppLocalizations.of(
+              context,
+            )!.listingCreatedSuccessfullyExclamation_mark;
 
       // Show the snackbar first
       ScaffoldMessenger.of(context)
@@ -112,13 +117,13 @@ class _SellScreenState extends State<SellScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Select Image Source'),
+          title: Text(AppLocalizations.of(context)!.selectImageSource),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
                 leading: const Icon(Icons.photo_library),
-                title: const Text('Gallery'),
+                title: Text(AppLocalizations.of(context)!.gallery),
                 onTap: () async {
                   Navigator.of(context).pop(); // Close dialog
                   await viewModel.pickImageFromGallery();
@@ -126,7 +131,7 @@ class _SellScreenState extends State<SellScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.camera_alt),
-                title: const Text('Camera'),
+                title: Text(AppLocalizations.of(context)!.camera),
                 onTap: () async {
                   Navigator.of(context).pop(); // Close dialog
                   await viewModel.pickImageFromCamera();
@@ -137,7 +142,7 @@ class _SellScreenState extends State<SellScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
           ],
         );
@@ -149,7 +154,11 @@ class _SellScreenState extends State<SellScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.listing != null ? 'Edit Listing' : 'Sell a Book'),
+        title: Text(
+          widget.listing != null
+              ? AppLocalizations.of(context)!.editListing
+              : AppLocalizations.of(context)!.sellABook,
+        ),
         centerTitle: true,
       ),
       body: Consumer<SellViewModel>(
@@ -202,8 +211,8 @@ class _SellScreenState extends State<SellScreen> {
                   const SizedBox(height: 24),
 
                   // Book Title
-                  const Text(
-                    'Book Title',
+                  Text(
+                    AppLocalizations.of(context)!.bookTitle,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -214,7 +223,9 @@ class _SellScreenState extends State<SellScreen> {
                   TextFormField(
                     controller: _titleController,
                     decoration: InputDecoration(
-                      hintText: 'e.g. Pure Physics',
+                      hintText: AppLocalizations.of(
+                        context,
+                      )!.ePeriodGPeriodPurePhysics,
                       filled: true,
                       fillColor: Theme.of(context).colorScheme.surface,
                       border: OutlineInputBorder(
@@ -228,7 +239,7 @@ class _SellScreenState extends State<SellScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter a title';
+                        return AppLocalizations.of(context)!.pleaseEnterATitle;
                       }
                       return null;
                     },
@@ -237,8 +248,8 @@ class _SellScreenState extends State<SellScreen> {
                   const SizedBox(height: 24),
 
                   // Author
-                  const Text(
-                    'Author',
+                  Text(
+                    AppLocalizations.of(context)!.author,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -263,7 +274,9 @@ class _SellScreenState extends State<SellScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter an author';
+                        return AppLocalizations.of(
+                          context,
+                        )!.pleaseEnterAnAuthor;
                       }
                       return null;
                     },
@@ -272,8 +285,10 @@ class _SellScreenState extends State<SellScreen> {
                   const SizedBox(height: 24),
 
                   // Price
-                  const Text(
-                    'Price (FCFA)',
+                  Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.priceOpen_parenthesisFcfaClose_parenthesis,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -305,11 +320,15 @@ class _SellScreenState extends State<SellScreen> {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter a price';
+                              return AppLocalizations.of(
+                                context,
+                              )!.pleaseEnterAPrice;
                             }
                             final price = int.tryParse(value);
                             if (price == null || price <= 0) {
-                              return 'Please enter a valid price';
+                              return AppLocalizations.of(
+                                context,
+                              )!.pleaseEnterAValidPrice;
                             }
                             return null;
                           },
@@ -343,8 +362,8 @@ class _SellScreenState extends State<SellScreen> {
                   const SizedBox(height: 24),
 
                   // Description
-                  const Text(
-                    'Description',
+                  Text(
+                    AppLocalizations.of(context)!.description,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -356,7 +375,9 @@ class _SellScreenState extends State<SellScreen> {
                     controller: _descriptionController,
                     maxLines: 4,
                     decoration: InputDecoration(
-                      hintText: 'Describe the book (edition, language, etc.)',
+                      hintText: AppLocalizations.of(
+                        context,
+                      )!.describeTheBookOpen_parenthesisEditionCommaLanguageCommaEtcPeriodClose_parenthesis,
                       filled: true,
                       fillColor: Theme.of(context).colorScheme.surface,
                       border: OutlineInputBorder(
@@ -370,8 +391,8 @@ class _SellScreenState extends State<SellScreen> {
                   const SizedBox(height: 24),
 
                   // Condition
-                  const Text(
-                    'Book Condition',
+                  Text(
+                    AppLocalizations.of(context)!.bookCondition,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -390,15 +411,24 @@ class _SellScreenState extends State<SellScreen> {
                         value: viewModel.condition,
                         isExpanded: true,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        items: const [
+                        items: [
                           DropdownMenuItem(value: 'new', child: Text('New')),
                           DropdownMenuItem(
                             value: 'like_new',
-                            child: Text('Like New'),
+                            child: Text(AppLocalizations.of(context)!.likeNew),
                           ),
-                          DropdownMenuItem(value: 'good', child: Text('Good')),
-                          DropdownMenuItem(value: 'fair', child: Text('Fair')),
-                          DropdownMenuItem(value: 'poor', child: Text('Poor')),
+                          DropdownMenuItem(
+                            value: 'good',
+                            child: Text(AppLocalizations.of(context)!.good),
+                          ),
+                          DropdownMenuItem(
+                            value: 'fair',
+                            child: Text(AppLocalizations.of(context)!.fair),
+                          ),
+                          DropdownMenuItem(
+                            value: 'poor',
+                            child: Text(AppLocalizations.of(context)!.poor),
+                          ),
                         ],
                         onChanged: (value) {
                           if (value != null) {
@@ -411,8 +441,8 @@ class _SellScreenState extends State<SellScreen> {
                   const SizedBox(height: 24),
 
                   // Category
-                  const Text(
-                    'Category',
+                  Text(
+                    AppLocalizations.of(context)!.category,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -430,42 +460,53 @@ class _SellScreenState extends State<SellScreen> {
                       child: DropdownButton<String?>(
                         value: viewModel.category,
                         isExpanded: true,
-                        hint: const Text('Select a category'),
+                        hint: Text(
+                          AppLocalizations.of(context)!.selectACategory,
+                        ),
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        items: const [
-                          DropdownMenuItem(value: null, child: Text('None')),
+                        items: [
                           DropdownMenuItem(
-                            value: 'Textbooks',
-                            child: Text('Textbooks'),
+                            value: null,
+                            child: Text(AppLocalizations.of(context)!.none),
+                          ),
+                          DropdownMenuItem(
+                            value: "Textbooks",
+                            child: Text(
+                              AppLocalizations.of(context)!.textbooks,
+                            ),
                           ),
                           DropdownMenuItem(
                             value: 'Fiction',
-                            child: Text('Fiction'),
+                            child: Text(AppLocalizations.of(context)!.fiction),
                           ),
                           DropdownMenuItem(
                             value: 'Science',
-                            child: Text('Science'),
+                            child: Text(AppLocalizations.of(context)!.science),
                           ),
                           DropdownMenuItem(
                             value: 'History',
-                            child: Text('History'),
+                            child: Text(AppLocalizations.of(context)!.history),
                           ),
                           DropdownMenuItem(value: 'GCE', child: Text('GCE')),
                           DropdownMenuItem(
                             value: 'Language',
-                            child: Text('Language'),
+                            child: Text(AppLocalizations.of(context)!.language),
                           ),
                           DropdownMenuItem(
                             value: 'Mathematics',
-                            child: Text('Mathematics'),
+                            child: Text(
+                              AppLocalizations.of(context)!.mathematics,
+                            ),
                           ),
                           DropdownMenuItem(
                             value: 'Engineering',
-                            child: Text('Engineering'),
+                            child: Text(
+                              AppLocalizations.of(context)!.engineering,
+                            ),
                           ),
                           DropdownMenuItem(
                             value: 'Medicine',
-                            child: Text('Medicine'),
+                            child: Text(AppLocalizations.of(context)!.medicine),
                           ),
                         ],
                         onChanged: (value) {
@@ -476,8 +517,8 @@ class _SellScreenState extends State<SellScreen> {
                   ),
                   const SizedBox(height: 24),
                   // Social Venture Section
-                  const Text(
-                    'Social Venture Features',
+                  Text(
+                    AppLocalizations.of(context)!.socialVentureFeatures,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -486,8 +527,8 @@ class _SellScreenState extends State<SellScreen> {
                   ),
                   const SizedBox(height: 16),
                   // Seller Type
-                  const Text(
-                    'Seller Type',
+                  Text(
+                    AppLocalizations.of(context)!.sellerType,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -506,18 +547,24 @@ class _SellScreenState extends State<SellScreen> {
                         value: viewModel.sellerType,
                         isExpanded: true,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        items: const [
+                        items: [
                           DropdownMenuItem(
                             value: 'individual',
-                            child: Text('Individual Student'),
+                            child: Text(
+                              AppLocalizations.of(context)!.individualStudent,
+                            ),
                           ),
                           DropdownMenuItem(
                             value: 'bookshop',
-                            child: Text('Verified Bookshop'),
+                            child: Text(
+                              AppLocalizations.of(context)!.verifiedBookshop,
+                            ),
                           ),
                           DropdownMenuItem(
                             value: 'author',
-                            child: Text('Local Author'),
+                            child: Text(
+                              AppLocalizations.of(context)!.localAuthor,
+                            ),
                           ),
                         ],
                         onChanged: (value) {
@@ -531,16 +578,18 @@ class _SellScreenState extends State<SellScreen> {
                   const SizedBox(height: 24),
                   // Buy-Back Eligibility
                   SwitchListTile(
-                    title: const Text(
-                      'Eligible for Buy-Back',
+                    title: Text(
+                      AppLocalizations.of(context)!.eligibleForBuyHyphenBack,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         color: Color(0xFF2D3436),
                       ),
                     ),
-                    subtitle: const Text(
-                      'Permit students to sell this book back when finished.',
+                    subtitle: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.permitStudentsToSellThisBookBackWhenFinishedPeriod,
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                     value: viewModel.isBuyBackEligible,
@@ -550,8 +599,8 @@ class _SellScreenState extends State<SellScreen> {
                   const SizedBox(height: 16),
                   // Stock Count (for non-individuals)
                   if (viewModel.sellerType != 'individual') ...[
-                    const Text(
-                      'Available Stock',
+                    Text(
+                      AppLocalizations.of(context)!.availableStock,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -596,7 +645,9 @@ class _SellScreenState extends State<SellScreen> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Listing will be visible in your current region',
+                        AppLocalizations.of(
+                          context,
+                        )!.listingWillBeVisibleInYourCurrentRegion,
                         style: TextStyle(
                           fontSize: 14,
                           color: Theme.of(
@@ -645,8 +696,8 @@ class _SellScreenState extends State<SellScreen> {
                             )
                           : Text(
                               viewModel.isEditing
-                                  ? 'Update Listing'
-                                  : 'Post Listing',
+                                  ? AppLocalizations.of(context)!.updateListing
+                                  : AppLocalizations.of(context)!.postListing,
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,

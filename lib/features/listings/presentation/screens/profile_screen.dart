@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 8),
               ListTile(
                 leading: const Icon(Icons.edit, color: Color(0xFF1A4D8C)),
-                title: const Text('Edit Listing'),
+                title: Text(AppLocalizations.of(context)!.editListing),
                 onTap: () {
                   Navigator.pop(context);
                   context.push('/sell', extra: listing);
@@ -49,8 +50,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.delete_outline, color: Colors.red),
-                title: const Text(
-                  'Delete Listing',
+                title: Text(
+                  AppLocalizations.of(context)!.deleteListing,
                   style: TextStyle(color: Colors.red),
                 ),
                 onTap: () {
@@ -71,14 +72,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Delete Listing?'),
+          title: Text(AppLocalizations.of(context)!.deleteListingQuestion_mark),
           content: Text(
-            'Are you sure you want to delete "${listing.title}"? This action cannot be undone.',
+            AppLocalizations.of(
+              context,
+            )!.areYouSureYouWantToDeleteApostropheOpen_braceListingtitleClose_braceApostropheQuestion_markThisActionCannotBeUndonePeriod(
+              listing.title,
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -86,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 context.read<ProfileViewModel>().deleteListing(listing.id);
               },
               style: TextButton.styleFrom(foregroundColor: Colors.red),
-              child: const Text('Delete'),
+              child: Text(AppLocalizations.of(context)!.delete),
             ),
           ],
         );
@@ -174,9 +179,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     onPressed: () => context.pop(),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'Profile',
+                      AppLocalizations.of(context)!.profile,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 18,
@@ -196,19 +201,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     icon: const Icon(Icons.more_vert, color: Colors.white),
                     itemBuilder: (BuildContext context) =>
                         <PopupMenuEntry<String>>[
-                          const PopupMenuItem<String>(
+                          PopupMenuItem<String>(
                             value: 'about',
                             child: ListTile(
                               leading: Icon(Icons.info_outline),
-                              title: Text('About Us'),
+                              title: Text(
+                                AppLocalizations.of(context)!.aboutUs,
+                              ),
                               contentPadding: EdgeInsets.zero,
                             ),
                           ),
-                          const PopupMenuItem<String>(
+                          PopupMenuItem<String>(
                             value: 'signOut',
                             child: ListTile(
                               leading: Icon(Icons.exit_to_app),
-                              title: Text('Sign Out'),
+                              title: Text(
+                                AppLocalizations.of(context)!.signOut,
+                              ),
                               contentPadding: EdgeInsets.zero,
                             ),
                           ),
@@ -238,12 +247,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Failed to load profile',
+                    AppLocalizations.of(context)!.failedToLoadProfile,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    profileViewModel.errorMessage ?? 'Unknown error',
+                    profileViewModel.errorMessage ??
+                        AppLocalizations.of(context)!.unknownError,
                     style: Theme.of(context).textTheme.bodyMedium,
                     textAlign: TextAlign.center,
                   ),
@@ -259,7 +269,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           final user = profileViewModel.currentUser;
           if (user == null) {
-            return const Center(child: Text('User not found'));
+            return Center(
+              child: Text(AppLocalizations.of(context)!.userNotFound),
+            );
           }
 
           return SingleChildScrollView(
@@ -374,7 +386,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            'Member since ${DateFormat.yMMMM().format(user.createdAt)}',
+                            AppLocalizations.of(
+                              context,
+                            )!.memberSinceOpen_braceDataClose_brace(
+                              DateFormat.yMMMM().format(user.createdAt),
+                            ),
                             style: TextStyle(
                               fontSize: 14,
                               color: Theme.of(context).colorScheme.primary,
@@ -396,7 +412,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            user.locality ?? 'Unknown Location',
+                            user.locality ??
+                                AppLocalizations.of(context)!.unknownLocation,
                             style: TextStyle(
                               fontSize: 14,
                               color: Theme.of(
@@ -420,7 +437,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: _buildStatCard(
                           context,
                           profileViewModel.userListings.length.toString(),
-                          'ACTIVE BOOKS',
+                          AppLocalizations.of(context)!.activeBooks,
                           Icons.book,
                           const Color(0xFF1A4D8C), // Scholar Blue
                         ),
@@ -432,7 +449,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: _buildStatCard(
                           context,
                           '${NumberFormat.compact().format(profileViewModel.userListings.fold<int>(0, (sum, item) => sum + item.priceFcfa))} FCFA',
-                          'TOTAL VALUE',
+                          AppLocalizations.of(context)!.totalValue,
                           Icons.savings,
                           const Color(0xFF27AE60), // Growth Green
                         ),
@@ -449,8 +466,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'My Active Books',
+                      Text(
+                        AppLocalizations.of(context)!.myActiveBooks,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
@@ -459,8 +476,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       TextButton.icon(
                         onPressed: () => context.go('/sell'),
                         icon: const Icon(Icons.add_circle, size: 16),
-                        label: const Text(
-                          'Sell New',
+                        label: Text(
+                          AppLocalizations.of(context)!.sellNew,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -490,12 +507,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
-                                  'No listings yet',
+                                  AppLocalizations.of(context)!.noListingsYet,
                                   style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'Create your first listing to get started',
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.createYourFirstListingToGetStarted,
                                   style: Theme.of(context).textTheme.bodySmall,
                                   textAlign: TextAlign.center,
                                 ),
@@ -595,7 +614,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
                                     Text(
-                                      'Listed ${DateTime.now().difference(listing.createdAt).inDays} days ago',
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.listedOpen_braceDateClose_braceDaysAgo(
+                                        DateTime.now()
+                                            .difference(listing.createdAt)
+                                            .inDays,
+                                      ),
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Theme.of(

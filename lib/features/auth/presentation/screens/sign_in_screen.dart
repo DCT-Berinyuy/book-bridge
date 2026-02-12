@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:locale_switcher/locale_switcher.dart';
 import 'package:provider/provider.dart';
@@ -53,7 +54,8 @@ class _SignInScreenState extends State<SignInScreen> {
         ..showSnackBar(
           SnackBar(
             content: Text(
-              authViewModel.errorMessage ?? 'An unknown error occurred.',
+              authViewModel.errorMessage ??
+                  AppLocalizations.of(context)!.anUnknownErrorOccurredPeriod,
             ),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
@@ -66,7 +68,10 @@ class _SignInScreenState extends State<SignInScreen> {
         ..showSnackBar(
           SnackBar(
             content: Text(
-              authViewModel.successMessage ?? 'Password reset link sent!',
+              authViewModel.successMessage ??
+                  AppLocalizations.of(
+                    context,
+                  )!.passwordResetLinkSentExclamation_mark,
             ),
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
@@ -83,19 +88,21 @@ class _SignInScreenState extends State<SignInScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Reset Password'),
+          title: Text(AppLocalizations.of(context)!.resetPassword),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'Enter your email address to receive a password reset link.',
+              Text(
+                AppLocalizations.of(
+                  context,
+                )!.enterYourEmailAddressToReceiveAPasswordResetLinkPeriod,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: emailDialogController,
                 autofocus: true,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.email,
                   hintText: 'student@university.cm',
                 ),
                 keyboardType: TextInputType.emailAddress,
@@ -105,7 +112,7 @@ class _SignInScreenState extends State<SignInScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             ElevatedButton(
               onPressed: () {
@@ -116,7 +123,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   Navigator.of(context).pop();
                 }
               },
-              child: const Text('Send Link'),
+              child: Text(AppLocalizations.of(context)!.sendLink),
             ),
           ],
         );
@@ -144,9 +151,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     onPressed: () => context.pop(),
                   ),
-                const Expanded(
+                Expanded(
                   child: Text(
-                    'Sign In',
+                    AppLocalizations.of(context)!.signIn,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
@@ -178,8 +185,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: Image.asset('assets/logo.png', height: 100),
                       ),
                       const SizedBox(height: 16),
-                      const Text(
-                        'BookBridge: for All',
+                      Text(
+                        AppLocalizations.of(context)!.bookbridgeColonForAll,
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -187,8 +194,10 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        'Democratizing access to affordable books in Cameroon.',
+                      Text(
+                        AppLocalizations.of(
+                          context,
+                        )!.democratizingAccessToAffordableBooksInCameroonPeriod,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 14,
@@ -206,8 +215,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // Email Field
-                        const Text(
-                          'Email Address',
+                        Text(
+                          AppLocalizations.of(context)!.emailAddress,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
@@ -234,7 +243,9 @@ class _SignInScreenState extends State<SignInScreen> {
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value?.isEmpty ?? true) {
-                              return 'Email is required';
+                              return AppLocalizations.of(
+                                context,
+                              )!.emailIsRequired;
                             }
                             if (!RegExp(
                               r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
@@ -247,8 +258,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         const SizedBox(height: 24),
 
                         // Password Field
-                        const Text(
-                          'Password',
+                        Text(
+                          AppLocalizations.of(context)!.password,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
@@ -287,10 +298,14 @@ class _SignInScreenState extends State<SignInScreen> {
                           obscureText: _obscurePassword,
                           validator: (value) {
                             if (value?.isEmpty ?? true) {
-                              return 'Password is required';
+                              return AppLocalizations.of(
+                                context,
+                              )!.passwordIsRequired;
                             }
                             if (value!.length < 6) {
-                              return 'Password must be at least 6 characters';
+                              return AppLocalizations.of(
+                                context,
+                              )!.passwordMustBeAtLeast6Characters;
                             }
                             return null;
                           },
@@ -302,8 +317,10 @@ class _SignInScreenState extends State<SignInScreen> {
                           alignment: Alignment.centerRight,
                           child: TextButton(
                             onPressed: () => _showForgotPasswordDialog(context),
-                            child: const Text(
-                              'Forgot password?',
+                            child: Text(
+                              AppLocalizations.of(
+                                context,
+                              )!.forgotPasswordQuestion_mark,
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
@@ -350,8 +367,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                       strokeWidth: 2,
                                     ),
                                   )
-                                : const Text(
-                                    'Sign In',
+                                : Text(
+                                    AppLocalizations.of(context)!.signIn,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
@@ -370,7 +387,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 horizontal: 16,
                               ),
                               child: Text(
-                                'OR',
+                                AppLocalizations.of(context)!.or,
                                 style: TextStyle(
                                   color: Colors.grey.shade400,
                                   fontWeight: FontWeight.w600,
@@ -404,8 +421,10 @@ class _SignInScreenState extends State<SignInScreen> {
                                   height: 24,
                                 ),
                                 const SizedBox(width: 12),
-                                const Text(
-                                  'Continue with Google',
+                                Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.continueWithGoogle,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
@@ -427,16 +446,18 @@ class _SignInScreenState extends State<SignInScreen> {
 
                       // Sign Up link
                       Text(
-                        "Don't have an account?",
+                        AppLocalizations.of(
+                          context,
+                        )!.donApostropheTHaveAnAccountQuestion_mark,
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey.shade400,
                         ),
                       ),
                       TextButton(
-                        onPressed: () => context.push('/sign-up'),
-                        child: const Text(
-                          'Sign Up',
+                        onPressed: () => context.push("/sign-up"),
+                        child: Text(
+                          AppLocalizations.of(context)!.signUp,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -456,9 +477,9 @@ class _SignInScreenState extends State<SignInScreen> {
                             size: 16,
                             color: Colors.grey,
                           ),
-                          const SizedBox(width: 4),
+                          SizedBox(width: 4),
                           Text(
-                            'CAMEROON • FCFA',
+                            AppLocalizations.of(context)!.cameroonChar_2022Fcfa,
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,

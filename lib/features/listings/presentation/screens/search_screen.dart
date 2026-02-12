@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -62,8 +63,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         children: [
                           const Icon(Icons.menu_book, color: Colors.white),
                           const SizedBox(width: 8),
-                          const Text(
-                            'BookBridge',
+                          Text(
+                            AppLocalizations.of(context)!.bookbridge,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
@@ -97,7 +98,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           style: const TextStyle(color: Colors.black),
                           cursorColor: Colors.black,
                           decoration: InputDecoration(
-                            hintText: 'Search title, author, or ISBN...',
+                            hintText: AppLocalizations.of(
+                              context,
+                            )!.searchTitleCommaAuthorCommaOrIsbnPeriodPeriodPeriod,
                             hintStyle: const TextStyle(color: Colors.grey),
                             prefixIcon: const Icon(
                               Icons.search,
@@ -148,8 +151,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       (viewModel.searchState == SearchState.success &&
                           _searchController.text.isEmpty)) ...[
                     // Academic Categories
-                    const Text(
-                      'Academic Categories',
+                    Text(
+                      AppLocalizations.of(context)!.academicCategories,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
@@ -157,7 +160,11 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     const SizedBox(height: 16),
                     if (viewModel.categories.isEmpty)
-                      const Center(child: Text('No categories available'))
+                      Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.noCategoriesAvailable,
+                        ),
+                      )
                     else
                       GridView.builder(
                         shrinkWrap: true,
@@ -186,8 +193,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Recent Searches',
+                          Text(
+                            AppLocalizations.of(context)!.recentSearches,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
@@ -197,8 +204,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             onPressed: () {
                               viewModel.clearRecentSearches();
                             },
-                            child: const Text(
-                              'Clear All',
+                            child: Text(
+                              AppLocalizations.of(context)!.clearAll,
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
@@ -285,7 +292,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Text(
-                          viewModel.errorMessage ?? 'An error occurred',
+                          viewModel.errorMessage ??
+                              AppLocalizations.of(context)!.anErrorOccurred,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.error,
                           ),
@@ -312,7 +320,11 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              'No results found for "${_searchController.text}"',
+                              AppLocalizations.of(
+                                context,
+                              )!.noResultsFoundForApostropheOpen_braceSearchtextClose_braceApostrophe(
+                                _searchController.text,
+                              ),
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
@@ -329,7 +341,11 @@ class _SearchScreenState extends State<SearchScreen> {
                       children: [
                         const SizedBox(height: 24),
                         Text(
-                          '${viewModel.searchResults.length} result${viewModel.searchResults.length != 1 ? 's' : ''} found',
+                          AppLocalizations.of(
+                            context,
+                          )!.open_braceCountClose_braceResultOpen_parenthesisSClose_parenthesisFound(
+                            viewModel.searchResults.length,
+                          ),
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                         const SizedBox(height: 12),
@@ -479,7 +495,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
-                          listing.sellerLocality ?? 'Cameroon',
+                          listing.sellerLocality ??
+                              AppLocalizations.of(context)!.cameroon,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
