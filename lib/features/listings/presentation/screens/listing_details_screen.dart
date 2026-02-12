@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -38,15 +39,13 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
 
     if (listing == null) return;
 
-    final shareText =
-        '''
-Check out this book on BookBridge:
-📚 ${listing.title} by ${listing.author}
-💰 ${listing.priceFcfa} FCFA
-🔍 Condition: ${listing.condition}
-
-Download BookBridge to view more details!
-''';
+    final shareText = AppLocalizations.of(context)!
+        .checkOutThisBookOnBookbridgeColonChar_1f4daOpen_braceTitleClose_braceByOpen_braceAuthorClose_braceCommaAtChar_1f4b0Open_bracePriceClose_braceFcfaPeriodChar_1f50dConditionColonOpen_braceConditionClose_bracePeriodDownloadBookbridgeToViewMoreDetailsExclamation_mark(
+          listing.title,
+          listing.author,
+          listing.priceFcfa.toString(),
+          listing.condition,
+        );
 
     await Share.share(shareText);
   }
@@ -55,7 +54,11 @@ Download BookBridge to view more details!
     if (whatsappNumber.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No WhatsApp number available')),
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.noWhatsappNumberAvailable,
+            ),
+          ),
         );
       }
       return;
@@ -72,7 +75,9 @@ Download BookBridge to view more details!
     debugPrint('ListingDetailsScreen: Original WhatsApp: $whatsappNumber');
     debugPrint('ListingDetailsScreen: Cleaned WhatsApp: $cleanNumber');
 
-    final message = 'Hi, I saw your book on BookBridge and I am interested!';
+    final message = AppLocalizations.of(
+      context,
+    )!.hiCommaISawYourBookOnBookbridgeAndIAmInterestedExclamation_mark;
     final whatsappUrl =
         'https://wa.me/$cleanNumber?text=${Uri.encodeComponent(message)}';
 
@@ -85,15 +90,25 @@ Download BookBridge to view more details!
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Could not launch WhatsApp')),
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)!.couldNotLaunchWhatsapp,
+              ),
+            ),
           );
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(
+                context,
+              )!.errorColonOpen_braceErrorClose_brace(e.toString()),
+            ),
+          ),
+        );
       }
     }
   }
@@ -102,7 +117,9 @@ Download BookBridge to view more details!
     if (phoneNumber.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No phone number available')),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.noPhoneNumberAvailable),
+          ),
         );
       }
       return;
@@ -119,15 +136,23 @@ Download BookBridge to view more details!
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Could not launch dialer')),
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.couldNotLaunchDialer),
+            ),
           );
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(
+                context,
+              )!.errorColonOpen_braceErrorClose_brace(e.toString()),
+            ),
+          ),
+        );
       }
     }
   }
@@ -168,7 +193,7 @@ Download BookBridge to view more details!
                       Expanded(
                         child: Center(
                           child: Text(
-                            'Book Details',
+                            AppLocalizations.of(context)!.bookDetails,
                             style: Theme.of(context).textTheme.titleLarge
                                 ?.copyWith(
                                   color: Colors.white,
@@ -211,12 +236,13 @@ Download BookBridge to view more details!
             ),
             const SizedBox(height: 16),
             Text(
-              'Failed to load listing',
+              AppLocalizations.of(context)!.failedToLoadListing,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 8),
             Text(
-              viewModel.errorMessage ?? 'Unknown error',
+              viewModel.errorMessage ??
+                  AppLocalizations.of(context)!.unknownError,
               style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
@@ -227,7 +253,7 @@ Download BookBridge to view more details!
 
     final listing = viewModel.listing;
     if (listing == null) {
-      return const Center(child: Text('No listing found'));
+      return Center(child: Text(AppLocalizations.of(context)!.noListingFound));
     }
 
     return Column(
@@ -261,9 +287,11 @@ Download BookBridge to view more details!
                           Future.microtask(() {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
+                                SnackBar(
                                   content: Text(
-                                    'This listing is no longer available.',
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.thisListingIsNoLongerAvailablePeriod,
                                   ),
                                   duration: Duration(seconds: 2),
                                 ),
@@ -324,7 +352,7 @@ Download BookBridge to view more details!
                           color: const Color(0xFF27AE60).withValues(alpha: 0.3),
                         ),
                       ),
-                      child: const Row(
+                      child: Row(
                         children: [
                           Icon(Icons.recycling, color: Color(0xFF27AE60)),
                           SizedBox(width: 12),
@@ -333,7 +361,9 @@ Download BookBridge to view more details!
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Buy-Back Eligible',
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.buy_hyphen_BackEligible,
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
@@ -341,7 +371,9 @@ Download BookBridge to view more details!
                                   ),
                                 ),
                                 Text(
-                                  'Sell this book back to the platform when you\'re done.',
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.sellThisBookBackToThePlatformWhenYou_apostrophe_ReDone_period_,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey,
@@ -379,10 +411,16 @@ Download BookBridge to view more details!
                             const SizedBox(height: 8),
                             Text(
                               listing.sellerType == 'individual'
-                                  ? 'This student is selling to fund their next semester.'
+                                  ? AppLocalizations.of(
+                                      context,
+                                    )!.thisStudentIsSellingToFundTheirNextSemester_period_
                                   : listing.sellerType == 'bookshop'
-                                  ? 'A verified local bookshop supporting the community.'
-                                  : 'Direct from the author. Supporting local creativity.',
+                                  ? AppLocalizations.of(
+                                      context,
+                                    )!.aVerifiedLocalBookshopSupportingTheCommunity_period_
+                                  : AppLocalizations.of(
+                                      context,
+                                    )!.directFromTheAuthor_period_SupportingLocalCreativity_period_,
                               style: const TextStyle(
                                 fontSize: 13,
                                 color: Color(0xFF2D3436), // Ink Black
@@ -476,8 +514,8 @@ Download BookBridge to view more details!
                   const SizedBox(height: 16),
 
                   // Description / Details
-                  const Text(
-                    'DESCRIPTION',
+                  Text(
+                    AppLocalizations.of(context)!.description,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -489,7 +527,9 @@ Download BookBridge to view more details!
                   Text(
                     listing.description.isNotEmpty
                         ? listing.description
-                        : 'No description provided.',
+                        : AppLocalizations.of(
+                            context,
+                          )!.noDescriptionProvided_period_,
                     style: TextStyle(
                       fontSize: 16,
                       height: 1.5,
@@ -499,8 +539,8 @@ Download BookBridge to view more details!
                   const SizedBox(height: 24),
 
                   // Seller Section
-                  const Text(
-                    'SELLER INFORMATION',
+                   Text(
+                    AppLocalizations.of(context)!.sellerInformation,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -593,7 +633,7 @@ Download BookBridge to view more details!
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    listing.sellerName ?? 'Unknown Seller',
+                                    listing.sellerName ?? AppLocalizations.of(context)!.unknownSeller,
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
@@ -610,7 +650,7 @@ Download BookBridge to view more details!
                                       const SizedBox(width: 4),
                                       Text(
                                         listing.sellerLocality ??
-                                            'Unknown Location',
+                                            AppLocalizations.of(context)!.unknownLocation,
                                         style: const TextStyle(
                                           fontSize: 14,
                                           color: Color(
@@ -635,8 +675,8 @@ Download BookBridge to view more details!
                           const SizedBox(height: 8),
                           Text(
                             listing.sellerType == 'bookshop'
-                                ? 'Supporting local businesses democratizes access to knowledge.'
-                                : 'Supporting local authors fosters a vibrant culture of learning.',
+                                ? AppLocalizations.of(context)!.supportingLocalBusinessesDemocratizesAccessToKnowledge_period_
+                                : AppLocalizations.of(context)!.supportingLocalAuthorsFostersAVibrantCultureOfLearning_period_,
                             style: const TextStyle(
                               fontSize: 12,
                               color: Color(0xFF13EC5B),
@@ -693,8 +733,8 @@ Download BookBridge to view more details!
                 ),
               ),
               icon: const Icon(Icons.chat_bubble),
-              label: const Text(
-                'Contact Seller via WhatsApp',
+              label:  Text(
+                AppLocalizations.of(context)!.contactSellerViaWhatsapp,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
             ),
@@ -712,7 +752,7 @@ Download BookBridge to view more details!
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Call Seller',
+                  AppLocalizations.of(context)!.callSeller,
                   style: TextStyle(
                     fontSize: 14,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,

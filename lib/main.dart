@@ -10,7 +10,9 @@ import 'package:book_bridge/features/listings/presentation/viewmodels/listing_de
 import 'package:book_bridge/features/listings/presentation/viewmodels/sell_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
-import 'config/app_config.dart';
+import 'package:book_bridge/config/app_config.dart';
+import 'package:book_bridge/l10n/app_localizations.dart';
+import 'package:locale_switcher/locale_switcher.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,12 +59,18 @@ class MyApp extends StatelessWidget {
           create: (_) => di.getIt<SearchViewModel>(),
         ),
       ],
-      child: MaterialApp.router(
-        title: 'BookBridge: Social Venture',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        routerConfig: appRouter,
+      child: LocaleManager(
+        sharedPreferenceName: "locale",
+        child: MaterialApp.router(
+          locale: LocaleSwitcher.localeBestMatch,
+          title: 'BookBridge: Social Venture',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          routerConfig: appRouter,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
@@ -36,7 +37,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Complete Your Profile'),
+        title: Text(AppLocalizations.of(context)!.completeYourProfile),
         automaticallyImplyLeading: false, // User must complete profile
         actions: [
           IconButton(
@@ -54,20 +55,26 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    'Just one more step!',
+                  Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.justOneMoreStepExclamation_mark,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'To start buying and selling, we need a few more details to help other students find you.',
+                  Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.toStartBuyingAndSellingCommaWeNeedAFewMoreDetailsToHelpOtherStudentsFindYouPeriod,
                     style: TextStyle(color: Colors.grey),
                   ),
                   const SizedBox(height: 32),
 
                   // Locality
-                  const Text(
-                    'Locality / Neighborhood',
+                  Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.localityForward_slashNeighborhood,
                     style: TextStyle(fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 8),
@@ -83,15 +90,16 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       ),
                     ),
                     validator: (value) {
-                      if (value?.isEmpty ?? true) return 'Locality is required';
+                      if (value?.isEmpty ?? true)
+                        return AppLocalizations.of(context)!.localityIsRequired;
                       return null;
                     },
                   ),
                   const SizedBox(height: 24),
 
                   // WhatsApp
-                  const Text(
-                    'WhatsApp Number',
+                  Text(
+                    AppLocalizations.of(context)!.whatsappNumber,
                     style: TextStyle(fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 8),
@@ -108,9 +116,12 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       ),
                     ),
                     validator: (value) {
-                      if (value?.isEmpty ?? true) return 'Number is required';
+                      if (value?.isEmpty ?? true)
+                        return AppLocalizations.of(context)!.numberIsRequired;
                       if (!RegExp(r'^\d{9}$').hasMatch(value!)) {
-                        return 'Enter a valid 9-digit number';
+                        return AppLocalizations.of(
+                          context,
+                        )!.enterAValid9HyphenDigitNumber;
                       }
                       return null;
                     },
@@ -158,7 +169,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                                         SnackBar(
                                           content: Text(
                                             profileViewModel.errorMessage ??
-                                                'Failed to update profile',
+                                                AppLocalizations.of(
+                                                  context,
+                                                )!.failedToUpdateProfile,
                                           ),
                                           backgroundColor: Colors.red,
                                         ),
@@ -190,8 +203,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       ),
                       child: profileViewModel.isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text(
-                              'Complete Setup',
+                          :  Text(
+                              AppLocalizations.of(context)!.completeSetup,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

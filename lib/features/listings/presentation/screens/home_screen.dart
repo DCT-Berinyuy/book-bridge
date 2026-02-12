@@ -1,3 +1,4 @@
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/sell'),
-        tooltip: 'Sell a Book',
+        tooltip: AppLocalizations.of(context)!.sellABook,
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         child: const Icon(Icons.add),
@@ -67,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
         _buildSliverAppBar(),
-        _buildSectionHeader('Categories'),
+        _buildSectionHeader(AppLocalizations.of(context)!.categories),
         _buildCategoryChips(),
         if (viewModel.homeState == HomeState.error &&
             viewModel.listings.isEmpty)
@@ -83,12 +84,12 @@ class _HomeScreenState extends State<HomeScreen> {
         else ...[
           // Featured listings logic
           if (viewModel.listings.any((l) => l.isFeatured)) ...[
-            _buildSectionHeader('Featured Books'),
+            _buildSectionHeader(AppLocalizations.of(context)!.featuredBooks),
             _buildFeaturedListings(
               viewModel.listings.where((l) => l.isFeatured).toList(),
             ),
           ],
-          _buildSectionHeader('Recently Added'),
+          _buildSectionHeader(AppLocalizations.of(context)!.recentlyAdded),
           _buildListingsGrid(
             viewModel.listings.where((l) => !l.isFeatured).toList(),
             viewModel,
@@ -118,12 +119,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 24),
           Text(
-            'Oops! Something Went Wrong',
+            AppLocalizations.of(
+              context,
+            )!.oopsExclamation_markSomethingWentWrong,
             style: GoogleFonts.lato(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
-            viewModel.errorMessage ?? 'Please check your connection.',
+            viewModel.errorMessage ??
+                AppLocalizations.of(context)!.pleaseCheckYourConnectionPeriod,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -136,13 +140,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ElevatedButton.icon(
                 onPressed: viewModel.refreshListings,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Try Again'),
+                label: Text(AppLocalizations.of(context)!.tryAgain),
               ),
               if (viewModel.selectedCategory != null) ...[
                 const SizedBox(width: 12),
                 OutlinedButton(
                   onPressed: viewModel.clearCategoryFilter,
-                  child: const Text('Back to Home'),
+                  child: Text(AppLocalizations.of(context)!.backToHome),
                 ),
               ],
             ],
@@ -163,15 +167,26 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 24),
           Text(
             isFiltered
-                ? 'No Books in ${viewModel.selectedCategory}'
-                : 'No Books Found',
+                ? AppLocalizations.of(
+                    context,
+                  )!.noBooksInOpen_braceCategoryClose_brace(
+                    viewModel.selectedCategory ??
+                        AppLocalizations.of(
+                          context,
+                        )!.less_thanNoCategoryGreater_than,
+                  )
+                : AppLocalizations.of(context)!.noBooksFound,
             style: GoogleFonts.lato(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
             isFiltered
-                ? 'Try another category or clear the filter.'
-                : 'Be the first to list a book in your area!',
+                ? AppLocalizations.of(
+                    context,
+                  )!.tryAnotherCategoryOrClearTheFilterPeriod
+                : AppLocalizations.of(
+                    context,
+                  )!.beTheFirstToListABookInYourAreaExclamation_mark,
             textAlign: TextAlign.center,
             style: const TextStyle(color: Colors.grey),
           ),
@@ -180,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton.icon(
               onPressed: viewModel.clearCategoryFilter,
               icon: const Icon(Icons.home_rounded),
-              label: const Text('Back to Home'),
+              label: Text(AppLocalizations.of(context)!.backToHome),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
@@ -216,7 +231,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(width: 12),
-          Text('BookBridge', style: theme.appBarTheme.titleTextStyle),
+          Text(
+            AppLocalizations.of(context)!.bookbridge,
+            style: theme.appBarTheme.titleTextStyle,
+          ),
         ],
       ),
       actions: [
@@ -252,7 +270,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
                   const SizedBox(width: 8),
                   Text(
-                    'Search by title or author...',
+                    AppLocalizations.of(
+                      context,
+                    )!.searchByTitleOrAuthorPeriodPeriodPeriod,
                     style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
                   ),
                 ],
@@ -278,11 +298,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCategoryChips() {
     final categories = [
-      'All',
-      'Textbooks',
-      'Fiction',
-      'Science',
-      'History',
+      AppLocalizations.of(context)!.all,
+      AppLocalizations.of(context)!.textbooks,
+      AppLocalizations.of(context)!.fiction,
+      AppLocalizations.of(context)!.science,
+      AppLocalizations.of(context)!.history,
       'GCE',
     ];
     return SliverToBoxAdapter(
@@ -449,14 +469,15 @@ class _ListingCard extends StatelessWidget {
                       ),
                     ),
             ),
-            if (listing.sellerType != 'individual') _buildVerifiedBadge(),
+            if (listing.sellerType != 'individual')
+              _buildVerifiedBadge(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildVerifiedBadge() {
+  Widget _buildVerifiedBadge(BuildContext context) {
     return Positioned(
       top: 8,
       left: 8,
@@ -466,12 +487,12 @@ class _ListingCard extends StatelessWidget {
           color: Colors.black.withAlpha(153),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Row(
+        child: Row(
           children: [
             Icon(Icons.verified, size: 12, color: Colors.white),
             SizedBox(width: 4),
             Text(
-              'VERIFIED',
+              AppLocalizations.of(context)!.verified,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 10,
