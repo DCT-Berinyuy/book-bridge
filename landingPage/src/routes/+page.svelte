@@ -42,8 +42,8 @@
           <span class="highlight">Connect.</span>
         </h1>
         <p class="hero-sub">
-          The easiest way for students in Yaoundé, Buea, and Douala to trade
-          textbooks. Save money, reduce waste, and build your library.
+          The easiest way for students in Yaoundé, Buea, Douala, and Bamenda to
+          trade textbooks. Save money, reduce waste, and build your library.
         </p>
 
         <div class="hero-actions">
@@ -108,7 +108,7 @@
       </div>
       <div class="divider"></div>
       <div class="trust-item">
-        <h2>3</h2>
+        <h2>4</h2>
         <p>Major Cities</p>
       </div>
       <div class="divider"></div>
