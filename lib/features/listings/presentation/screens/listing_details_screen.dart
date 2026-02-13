@@ -687,7 +687,7 @@ Download BookBridge to view more details!
             _buildBoostOption(
               context,
               title: '7 Days Boost',
-              price: 500,
+              price: 5,
               duration: 7,
               listingId: viewModel.listing!.id,
             ),
@@ -695,7 +695,7 @@ Download BookBridge to view more details!
             _buildBoostOption(
               context,
               title: '30 Days Boost',
-              price: 1500,
+              price: 15,
               duration: 30,
               listingId: viewModel.listing!.id,
             ),
