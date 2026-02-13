@@ -11,6 +11,7 @@ import 'package:book_bridge/features/listings/presentation/viewmodels/sell_viewm
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
 import 'package:book_bridge/features/notifications/presentation/viewmodels/notifications_viewmodel.dart';
+import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
 import 'config/app_config.dart';
 
 void main() async {
@@ -59,6 +60,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<NotificationsViewModel>(
           create: (_) => di.getIt<NotificationsViewModel>(),
+        ),
+        ChangeNotifierProvider<PaymentViewModel>(
+          create: (_) => di.getIt<PaymentViewModel>(),
         ),
       ],
       child: MaterialApp.router(
