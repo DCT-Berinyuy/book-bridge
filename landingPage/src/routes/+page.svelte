@@ -13,6 +13,7 @@
     CreditCard,
     Star,
     Download,
+    Apple,
   } from "lucide-svelte";
   import { onMount } from "svelte";
   import screenshot from "$lib/assets/screenshot.png";
@@ -290,6 +291,14 @@
             <div class="btn-text">
               <span>Coming soon to</span>
               <strong>Play Store</strong>
+            </div>
+          </button>
+          <!-- Placeholder for App Store -->
+          <button class="store-btn other" disabled>
+            <Apple size={24} />
+            <div class="btn-text">
+              <span>Coming soon to</span>
+              <strong>App Store</strong>
             </div>
           </button>
         </div>
