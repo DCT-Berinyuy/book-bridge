@@ -1,3 +1,4 @@
+import 'package:book_bridge/core/presentation/widgets/notification_icon.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -220,13 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       actions: [
-        IconButton(
-          icon: Icon(
-            Icons.notifications_none_rounded,
-            color: theme.appBarTheme.foregroundColor,
-          ),
-          onPressed: () => context.push('/notifications'),
-        ),
+        const NotificationIcon(),
         IconButton(
           icon: Icon(
             Icons.person_outline_rounded,

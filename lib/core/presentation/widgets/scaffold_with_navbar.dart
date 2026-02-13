@@ -1,15 +1,31 @@
+import 'package:book_bridge/features/notifications/presentation/viewmodels/notifications_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-class ScaffoldWithNavBar extends StatelessWidget {
+class ScaffoldWithNavBar extends StatefulWidget {
   const ScaffoldWithNavBar({required this.navigationShell, super.key});
 
   final StatefulNavigationShell navigationShell;
 
   @override
+  State<ScaffoldWithNavBar> createState() => _ScaffoldWithNavBarState();
+}
+
+class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
+  @override
+  void initState() {
+    super.initState();
+    // Initialize notifications globally
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<NotificationsViewModel>().subscribeToNotifications();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: navigationShell,
+      body: widget.navigationShell,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
@@ -28,11 +44,11 @@ class ScaffoldWithNavBar extends StatelessWidget {
           ],
         ),
         child: NavigationBar(
-          selectedIndex: navigationShell.currentIndex,
+          selectedIndex: widget.navigationShell.currentIndex,
           onDestinationSelected: (index) {
-            navigationShell.goBranch(
+            widget.navigationShell.goBranch(
               index,
-              initialLocation: index == navigationShell.currentIndex,
+              initialLocation: index == widget.navigationShell.currentIndex,
             );
           },
           backgroundColor: Colors.transparent,

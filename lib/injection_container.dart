@@ -27,6 +27,10 @@ import 'package:book_bridge/features/listings/presentation/viewmodels/listing_de
 import 'package:book_bridge/features/listings/presentation/viewmodels/sell_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
+import 'package:book_bridge/features/notifications/data/datasources/supabase_notifications_data_source.dart';
+import 'package:book_bridge/features/notifications/data/repositories/notifications_repository_impl.dart';
+import 'package:book_bridge/features/notifications/domain/repositories/notifications_repository.dart';
+import 'package:book_bridge/features/notifications/presentation/viewmodels/notifications_viewmodel.dart';
 
 /// Service locator for dependency injection.
 ///
@@ -177,5 +181,18 @@ Future<void> setupDependencyInjection() async {
       searchListingsUseCase: getIt<SearchListingsUseCase>(),
       repository: getIt<ListingRepository>(),
     ),
+  );
+
+  // Notifications Feature
+  getIt.registerSingleton<SupabaseNotificationsDataSource>(
+    SupabaseNotificationsDataSource(getIt<SupabaseClient>()),
+  );
+
+  getIt.registerSingleton<NotificationsRepository>(
+    NotificationsRepositoryImpl(getIt<SupabaseNotificationsDataSource>()),
+  );
+
+  getIt.registerLazySingleton<NotificationsViewModel>(
+    () => NotificationsViewModel(getIt<NotificationsRepository>()),
   );
 }
