@@ -73,13 +73,18 @@ class SupabaseListingsDataSource {
       var query = supabaseClient
           .from('listings')
           .select('*, profiles:seller_id(*)')
-          .eq('status', status);
+          .eq('status', status)
+          .or(
+            'expires_at.is.null,expires_at.gt.${DateTime.now().toIso8601String()}',
+          );
 
       if (category != null && category.isNotEmpty) {
         query = query.eq('category', category);
       }
 
       final response = await query
+          .order('is_boosted', ascending: false)
+          .order('boost_expires_at', ascending: false)
           .order('created_at', ascending: false)
           .range(offset, offset + limit - 1);
 
@@ -159,10 +164,11 @@ class SupabaseListingsDataSource {
                   0, // Assuming offset will be handled by the RPC if needed
             },
           )
-          .select(
-            '*, profiles:seller_id(*)',
-          ) // Select the full listing and joined profile
-          .limit(limit); // Limit is applied after RPC returns results
+          .select('*, profiles:seller_id(*)')
+          .order('is_boosted', ascending: false)
+          .order('boost_expires_at', ascending: false)
+          .order('created_at', ascending: false)
+          .limit(limit);
 
       final listings = (response as List<dynamic>)
           .map((item) => ListingModel.fromJson(item as Map<String, dynamic>))

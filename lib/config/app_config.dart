@@ -14,5 +14,21 @@ class AppConfig {
     defaultValue: '',
   );
 
-  // Other environment-specific configurations can be added here
+  // CamPay configuration
+  static const String campayAppId = String.fromEnvironment(
+    'CAMPAY_APP_ID',
+    defaultValue: '',
+  );
+  static const String campayAppUsername = String.fromEnvironment(
+    'CAMPAY_APP_USERNAME',
+    defaultValue: '',
+  );
+  static const String campayAppPassword = String.fromEnvironment(
+    'CAMPAY_APP_PASSWORD',
+    defaultValue: '',
+  );
+  static const String campayBaseUrl = String.fromEnvironment(
+    'CAMPAY_BASE_URL',
+    defaultValue: 'https://demo.campay.net/api',
+  );
 }

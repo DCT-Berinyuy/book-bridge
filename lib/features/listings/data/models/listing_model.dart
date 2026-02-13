@@ -20,6 +20,9 @@ class ListingModel extends Listing {
     super.sellerType = 'individual',
     super.isBuyBackEligible = false,
     super.stockCount = 1,
+    super.isBoosted = false,
+    super.boostExpiresAt,
+    super.expiresAt,
     super.sellerName,
     super.sellerLocality,
     super.sellerWhatsapp,
@@ -48,6 +51,13 @@ class ListingModel extends Listing {
       sellerType: json['seller_type'] as String? ?? 'individual',
       isBuyBackEligible: json['is_buy_back_eligible'] as bool? ?? false,
       stockCount: json['stock_count'] as int? ?? 1,
+      isBoosted: json['is_boosted'] as bool? ?? false,
+      boostExpiresAt: json['boost_expires_at'] != null
+          ? DateTime.parse(json['boost_expires_at'] as String)
+          : null,
+      expiresAt: json['expires_at'] != null
+          ? DateTime.parse(json['expires_at'] as String)
+          : null,
       sellerName:
           (json['profiles'] as Map<String, dynamic>?)?['full_name'] as String?,
       sellerLocality:
@@ -79,6 +89,9 @@ class ListingModel extends Listing {
       'seller_type': sellerType,
       'is_buy_back_eligible': isBuyBackEligible,
       'stock_count': stockCount,
+      'is_boosted': isBoosted,
+      'boost_expires_at': boostExpiresAt?.toIso8601String(),
+      'expires_at': expiresAt?.toIso8601String(),
     };
   }
 
@@ -99,6 +112,9 @@ class ListingModel extends Listing {
       sellerType: listing.sellerType,
       isBuyBackEligible: listing.isBuyBackEligible,
       stockCount: listing.stockCount,
+      isBoosted: listing.isBoosted,
+      boostExpiresAt: listing.boostExpiresAt,
+      expiresAt: listing.expiresAt,
       sellerName: listing.sellerName,
       sellerLocality: listing.sellerLocality,
       sellerWhatsapp: listing.sellerWhatsapp,
@@ -122,6 +138,9 @@ class ListingModel extends Listing {
       sellerType: sellerType,
       isBuyBackEligible: isBuyBackEligible,
       stockCount: stockCount,
+      isBoosted: isBoosted,
+      boostExpiresAt: boostExpiresAt,
+      expiresAt: expiresAt,
       sellerName: sellerName,
       sellerLocality: sellerLocality,
       sellerWhatsapp: sellerWhatsapp,

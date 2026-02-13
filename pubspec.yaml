@@ -24,6 +24,7 @@ dependencies:
   google_sign_in: ^6.2.1
   path: ^1.9.0
   timeago: ^3.7.1
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:
