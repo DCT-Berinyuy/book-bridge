@@ -49,31 +49,43 @@ async function handleBoostSuccess(listingId, reference, amount, duration) {
 	const expiresAt = new Date();
 	expiresAt.setDate(expiresAt.getDate() + parseInt(duration));
 
-	console.log(`Boosting listing ${listingId} for ${duration} days until ${expiresAt.toISOString()}`);
+	console.log(`Processing boost for listing ${listingId}`);
 
-	// 1. Update listing
-	const { data: listingData, error: listingError } = await supabase
+	// 1. Get the seller_id from the listing
+	const { data: listing, error: fetchError } = await supabase
+		.from('listings')
+		.select('seller_id')
+		.eq('id', listingId)
+		.single();
+
+	if (fetchError || !listing) {
+		console.error('Error fetching listing for boost:', fetchError);
+		throw new Error('Listing not found');
+	}
+
+	const userId = listing.seller_id;
+
+	// 2. Update listing visibility
+	const { error: listingError } = await supabase
 		.from('listings')
 		.update({
 			is_boosted: true,
 			boost_expires_at: expiresAt.toISOString()
 		})
-		.eq('id', listingId)
-		.select();
+		.eq('id', listingId);
 
 	if (listingError) {
-		console.error('Error updating listing:', listingError);
+		console.error('Error updating listing visibility:', listingError);
 		throw listingError;
 	}
-	
-	console.log(`Listing ${listingId} updated successfully:`, listingData);
 
-	// 2. Upsert boost payment record (Tracking)
+	// 3. Upsert boost payment record
 	const { error: paymentError } = await supabase
 		.from('boost_payments')
 		.upsert({
 			payment_reference: reference,
 			listing_id: listingId,
+			user_id: userId,
 			amount: parseInt(amount),
 			duration_days: parseInt(duration),
 			status: 'successful',
@@ -81,21 +93,28 @@ async function handleBoostSuccess(listingId, reference, amount, duration) {
 		}, { onConflict: 'payment_reference' });
     
     if (paymentError) {
-		console.error('Error upserting boost payment:', paymentError);
-		// We don't throw here because the boost itself succeeded
+		console.error('Error recording boost payment:', paymentError);
+		throw paymentError;
 	}
+	
+	console.log(`Successfully boosted listing ${listingId} for user ${userId}`);
 }
 
 async function handleDonationSuccess(userId, reference, amount) {
+	console.log(`Processing donation from user ${userId}`);
+	
 	const { error } = await supabase
 		.from('donations')
 		.upsert({
 			payment_reference: reference,
-			user_id: userId,
+			user_id: userId === 'anonymous' ? null : userId,
 			amount: parseInt(amount),
 			status: 'successful',
 			created_at: new Date().toISOString()
 		}, { onConflict: 'payment_reference' });
     
-    if (error) console.error('Donation update error:', error);
+    if (error) {
+		console.error('Donation record error:', error);
+		throw error;
+	}
 }
