@@ -7,41 +7,66 @@ const supabase = createClient(
 	env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+// Health check endpoint
+export async function GET() {
+	return json({ 
+		status: 'alive', 
+		time: new Date().toISOString(),
+		config_check: {
+			has_url: !!env.SUPABASE_URL,
+			has_key: !!env.SUPABASE_SERVICE_ROLE_KEY,
+			has_webhook_key: !!env.CAMPAY_WEBHOOK_KEY
+		}
+	});
+}
+
 export async function POST({ request }) {
-	// 1. Verify Authentication
+	const timestamp = new Date().toISOString();
+	console.log(`[${timestamp}] Webhook received`);
+
+	// 1. Log Headers for debugging
+	const headers = Object.fromEntries(request.headers.entries());
+	console.log(`[${timestamp}] Headers:`, JSON.stringify(headers));
+
+	// 2. Verify Authentication
 	const authHeader = request.headers.get('Authorization') || '';
 	const webhookKeyHeader = request.headers.get('x-campay-webhook-key');
-	
-	// Handle "Bearer <key>" format common in many gateways
 	const providedKey = webhookKeyHeader || authHeader.replace('Bearer ', '').trim();
 	
 	if (providedKey !== env.CAMPAY_WEBHOOK_KEY) {
-		console.error('CamPay Webhook: Invalid Webhook Key', { providedKey, expected: env.CAMPAY_WEBHOOK_KEY });
-		return json({ error: 'Unauthorized' }, { status: 401 });
+		console.error(`[${timestamp}] Unauthorized: Provided ${providedKey} vs Expected ${env.CAMPAY_WEBHOOK_KEY}`);
+		return json({ error: 'Unauthorized', debug_received: providedKey }, { status: 401 });
 	}
 
 	try {
 		const payload = await request.json();
+		console.log(`[${timestamp}] Payload:`, JSON.stringify(payload));
+		
 		const { status, reference, amount, currency, external_reference } = payload;
-
-		console.log(`CamPay Webhook received: ${reference} - Status: ${status} - External: ${external_reference}`);
 
 		if (status === 'SUCCESSFUL') {
 			if (external_reference && external_reference.startsWith('boost:')) {
-				const [_, listingId, duration] = external_reference.split(':');
-				await handleBoostSuccess(listingId, reference, amount, duration || '7');
+				const parts = external_reference.split(':');
+				const listingId = parts[1];
+				const duration = parts[2] || '7';
+				
+				console.log(`[${timestamp}] Processing boost: Listing=${listingId}, Duration=${duration}`);
+				await handleBoostSuccess(listingId, reference, amount, duration);
 			} else if (external_reference && external_reference.startsWith('donation:')) {
-				const [_, userId] = external_reference.split(':');
+				const parts = external_reference.split(':');
+				const userId = parts[1];
 				await handleDonationSuccess(userId, reference, amount);
+			} else {
+				console.warn(`[${timestamp}] Unknown external_reference format: ${external_reference}`);
 			}
 		} else {
-			console.log(`CamPay Payment ${status}: ${reference}`);
+			console.log(`[${timestamp}] Payment ${status} for ref ${reference}`);
 		}
 
-		return json({ success: true });
+		return json({ success: true, processed_at: timestamp });
 	} catch (err) {
-		console.error('CamPay Webhook Error:', err);
-		return json({ error: err.message }, { status: 500 });
+		console.error(`[${timestamp}] Webhook Error:`, err);
+		return json({ error: err.message, stack: err.stack }, { status: 500 });
 	}
 }
 
