@@ -31,6 +31,13 @@ import 'package:book_bridge/features/notifications/data/datasources/supabase_not
 import 'package:book_bridge/features/notifications/data/repositories/notifications_repository_impl.dart';
 import 'package:book_bridge/features/notifications/domain/repositories/notifications_repository.dart';
 import 'package:book_bridge/features/notifications/presentation/viewmodels/notifications_viewmodel.dart';
+import 'package:book_bridge/features/payments/data/datasources/campay_data_source.dart';
+import 'package:book_bridge/features/payments/data/repositories/payment_repository_impl.dart';
+import 'package:book_bridge/features/payments/domain/repositories/payment_repository.dart';
+import 'package:book_bridge/features/payments/domain/usecases/collect_payment_usecase.dart';
+import 'package:book_bridge/features/payments/domain/usecases/get_payment_status_usecase.dart';
+import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
+import 'package:book_bridge/config/app_config.dart';
 
 /// Service locator for dependency injection.
 ///
@@ -155,6 +162,7 @@ Future<void> setupDependencyInjection() async {
   getIt.registerSingleton<ListingDetailsViewModel>(
     ListingDetailsViewModel(
       getListingDetailsUseCase: getIt<GetListingDetailsUseCase>(),
+      getCurrentUserUseCase: getIt<GetCurrentUserUseCase>(),
     ),
   );
 
@@ -194,5 +202,34 @@ Future<void> setupDependencyInjection() async {
 
   getIt.registerLazySingleton<NotificationsViewModel>(
     () => NotificationsViewModel(getIt<NotificationsRepository>()),
+  );
+
+  // Payments Feature
+  getIt.registerLazySingleton<CamPayDataSource>(
+    () => CamPayDataSource(
+      appId: AppConfig.campayAppId,
+      appUsername: AppConfig.campayAppUsername,
+      appPassword: AppConfig.campayAppPassword,
+      baseUrl: AppConfig.campayBaseUrl,
+    ),
+  );
+
+  getIt.registerLazySingleton<PaymentRepository>(
+    () => PaymentRepositoryImpl(getIt<CamPayDataSource>()),
+  );
+
+  getIt.registerLazySingleton<CollectPaymentUseCase>(
+    () => CollectPaymentUseCase(repository: getIt<PaymentRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetPaymentStatusUseCase>(
+    () => GetPaymentStatusUseCase(repository: getIt<PaymentRepository>()),
+  );
+
+  getIt.registerLazySingleton<PaymentViewModel>(
+    () => PaymentViewModel(
+      collectPaymentUseCase: getIt<CollectPaymentUseCase>(),
+      getPaymentStatusUseCase: getIt<GetPaymentStatusUseCase>(),
+    ),
   );
 }

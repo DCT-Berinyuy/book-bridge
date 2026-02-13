@@ -22,6 +22,9 @@ class Listing extends Equatable {
   final bool isBuyBackEligible;
   final int stockCount; // For bookshops
   final bool isFeatured; // For featured listings
+  final bool isBoosted;
+  final DateTime? boostExpiresAt;
+  final DateTime? expiresAt;
 
   // Seller info (populated from join)
   final String? sellerName;
@@ -45,6 +48,9 @@ class Listing extends Equatable {
     this.isBuyBackEligible = false,
     this.stockCount = 1,
     this.isFeatured = false,
+    this.isBoosted = false,
+    this.boostExpiresAt,
+    this.expiresAt,
     this.sellerName,
     this.sellerLocality,
     this.sellerWhatsapp,
@@ -68,6 +74,9 @@ class Listing extends Equatable {
     isBuyBackEligible,
     stockCount,
     isFeatured,
+    isBoosted,
+    boostExpiresAt,
+    expiresAt,
     sellerName,
     sellerLocality,
     sellerWhatsapp,
