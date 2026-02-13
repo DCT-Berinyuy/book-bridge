@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/core/presentation/widgets/notification_icon.dart';
 import 'package:book_bridge/features/listings/domain/entities/category.dart'
     as entity;
 
@@ -71,15 +72,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           ),
                           const Spacer(),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.notifications,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              context.push('/notifications');
-                            },
-                          ),
+                          const NotificationIcon(color: Colors.white),
                         ],
                       ),
                       const SizedBox(height: 24),
