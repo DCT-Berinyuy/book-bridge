@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 
 /// User profile screen displaying user information and their listings.
 ///
@@ -158,7 +159,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _MenuItem(
                     icon: Icons.share_outlined,
                     title: 'Invite friends',
-                    onTap: () {},
+                    onTap: () {
+                      Share.share(
+                        'Join me on BookBridge, the peer-to-peer marketplace for used books in Cameroon! 📚✨\n\nDownload or visit us at: https://book-bridge-three.vercel.app/',
+                        subject: 'Invite to BookBridge',
+                      );
+                    },
                   ),
                   _MenuItem(
                     icon: Icons.info_outline_rounded,
