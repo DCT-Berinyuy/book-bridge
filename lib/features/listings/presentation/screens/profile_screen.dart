@@ -47,10 +47,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onSelected: (value) {
               if (value == 'edit') {
                 context.push('/edit-profile');
-              } else if (value == 'help') {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Help & Support coming soon!')),
-                );
               } else if (value == 'logout') {
                 _confirmLogout(context);
               }
@@ -63,16 +59,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Icon(Icons.edit_outlined, size: 20, color: Colors.black87),
                     SizedBox(width: 12),
                     Text('Edit Profile'),
-                  ],
-                ),
-              ),
-              const PopupMenuItem(
-                value: 'help',
-                child: Row(
-                  children: [
-                    Icon(Icons.help_outline, size: 20, color: Colors.black87),
-                    SizedBox(width: 12),
-                    Text('Help & Support'),
                   ],
                 ),
               ),
