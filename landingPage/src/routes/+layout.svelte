@@ -110,14 +110,14 @@
         </div>
         <div class="link-column">
           <h3>Support</h3>
-          <a href="#">Help Center</a>
-          <a href="#">Safety Guidelines</a>
-          <a href="#">Contact Us</a>
+          <a href="#how-it-works">Help Center</a>
+          <a href="#features">Safety Guidelines</a>
+          <a href="#app">Contact Us</a>
         </div>
         <div class="link-column">
           <h3>Legal</h3>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
+          <a href="#how-it-works">Privacy Policy</a>
+          <a href="#features">Terms of Service</a>
         </div>
       </div>
     </div>
@@ -139,6 +139,12 @@
 </div>
 
 <style>
+  .app {
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+  }
+
   /* Navbar Styles */
   nav {
     position: fixed;
