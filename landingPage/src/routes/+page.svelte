@@ -21,6 +21,7 @@
   // Tab state for "How it Works"
   let activeTab = $state("buyer");
 
+  /** @param {string} tab */
   function setTab(tab) {
     activeTab = tab;
   }
@@ -42,8 +43,8 @@
           <span class="highlight">Connect.</span>
         </h1>
         <p class="hero-sub">
-          The easiest way for students in Yaoundé, Buea, Douala, and Bamenda to
-          trade textbooks. Save money, reduce waste, and build your library.
+          The easiest way for students in Yaoundé, Buea, and Douala to trade
+          textbooks. Save money, reduce waste, and build your library.
         </p>
 
         <div class="hero-actions">
@@ -108,7 +109,7 @@
       </div>
       <div class="divider"></div>
       <div class="trust-item">
-        <h2>4</h2>
+        <h2>3</h2>
         <p>Major Cities</p>
       </div>
       <div class="divider"></div>
@@ -367,10 +368,7 @@
     grid-template-columns: 1.1fr 0.9fr;
     align-items: center;
     gap: 4rem;
-    max-width: 100%; /* Ensure container doesn't overflow */
   }
-
-  /* ... (rest of hero styles unchanged up to hero-image) ... */
 
   .badge-container {
     margin-bottom: 1.5rem;
@@ -388,8 +386,6 @@
     font-weight: 500;
     color: var(--charcoal);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-    white-space: normal; /* Allow text wrapping */
-    text-align: left;
   }
 
   .hero h1 {
@@ -429,7 +425,6 @@
     display: flex;
     gap: 1rem;
     margin-bottom: 3rem;
-    flex-wrap: wrap; /* Allow buttons to wrap on very small screens */
   }
 
   .btn-primary-lg {
@@ -475,7 +470,6 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    flex-wrap: wrap;
   }
 
   .avatar-group {
@@ -500,15 +494,11 @@
     display: flex;
     justify-content: center;
     perspective: 1000px;
-    width: 100%; /* Ensure it fits in container */
   }
 
   .phone-mockup {
     width: 300px;
-    max-width: 100%; /* Responsive width */
-    height: auto; /* Auto height based on aspect ratio or fixed if needed */
-    aspect-ratio: 1/2; /* Maintain aspect ratio */
-    min-height: 500px;
+    height: 600px;
     background: #111;
     border-radius: 40px;
     padding: 12px;
@@ -897,7 +887,7 @@
       grid-template-columns: repeat(2, 1fr);
     }
 
-    .hero h1 {
+    .heroh1 {
       font-size: 3.5rem;
     }
   }
@@ -906,7 +896,7 @@
     .hero-container {
       grid-template-columns: 1fr;
       text-align: center;
-      gap: 3rem;
+      gap: 5rem;
     }
 
     .badge-container {
@@ -929,17 +919,7 @@
     }
 
     .hero-image {
-      padding: 0 1rem;
-      perspective: none; /* Disable 3D on mobile to prevent overflow */
-    }
-
-    .phone-mockup {
-      transform: none !important; /* Reset transform */
-      width: 100%;
-      max-width: 280px; /* Limit width on mobile */
-      min-height: auto;
-      aspect-ratio: auto;
-      height: 550px;
+      padding: 0 2rem;
     }
 
     .float-card {
