@@ -222,8 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SliverAppBar(
       pinned: true,
       floating: true,
-      expandedHeight: 125,
-      toolbarHeight: 60,
+      expandedHeight: 130, // branding (70) + search bar (60)
       elevation: 2,
       centerTitle: false,
       backgroundColor: theme.appBarTheme.backgroundColor,
@@ -231,7 +230,8 @@ class _HomeScreenState extends State<HomeScreen> {
       flexibleSpace: FlexibleSpaceBar(
         background: Padding(
           padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top + 8,
+            top: MediaQuery.of(context).padding.top + 4,
+            bottom: 60, // Same as search bar section
             left: 16,
             right: 8,
           ),
@@ -253,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: theme.appBarTheme.titleTextStyle?.copyWith(fontSize: 20),
               ),
               const Spacer(),
-              const NotificationIcon(),
+              NotificationIcon(color: theme.appBarTheme.foregroundColor),
               IconButton(
                 icon: Icon(
                   Icons.person_outline_rounded,
