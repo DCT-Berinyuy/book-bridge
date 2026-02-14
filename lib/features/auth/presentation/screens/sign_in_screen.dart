@@ -198,6 +198,60 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   const SizedBox(height: 40),
 
+                  // Google Sign In button
+                  SizedBox(
+                    height: 56,
+                    child: OutlinedButton(
+                      onPressed: authViewModel.authState == AuthState.loading
+                          ? null
+                          : () => authViewModel.signInWithGoogle(),
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: Colors.grey.shade300),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.network(
+                            'https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png',
+                            height: 24,
+                          ),
+                          const SizedBox(width: 12),
+                          const Text(
+                            'Continue with Google',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF2D3436),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // OR Divider
+                  Row(
+                    children: [
+                      const Expanded(child: Divider()),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          'OR',
+                          style: TextStyle(
+                            color: Colors.grey.shade400,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const Expanded(child: Divider()),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
                   // Form Fields
                   Form(
                     key: _formKey,
@@ -359,62 +413,6 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ),
                         const SizedBox(height: 24),
-
-                        // OR Divider
-                        Row(
-                          children: [
-                            const Expanded(child: Divider()),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                              ),
-                              child: Text(
-                                'OR',
-                                style: TextStyle(
-                                  color: Colors.grey.shade400,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            const Expanded(child: Divider()),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Google Sign In button
-                        SizedBox(
-                          height: 56,
-                          child: OutlinedButton(
-                            onPressed:
-                                authViewModel.authState == AuthState.loading
-                                ? null
-                                : () => authViewModel.signInWithGoogle(),
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(color: Colors.grey.shade300),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.network(
-                                  'https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png',
-                                  height: 24,
-                                ),
-                                const SizedBox(width: 12),
-                                const Text(
-                                  'Continue with Google',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xFF2D3436),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
