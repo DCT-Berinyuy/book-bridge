@@ -223,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
       pinned: true,
       floating: true,
       expandedHeight: 130, // branding (70) + search bar (60)
-      elevation: 2,
+      elevation: 4,
       centerTitle: false,
       backgroundColor: theme.appBarTheme.backgroundColor,
       foregroundColor: theme.appBarTheme.foregroundColor,
@@ -267,44 +267,56 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-          child: Consumer<HomeViewModel>(
-            builder: (context, viewModel, _) {
-              return TextField(
-                controller: _searchController,
-                onChanged: (value) => viewModel.setSearchQuery(value),
-                decoration: InputDecoration(
-                  hintText: 'Search by title or author...',
-                  hintStyle: TextStyle(
-                    color: theme.colorScheme.onSurfaceVariant,
+        child: Container(
+          decoration: BoxDecoration(
+            color: theme.appBarTheme.backgroundColor,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+            child: Consumer<HomeViewModel>(
+              builder: (context, viewModel, _) {
+                return TextField(
+                  controller: _searchController,
+                  onChanged: (value) => viewModel.setSearchQuery(value),
+                  decoration: InputDecoration(
+                    hintText: 'Search by title or author...',
+                    hintStyle: TextStyle(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    suffixIcon: viewModel.searchQuery.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              _searchController.clear();
+                              viewModel.clearSearch();
+                            },
+                          )
+                        : null,
+                    filled: true,
+                    fillColor: theme.colorScheme.surfaceContainer,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                   ),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  suffixIcon: viewModel.searchQuery.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.clear),
-                          onPressed: () {
-                            _searchController.clear();
-                            viewModel.clearSearch();
-                          },
-                        )
-                      : null,
-                  filled: true,
-                  fillColor: theme.colorScheme.surfaceContainer,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -851,7 +863,48 @@ class _ListingCard extends StatelessWidget {
                       ),
                     ),
             ),
-            if (listing.sellerType != 'individual') _buildVerifiedBadge(),
+            Positioned(
+              top: 8,
+              left: 8,
+              child: listing.sellerType != 'individual'
+                  ? _buildVerifiedBadge()
+                  : Container(),
+            ),
+            if (currentPosition != null &&
+                listing.latitude != null &&
+                listing.longitude != null)
+              Positioned(
+                bottom: 8,
+                left: 8,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        size: 12,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        _getDistanceString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             Positioned(
               top: 8,
               right: 8,
@@ -896,29 +949,25 @@ class _ListingCard extends StatelessWidget {
   }
 
   Widget _buildVerifiedBadge() {
-    return Positioned(
-      top: 8,
-      left: 8,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: Colors.black.withAlpha(153),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: const Row(
-          children: [
-            Icon(Icons.verified, size: 12, color: Colors.white),
-            SizedBox(width: 4),
-            Text(
-              'VERIFIED',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-              ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.black.withAlpha(153),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: const Row(
+        children: [
+          Icon(Icons.verified, size: 12, color: Colors.white),
+          SizedBox(width: 4),
+          Text(
+            'VERIFIED',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -945,29 +994,6 @@ class _ListingCard extends StatelessWidget {
               fontSize: 12,
             ),
           ),
-          const SizedBox(height: 4),
-          if (currentPosition != null &&
-              listing.latitude != null &&
-              listing.longitude != null) ...[
-            Row(
-              children: [
-                Icon(
-                  Icons.location_on,
-                  size: 12,
-                  color: Theme.of(context).colorScheme.tertiary,
-                ),
-                const SizedBox(width: 2),
-                Text(
-                  _getDistanceString(),
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.tertiary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ],
           const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
