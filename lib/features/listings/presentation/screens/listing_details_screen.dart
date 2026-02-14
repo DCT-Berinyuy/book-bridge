@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/listing_details_viewmodel.dart';
-import 'package:book_bridge/features/payments/presentation/widgets/payment_bottom_sheet.dart';
 
 /// Listing details screen showing comprehensive information about a book.
 ///
@@ -657,120 +656,6 @@ Download BookBridge to view more details!
     );
   }
 
-  void _showBoostOptions(ListingDetailsViewModel viewModel) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(24),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              'Boost Your Listing 🚀',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Promote your book to the top of the feed and sell faster!',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey),
-            ),
-            const SizedBox(height: 24),
-            _buildBoostOption(
-              context,
-              title: '7 Days Boost',
-              price: 5,
-              duration: 7,
-              listingId: viewModel.listing!.id,
-            ),
-            const SizedBox(height: 12),
-            _buildBoostOption(
-              context,
-              title: '30 Days Boost',
-              price: 15,
-              duration: 30,
-              listingId: viewModel.listing!.id,
-            ),
-            const SizedBox(height: 24),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBoostOption(
-    BuildContext context, {
-    required String title,
-    required int price,
-    required int duration,
-    required String listingId,
-  }) {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context); // Close selection sheet
-        showModalBottomSheet(
-          context: this.context,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (context) => PaymentBottomSheet(
-            amount: price,
-            title: title,
-            externalReference: 'boost:$listingId:$duration',
-            onSuccess: () {
-              ScaffoldMessenger.of(this.context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    'Boost initiated! It will be active once payment is verified.',
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      },
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.blue.withValues(alpha: 0.3)),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            const Icon(Icons.flash_on, color: Colors.orange),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text('$duration days of extra visibility'),
-                ],
-              ),
-            ),
-            Text(
-              '$price FCFA',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget? _buildBottomBar(ListingDetailsViewModel viewModel) {
     final listing = viewModel.listing;
     if (listing == null) return null;
@@ -795,52 +680,26 @@ Download BookBridge to view more details!
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (viewModel.isOwner) ...[
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton.icon(
-                onPressed: () => _showBoostOptions(viewModel),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                icon: const Icon(Icons.rocket_launch),
-                label: Text(
-                  listing.isBoosted ? 'Extend Boost' : 'Boost Visibility',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+          SizedBox(
+            width: double.infinity,
+            height: 56,
+            child: ElevatedButton.icon(
+              onPressed: () => _contactSeller(listing.sellerWhatsapp ?? ''),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFF2994A), // Bridge Orange
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
-            ),
-            const SizedBox(height: 8),
-          ] else ...[
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton.icon(
-                onPressed: () => _contactSeller(listing.sellerWhatsapp ?? ''),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFF2994A), // Bridge Orange
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                icon: const Icon(Icons.chat_bubble),
-                label: const Text(
-                  'Contact Seller via WhatsApp',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                ),
+              icon: const Icon(Icons.chat_bubble),
+              label: const Text(
+                'Contact Seller via WhatsApp',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
             ),
-            const SizedBox(height: 8),
-          ],
+          ),
+          const SizedBox(height: 8),
           TextButton(
             onPressed: () => _callSeller(listing.sellerWhatsapp ?? ''),
             child: Row(
