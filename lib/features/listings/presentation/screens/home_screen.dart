@@ -633,14 +633,14 @@ class _ListingCard extends StatelessWidget {
                 Icon(
                   Icons.location_on,
                   size: 12,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.tertiary,
                 ),
                 const SizedBox(width: 2),
                 Text(
                   _getDistanceString(),
                   style: TextStyle(
                     fontSize: 12,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.tertiary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
