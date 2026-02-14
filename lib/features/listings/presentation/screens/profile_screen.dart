@@ -110,55 +110,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _buildStatsSection(context, profileViewModel),
                 const Divider(height: 1),
                 _buildMenuSection(context, 'My Account', [
-                  _MenuItem(
+                  _buildMenuItem(
+                    context,
                     icon: Icons.person_outline,
                     title: 'My Profile Edit',
                     onTap: () => context.push('/edit-profile'),
                   ),
-                  _MenuItem(
-                    icon: Icons.favorite_border_rounded,
+                  _buildMenuItem(
+                    context,
+                    icon: Icons.favorite_border,
                     title: 'My Favourites',
                     onTap: () => context.push('/favorites'),
                   ),
-                  _MenuItem(
-                    icon: Icons.location_on_outlined,
-                    title: 'My Location Update',
-                    onTap: () => context.push('/edit-profile'),
-                  ),
-                  _MenuItem(
-                    icon: Icons.library_books_outlined,
+                  _buildMenuItem(
+                    context,
+                    icon: Icons.book_outlined,
                     title: 'My Books',
                     onTap: () => context.go('/my-books'),
+                    isLast: true,
                   ),
                 ]),
                 const Divider(height: 1),
                 _buildMenuSection(context, 'More', [
-                  _MenuItem(
+                  _buildMenuItem(
+                    context,
                     icon: Icons.lock_outline,
                     title: 'Privacy Policy',
                     onTap: () => context.push('/privacy'),
                   ),
-                  _MenuItem(
+                  _buildMenuItem(
+                    context,
                     icon: Icons.description_outlined,
                     title: 'Terms & Conditions',
                     onTap: () => context.push('/terms'),
                   ),
-                  _MenuItem(
+                  _buildExpandableMenuItem(
+                    context,
                     icon: Icons.help_outline,
-                    title: 'FAQ',
-                    onTap: () => context.push('/faq'),
+                    title: 'Help & Support',
+                    children: [
+                      _buildMenuItem(
+                        context,
+                        icon: Icons.help_outline,
+                        title: 'FAQ',
+                        onTap: () => context.push('/faq'),
+                        indent: true,
+                      ),
+                      _buildMenuItem(
+                        context,
+                        icon: Icons.feedback_outlined,
+                        title: 'Feedback',
+                        onTap: () => context.push('/feedback'),
+                        indent: true,
+                      ),
+                      _buildMenuItem(
+                        context,
+                        icon: Icons.email_outlined,
+                        title: 'Contact Us',
+                        onTap: () => context.push('/contact'),
+                        indent: true,
+                        isLast: true,
+                      ),
+                    ],
                   ),
-                  _MenuItem(
-                    icon: Icons.feedback_outlined,
-                    title: 'Feedback',
-                    onTap: () => context.push('/feedback'),
-                  ),
-                  _MenuItem(
-                    icon: Icons.email_outlined,
-                    title: 'Contact Us',
-                    onTap: () => context.push('/contact'),
-                  ),
-                  _MenuItem(
+                  _buildMenuItem(
+                    context,
                     icon: Icons.share_outlined,
                     title: 'Invite friends',
                     onTap: () {
@@ -168,16 +184,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     },
                   ),
-                  _MenuItem(
+                  _buildMenuItem(
+                    context,
                     icon: Icons.info_outline_rounded,
                     title: 'About BookBridge',
                     onTap: () => context.push('/about'),
                   ),
-                  _MenuItem(
+                  _buildMenuItem(
+                    context,
                     icon: Icons.logout_rounded,
                     title: 'Logout',
                     textColor: Colors.red,
                     onTap: () => _confirmLogout(context),
+                    isLast: true,
                   ),
                 ]),
                 _buildFollowUs(context),
@@ -300,7 +319,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildMenuSection(
     BuildContext context,
     String title,
-    List<_MenuItem> items,
+    List<Widget> items,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -310,42 +329,105 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Text(
             title,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.7),
+              letterSpacing: 1.1,
             ),
           ),
         ),
-        ...items.map(
-          (item) => Column(
-            children: [
-              ListTile(
-                leading: Icon(item.icon, size: 24, color: Colors.black87),
-                title: Text(
-                  item.title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: item.textColor ?? Colors.black87,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                onTap: item.onTap,
-                trailing: const Icon(
-                  Icons.chevron_right,
-                  size: 20,
-                  color: Colors.grey,
-                ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+        ...items,
+        const SizedBox(height: 8),
+      ],
+    );
+  }
+
+  Widget _buildMenuItem(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    Color? textColor,
+    bool isLast = false,
+    bool indent = false,
+  }) {
+    return Column(
+      children: [
+        ListTile(
+          leading: Icon(
+            icon,
+            size: 22,
+            color: textColor ?? Colors.black87.withValues(alpha: 0.8),
+          ),
+          title: Text(
+            title,
+            style: TextStyle(
+              fontSize: 15,
+              color: textColor ?? Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          onTap: onTap,
+          trailing: Icon(
+            Icons.chevron_right,
+            size: 18,
+            color: Colors.grey.withValues(alpha: 0.6),
+          ),
+          contentPadding: EdgeInsets.only(left: indent ? 40 : 20, right: 20),
+          visualDensity: VisualDensity.compact,
+        ),
+        if (!isLast)
+          Padding(
+            padding: EdgeInsets.only(left: indent ? 80 : 60),
+            child: Divider(
+              height: 1,
+              color: Colors.grey.withValues(alpha: 0.1),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildExpandableMenuItem(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required List<Widget> children,
+  }) {
+    return Column(
+      children: [
+        Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
+            leading: Icon(
+              icon,
+              size: 22,
+              color: Colors.black87.withValues(alpha: 0.8),
+            ),
+            title: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black87,
+                fontWeight: FontWeight.w500,
               ),
-              if (items.indexOf(item) != items.length - 1)
-                Padding(
-                  padding: const EdgeInsets.only(left: 60),
-                  child: Divider(height: 1, color: Colors.grey[200]),
-                ),
-            ],
+            ),
+            trailing: Icon(
+              Icons.expand_more,
+              size: 18,
+              color: Colors.grey.withValues(alpha: 0.6),
+            ),
+            childrenPadding: EdgeInsets.zero,
+            tilePadding: const EdgeInsets.symmetric(horizontal: 20),
+            children: children,
           ),
         ),
-        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.only(left: 60),
+          child: Divider(height: 1, color: Colors.grey.withValues(alpha: 0.1)),
+        ),
       ],
     );
   }
@@ -470,18 +552,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-}
-
-class _MenuItem {
-  final IconData icon;
-  final String title;
-  final VoidCallback onTap;
-  final Color? textColor;
-
-  _MenuItem({
-    required this.icon,
-    required this.title,
-    required this.onTap,
-    this.textColor,
-  });
 }
