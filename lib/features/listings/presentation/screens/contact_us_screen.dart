@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ContactUsScreen extends StatelessWidget {
   const ContactUsScreen({super.key});
@@ -62,7 +63,7 @@ class ContactUsScreen extends StatelessWidget {
             const SizedBox(height: 40),
             _buildContactCard(
               context,
-              icon: Icons.chat_outlined,
+              icon: FontAwesomeIcons.whatsapp,
               title: 'WhatsApp Support',
               subtitle: 'Chat with us directly',
               color: Colors.green,
@@ -80,7 +81,7 @@ class ContactUsScreen extends StatelessWidget {
             const SizedBox(height: 16),
             _buildContactCard(
               context,
-              icon: Icons.person_outline,
+              icon: FontAwesomeIcons.linkedinIn,
               title: 'LinkedIn',
               subtitle: 'Connect with Verla Berinyuy',
               color: const Color(0xFF0077B5),

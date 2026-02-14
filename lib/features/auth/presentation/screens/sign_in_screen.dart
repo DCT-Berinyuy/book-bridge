@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 /// Sign In screen for user authentication.
 ///
@@ -214,9 +215,10 @@ class _SignInScreenState extends State<SignInScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.network(
-                            'https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png',
-                            height: 24,
+                          const FaIcon(
+                            FontAwesomeIcons.google,
+                            size: 20,
+                            color: Color(0xFFEA4335), // Google Red
                           ),
                           const SizedBox(width: 12),
                           const Text(

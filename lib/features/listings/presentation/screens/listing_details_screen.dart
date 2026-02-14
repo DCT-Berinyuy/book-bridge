@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/listing_details_viewmodel.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
@@ -724,7 +725,7 @@ Download BookBridge to view more details!
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              icon: const Icon(Icons.chat_bubble),
+              icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 20),
               label: const Text(
                 'Contact Seller via WhatsApp',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
