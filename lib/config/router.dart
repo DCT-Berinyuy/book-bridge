@@ -15,6 +15,8 @@ import 'package:book_bridge/core/presentation/widgets/scaffold_with_navbar.dart'
 import 'package:book_bridge/features/auth/presentation/screens/edit_profile_screen.dart';
 import 'package:book_bridge/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:book_bridge/features/favorites/presentation/screens/favorites_screen.dart';
+import 'package:book_bridge/features/listings/presentation/screens/privacy_policy_screen.dart';
+import 'package:book_bridge/features/listings/presentation/screens/terms_conditions_screen.dart';
 
 import 'package:book_bridge/features/listings/presentation/screens/about_screen.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
@@ -200,6 +202,18 @@ final appRouter = GoRouter(
       path: '/favorites',
       name: 'favorites',
       builder: (context, state) => const FavoritesScreen(),
+    ),
+    // Privacy Policy Route
+    GoRoute(
+      path: '/privacy',
+      name: 'privacy',
+      builder: (context, state) => const PrivacyPolicyScreen(),
+    ),
+    // Terms & Conditions Route
+    GoRoute(
+      path: '/terms',
+      name: 'terms',
+      builder: (context, state) => const TermsConditionsScreen(),
     ),
   ],
 );

@@ -133,12 +133,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _MenuItem(
                     icon: Icons.lock_outline,
                     title: 'Privacy Policy',
-                    onTap: () {},
+                    onTap: () => context.push('/privacy'),
                   ),
                   _MenuItem(
                     icon: Icons.description_outlined,
                     title: 'Terms & Conditions',
-                    onTap: () {},
+                    onTap: () => context.push('/terms'),
                   ),
                   _MenuItem(
                     icon: Icons.help_outline,
