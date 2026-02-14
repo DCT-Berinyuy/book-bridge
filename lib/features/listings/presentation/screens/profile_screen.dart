@@ -143,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _MenuItem(
                     icon: Icons.help_outline,
                     title: 'FAQ',
-                    onTap: () {},
+                    onTap: () => context.push('/faq'),
                   ),
                   _MenuItem(
                     icon: Icons.feedback_outlined,
