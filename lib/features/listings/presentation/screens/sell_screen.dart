@@ -431,6 +431,7 @@ class _SellScreenState extends State<SellScreen> {
                       child: DropdownButton<String?>(
                         value: viewModel.category,
                         isExpanded: true,
+                        menuMaxHeight: 350,
                         hint: const Text('Select a category'),
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         items: [
