@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 /// User profile screen displaying user information and their listings.
 ///
@@ -366,11 +368,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildSocialIcon(Icons.facebook, Colors.blue),
-              _buildSocialIcon(Icons.camera_alt, Colors.pink),
-              _buildSocialIcon(Icons.play_circle_fill, Colors.red),
-              _buildSocialIcon(Icons.close, Colors.black),
-              _buildSocialIcon(Icons.language, Colors.blueGrey),
+              _buildSocialIcon(
+                FontAwesomeIcons.facebook,
+                const Color(0xFF1877F2),
+                'Facebook',
+                () => _launchUrl(
+                  'https://www.facebook.com/profile.php?id=61572639047021',
+                ),
+              ),
+              _buildSocialIcon(
+                FontAwesomeIcons.instagram,
+                const Color(0xFFE4405F),
+                'Instagram',
+                () =>
+                    _launchUrl('https://www.instagram.com/verlaberinyuyndey/'),
+              ),
+              _buildSocialIcon(
+                FontAwesomeIcons.youtube,
+                const Color(0xFFFF0000),
+                'YouTube',
+                () => _launchUrl('https://www.youtube.com/@VerlaBerinyuy'),
+              ),
+              _buildSocialIcon(
+                FontAwesomeIcons.linkedinIn,
+                const Color(0xFF0A66C2),
+                'LinkedIn',
+                () => _launchUrl(
+                  'https://www.linkedin.com/in/verla-berinyuy-15b1262a5/',
+                ),
+              ),
             ],
           ),
         ],
@@ -378,15 +404,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildSocialIcon(IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        shape: BoxShape.circle,
+  Widget _buildSocialIcon(
+    IconData icon,
+    Color color,
+    String label,
+    VoidCallback onTap,
+  ) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                shape: BoxShape.circle,
+              ),
+              child: FaIcon(icon, color: color, size: 24),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
-      child: Icon(icon, color: color, size: 28),
     );
+  }
+
+  Future<void> _launchUrl(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   void _confirmLogout(BuildContext context) {
