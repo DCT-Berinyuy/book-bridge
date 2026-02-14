@@ -719,7 +719,7 @@ Download BookBridge to view more details!
             child: ElevatedButton.icon(
               onPressed: () => _contactSeller(listing.sellerWhatsapp ?? ''),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFF2994A), // Bridge Orange
+                backgroundColor: const Color(0xFF25D366), // WhatsApp Green
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
