@@ -887,7 +887,7 @@
       grid-template-columns: repeat(2, 1fr);
     }
 
-    .heroh1 {
+    .hero h1 {
       font-size: 3.5rem;
     }
   }
