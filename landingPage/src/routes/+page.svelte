@@ -43,8 +43,8 @@
           <span class="highlight">Connect.</span>
         </h1>
         <p class="hero-sub">
-          The easiest way for students in Yaoundé, Buea, and Douala to trade
-          textbooks. Save money, reduce waste, and build your library.
+          The easiest way for students in Yaoundé, Buea, Douala, and Bamenda to
+          trade textbooks. Save money, reduce waste, and build your library.
         </p>
 
         <div class="hero-actions">
@@ -109,7 +109,7 @@
       </div>
       <div class="divider"></div>
       <div class="trust-item">
-        <h2>3</h2>
+        <h2>4</h2>
         <p>Major Cities</p>
       </div>
       <div class="divider"></div>
@@ -954,6 +954,146 @@
 
     .store-buttons {
       flex-direction: column;
+    }
+  }
+
+  /* Extra Small Devices (iPhone SE, small phones) */
+  @media (max-width: 400px) {
+    .hero h1 {
+      font-size: 2.5rem;
+      line-height: 1.2;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      padding: 0 1rem;
+    }
+
+    .hero-actions {
+      gap: 0.75rem;
+    }
+
+    .btn-primary-lg,
+    .btn-secondary-lg {
+      padding: 0.875rem 1.5rem;
+      font-size: 1rem;
+    }
+
+    .badge {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.8rem;
+    }
+
+    .trust-avatars p {
+      font-size: 0.85rem;
+    }
+
+    .section-header h2 {
+      font-size: 2rem;
+    }
+
+    .section-header p {
+      font-size: 1rem;
+      padding: 0 1rem;
+    }
+
+    .hero-container {
+      gap: 3rem;
+    }
+
+    .hero-image {
+      padding: 0 1rem;
+    }
+
+    .phone-mockup {
+      width: 100%;
+      max-width: 240px;
+      height: 480px;
+    }
+
+    .trust-bar {
+      padding: 2rem 0;
+    }
+
+    .trust-item h2 {
+      font-size: 2rem;
+    }
+
+    .trust-item p {
+      font-size: 0.85rem;
+    }
+
+    .how-it-works {
+      padding: 4rem 0;
+    }
+
+    .tabs-container {
+      padding: 0 1rem;
+    }
+
+    .tab-btn {
+      padding: 0.7rem 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .step-card {
+      padding: 1.5rem 1rem;
+    }
+
+    .step-icon {
+      width: 60px;
+      height: 60px;
+    }
+
+    .step-card h3 {
+      font-size: 1.25rem;
+    }
+
+    .step-card p {
+      font-size: 0.9rem;
+    }
+
+    .features {
+      padding: 4rem 0 6rem;
+    }
+
+    .feature-card {
+      padding: 1.5rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.1rem;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+    }
+
+    .showcase-box {
+      padding: 3rem 1.5rem;
+      border-radius: 24px;
+    }
+
+    .showcase-content h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .showcase-content p {
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+
+    .store-btn {
+      padding: 0.875rem 1.25rem;
+    }
+
+    .btn-text span {
+      font-size: 0.7rem;
+    }
+
+    .btn-text strong {
+      font-size: 1rem;
     }
   }
 </style>
