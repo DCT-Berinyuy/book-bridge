@@ -456,26 +456,46 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildNearbyCard() {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF1E3A8A), // Deep blue
+            Color(0xFF7C3AED), // Purple
+          ],
+        ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+            color: const Color(0xFF7C3AED).withValues(alpha: 0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
       child: Stack(
         children: [
-          // Background illustration
+          // Background pattern
           Positioned(
-            right: -20,
-            bottom: -20,
+            right: -30,
+            top: -30,
             child: Icon(
-              Icons.map_rounded,
-              size: 140,
-              color: Colors.white.withValues(alpha: 0.08),
+              Icons.explore_rounded,
+              size: 160,
+              color: Colors.white.withValues(alpha: 0.05),
+            ),
+          ),
+          // Decorative circles
+          Positioned(
+            left: 20,
+            bottom: 20,
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withValues(alpha: 0.1),
+              ),
             ),
           ),
           Padding(
@@ -488,76 +508,127 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'Books NEARBY 📍',
-                        style: GoogleFonts.montserrat(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            'NEARBY',
+                            style: GoogleFonts.montserrat(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          const Icon(
+                            Icons.location_on,
+                            color: Color(0xFF10B981),
+                            size: 20,
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 4),
                       Text(
-                        'Buy & Sell books in your neighborhood instantly.',
+                        'Discover books in your community',
                         style: GoogleFonts.inter(
-                          color: Colors.white.withValues(alpha: 0.8),
-                          fontSize: 12,
+                          color: Colors.white.withValues(alpha: 0.85),
+                          fontSize: 11,
+                          height: 1.3,
                         ),
                       ),
                       const SizedBox(height: 14),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Scroll down to the nearby books section
-                          _scrollController.animateTo(
-                            320,
-                            duration: const Duration(milliseconds: 600),
-                            curve: Curves.easeInOut,
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Theme.of(
-                            context,
-                          ).colorScheme.primary,
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF10B981), Color(0xFF059669)],
                           ),
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(
+                                0xFF10B981,
+                              ).withValues(alpha: 0.4),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
-                        child: Text(
-                          'Explore Nearby',
-                          style: GoogleFonts.montserrat(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _scrollController.animateTo(
+                              320,
+                              duration: const Duration(milliseconds: 600),
+                              curve: Curves.easeInOut,
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shadowColor: Colors.transparent,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          child: Text(
+                            'Explore Now',
+                            style: GoogleFonts.montserrat(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const Expanded(
+                Expanded(
                   flex: 1,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Icon(
-                        Icons.location_on,
-                        color: Color(0xFF13EC5B),
-                        size: 36,
+                      // Background glow
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: RadialGradient(
+                            colors: [
+                              const Color(0xFF10B981).withValues(alpha: 0.3),
+                              Colors.transparent,
+                            ],
+                          ),
+                        ),
                       ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
+                      // Layered pins
+                      const Positioned(
+                        top: 8,
+                        left: 8,
                         child: Icon(
                           Icons.location_on,
-                          color: Colors.white,
-                          size: 16,
+                          color: Color(0xFF34D399),
+                          size: 20,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.location_on,
+                        color: Color(0xFF10B981),
+                        size: 40,
+                      ),
+                      const Positioned(
+                        bottom: 8,
+                        right: 8,
+                        child: Icon(
+                          Icons.location_on,
+                          color: Color(0xFF059669),
+                          size: 24,
                         ),
                       ),
                     ],
@@ -574,25 +645,52 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildDonationCard() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF27AE60),
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFFF97316), // Orange
+            Color(0xFFEC4899), // Pink
+          ],
+        ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF27AE60).withValues(alpha: 0.2),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+            color: const Color(0xFFEC4899).withValues(alpha: 0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
       child: Stack(
         children: [
+          // Background pattern
           Positioned(
-            right: -10,
-            bottom: -10,
+            right: -20,
+            bottom: -20,
             child: Icon(
-              Icons.card_giftcard_rounded,
-              size: 120,
-              color: Colors.white.withValues(alpha: 0.1),
+              Icons.auto_stories_rounded,
+              size: 140,
+              color: Colors.white.withValues(alpha: 0.08),
+            ),
+          ),
+          // Floating hearts
+          Positioned(
+            right: 30,
+            top: 20,
+            child: Icon(
+              Icons.favorite,
+              size: 16,
+              color: Colors.white.withValues(alpha: 0.3),
+            ),
+          ),
+          Positioned(
+            right: 50,
+            top: 50,
+            child: Icon(
+              Icons.favorite,
+              size: 12,
+              color: Colors.white.withValues(alpha: 0.2),
             ),
           ),
           Padding(
@@ -600,58 +698,140 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               children: [
                 Expanded(
+                  flex: 3,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'Donate & Impact! 🎁',
-                        style: GoogleFonts.montserrat(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            'DONATE',
+                            style: GoogleFonts.montserrat(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          const Icon(
+                            Icons.favorite,
+                            color: Color(0xFFFEF3C7),
+                            size: 18,
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 4),
                       Text(
-                        'Give your old books a new life by donating to students.',
+                        'Give books, create impact',
                         style: GoogleFonts.inter(
-                          color: Colors.white.withValues(alpha: 0.8),
-                          fontSize: 12,
+                          color: Colors.white.withValues(alpha: 0.85),
+                          fontSize: 11,
+                          height: 1.3,
                         ),
                       ),
                       const SizedBox(height: 14),
-                      ElevatedButton(
-                        onPressed: () => context.push('/sell'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: const Color(0xFF27AE60),
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
-                          ),
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.15),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
-                        child: Text(
-                          'Donate Now',
-                          style: GoogleFonts.montserrat(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
+                        child: ElevatedButton(
+                          onPressed: () => context.push('/sell'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: const Color(0xFFEC4899),
+                            elevation: 0,
+                            shadowColor: Colors.transparent,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          child: Text(
+                            'Give Now',
+                            style: GoogleFonts.montserrat(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const Icon(
-                  Icons.volunteer_activism_rounded,
-                  size: 40,
-                  color: Colors.white,
+                Expanded(
+                  flex: 1,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Glow effect
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: RadialGradient(
+                            colors: [
+                              Colors.white.withValues(alpha: 0.2),
+                              Colors.transparent,
+                            ],
+                          ),
+                        ),
+                      ),
+                      // Stacked books illustration
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 32,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFEF3C7),
+                              borderRadius: BorderRadius.circular(1),
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Container(
+                            width: 36,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.9),
+                              borderRadius: BorderRadius.circular(1),
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Container(
+                            width: 30,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFDE68A),
+                              borderRadius: BorderRadius.circular(1),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Icon(
+                            Icons.auto_awesome,
+                            color: Color(0xFFFEF3C7),
+                            size: 16,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
