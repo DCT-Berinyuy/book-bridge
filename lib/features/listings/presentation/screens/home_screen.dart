@@ -222,36 +222,48 @@ class _HomeScreenState extends State<HomeScreen> {
     return SliverAppBar(
       pinned: true,
       floating: true,
+      expandedHeight: 120,
       elevation: 2,
       centerTitle: false,
       backgroundColor: theme.appBarTheme.backgroundColor,
       foregroundColor: theme.appBarTheme.foregroundColor,
-      title: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: Image.asset(
-              'assets/logo.png',
-              height: 32,
-              width: 32,
-              fit: BoxFit.contain,
+      flexibleSpace: FlexibleSpaceBar(
+        background: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 8, 0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.asset(
+                    'assets/logo.png',
+                    height: 32,
+                    width: 32,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  'BookBridge',
+                  style: theme.appBarTheme.titleTextStyle?.copyWith(
+                    fontSize: 20,
+                  ),
+                ),
+                const Spacer(),
+                const NotificationIcon(),
+                IconButton(
+                  icon: Icon(
+                    Icons.person_outline_rounded,
+                    color: theme.appBarTheme.foregroundColor,
+                  ),
+                  onPressed: () => context.push('/profile'),
+                ),
+              ],
             ),
           ),
-          const SizedBox(width: 12),
-          Text('BookBridge', style: theme.appBarTheme.titleTextStyle),
-        ],
-      ),
-      actions: [
-        const NotificationIcon(),
-        IconButton(
-          icon: Icon(
-            Icons.person_outline_rounded,
-            color: theme.appBarTheme.foregroundColor,
-          ),
-          onPressed: () => context.push('/profile'),
         ),
-      ],
+      ),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
         child: Padding(
