@@ -340,4 +340,47 @@
       grid-template-columns: repeat(2, 1fr);
     }
   }
+
+  @media (max-width: 400px) {
+    nav {
+      padding: 0.8rem 0;
+    }
+
+    .logo {
+      font-size: 1.1rem;
+    }
+
+    .bookbridge-logo {
+      height: 28px;
+    }
+
+    .footer-content {
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-links-group {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .footer-brand p {
+      font-size: 0.9rem;
+    }
+
+    .link-column h3 {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .link-column a {
+      font-size: 0.85rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .footer-bottom {
+      font-size: 0.85rem;
+      padding-top: 1.5rem;
+    }
+  }
 </style>
