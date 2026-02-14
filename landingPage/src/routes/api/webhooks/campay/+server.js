@@ -2,10 +2,15 @@ import { json } from '@sveltejs/kit';
 import { createClient } from '@supabase/supabase-js';
 import { env } from '$env/dynamic/private';
 
-const supabase = createClient(
-	env.SUPABASE_URL,
-	env.SUPABASE_SERVICE_ROLE_KEY
-);
+
+let supabase;
+
+function getSupabase() {
+	if (!supabase && env.SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY) {
+		supabase = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY);
+	}
+	return supabase;
+}
 
 // Health check endpoint
 export async function GET() {
@@ -77,6 +82,9 @@ async function handleBoostSuccess(listingId, reference, amount, duration) {
 	console.log(`Processing boost for listing ${listingId}`);
 
 	// 1. Get the seller_id from the listing
+	const supabase = getSupabase();
+	if (!supabase) throw new Error('Supabase client not initialized');
+
 	const { data: listing, error: fetchError } = await supabase
 		.from('listings')
 		.select('seller_id')
@@ -128,6 +136,9 @@ async function handleBoostSuccess(listingId, reference, amount, duration) {
 async function handleDonationSuccess(userId, reference, amount) {
 	console.log(`Processing donation from user ${userId}`);
 	
+	const supabase = getSupabase();
+	if (!supabase) throw new Error('Supabase client not initialized');
+
 	const { error } = await supabase
 		.from('donations')
 		.upsert({
