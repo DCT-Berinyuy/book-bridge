@@ -161,6 +161,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onTap: () {},
                   ),
                   _MenuItem(
+                    icon: Icons.info_outline_rounded,
+                    title: 'About BookBridge',
+                    onTap: () => context.push('/about'),
+                  ),
+                  _MenuItem(
                     icon: Icons.logout_rounded,
                     title: 'Logout',
                     textColor: Colors.red,
