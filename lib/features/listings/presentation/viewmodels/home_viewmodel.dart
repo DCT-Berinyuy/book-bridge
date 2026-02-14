@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/listings/domain/usecases/get_listings_usecase.dart';
 
@@ -19,9 +20,11 @@ class HomeViewModel extends ChangeNotifier {
   bool _hasMoreListings = true;
   final int _pageSize = 50;
   String? _selectedCategory;
+  Position? _currentPosition;
 
   // Getters
   HomeState get homeState => _homeState;
+  Position? get currentPosition => _currentPosition;
   List<Listing> get listings => _listings;
   String? get errorMessage => _errorMessage;
   bool get hasMoreListings => _hasMoreListings;
@@ -30,6 +33,7 @@ class HomeViewModel extends ChangeNotifier {
 
   HomeViewModel({required this.getListingsUseCase}) {
     _loadInitialListings();
+    _fetchLocation();
   }
 
   /// Loads the initial set of listings on initialization.
@@ -119,5 +123,35 @@ class HomeViewModel extends ChangeNotifier {
   Future<void> clearCategoryFilter() async {
     _selectedCategory = null;
     await _loadInitialListings();
+  }
+
+  /// Fetches the user's current location.
+  Future<void> _fetchLocation() async {
+    try {
+      bool serviceEnabled;
+      LocationPermission permission;
+
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        return;
+      }
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        return;
+      }
+
+      _currentPosition = await Geolocator.getCurrentPosition();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error fetching location: $e');
+    }
   }
 }

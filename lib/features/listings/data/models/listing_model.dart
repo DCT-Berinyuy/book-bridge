@@ -27,6 +27,8 @@ class ListingModel extends Listing {
     super.sellerLocality,
     super.sellerWhatsapp,
     super.sellerAvatarUrl,
+    super.latitude,
+    super.longitude,
   });
 
   /// Creates a ListingModel instance from JSON.
@@ -67,6 +69,8 @@ class ListingModel extends Listing {
               as String?,
       sellerAvatarUrl:
           (json['profiles'] as Map<String, dynamic>?)?['avatar_url'] as String?,
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      longitude: (json['longitude'] as num?)?.toDouble(),
     );
   }
 
@@ -92,6 +96,8 @@ class ListingModel extends Listing {
       'is_boosted': isBoosted,
       'boost_expires_at': boostExpiresAt?.toIso8601String(),
       'expires_at': expiresAt?.toIso8601String(),
+      'latitude': latitude,
+      'longitude': longitude,
     };
   }
 
@@ -119,6 +125,8 @@ class ListingModel extends Listing {
       sellerLocality: listing.sellerLocality,
       sellerWhatsapp: listing.sellerWhatsapp,
       sellerAvatarUrl: listing.sellerAvatarUrl,
+      latitude: listing.latitude,
+      longitude: listing.longitude,
     );
   }
 
@@ -145,6 +153,8 @@ class ListingModel extends Listing {
       sellerLocality: sellerLocality,
       sellerWhatsapp: sellerWhatsapp,
       sellerAvatarUrl: sellerAvatarUrl,
+      latitude: latitude,
+      longitude: longitude,
     );
   }
 }

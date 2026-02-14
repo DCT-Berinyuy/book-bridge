@@ -1,5 +1,6 @@
 import 'package:book_bridge/core/presentation/widgets/notification_icon.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -47,13 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/sell'),
-        tooltip: 'Sell a Book',
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        child: const Icon(Icons.add),
-      ),
     );
   }
 
@@ -68,8 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
         _buildSliverAppBar(),
+        _buildDonationBanner(),
         _buildSectionHeader('Categories'),
-        _buildCategoryChips(),
+        _buildCategoriesSection(),
         if (viewModel.homeState == HomeState.error &&
             viewModel.listings.isEmpty)
           SliverFillRemaining(
@@ -271,61 +266,161 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCategoryChips() {
+  Widget _buildDonationBanner() {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Donate & Make an Impact! 🎁',
+                      style: GoogleFonts.lato(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Give your old books a new life by donating them to students in need.',
+                      style: TextStyle(color: Colors.white70, fontSize: 12),
+                    ),
+                    const SizedBox(height: 12),
+                    ElevatedButton(
+                      onPressed: () => context.push(
+                        '/sell',
+                      ), // TODO: specialized donation flow
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Theme.of(context).colorScheme.primary,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: const Text(
+                        'Donate Now',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 16),
+              Icon(
+                Icons.volunteer_activism_rounded,
+                size: 64,
+                color: Colors.white.withValues(alpha: 0.9),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoriesSection() {
     final categories = [
-      'All',
-      'Textbooks',
-      'Fiction',
-      'Science',
-      'History',
-      'GCE',
+      {'name': 'All', 'icon': Icons.grid_view_rounded, 'color': Colors.grey},
+      {'name': 'Textbooks', 'icon': Icons.school_rounded, 'color': Colors.blue},
+      {
+        'name': 'Fiction',
+        'icon': Icons.auto_stories_rounded,
+        'color': Colors.purple,
+      },
+      {'name': 'Science', 'icon': Icons.science_rounded, 'color': Colors.teal},
+      {
+        'name': 'History',
+        'icon': Icons.history_edu_rounded,
+        'color': Colors.brown,
+      },
+      {'name': 'GCE', 'icon': Icons.assignment_rounded, 'color': Colors.orange},
     ];
+
     return SliverToBoxAdapter(
       child: SizedBox(
-        height: 40,
+        height: 100,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: categories.length,
           padding: const EdgeInsets.symmetric(horizontal: 12),
           itemBuilder: (context, index) {
-            final isSelected = index == 0
+            final category = categories[index];
+            final name = category['name'] as String;
+            final icon = category['icon'] as IconData;
+            final color = category['color'] as Color;
+
+            final isSelected = name == 'All'
                 ? context.watch<HomeViewModel>().selectedCategory == null
-                : context.watch<HomeViewModel>().selectedCategory ==
-                      categories[index];
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: ChoiceChip(
-                label: Text(categories[index]),
-                selected: isSelected,
-                onSelected: (selected) {
-                  if (selected) {
-                    if (index == 0) {
-                      // 'All' category - clear filter
-                      context.read<HomeViewModel>().clearCategoryFilter();
-                    } else {
-                      // Specific category
-                      context.read<HomeViewModel>().setSelectedCategory(
-                        categories[index],
-                      );
-                    }
-                  }
-                },
-                selectedColor: Theme.of(context).colorScheme.primary,
-                backgroundColor: Theme.of(
-                  context,
-                ).colorScheme.surfaceContainerHighest,
-                labelStyle: TextStyle(
+                : context.watch<HomeViewModel>().selectedCategory == name;
+
+            return GestureDetector(
+              onTap: () {
+                if (name == 'All') {
+                  context.read<HomeViewModel>().clearCategoryFilter();
+                } else {
+                  context.read<HomeViewModel>().setSelectedCategory(name);
+                }
+              },
+              child: Container(
+                width: 80,
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                decoration: BoxDecoration(
                   color: isSelected
-                      ? Theme.of(context).colorScheme.onPrimary
-                      : Theme.of(context).colorScheme.onSurface,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      ? color.withValues(alpha: 0.1)
+                      : Theme.of(context).colorScheme.surfaceContainer,
+                  borderRadius: BorderRadius.circular(12),
+                  border: isSelected
+                      ? Border.all(color: color, width: 2)
+                      : null,
                 ),
-                side: BorderSide(
-                  color: Theme.of(context).colorScheme.outline,
-                  width: 1.0,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: color.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(icon, color: color, size: 24),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      name,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: isSelected
+                            ? FontWeight.bold
+                            : FontWeight.w500,
+                        color: isSelected
+                            ? color
+                            : Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );
@@ -348,7 +443,12 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 200,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: _ListingCard(listing: featuredListings[index]),
+                child: _ListingCard(
+                  listing: featuredListings[index],
+                  currentPosition: context
+                      .watch<HomeViewModel>()
+                      .currentPosition,
+                ),
               ),
             );
           },
@@ -369,7 +469,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         delegate: SliverChildBuilderDelegate((context, index) {
           final listing = listings[index];
-          return _ListingCard(listing: listing);
+          return _ListingCard(
+            listing: listing,
+            currentPosition: viewModel.currentPosition,
+          );
         }, childCount: listings.length),
       ),
     );
@@ -378,8 +481,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class _ListingCard extends StatelessWidget {
   final Listing listing;
+  final Position? currentPosition;
 
-  const _ListingCard({required this.listing});
+  const _ListingCard({required this.listing, this.currentPosition});
 
   @override
   Widget build(BuildContext context) {
@@ -501,7 +605,30 @@ class _ListingCard extends StatelessWidget {
               fontSize: 12,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
+          if (currentPosition != null &&
+              listing.latitude != null &&
+              listing.longitude != null) ...[
+            Row(
+              children: [
+                Icon(
+                  Icons.location_on,
+                  size: 12,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(width: 2),
+                Text(
+                  _getDistanceString(),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ],
+          const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -520,6 +647,26 @@ class _ListingCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _getDistanceString() {
+    if (currentPosition == null ||
+        listing.latitude == null ||
+        listing.longitude == null) {
+      return '';
+    }
+    final distanceInMeters = Geolocator.distanceBetween(
+      currentPosition!.latitude,
+      currentPosition!.longitude,
+      listing.latitude!,
+      listing.longitude!,
+    );
+
+    if (distanceInMeters < 1000) {
+      return '${distanceInMeters.toStringAsFixed(0)} m';
+    } else {
+      return '${(distanceInMeters / 1000).toStringAsFixed(1)} km';
+    }
   }
 
   Widget _buildConditionIndicator(BuildContext context, String condition) {

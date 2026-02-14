@@ -25,6 +25,8 @@ class UpdateListingUseCase implements UseCase<Listing, UpdateListingParams> {
       sellerType: params.sellerType,
       isBuyBackEligible: params.isBuyBackEligible,
       stockCount: params.stockCount,
+      latitude: params.latitude,
+      longitude: params.longitude,
     );
   }
 }
@@ -41,6 +43,8 @@ class UpdateListingParams extends Equatable {
   final String? sellerType;
   final bool? isBuyBackEligible;
   final int? stockCount;
+  final double? latitude;
+  final double? longitude;
 
   const UpdateListingParams({
     required this.id,
@@ -54,6 +58,8 @@ class UpdateListingParams extends Equatable {
     this.sellerType,
     this.isBuyBackEligible,
     this.stockCount,
+    this.latitude,
+    this.longitude,
   });
 
   @override
@@ -69,5 +75,7 @@ class UpdateListingParams extends Equatable {
     sellerType,
     isBuyBackEligible,
     stockCount,
+    latitude,
+    longitude,
   ];
 }

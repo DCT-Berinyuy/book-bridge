@@ -10,9 +10,10 @@ import 'package:book_bridge/features/listings/presentation/screens/listing_detai
 import 'package:book_bridge/features/listings/presentation/screens/sell_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/profile_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/search_screen.dart';
+import 'package:book_bridge/features/listings/presentation/screens/categories_screen.dart';
 import 'package:book_bridge/core/presentation/widgets/scaffold_with_navbar.dart';
 import 'package:book_bridge/features/auth/presentation/screens/edit_profile_screen.dart';
-import 'package:book_bridge/features/notifications/presentation/screens/notifications_screen.dart';
+
 import 'package:book_bridge/features/listings/presentation/screens/about_screen.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/injection_container.dart' as di;
@@ -138,6 +139,17 @@ final appRouter = GoRouter(
           ],
         ),
 
+        // Categories Branch
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/categories',
+              name: 'categories',
+              builder: (context, state) => const CategoriesScreen(),
+            ),
+          ],
+        ),
+
         // Profile Branch
         StatefulShellBranch(
           routes: [
@@ -166,13 +178,6 @@ final appRouter = GoRouter(
       path: '/edit-profile',
       name: 'editProfile',
       builder: (context, state) => const EditProfileScreen(),
-    ),
-
-    // Notifications Route (Full Screen, outside shell)
-    GoRoute(
-      path: '/notifications',
-      name: 'notifications',
-      builder: (context, state) => const NotificationsScreen(),
     ),
 
     // About Route (Full Screen, outside shell)

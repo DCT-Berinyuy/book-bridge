@@ -56,6 +56,8 @@ abstract class ListingRepository {
     String sellerType = 'individual',
     bool isBuyBackEligible = false,
     int stockCount = 1,
+    double? latitude,
+    double? longitude,
   });
 
   /// Deletes a listing.
@@ -78,6 +80,8 @@ abstract class ListingRepository {
     String? sellerType,
     bool? isBuyBackEligible,
     int? stockCount,
+    double? latitude,
+    double? longitude,
   });
 
   /// Uploads a book image to storage.

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/listings/domain/repositories/listing_repository.dart';
 import 'package:book_bridge/features/listings/domain/usecases/create_listing_usecase.dart';
@@ -205,6 +206,9 @@ class SellViewModel extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
+    // Get current location
+    final position = await _getCurrentLocation();
+
     final params = CreateListingParams(
       title: _title!,
       author: _author!,
@@ -216,6 +220,8 @@ class SellViewModel extends ChangeNotifier {
       sellerType: _sellerType,
       isBuyBackEligible: _isBuyBackEligible,
       stockCount: _stockCount,
+      latitude: position?.latitude,
+      longitude: position?.longitude,
     );
 
     final result = await createListingUseCase(params);
@@ -243,6 +249,9 @@ class SellViewModel extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
+    // Get current location (optional update)
+    final position = await _getCurrentLocation();
+
     final params = UpdateListingParams(
       id: _editingListing!.id,
       title: _title,
@@ -255,6 +264,8 @@ class SellViewModel extends ChangeNotifier {
       sellerType: _sellerType,
       isBuyBackEligible: _isBuyBackEligible,
       stockCount: _stockCount,
+      latitude: position?.latitude,
+      longitude: position?.longitude,
     );
 
     final result = await updateListingUseCase(params);
@@ -292,6 +303,32 @@ class SellViewModel extends ChangeNotifier {
     if (pickedFile != null) {
       await _processAndUploadImage(File(pickedFile.path));
     }
+  }
+
+  /// Gets the current location of the device.
+  Future<Position?> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return null;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return null;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return null;
+    }
+
+    return await Geolocator.getCurrentPosition();
   }
 
   /// Processes and uploads the selected image to Supabase Storage.

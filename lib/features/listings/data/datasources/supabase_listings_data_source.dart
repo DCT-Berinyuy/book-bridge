@@ -196,6 +196,8 @@ class SupabaseListingsDataSource {
     String sellerType = 'individual',
     bool isBuyBackEligible = false,
     int stockCount = 1,
+    double? latitude,
+    double? longitude,
   }) async {
     try {
       final userId = supabaseClient.auth.currentUser?.id;
@@ -219,6 +221,8 @@ class SupabaseListingsDataSource {
             'seller_type': sellerType,
             'is_buy_back_eligible': isBuyBackEligible,
             'stock_count': stockCount,
+            'latitude': latitude,
+            'longitude': longitude,
           })
           .select()
           .single();
@@ -264,6 +268,8 @@ class SupabaseListingsDataSource {
     String? sellerType,
     bool? isBuyBackEligible,
     int? stockCount,
+    double? latitude,
+    double? longitude,
   }) async {
     try {
       final updates = <String, dynamic>{};
@@ -279,6 +285,8 @@ class SupabaseListingsDataSource {
         updates['is_buy_back_eligible'] = isBuyBackEligible;
       }
       if (stockCount != null) updates['stock_count'] = stockCount;
+      if (latitude != null) updates['latitude'] = latitude;
+      if (longitude != null) updates['longitude'] = longitude;
 
       final response = await supabaseClient
           .from('listings')

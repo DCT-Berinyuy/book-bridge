@@ -139,6 +139,8 @@ class ListingRepositoryImpl implements ListingRepository {
     String sellerType = 'individual',
     bool isBuyBackEligible = false,
     int stockCount = 1,
+    double? latitude,
+    double? longitude,
   }) async {
     try {
       final listingModel = await dataSource.createListing(
@@ -152,6 +154,8 @@ class ListingRepositoryImpl implements ListingRepository {
         sellerType: sellerType,
         isBuyBackEligible: isBuyBackEligible,
         stockCount: stockCount,
+        latitude: latitude,
+        longitude: longitude,
       );
       return Right(listingModel.toEntity());
     } on ServerException catch (e) {
@@ -188,6 +192,8 @@ class ListingRepositoryImpl implements ListingRepository {
     String? sellerType,
     bool? isBuyBackEligible,
     int? stockCount,
+    double? latitude,
+    double? longitude,
   }) async {
     try {
       final listingModel = await dataSource.updateListing(
@@ -202,6 +208,8 @@ class ListingRepositoryImpl implements ListingRepository {
         sellerType: sellerType,
         isBuyBackEligible: isBuyBackEligible,
         stockCount: stockCount,
+        latitude: latitude,
+        longitude: longitude,
       );
       return Right(listingModel.toEntity());
     } on NotFoundException catch (e) {

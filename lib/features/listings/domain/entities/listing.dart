@@ -32,6 +32,10 @@ class Listing extends Equatable {
   final String? sellerWhatsapp;
   final String? sellerAvatarUrl;
 
+  // Location
+  final double? latitude;
+  final double? longitude;
+
   const Listing({
     required this.id,
     required this.title,
@@ -55,6 +59,8 @@ class Listing extends Equatable {
     this.sellerLocality,
     this.sellerWhatsapp,
     this.sellerAvatarUrl,
+    this.latitude,
+    this.longitude,
   });
 
   @override
@@ -81,5 +87,7 @@ class Listing extends Equatable {
     sellerLocality,
     sellerWhatsapp,
     sellerAvatarUrl,
+    latitude,
+    longitude,
   ];
 }

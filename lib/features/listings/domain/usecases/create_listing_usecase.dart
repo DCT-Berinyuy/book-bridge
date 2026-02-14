@@ -23,6 +23,8 @@ class CreateListingUseCase implements UseCase<Listing, CreateListingParams> {
       sellerType: params.sellerType,
       isBuyBackEligible: params.isBuyBackEligible,
       stockCount: params.stockCount,
+      latitude: params.latitude,
+      longitude: params.longitude,
     );
   }
 }
@@ -39,6 +41,8 @@ class CreateListingParams {
   final String sellerType;
   final bool isBuyBackEligible;
   final int stockCount;
+  final double? latitude;
+  final double? longitude;
 
   CreateListingParams({
     required this.title,
@@ -51,5 +55,7 @@ class CreateListingParams {
     this.sellerType = 'individual',
     this.isBuyBackEligible = false,
     this.stockCount = 1,
+    this.latitude,
+    this.longitude,
   });
 }
