@@ -482,7 +482,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 14),
                       ElevatedButton(
                         onPressed: () {
-                          // Logic to show nearby books
+                          // Scroll down to the nearby books section
+                          _scrollController.animateTo(
+                            320,
+                            duration: const Duration(milliseconds: 600),
+                            curve: Curves.easeInOut,
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
