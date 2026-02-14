@@ -19,6 +19,7 @@ import 'package:book_bridge/features/listings/presentation/screens/privacy_polic
 import 'package:book_bridge/features/listings/presentation/screens/terms_conditions_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/faq_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/feedback_screen.dart';
+import 'package:book_bridge/features/listings/presentation/screens/contact_us_screen.dart';
 
 import 'package:book_bridge/features/listings/presentation/screens/about_screen.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
@@ -228,6 +229,12 @@ final appRouter = GoRouter(
       path: '/feedback',
       name: 'feedback',
       builder: (context, state) => const FeedbackScreen(),
+    ),
+    // Contact Us Route
+    GoRoute(
+      path: '/contact',
+      name: 'contact',
+      builder: (context, state) => const ContactUsScreen(),
     ),
   ],
 );

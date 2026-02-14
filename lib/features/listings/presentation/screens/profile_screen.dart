@@ -153,7 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _MenuItem(
                     icon: Icons.email_outlined,
                     title: 'Contact Us',
-                    onTap: () {},
+                    onTap: () => context.push('/contact'),
                   ),
                   _MenuItem(
                     icon: Icons.share_outlined,
