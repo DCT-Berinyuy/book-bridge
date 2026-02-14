@@ -109,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _buildMenuSection(context, 'My Account', [
                   _MenuItem(
                     icon: Icons.person_outline,
-                    title: 'My Profile',
+                    title: 'My Profile Edit',
                     onTap: () => context.push('/edit-profile'),
                   ),
                   _MenuItem(
@@ -148,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _MenuItem(
                     icon: Icons.feedback_outlined,
                     title: 'Feedback',
-                    onTap: () {},
+                    onTap: () => context.push('/feedback'),
                   ),
                   _MenuItem(
                     icon: Icons.email_outlined,
