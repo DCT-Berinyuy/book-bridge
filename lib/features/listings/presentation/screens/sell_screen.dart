@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/sell_viewmodel.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/core/constants/categories.dart';
 
 /// Screen for creating and selling a new book listing.
 ///
@@ -432,40 +433,16 @@ class _SellScreenState extends State<SellScreen> {
                         isExpanded: true,
                         hint: const Text('Select a category'),
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        items: const [
-                          DropdownMenuItem(value: null, child: Text('None')),
-                          DropdownMenuItem(
-                            value: 'Textbooks',
-                            child: Text('Textbooks'),
+                        items: [
+                          const DropdownMenuItem(
+                            value: null,
+                            child: Text('None'),
                           ),
-                          DropdownMenuItem(
-                            value: 'Fiction',
-                            child: Text('Fiction'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'Science',
-                            child: Text('Science'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'History',
-                            child: Text('History'),
-                          ),
-                          DropdownMenuItem(value: 'GCE', child: Text('GCE')),
-                          DropdownMenuItem(
-                            value: 'Language',
-                            child: Text('Language'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'Mathematics',
-                            child: Text('Mathematics'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'Engineering',
-                            child: Text('Engineering'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'Medicine',
-                            child: Text('Medicine'),
+                          ...appCategories.map(
+                            (cat) => DropdownMenuItem(
+                              value: cat.name,
+                              child: Text(cat.name),
+                            ),
                           ),
                         ],
                         onChanged: (value) {

@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
+import 'package:book_bridge/core/constants/categories.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -632,20 +633,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCategoriesSection() {
     final categories = [
-      {'name': 'All', 'icon': Icons.grid_view_rounded, 'color': Colors.grey},
-      {'name': 'Textbooks', 'icon': Icons.school_rounded, 'color': Colors.blue},
-      {
-        'name': 'Fiction',
-        'icon': Icons.auto_stories_rounded,
-        'color': Colors.purple,
-      },
-      {'name': 'Science', 'icon': Icons.science_rounded, 'color': Colors.teal},
-      {
-        'name': 'History',
-        'icon': Icons.history_edu_rounded,
-        'color': Colors.brown,
-      },
-      {'name': 'GCE', 'icon': Icons.assignment_rounded, 'color': Colors.orange},
+      const Category(
+        name: 'All',
+        icon: Icons.grid_view_rounded,
+        color: Colors.grey,
+      ),
+      ...appCategories,
     ];
 
     return SliverToBoxAdapter(
@@ -657,9 +650,9 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           itemBuilder: (context, index) {
             final category = categories[index];
-            final name = category['name'] as String;
-            final icon = category['icon'] as IconData;
-            final color = category['color'] as Color;
+            final name = category.name;
+            final icon = category.icon;
+            final color = category.color;
 
             final isSelected = name == 'All'
                 ? context.watch<HomeViewModel>().selectedCategory == null

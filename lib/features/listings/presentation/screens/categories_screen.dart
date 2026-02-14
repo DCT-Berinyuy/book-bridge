@@ -1,4 +1,5 @@
 import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
+import 'package:book_bridge/core/constants/categories.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,32 +10,7 @@ class CategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categories = [
-      {'name': 'Textbooks', 'icon': Icons.school_rounded, 'color': Colors.blue},
-      {
-        'name': 'Fiction',
-        'icon': Icons.auto_stories_rounded,
-        'color': Colors.purple,
-      },
-      {'name': 'Science', 'icon': Icons.science_rounded, 'color': Colors.teal},
-      {
-        'name': 'History',
-        'icon': Icons.history_edu_rounded,
-        'color': Colors.brown,
-      },
-      {'name': 'GCE', 'icon': Icons.assignment_rounded, 'color': Colors.orange},
-      {
-        'name': 'Business',
-        'icon': Icons.business_center_rounded,
-        'color': Colors.indigo,
-      },
-      {
-        'name': 'Technology',
-        'icon': Icons.computer_rounded,
-        'color': Colors.cyan,
-      },
-      {'name': 'Arts', 'icon': Icons.palette_rounded, 'color': Colors.pink},
-    ];
+    const categories = appCategories;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Categories')),
@@ -64,9 +40,9 @@ class CategoriesScreen extends StatelessWidget {
               itemCount: categories.length,
               itemBuilder: (context, index) {
                 final category = categories[index];
-                final name = category['name'] as String;
-                final icon = category['icon'] as IconData;
-                final color = category['color'] as Color;
+                final name = category.name;
+                final icon = category.icon;
+                final color = category.color;
 
                 return GestureDetector(
                   onTap: () {
