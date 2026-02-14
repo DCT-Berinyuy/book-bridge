@@ -179,6 +179,9 @@ class HomeViewModel extends ChangeNotifier {
   /// Sets the search query and filters listings locally.
   void setSearchQuery(String query) {
     _searchQuery = query;
+    if (query.isNotEmpty) {
+      _shouldScrollToResults = true;
+    }
     notifyListeners();
   }
 
