@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/listing_details_viewmodel.dart';
+import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 
 /// Listing details screen showing comprehensive information about a book.
 ///
@@ -180,6 +182,35 @@ Download BookBridge to view more details!
                       IconButton(
                         icon: const Icon(Icons.share, color: Colors.white),
                         onPressed: () => _shareListing(),
+                      ),
+                      Consumer2<FavoritesViewModel, AuthViewModel>(
+                        builder: (context, favoritesVM, authVM, _) {
+                          final viewModel = context
+                              .read<ListingDetailsViewModel>();
+                          final listing = viewModel.listing;
+                          if (listing == null) return const SizedBox.shrink();
+
+                          final userId = authVM.currentUser?.id;
+                          final isFavorite = favoritesVM.isListingFavorite(
+                            listing.id,
+                          );
+
+                          return IconButton(
+                            icon: Icon(
+                              isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: isFavorite ? Colors.red : Colors.white,
+                            ),
+                            onPressed: () {
+                              if (userId != null) {
+                                favoritesVM.toggleFavorite(userId, listing);
+                              } else {
+                                context.push('/sign-in');
+                              }
+                            },
+                          );
+                        },
                       ),
                     ],
                   ),

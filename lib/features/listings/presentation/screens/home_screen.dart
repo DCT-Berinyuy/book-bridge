@@ -2,6 +2,8 @@ import 'package:book_bridge/core/presentation/widgets/notification_icon.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
+import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -839,6 +841,43 @@ class _ListingCard extends StatelessWidget {
                     ),
             ),
             if (listing.sellerType != 'individual') _buildVerifiedBadge(),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: Consumer2<FavoritesViewModel, AuthViewModel>(
+                builder: (context, favoritesVM, authVM, _) {
+                  final userId = authVM.currentUser?.id;
+                  final isFavorite = favoritesVM.isListingFavorite(listing.id);
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.8),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      shape: const CircleBorder(),
+                      clipBehavior: Clip.hardEdge,
+                      child: IconButton(
+                        icon: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: isFavorite ? Colors.red : Colors.grey[700],
+                          size: 20,
+                        ),
+                        onPressed: () {
+                          if (userId != null) {
+                            favoritesVM.toggleFavorite(userId, listing);
+                          } else {
+                            context.push('/sign-in');
+                          }
+                        },
+                        constraints: const BoxConstraints(),
+                        padding: const EdgeInsets.all(6),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

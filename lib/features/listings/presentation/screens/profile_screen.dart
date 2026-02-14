@@ -39,7 +39,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
-          IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (value) {
+              if (value == 'edit') {
+                context.push('/edit-profile');
+              } else if (value == 'help') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Help & Support coming soon!')),
+                );
+              } else if (value == 'logout') {
+                _confirmLogout(context);
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'edit',
+                child: Row(
+                  children: [
+                    Icon(Icons.edit_outlined, size: 20, color: Colors.black87),
+                    SizedBox(width: 12),
+                    Text('Edit Profile'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'help',
+                child: Row(
+                  children: [
+                    Icon(Icons.help_outline, size: 20, color: Colors.black87),
+                    SizedBox(width: 12),
+                    Text('Help & Support'),
+                  ],
+                ),
+              ),
+              const PopupMenuDivider(),
+              const PopupMenuItem(
+                value: 'logout',
+                child: Row(
+                  children: [
+                    Icon(Icons.logout, size: 20, color: Colors.red),
+                    SizedBox(width: 12),
+                    Text('Logout', style: TextStyle(color: Colors.red)),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ],
       ),
       body: Consumer<ProfileViewModel>(
@@ -69,9 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _MenuItem(
                     icon: Icons.favorite_border_rounded,
                     title: 'My Favourites',
-                    onTap: () {
-                      // Future: My Favourites
-                    },
+                    onTap: () => context.push('/favorites'),
                   ),
                   _MenuItem(
                     icon: Icons.location_on_outlined,

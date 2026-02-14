@@ -12,6 +12,7 @@ import 'package:book_bridge/features/listings/presentation/viewmodels/profile_vi
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
 import 'package:book_bridge/features/notifications/presentation/viewmodels/notifications_viewmodel.dart';
 import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
+import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 import 'config/app_config.dart';
 
 void main() async {
@@ -63,6 +64,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<PaymentViewModel>(
           create: (_) => di.getIt<PaymentViewModel>(),
+        ),
+        ChangeNotifierProvider<FavoritesViewModel>(
+          create: (_) => di.getIt<FavoritesViewModel>(),
         ),
       ],
       child: MaterialApp.router(

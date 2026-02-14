@@ -14,6 +14,7 @@ import 'package:book_bridge/features/listings/presentation/screens/categories_sc
 import 'package:book_bridge/core/presentation/widgets/scaffold_with_navbar.dart';
 import 'package:book_bridge/features/auth/presentation/screens/edit_profile_screen.dart';
 import 'package:book_bridge/features/notifications/presentation/screens/notifications_screen.dart';
+import 'package:book_bridge/features/favorites/presentation/screens/favorites_screen.dart';
 
 import 'package:book_bridge/features/listings/presentation/screens/about_screen.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
@@ -193,6 +194,12 @@ final appRouter = GoRouter(
       path: '/about',
       name: 'about',
       builder: (context, state) => const AboutScreen(),
+    ),
+    // Favorites Route
+    GoRoute(
+      path: '/favorites',
+      name: 'favorites',
+      builder: (context, state) => const FavoritesScreen(),
     ),
   ],
 );

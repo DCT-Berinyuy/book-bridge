@@ -37,6 +37,13 @@ import 'package:book_bridge/features/payments/domain/repositories/payment_reposi
 import 'package:book_bridge/features/payments/domain/usecases/collect_payment_usecase.dart';
 import 'package:book_bridge/features/payments/domain/usecases/get_payment_status_usecase.dart';
 import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
+import 'package:book_bridge/features/favorites/data/datasources/supabase_favorites_data_source.dart';
+import 'package:book_bridge/features/favorites/data/repositories/favorites_repository_impl.dart';
+import 'package:book_bridge/features/favorites/domain/repositories/favorites_repository.dart';
+import 'package:book_bridge/features/favorites/domain/usecases/get_favorites_usecase.dart';
+import 'package:book_bridge/features/favorites/domain/usecases/toggle_favorite_usecase.dart';
+import 'package:book_bridge/features/favorites/domain/usecases/is_favorite_usecase.dart';
+import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 import 'package:book_bridge/config/app_config.dart';
 
 /// Service locator for dependency injection.
@@ -230,6 +237,37 @@ Future<void> setupDependencyInjection() async {
     () => PaymentViewModel(
       collectPaymentUseCase: getIt<CollectPaymentUseCase>(),
       getPaymentStatusUseCase: getIt<GetPaymentStatusUseCase>(),
+    ),
+  );
+
+  // Favorites Feature
+  getIt.registerLazySingleton<SupabaseFavoritesDataSource>(
+    () => SupabaseFavoritesDataSource(supabaseClient: getIt<SupabaseClient>()),
+  );
+
+  getIt.registerLazySingleton<FavoritesRepository>(
+    () => FavoritesRepositoryImpl(
+      dataSource: getIt<SupabaseFavoritesDataSource>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GetFavoritesUseCase>(
+    () => GetFavoritesUseCase(getIt<FavoritesRepository>()),
+  );
+
+  getIt.registerLazySingleton<ToggleFavoriteUseCase>(
+    () => ToggleFavoriteUseCase(getIt<FavoritesRepository>()),
+  );
+
+  getIt.registerLazySingleton<IsFavoriteUseCase>(
+    () => IsFavoriteUseCase(getIt<FavoritesRepository>()),
+  );
+
+  getIt.registerLazySingleton<FavoritesViewModel>(
+    () => FavoritesViewModel(
+      getFavoritesUseCase: getIt<GetFavoritesUseCase>(),
+      toggleFavoriteUseCase: getIt<ToggleFavoriteUseCase>(),
+      isFavoriteUseCase: getIt<IsFavoriteUseCase>(),
     ),
   );
 }
