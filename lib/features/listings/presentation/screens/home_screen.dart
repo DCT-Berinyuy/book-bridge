@@ -222,15 +222,17 @@ class _HomeScreenState extends State<HomeScreen> {
     return SliverAppBar(
       pinned: true,
       floating: true,
-      expandedHeight: 120,
+      expandedHeight: 140,
+      toolbarHeight: 60,
       elevation: 2,
       centerTitle: false,
       backgroundColor: theme.appBarTheme.backgroundColor,
       foregroundColor: theme.appBarTheme.foregroundColor,
       flexibleSpace: FlexibleSpaceBar(
         background: SafeArea(
+          bottom: false,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 8, 0),
+            padding: const EdgeInsets.fromLTRB(16, 8, 8, 0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
