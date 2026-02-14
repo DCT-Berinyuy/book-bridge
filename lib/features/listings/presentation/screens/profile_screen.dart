@@ -263,6 +263,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
 
           return SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 120),
             child: Column(
               children: [
                 // User profile header

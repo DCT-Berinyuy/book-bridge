@@ -9,7 +9,7 @@ import 'package:book_bridge/features/listings/presentation/screens/home_screen.d
 import 'package:book_bridge/features/listings/presentation/screens/listing_details_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/sell_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/profile_screen.dart';
-import 'package:book_bridge/features/listings/presentation/screens/search_screen.dart';
+import 'package:book_bridge/features/listings/presentation/screens/my_books_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/categories_screen.dart';
 import 'package:book_bridge/core/presentation/widgets/scaffold_with_navbar.dart';
 import 'package:book_bridge/features/auth/presentation/screens/edit_profile_screen.dart';
@@ -116,13 +116,13 @@ final appRouter = GoRouter(
           ],
         ),
 
-        // Search Branch
+        // MyBooks Branch
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/search',
-              name: 'search',
-              builder: (context, state) => const SearchScreen(),
+              path: '/my-books',
+              name: 'my-books',
+              builder: (context, state) => const MyBooksScreen(),
             ),
           ],
         ),

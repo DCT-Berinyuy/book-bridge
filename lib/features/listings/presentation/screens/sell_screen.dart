@@ -155,7 +155,7 @@ class _SellScreenState extends State<SellScreen> {
       body: Consumer<SellViewModel>(
         builder: (context, viewModel, child) {
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
             child: Form(
               key: _formKey,
               child: Column(

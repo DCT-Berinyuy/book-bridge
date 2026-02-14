@@ -310,6 +310,7 @@ Download BookBridge to view more details!
               ),
             ),
             child: SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 120),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

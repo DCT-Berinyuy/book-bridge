@@ -20,6 +20,7 @@ class HomeViewModel extends ChangeNotifier {
   bool _hasMoreListings = true;
   final int _pageSize = 50;
   String? _selectedCategory;
+  String _searchQuery = '';
   Position? _currentPosition;
 
   // Getters
@@ -30,6 +31,20 @@ class HomeViewModel extends ChangeNotifier {
   bool get hasMoreListings => _hasMoreListings;
   bool get isLoading => _homeState == HomeState.loading;
   String? get selectedCategory => _selectedCategory;
+  String get searchQuery => _searchQuery;
+
+  /// Returns filtered listings based on search query
+  List<Listing> get filteredListings {
+    if (_searchQuery.isEmpty) {
+      return _listings;
+    }
+
+    final query = _searchQuery.toLowerCase();
+    return _listings.where((listing) {
+      return listing.title.toLowerCase().contains(query) ||
+          listing.author.toLowerCase().contains(query);
+    }).toList();
+  }
 
   HomeViewModel({required this.getListingsUseCase}) {
     _loadInitialListings();
@@ -123,6 +138,18 @@ class HomeViewModel extends ChangeNotifier {
   Future<void> clearCategoryFilter() async {
     _selectedCategory = null;
     await _loadInitialListings();
+  }
+
+  /// Sets the search query and filters listings locally.
+  void setSearchQuery(String query) {
+    _searchQuery = query;
+    notifyListeners();
+  }
+
+  /// Clears the search query.
+  void clearSearch() {
+    _searchQuery = '';
+    notifyListeners();
   }
 
   /// Fetches the user's current location.

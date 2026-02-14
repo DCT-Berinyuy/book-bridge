@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -27,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -66,27 +68,27 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildSectionHeader('Categories'),
         _buildCategoriesSection(),
         if (viewModel.homeState == HomeState.error &&
-            viewModel.listings.isEmpty)
+            viewModel.filteredListings.isEmpty)
           SliverFillRemaining(
-            hasScrollBody: false,
+            hasScrollBody: true,
             child: _buildErrorState(viewModel),
           )
-        else if (viewModel.listings.isEmpty)
+        else if (viewModel.filteredListings.isEmpty)
           SliverFillRemaining(
-            hasScrollBody: false,
+            hasScrollBody: true,
             child: _buildEmptyState(viewModel),
           )
         else ...[
           // Featured listings logic
-          if (viewModel.listings.any((l) => l.isFeatured)) ...[
+          if (viewModel.filteredListings.any((l) => l.isFeatured)) ...[
             _buildSectionHeader('Featured Books'),
             _buildFeaturedListings(
-              viewModel.listings.where((l) => l.isFeatured).toList(),
+              viewModel.filteredListings.where((l) => l.isFeatured).toList(),
             ),
           ],
           _buildSectionHeader('Recently Added'),
           _buildListingsGrid(
-            viewModel.listings.where((l) => !l.isFeatured).toList(),
+            viewModel.filteredListings.where((l) => !l.isFeatured).toList(),
             viewModel,
           ),
           if (viewModel.hasMoreListings && viewModel.isLoading)
@@ -229,25 +231,42 @@ class _HomeScreenState extends State<HomeScreen> {
         preferredSize: const Size.fromHeight(60.0),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-          child: GestureDetector(
-            onTap: () => context.push('/search'),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainer,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Search by title or author...',
-                    style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+          child: Consumer<HomeViewModel>(
+            builder: (context, viewModel, _) {
+              return TextField(
+                controller: _searchController,
+                onChanged: (value) => viewModel.setSearchQuery(value),
+                decoration: InputDecoration(
+                  hintText: 'Search by title or author...',
+                  hintStyle: TextStyle(
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
-                ],
-              ),
-            ),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  suffixIcon: viewModel.searchQuery.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            viewModel.clearSearch();
+                          },
+                        )
+                      : null,
+                  filled: true,
+                  fillColor: theme.colorScheme.surfaceContainer,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -459,7 +478,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildListingsGrid(List<Listing> listings, HomeViewModel viewModel) {
     return SliverPadding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
       sliver: SliverGrid(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
