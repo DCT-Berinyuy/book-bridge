@@ -22,6 +22,7 @@ class HomeViewModel extends ChangeNotifier {
   String? _selectedCategory;
   String _searchQuery = '';
   Position? _currentPosition;
+  bool _shouldScrollToResults = false;
 
   // Getters
   HomeState get homeState => _homeState;
@@ -32,6 +33,7 @@ class HomeViewModel extends ChangeNotifier {
   bool get isLoading => _homeState == HomeState.loading;
   String? get selectedCategory => _selectedCategory;
   String get searchQuery => _searchQuery;
+  bool get shouldScrollToResults => _shouldScrollToResults;
 
   /// Returns filtered listings based on search query
   List<Listing> get filteredListings {
@@ -44,6 +46,32 @@ class HomeViewModel extends ChangeNotifier {
       return listing.title.toLowerCase().contains(query) ||
           listing.author.toLowerCase().contains(query);
     }).toList();
+  }
+
+  /// Returns listings sorted by distance from the current position.
+  List<Listing> get nearbyListings {
+    if (_currentPosition == null) return _listings;
+
+    final List<Listing> sortedListings = List.from(_listings);
+    sortedListings.sort((a, b) {
+      if (a.latitude == null || a.longitude == null) return 1;
+      if (b.latitude == null || b.longitude == null) return -1;
+
+      final distanceA = Geolocator.distanceBetween(
+        _currentPosition!.latitude,
+        _currentPosition!.longitude,
+        a.latitude!,
+        a.longitude!,
+      );
+      final distanceB = Geolocator.distanceBetween(
+        _currentPosition!.latitude,
+        _currentPosition!.longitude,
+        b.latitude!,
+        b.longitude!,
+      );
+      return distanceA.compareTo(distanceB);
+    });
+    return sortedListings;
   }
 
   HomeViewModel({required this.getListingsUseCase}) {
@@ -131,7 +159,15 @@ class HomeViewModel extends ChangeNotifier {
   /// Sets the selected category and reloads listings.
   Future<void> setSelectedCategory(String? category) async {
     _selectedCategory = category;
+    if (category != null) {
+      _shouldScrollToResults = true;
+    }
     await _loadInitialListings();
+  }
+
+  /// Consumes the scroll request and resets the flag.
+  void consumeScrollRequest() {
+    _shouldScrollToResults = false;
   }
 
   /// Clears the selected category and reloads all listings.
