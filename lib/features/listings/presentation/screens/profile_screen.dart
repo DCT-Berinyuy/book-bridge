@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
-import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:intl/intl.dart';
 
 /// User profile screen displaying user information and their listings.
@@ -18,132 +17,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  void _showListingActions(BuildContext context, Listing listing) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 8),
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(height: 8),
-              ListTile(
-                leading: const Icon(Icons.edit, color: Color(0xFF1A4D8C)),
-                title: const Text('Edit Listing'),
-                onTap: () {
-                  Navigator.pop(context);
-                  context.push('/sell', extra: listing);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.delete_outline, color: Colors.red),
-                title: const Text(
-                  'Delete Listing',
-                  style: TextStyle(color: Colors.red),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _confirmDeleteListing(context, listing);
-                },
-              ),
-              const SizedBox(height: 8),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _confirmDeleteListing(BuildContext context, Listing listing) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Delete Listing?'),
-          content: Text(
-            'Are you sure you want to delete "${listing.title}"? This action cannot be undone.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                context.read<ProfileViewModel>().deleteListing(listing.id);
-              },
-              style: TextButton.styleFrom(foregroundColor: Colors.red),
-              child: const Text('Delete'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildStatCard(
-    BuildContext context,
-    String value,
-    String label,
-    IconData icon,
-    Color color,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Theme.of(
-          context,
-        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 16, color: color),
-              const SizedBox(width: 6),
-              Flexible(
-                child: Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              letterSpacing: 1.2,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   void initState() {
     super.initState();
@@ -157,104 +30,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
-        child: Container(
-          color: const Color(0xFF1A4D8C), // Scholar Blue
-          child: SafeArea(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.chevron_left,
-                      size: 24,
-                      color: Colors.white,
-                    ),
-                    onPressed: () => context.pop(),
-                  ),
-                  const Expanded(
-                    child: Text(
-                      'Profile',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  PopupMenuButton<String>(
-                    onSelected: (value) {
-                      if (value == 'signOut') {
-                        context.read<AuthViewModel>().signOut();
-                      } else if (value == 'about') {
-                        context.push('/about');
-                      }
-                    },
-                    icon: const Icon(Icons.more_vert, color: Colors.white),
-                    itemBuilder: (BuildContext context) =>
-                        <PopupMenuEntry<String>>[
-                          const PopupMenuItem<String>(
-                            value: 'about',
-                            child: ListTile(
-                              leading: Icon(Icons.info_outline),
-                              title: Text('About Us'),
-                              contentPadding: EdgeInsets.zero,
-                            ),
-                          ),
-                          const PopupMenuItem<String>(
-                            value: 'signOut',
-                            child: ListTile(
-                              leading: Icon(Icons.exit_to_app),
-                              title: Text('Sign Out'),
-                              contentPadding: EdgeInsets.zero,
-                            ),
-                          ),
-                        ],
-                  ),
-                ],
-              ),
-            ),
-          ),
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF1A4D8C),
+        foregroundColor: Colors.white,
+        title: const Text(
+          'Account',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [
+          IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
+        ],
       ),
       body: Consumer<ProfileViewModel>(
         builder: (context, profileViewModel, _) {
           if (profileViewModel.profileState == ProfileState.loading) {
             return const Center(child: CircularProgressIndicator());
-          }
-
-          if (profileViewModel.profileState == ProfileState.error) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 64,
-                    color: Theme.of(context).colorScheme.error,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Failed to load profile',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    profileViewModel.errorMessage ?? 'Unknown error',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: profileViewModel.loadProfile,
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
           }
 
           final user = profileViewModel.currentUser;
@@ -263,379 +54,77 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
 
           return SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 120),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // User profile header
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    children: [
-                      // Profile image
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        height: MediaQuery.of(context).size.width * 0.3,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: const Color(0xFF1A4D8C), // Primary green
-                            width: 4,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF1A4D8C).withValues(
-                                alpha: 0.2,
-                              ), // Primary green with opacity
-                              blurRadius: 16,
-                              spreadRadius: 4,
-                            ),
-                          ],
-                        ),
-                        child: Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                              MediaQuery.of(context).size.width * 0.15,
-                            ),
-                            child:
-                                user.avatarUrl != null &&
-                                    user.avatarUrl!.isNotEmpty
-                                ? Image.network(
-                                    user.avatarUrl!,
-                                    fit: BoxFit.cover,
-                                    loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          }
-                                          return const Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        },
-                                  )
-                                : Center(
-                                    child: Text(
-                                      user.fullName.isNotEmpty
-                                          ? user.fullName
-                                                .split(' ')[0][0]
-                                                .toUpperCase()
-                                          : user.email[0].toUpperCase(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineSmall
-                                          ?.copyWith(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-
-                      // User name
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            user.fullName.isNotEmpty
-                                ? user.fullName
-                                : user.email,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.edit,
-                              size: 20,
-                              color: Colors.grey,
-                            ),
-                            onPressed: () => context.push('/edit-profile'),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-
-                      // Member since
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.calendar_month,
-                            size: 16,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Member since ${DateFormat.yMMMM().format(user.createdAt)}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-
-                      // Location info
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.location_on,
-                            size: 16,
-                            color: Colors.grey,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            user.locality ?? 'Unknown Location',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                _buildHeader(context, user),
+                _buildStatsSection(context, profileViewModel),
+                const Divider(height: 1),
+                _buildMenuSection(context, 'My Account', [
+                  _MenuItem(
+                    icon: Icons.person_outline,
+                    title: 'My Profile',
+                    onTap: () => context.push('/edit-profile'),
                   ),
-                ),
-
-                // Stats section
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      // Active Listings
-                      Expanded(
-                        child: _buildStatCard(
-                          context,
-                          profileViewModel.userListings.length.toString(),
-                          'ACTIVE BOOKS',
-                          Icons.book,
-                          const Color(0xFF1A4D8C), // Scholar Blue
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-
-                      // Total Value
-                      Expanded(
-                        child: _buildStatCard(
-                          context,
-                          '${NumberFormat.compact().format(profileViewModel.userListings.fold<int>(0, (sum, item) => sum + item.priceFcfa))} FCFA',
-                          'TOTAL VALUE',
-                          Icons.savings,
-                          const Color(0xFF27AE60), // Growth Green
-                        ),
-                      ),
-                    ],
+                  _MenuItem(
+                    icon: Icons.favorite_border_rounded,
+                    title: 'My Favourites',
+                    onTap: () {
+                      // Future: My Favourites
+                    },
                   ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // My Active Books section
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'My Active Books',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      TextButton.icon(
-                        onPressed: () => context.go('/sell'),
-                        icon: const Icon(Icons.add_circle, size: 16),
-                        label: const Text(
-                          'Sell New',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF13EC5B), // Primary green
-                          ),
-                        ),
-                      ),
-                    ],
+                  _MenuItem(
+                    icon: Icons.location_on_outlined,
+                    title: 'My Location Update',
+                    onTap: () => context.push('/edit-profile'),
                   ),
-                ),
-                const SizedBox(height: 8),
-
-                // Listings
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: profileViewModel.userListings.isEmpty
-                      ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.inventory_2_outlined,
-                                  size: 64,
-                                  color: Theme.of(context).colorScheme.onSurface
-                                      .withValues(alpha: 0.3),
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  'No listings yet',
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'Create your first listing to get started',
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: profileViewModel.userListings.length,
-                          itemBuilder: (context, index) {
-                            final listing =
-                                profileViewModel.userListings[index];
-                            final isDeleting =
-                                profileViewModel.isDeleting &&
-                                profileViewModel.userListings[index].id ==
-                                    listing.id;
-
-                            return Container(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .surfaceContainerHighest
-                                    .withValues(alpha: 0.5),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: ListTile(
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
-                                ),
-                                leading: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.15,
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.15,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.surface,
-                                  ),
-                                  child: listing.imageUrl.isNotEmpty
-                                      ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            8,
-                                          ),
-                                          child: Image.network(
-                                            listing.imageUrl,
-                                            fit: BoxFit.cover,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                                  // Completely disappear the listing if image fails to load
-                                                  Future.microtask(() {
-                                                    if (context.mounted) {
-                                                      profileViewModel
-                                                          .removeListingById(
-                                                            listing.id,
-                                                          );
-                                                    }
-                                                  });
-                                                  return const SizedBox.shrink();
-                                                },
-                                          ),
-                                        )
-                                      : Icon(
-                                          Icons.image_not_supported,
-                                          size: 30,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface
-                                              .withValues(alpha: 0.3),
-                                        ),
-                                ),
-                                title: Text(
-                                  listing.title,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${listing.priceFcfa} FCFA',
-                                      style: TextStyle(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.primary,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Listed ${DateTime.now().difference(listing.createdAt).inDays} days ago',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.onSurfaceVariant,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                trailing: isDeleting
-                                    ? SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation(
-                                            Theme.of(context).colorScheme.error,
-                                          ),
-                                        ),
-                                      )
-                                    : IconButton(
-                                        icon: Icon(
-                                          Icons.edit,
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                        ),
-                                        onPressed: () {
-                                          _showListingActions(context, listing);
-                                        },
-                                      ),
-                                onTap: () {
-                                  context.go('/listing/${listing.id}');
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                ),
+                  _MenuItem(
+                    icon: Icons.library_books_outlined,
+                    title: 'My Books',
+                    onTap: () => context.go('/my-books'),
+                  ),
+                ]),
+                const Divider(height: 1),
+                _buildMenuSection(context, 'More', [
+                  _MenuItem(
+                    icon: Icons.lock_outline,
+                    title: 'Privacy Policy',
+                    onTap: () {},
+                  ),
+                  _MenuItem(
+                    icon: Icons.description_outlined,
+                    title: 'Terms & Conditions',
+                    onTap: () {},
+                  ),
+                  _MenuItem(
+                    icon: Icons.help_outline,
+                    title: 'FAQ',
+                    onTap: () {},
+                  ),
+                  _MenuItem(
+                    icon: Icons.feedback_outlined,
+                    title: 'Feedback',
+                    onTap: () {},
+                  ),
+                  _MenuItem(
+                    icon: Icons.email_outlined,
+                    title: 'Contact Us',
+                    onTap: () {},
+                  ),
+                  _MenuItem(
+                    icon: Icons.share_outlined,
+                    title: 'Invite friends',
+                    onTap: () {},
+                  ),
+                  _MenuItem(
+                    icon: Icons.logout_rounded,
+                    title: 'Logout',
+                    textColor: Colors.red,
+                    onTap: () => _confirmLogout(context),
+                  ),
+                ]),
+                _buildFollowUs(context),
+                const SizedBox(height: 120),
               ],
             ),
           );
@@ -643,4 +132,243 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
+  Widget _buildHeader(BuildContext context, dynamic user) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A4D8C).withValues(alpha: 0.05),
+      ),
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 50,
+            backgroundColor: const Color(0xFF1A4D8C),
+            backgroundImage:
+                user.avatarUrl != null && user.avatarUrl!.isNotEmpty
+                ? NetworkImage(user.avatarUrl!)
+                : null,
+            child: user.avatarUrl == null || user.avatarUrl!.isEmpty
+                ? Text(
+                    user.fullName.isNotEmpty
+                        ? user.fullName[0].toUpperCase()
+                        : user.email[0].toUpperCase(),
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  )
+                : null,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            user.fullName.isNotEmpty ? user.fullName : user.email,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.location_on, size: 16, color: Colors.grey),
+              const SizedBox(width: 4),
+              Text(
+                user.locality ?? 'Unknown Location',
+                style: const TextStyle(color: Colors.grey, fontSize: 14),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatsSection(BuildContext context, ProfileViewModel vm) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: _buildStatItem(
+              context,
+              vm.userListings.length.toString(),
+              'Active Books',
+              const Color(0xFF1A4D8C),
+            ),
+          ),
+          Container(height: 40, width: 1, color: Colors.grey[300]),
+          Expanded(
+            child: _buildStatItem(
+              context,
+              '${NumberFormat.compact().format(vm.userListings.fold<int>(0, (sum, item) => sum + item.priceFcfa))} FCFA',
+              'Total Value',
+              const Color(0xFF27AE60),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatItem(
+    BuildContext context,
+    String value,
+    String label,
+    Color color,
+  ) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.grey,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMenuSection(
+    BuildContext context,
+    String title,
+    List<_MenuItem> items,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
+        ...items.map(
+          (item) => Column(
+            children: [
+              ListTile(
+                leading: Icon(item.icon, size: 24, color: Colors.black87),
+                title: Text(
+                  item.title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: item.textColor ?? Colors.black87,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                onTap: item.onTap,
+                trailing: const Icon(
+                  Icons.chevron_right,
+                  size: 20,
+                  color: Colors.grey,
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+              ),
+              if (items.indexOf(item) != items.length - 1)
+                Padding(
+                  padding: const EdgeInsets.only(left: 60),
+                  child: Divider(height: 1, color: Colors.grey[200]),
+                ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+      ],
+    );
+  }
+
+  Widget _buildFollowUs(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Follow Us',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildSocialIcon(Icons.facebook, Colors.blue),
+              _buildSocialIcon(Icons.camera_alt, Colors.pink),
+              _buildSocialIcon(Icons.play_circle_fill, Colors.red),
+              _buildSocialIcon(Icons.close, Colors.black),
+              _buildSocialIcon(Icons.language, Colors.blueGrey),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSocialIcon(IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        shape: BoxShape.circle,
+      ),
+      child: Icon(icon, color: color, size: 28),
+    );
+  }
+
+  void _confirmLogout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              context.read<AuthViewModel>().signOut();
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MenuItem {
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+  final Color? textColor;
+
+  _MenuItem({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+    this.textColor,
+  });
 }
