@@ -92,6 +92,15 @@ class AboutScreen extends StatelessWidget {
             // Links Section
             _buildLinkTile(
               context,
+              icon: Icons.favorite_rounded,
+              title: AppLocalizations.of(context)!.supportCommunity,
+              subtitle: AppLocalizations.of(context)!.supportDescription,
+              onTap: () =>
+                  _launchUrl('https://checkout.fapshi.com/donation/14943173'),
+            ),
+            const SizedBox(height: 16),
+            _buildLinkTile(
+              context,
               icon: Icons.code,
               title: AppLocalizations.of(context)!.projectSourceCode,
               subtitle: AppLocalizations.of(context)!.viewOnGitHub,

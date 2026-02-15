@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,6 +25,13 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   final PageController _pageController = PageController();
   int _currentPromoPage = 0;
+
+  Future<void> _launchUrl(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   @override
   void initState() {
@@ -748,10 +756,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         children: [
                           Text(
-                            AppLocalizations.of(context)!.donate,
+                            AppLocalizations.of(context)!.supportCommunity,
                             style: GoogleFonts.montserrat(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 16,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 1.2,
                             ),
@@ -766,7 +774,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        AppLocalizations.of(context)!.giveBooks,
+                        AppLocalizations.of(context)!.supportDescription,
                         style: GoogleFonts.inter(
                           color: Colors.white.withValues(alpha: 0.85),
                           fontSize: 11,
@@ -787,7 +795,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                         child: ElevatedButton(
-                          onPressed: () => context.push('/sell'),
+                          onPressed: () => _launchUrl(
+                            'https://checkout.fapshi.com/donation/14943173',
+                          ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: const Color(0xFFEC4899),
