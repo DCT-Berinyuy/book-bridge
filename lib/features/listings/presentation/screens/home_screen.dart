@@ -549,7 +549,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
                 Expanded(
@@ -577,7 +577,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 1),
                       Text(
                         AppLocalizations.of(context)!.discoverBooks,
                         style: GoogleFonts.inter(
@@ -586,7 +586,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 1.2,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
                       Container(
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
@@ -744,7 +744,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
                 Expanded(
@@ -774,7 +774,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 1),
                       Text(
                         AppLocalizations.of(context)!.supportDescription,
                         style: GoogleFonts.inter(
@@ -783,7 +783,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 1.1,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 3),
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
