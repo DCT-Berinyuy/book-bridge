@@ -457,7 +457,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           SizedBox(
-            height: 200, // Increased height to accommodate wrapped text
+            height: 155, // Further compacted height
             child: PageView(
               controller: _pageController,
               onPageChanged: (index) {
@@ -549,7 +549,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
                 Expanded(
@@ -564,7 +564,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             AppLocalizations.of(context)!.nearby,
                             style: GoogleFonts.montserrat(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 16,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 1.2,
                             ),
@@ -573,20 +573,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           const Icon(
                             Icons.location_on,
                             color: Color(0xFF10B981),
-                            size: 20,
+                            size: 18,
                           ),
                         ],
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        AppLocalizations.of(context)!.discoverBooks,
-                        style: GoogleFonts.inter(
-                          color: Colors.white.withValues(alpha: 0.85),
-                          fontSize: 11,
-                          height: 1.3,
-                        ),
-                      ),
-                      const SizedBox(height: 14),
+                      const SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
@@ -664,13 +655,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Icon(
                           Icons.location_on,
                           color: Color(0xFF34D399),
-                          size: 20,
+                          size: 16,
                         ),
                       ),
                       const Icon(
                         Icons.location_on,
                         color: Color(0xFF10B981),
-                        size: 40,
+                        size: 32,
                       ),
                       const Positioned(
                         bottom: 8,
@@ -678,7 +669,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Icon(
                           Icons.location_on,
                           color: Color(0xFF059669),
-                          size: 24,
+                          size: 20,
                         ),
                       ),
                     ],
@@ -744,7 +735,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
                 Expanded(
@@ -760,7 +751,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               AppLocalizations.of(context)!.supportCommunity,
                               style: GoogleFonts.montserrat(
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: 15,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 1.2,
                               ),
@@ -770,20 +761,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           const Icon(
                             Icons.favorite,
                             color: Color(0xFFFEF3C7),
-                            size: 18,
+                            size: 16,
                           ),
                         ],
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
                       Text(
                         AppLocalizations.of(context)!.supportDescription,
                         style: GoogleFonts.inter(
                           color: Colors.white.withValues(alpha: 0.85),
-                          fontSize: 11,
-                          height: 1.3,
+                          fontSize: 10,
+                          height: 1.2,
                         ),
                       ),
-                      const SizedBox(height: 14),
+                      const SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
