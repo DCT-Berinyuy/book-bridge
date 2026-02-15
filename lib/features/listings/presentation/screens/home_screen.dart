@@ -6,7 +6,7 @@ import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel
 import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 import 'package:book_bridge/core/constants/categories.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
@@ -247,8 +247,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.asset(
                   'assets/logo.png',
-                  height: 32,
-                  width: 32,
+                  height: 40,
+                  width: 40,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -259,18 +259,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   return GestureDetector(
                     onTap: () => localeViewModel.toggleLocale(),
                     child: Container(
-                      height: 32,
-                      padding: const EdgeInsets.symmetric(horizontal: 6),
-                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         isEnglish ? '🇺🇸 EN' : '🇫🇷 FR',
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -282,22 +283,23 @@ class _HomeScreenState extends State<HomeScreen> {
               NotificationIcon(color: theme.appBarTheme.foregroundColor),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 4),
-                width: 32,
-                height: 32,
                 decoration: BoxDecoration(
                   color: (theme.appBarTheme.foregroundColor ?? Colors.white)
                       .withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: IconButton(
                   icon: Icon(
                     Icons.person_outline_rounded,
                     color: theme.appBarTheme.foregroundColor,
-                    size: 18,
+                    size: 20,
                   ),
                   onPressed: () => context.push('/profile'),
                   constraints: const BoxConstraints(),
-                  padding: EdgeInsets.zero,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                 ),
               ),
             ],

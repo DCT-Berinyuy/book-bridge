@@ -16,28 +16,23 @@ class NotificationIcon extends StatelessWidget {
 
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 4),
-          width: 32,
-          height: 32,
           decoration: BoxDecoration(
             color: (color ?? Colors.white).withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(20),
           ),
           child: IconButton(
             icon: Badge(
               isLabelVisible: unreadCount > 0,
-              label: Text(
-                unreadCount.toString(),
-                style: const TextStyle(fontSize: 8),
-              ),
+              label: Text(unreadCount.toString()),
               child: Icon(
                 Icons.notifications_none_rounded,
                 color: color,
-                size: 18,
+                size: 20,
               ),
             ),
             onPressed: () => context.push('/notifications'),
             constraints: const BoxConstraints(),
-            padding: EdgeInsets.zero,
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           ),
         );
       },

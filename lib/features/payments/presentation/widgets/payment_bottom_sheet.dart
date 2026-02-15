@@ -1,7 +1,7 @@
 import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:book_bridge/l10n/app_localizations.dart';
 
 class PaymentBottomSheet extends StatefulWidget {
   final int amount;

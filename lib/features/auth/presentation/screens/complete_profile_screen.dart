@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:book_bridge/l10n/app_localizations.dart';
 
 /// Screen for Google users to provide missing profile information.
 class CompleteProfileScreen extends StatefulWidget {
