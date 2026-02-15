@@ -549,7 +549,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
                 Expanded(
@@ -586,7 +586,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 1.2,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 8),
                       Container(
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
@@ -618,7 +618,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             shadowColor: Colors.transparent,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 16,
-                              vertical: 8,
+                              vertical: 6,
                             ),
                             minimumSize: Size.zero,
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -744,7 +744,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
                 Expanded(
@@ -760,9 +760,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               AppLocalizations.of(context)!.supportCommunity,
                               style: GoogleFonts.montserrat(
                                 color: Colors.white,
-                                fontSize: 15,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w900,
-                                letterSpacing: 1.2,
+                                letterSpacing: 1.1,
                               ),
                             ),
                           ),
@@ -780,10 +780,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: GoogleFonts.inter(
                           color: Colors.white.withValues(alpha: 0.85),
                           fontSize: 10,
-                          height: 1.2,
+                          height: 1.1,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 4),
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -807,7 +807,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             shadowColor: Colors.transparent,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 16,
-                              vertical: 8,
+                              vertical: 6,
                             ),
                             minimumSize: Size.zero,
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
