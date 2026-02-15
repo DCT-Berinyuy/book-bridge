@@ -1,6 +1,35 @@
 # CHANGELOG
 
-## 1.1.0 - February 1, 2026
+## 1.3.0 - February 15, 2026
+
+### Added
+
+- **Multi-language Support**: Full support for English and French localization across the app.
+- **Fapshi Integration**: Integrated community donation support via a dedicated Fapshi checkout link.
+- **SvelteKit Landing Page**: Initial production build of the web front-end.
+
+### Changed
+
+- **UI Refinements**: Compacted promotional section for a more native feel (155px height).
+- **Design System**: Harmonized UI with "pill" style capsule containers for icons and buttons.
+- **Project Structure**: Cleaned up 20+ redundant files and migrated to local `l10n` imports for stability.
+- **Git Hygiene**: Comprehensive `.gitignore` updates for a cleaner development environment.
+
+### Fixed
+
+- **Layout Overflows**: Resolved persistent "RIGHT OVERFLOWED" and "BOTTOM OVERFLOWED" issues on the home screen.
+- **Localization Bug**: Fixed critical "Undefined name 'AppLocalizations'" regression.
+
+---
+
+## 1.2.0 - February 14, 2026
+
+### Added
+
+- **Nearby Books**: Initial implementation of location-based listing discovery.
+- **Promo Banners**: Dynamic PageView for promotional messaging.
+
+---
 
 ### Added
 
