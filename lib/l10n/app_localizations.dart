@@ -155,7 +155,7 @@ abstract class AppLocalizations {
   /// No description provided for @supportCommunity.
   ///
   /// In en, this message translates to:
-  /// **'Support the BookBridge Community'**
+  /// **'Support the BookBridge\nCommunity'**
   String get supportCommunity;
 
   /// No description provided for @supportDescription.

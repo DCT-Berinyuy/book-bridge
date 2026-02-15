@@ -36,7 +36,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get discoverBooks => 'Découvrez des livres dans votre communauté';
 
   @override
-  String get supportCommunity => 'Soutenir la communauté BookBridge';
+  String get supportCommunity => 'Soutenir la communauté\nBookBridge';
 
   @override
   String get supportDescription =>

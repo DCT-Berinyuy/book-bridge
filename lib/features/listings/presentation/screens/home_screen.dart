@@ -577,6 +577,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 2),
+                      Text(
+                        AppLocalizations.of(context)!.discoverBooks,
+                        style: GoogleFonts.inter(
+                          color: Colors.white.withValues(alpha: 0.85),
+                          fontSize: 10,
+                          height: 1.2,
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
