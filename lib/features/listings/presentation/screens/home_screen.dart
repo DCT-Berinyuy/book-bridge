@@ -457,7 +457,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           SizedBox(
-            height: 165, // Compact height to avoid overflow
+            height: 200, // Increased height to accommodate wrapped text
             child: PageView(
               controller: _pageController,
               onPageChanged: (index) {
