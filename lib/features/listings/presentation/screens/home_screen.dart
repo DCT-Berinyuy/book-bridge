@@ -586,7 +586,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 1.2,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 6),
                       Container(
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
@@ -783,7 +783,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 1.2,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 6),
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
