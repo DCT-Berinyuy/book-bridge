@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
 
 /// Sign Up screen for new user registration.
 ///
@@ -60,7 +62,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ..showSnackBar(
           SnackBar(
             content: Text(
-              authViewModel.errorMessage ?? 'An unknown error occurred.',
+              authViewModel.errorMessage ??
+                  AppLocalizations.of(context)!.unknownError,
             ),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
@@ -72,7 +75,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: const Text('Sign up successful! Welcome.'),
+            content: Text(AppLocalizations.of(context)!.signUpSuccess),
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
         );
@@ -99,18 +102,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   onPressed: () =>
                       context.canPop() ? context.pop() : context.go('/sign-in'),
                 ),
-                const Expanded(
+                Expanded(
                   child: Text(
-                    'Create Account',
+                    AppLocalizations.of(context)!.signUpButton,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
                     ),
                   ),
                 ),
-                const SizedBox(width: 40), // Spacer for alignment
+                Consumer<LocaleViewModel>(
+                  builder: (context, localeViewModel, _) {
+                    final isEnglish =
+                        localeViewModel.locale.languageCode == 'en';
+                    return GestureDetector(
+                      onTap: () => localeViewModel.toggleLocale(),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          isEnglish ? '🇺🇸 EN' : '🇫🇷 FR',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -132,10 +161,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   const SizedBox(height: 24),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Connecting students, authors, and bookshops to end learning poverty.',
+                  Text(
+                    AppLocalizations.of(context)!.appMarketingHeadline,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                   const SizedBox(height: 24),
 
@@ -146,9 +175,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // Full Name
-                        const Text(
-                          'Full Name',
-                          style: TextStyle(
+                        Text(
+                          AppLocalizations.of(context)!.fullNameLabel,
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: Colors.grey,
@@ -159,7 +188,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           controller: _fullNameController,
                           enabled: authViewModel.authState != AuthState.loading,
                           decoration: InputDecoration(
-                            hintText: 'e.g. John Doe',
+                            hintText: AppLocalizations.of(
+                              context,
+                            )!.fullNameHint,
                             filled: true,
                             fillColor: Theme.of(context).colorScheme.surface,
                             border: OutlineInputBorder(
@@ -173,7 +204,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           validator: (value) {
                             if (value?.isEmpty ?? true) {
-                              return 'Full name is required';
+                              return AppLocalizations.of(
+                                context,
+                              )!.fullNameRequired;
                             }
                             return null;
                           },
@@ -181,9 +214,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         const SizedBox(height: 16),
 
                         // Email
-                        const Text(
-                          'School/Personal Email',
-                          style: TextStyle(
+                        Text(
+                          AppLocalizations.of(context)!.emailLabel,
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: Colors.grey,
@@ -194,7 +227,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           controller: _emailController,
                           enabled: authViewModel.authState != AuthState.loading,
                           decoration: InputDecoration(
-                            hintText: 'student@university.cm',
+                            hintText: AppLocalizations.of(context)!.emailHint,
                             filled: true,
                             fillColor: Theme.of(context).colorScheme.surface,
                             border: OutlineInputBorder(
@@ -209,12 +242,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value?.isEmpty ?? true) {
-                              return 'Email is required';
+                              return AppLocalizations.of(
+                                context,
+                              )!.emailRequired;
                             }
                             if (!RegExp(
                               r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
                             ).hasMatch(value!)) {
-                              return 'Enter a valid email address';
+                              return AppLocalizations.of(context)!.emailInvalid;
                             }
                             return null;
                           },
@@ -222,9 +257,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         const SizedBox(height: 16),
 
                         // Locality
-                        const Text(
-                          'Locality / Neighborhood',
-                          style: TextStyle(
+                        Text(
+                          AppLocalizations.of(context)!.localityLabel,
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: Colors.grey,
@@ -235,7 +270,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           controller: _localityController,
                           enabled: authViewModel.authState != AuthState.loading,
                           decoration: InputDecoration(
-                            hintText: 'e.g. Molyko, Buea',
+                            hintText: AppLocalizations.of(
+                              context,
+                            )!.localityHint,
                             filled: true,
                             fillColor: Theme.of(context).colorScheme.surface,
                             border: OutlineInputBorder(
@@ -249,7 +286,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           validator: (value) {
                             if (value?.isEmpty ?? true) {
-                              return 'Locality is required';
+                              return AppLocalizations.of(
+                                context,
+                              )!.localityRequired;
                             }
                             return null;
                           },
@@ -257,9 +296,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         const SizedBox(height: 16),
 
                         // WhatsApp Number
-                        const Text(
-                          'WhatsApp Number',
-                          style: TextStyle(
+                        Text(
+                          AppLocalizations.of(context)!.whatsappLabel,
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: Colors.grey,
@@ -270,7 +309,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           controller: _whatsappController,
                           enabled: authViewModel.authState != AuthState.loading,
                           decoration: InputDecoration(
-                            hintText: 'e.g. 677... or 699...',
+                            hintText: AppLocalizations.of(
+                              context,
+                            )!.whatsappHint,
                             filled: true,
                             fillColor: Theme.of(context).colorScheme.surface,
                             border: OutlineInputBorder(
@@ -285,11 +326,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           keyboardType: TextInputType.phone,
                           validator: (value) {
                             if (value?.isEmpty ?? true) {
-                              return 'WhatsApp number is required';
+                              return AppLocalizations.of(
+                                context,
+                              )!.whatsappRequired;
                             }
                             // Basic Cameroon phone number validation (9 digits)
                             if (!RegExp(r'^\d{9}$').hasMatch(value!)) {
-                              return 'Enter a valid 9-digit number';
+                              return AppLocalizations.of(
+                                context,
+                              )!.whatsappInvalid;
                             }
                             return null;
                           },
@@ -297,9 +342,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         const SizedBox(height: 16),
 
                         // Password
-                        const Text(
-                          'Password',
-                          style: TextStyle(
+                        Text(
+                          AppLocalizations.of(context)!.passwordLabel,
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: Colors.grey,
@@ -310,7 +355,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           controller: _passwordController,
                           enabled: authViewModel.authState != AuthState.loading,
                           decoration: InputDecoration(
-                            hintText: 'Min. 6 characters',
+                            hintText: AppLocalizations.of(
+                              context,
+                            )!.passwordRequirement,
                             filled: true,
                             fillColor: Theme.of(context).colorScheme.surface,
                             border: OutlineInputBorder(
@@ -337,10 +384,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           obscureText: _obscurePassword,
                           validator: (value) {
                             if (value?.isEmpty ?? true) {
-                              return 'Password is required';
+                              return AppLocalizations.of(
+                                context,
+                              )!.passwordRequired;
                             }
                             if (value!.length < 6) {
-                              return 'Password must be at least 6 characters';
+                              return AppLocalizations.of(
+                                context,
+                              )!.passwordTooShort;
                             }
                             return null;
                           },
@@ -389,9 +440,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       strokeWidth: 2,
                                     ),
                                   )
-                                : const Text(
-                                    'Sign Up',
-                                    style: TextStyle(
+                                : Text(
+                                    AppLocalizations.of(context)!.signUpButton,
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -408,9 +459,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(height: 16),
 
                       // FCFA indicator
-                      const Text(
-                        'PRICES ARE LISTED IN FCFA',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!.pricesListedIn,
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                           color: Color(0xFF1A4D8C), // Scholar Blue
@@ -420,7 +471,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                       // Sign In link
                       Text(
-                        'Already have an account?',
+                        AppLocalizations.of(context)!.haveAccount,
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey.shade400,
@@ -430,9 +481,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         onPressed: () => context.canPop()
                             ? context.pop()
                             : context.go('/sign-in'),
-                        child: const Text(
-                          'Log In',
-                          style: TextStyle(
+                        child: Text(
+                          AppLocalizations.of(context)!.logInButton,
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF13EC5B), // Scholar Blue

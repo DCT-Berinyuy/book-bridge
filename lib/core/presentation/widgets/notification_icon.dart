@@ -14,13 +14,31 @@ class NotificationIcon extends StatelessWidget {
       builder: (context, viewModel, _) {
         final unreadCount = viewModel.unreadCount;
 
-        return IconButton(
-          icon: Badge(
-            isLabelVisible: unreadCount > 0,
-            label: Text(unreadCount.toString()),
-            child: Icon(Icons.notifications_none_rounded, color: color),
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: (color ?? Colors.white).withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
           ),
-          onPressed: () => context.push('/notifications'),
+          child: IconButton(
+            icon: Badge(
+              isLabelVisible: unreadCount > 0,
+              label: Text(
+                unreadCount.toString(),
+                style: const TextStyle(fontSize: 8),
+              ),
+              child: Icon(
+                Icons.notifications_none_rounded,
+                color: color,
+                size: 18,
+              ),
+            ),
+            onPressed: () => context.push('/notifications'),
+            constraints: const BoxConstraints(),
+            padding: EdgeInsets.zero,
+          ),
         );
       },
     );

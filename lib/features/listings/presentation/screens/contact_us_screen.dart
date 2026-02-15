@@ -1,7 +1,8 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ContactUsScreen extends StatelessWidget {
   const ContactUsScreen({super.key});
@@ -30,7 +31,7 @@ class ContactUsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contact Us'),
+        title: Text(AppLocalizations.of(context)!.contactUs),
         backgroundColor: const Color(0xFF1A4D8C),
         foregroundColor: Colors.white,
         leading: IconButton(
@@ -43,9 +44,9 @@ class ContactUsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Get in touch',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.getInTouch,
+              style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF1A4D8C),
@@ -53,7 +54,7 @@ class ContactUsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'Have a question, feedback, or need support? We\'re here to help you get the most out of BookBridge.',
+              AppLocalizations.of(context)!.contactSubtitle,
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey[600],
@@ -64,8 +65,8 @@ class ContactUsScreen extends StatelessWidget {
             _buildContactCard(
               context,
               icon: FontAwesomeIcons.whatsapp,
-              title: 'WhatsApp Support',
-              subtitle: 'Chat with us directly',
+              title: AppLocalizations.of(context)!.whatsappSupport,
+              subtitle: AppLocalizations.of(context)!.chatDirectly,
               color: Colors.green,
               onTap: _launchWhatsApp,
             ),
@@ -73,7 +74,7 @@ class ContactUsScreen extends StatelessWidget {
             _buildContactCard(
               context,
               icon: Icons.email_outlined,
-              title: 'Email Us',
+              title: AppLocalizations.of(context)!.emailUs,
               subtitle: 'verlaberinyuy8@gmail.com',
               color: Colors.redAccent,
               onTap: _launchEmail,
@@ -83,17 +84,19 @@ class ContactUsScreen extends StatelessWidget {
               context,
               icon: FontAwesomeIcons.linkedinIn,
               title: 'LinkedIn',
-              subtitle: 'Connect with Verla Berinyuy',
+              subtitle: AppLocalizations.of(
+                context,
+              )!.connectWithAuthor('Verla Berinyuy'),
               color: const Color(0xFF0077B5),
               onTap: () => _launchUrl(
                 'https://www.linkedin.com/in/verla-berinyuy-15b1262a5/',
               ),
             ),
             const SizedBox(height: 48),
-            const Center(
+            Center(
               child: Text(
-                'Available Mon - Sat, 8 AM - 6 PM',
-                style: TextStyle(
+                AppLocalizations.of(context)!.availableHours,
+                style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: Colors.grey,

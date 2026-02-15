@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
+import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// User profile screen displaying user information and their listings.
 ///
@@ -37,9 +39,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF1A4D8C),
         foregroundColor: Colors.white,
-        title: const Text(
-          'Account',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          AppLocalizations.of(context)!.account,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
           PopupMenuButton<String>(
@@ -52,24 +54,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
               }
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'edit',
                 child: Row(
                   children: [
                     Icon(Icons.edit_outlined, size: 20, color: Colors.black87),
                     SizedBox(width: 12),
-                    Text('Edit Profile'),
+                    Text(AppLocalizations.of(context)!.editProfile),
                   ],
                 ),
               ),
               const PopupMenuDivider(),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'logout',
                 child: Row(
                   children: [
                     Icon(Icons.logout, size: 20, color: Colors.red),
                     SizedBox(width: 12),
-                    Text('Logout', style: TextStyle(color: Colors.red)),
+                    Text(
+                      AppLocalizations.of(context)!.logout,
+                      style: const TextStyle(color: Colors.red),
+                    ),
                   ],
                 ),
               ),
@@ -85,7 +90,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           final user = profileViewModel.currentUser;
           if (user == null) {
-            return const Center(child: Text('User not found'));
+            return Center(
+              child: Text(AppLocalizations.of(context)!.userNotFound),
+            );
           }
 
           return SingleChildScrollView(
@@ -95,64 +102,74 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _buildHeader(context, user),
                 _buildStatsSection(context, profileViewModel),
                 const Divider(height: 1),
-                _buildMenuSection(context, 'My Account', [
-                  _buildMenuItem(
-                    context,
-                    icon: Icons.person_outline,
-                    title: 'My Profile Edit',
-                    onTap: () => context.push('/edit-profile'),
-                  ),
-                  _buildMenuItem(
-                    context,
-                    icon: Icons.favorite_border,
-                    title: 'My Favourites',
-                    onTap: () => context.push('/favorites'),
-                  ),
-                  _buildMenuItem(
-                    context,
-                    icon: Icons.book_outlined,
-                    title: 'My Books',
-                    onTap: () => context.go('/my-books'),
-                    isLast: true,
-                  ),
-                ]),
+                _buildMenuSection(
+                  context,
+                  AppLocalizations.of(context)!.myAccount,
+                  [
+                    _buildMenuItem(
+                      context,
+                      icon: Icons.person_outline,
+                      title: AppLocalizations.of(context)!.myProfileEdit,
+                      onTap: () => context.push('/edit-profile'),
+                    ),
+                    _buildMenuItem(
+                      context,
+                      icon: Icons.favorite_border,
+                      title: AppLocalizations.of(context)!.myFavourites,
+                      onTap: () => context.push('/favorites'),
+                    ),
+                    _buildMenuItem(
+                      context,
+                      icon: Icons.book_outlined,
+                      title: AppLocalizations.of(context)!.myBooks,
+                      onTap: () => context.go('/my-books'),
+                      isLast: true,
+                    ),
+                  ],
+                ),
                 const Divider(height: 1),
-                _buildMenuSection(context, 'More', [
+                _buildMenuSection(context, AppLocalizations.of(context)!.more, [
                   _buildMenuItem(
                     context,
                     icon: Icons.lock_outline,
-                    title: 'Privacy Policy',
+                    title: AppLocalizations.of(context)!.privacyPolicy,
                     onTap: () => context.push('/privacy'),
                   ),
                   _buildMenuItem(
                     context,
                     icon: Icons.description_outlined,
-                    title: 'Terms & Conditions',
+                    title: AppLocalizations.of(context)!.termsConditions,
                     onTap: () => context.push('/terms'),
+                  ),
+                  _buildMenuItem(
+                    context,
+                    icon: Icons.language_outlined,
+                    title: AppLocalizations.of(context)!.language,
+                    onTap: () => _showLanguagePicker(context),
                   ),
                   _buildExpandableMenuItem(
                     context,
                     icon: Icons.help_outline,
-                    title: 'Help & Support',
+                    title: AppLocalizations.of(context)!.helpSupport,
                     children: [
                       _buildMenuItem(
                         context,
                         icon: Icons.help_outline,
-                        title: 'FAQ',
+                        title: AppLocalizations.of(context)!.faq,
                         onTap: () => context.push('/faq'),
                         indent: true,
                       ),
                       _buildMenuItem(
                         context,
                         icon: Icons.feedback_outlined,
-                        title: 'Feedback',
+                        title: AppLocalizations.of(context)!.feedback,
                         onTap: () => context.push('/feedback'),
                         indent: true,
                       ),
                       _buildMenuItem(
                         context,
                         icon: Icons.email_outlined,
-                        title: 'Contact Us',
+                        title: AppLocalizations.of(context)!.contactUs,
                         onTap: () => context.push('/contact'),
                         indent: true,
                         isLast: true,
@@ -162,24 +179,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildMenuItem(
                     context,
                     icon: Icons.share_outlined,
-                    title: 'Invite friends',
+                    title: AppLocalizations.of(context)!.inviteFriends,
                     onTap: () {
+                      final l10n = AppLocalizations.of(context)!;
                       Share.share(
-                        'Join me on BookBridge, the peer-to-peer marketplace for used books in Cameroon! 📚✨\n\nDownload or visit us at: https://book-bridge-three.vercel.app/',
-                        subject: 'Invite to BookBridge',
+                        l10n.inviteMessage,
+                        subject: l10n.inviteSubject,
                       );
                     },
                   ),
                   _buildMenuItem(
                     context,
                     icon: Icons.info_outline_rounded,
-                    title: 'About BookBridge',
+                    title: AppLocalizations.of(context)!.aboutBookBridge,
                     onTap: () => context.push('/about'),
                   ),
                   _buildMenuItem(
                     context,
                     icon: Icons.logout_rounded,
-                    title: 'Logout',
+                    title: AppLocalizations.of(context)!.logout,
                     textColor: Colors.red,
                     onTap: () => _confirmLogout(context),
                     isLast: true,
@@ -236,7 +254,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const Icon(Icons.location_on, size: 16, color: Colors.grey),
               const SizedBox(width: 4),
               Text(
-                user.locality ?? 'Unknown Location',
+                user.locality ?? AppLocalizations.of(context)!.unknownLocation,
                 style: const TextStyle(color: Colors.grey, fontSize: 14),
               ),
             ],
@@ -255,7 +273,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: _buildStatItem(
               context,
               vm.userListings.length.toString(),
-              'Active Books',
+              AppLocalizations.of(context)!.activeBooks,
               const Color(0xFF1A4D8C),
             ),
           ),
@@ -263,8 +281,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Expanded(
             child: _buildStatItem(
               context,
-              '${NumberFormat.compact().format(vm.userListings.fold<int>(0, (sum, item) => sum + item.priceFcfa))} FCFA',
-              'Total Value',
+              AppLocalizations.of(context)!.priceFormat(
+                NumberFormat.compact().format(
+                  vm.userListings.fold<int>(
+                    0,
+                    (sum, item) => sum + item.priceFcfa,
+                  ),
+                ),
+              ),
+              AppLocalizations.of(context)!.totalValue,
               const Color(0xFF27AE60),
             ),
           ),
@@ -425,7 +450,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Follow Us',
+            AppLocalizations.of(context)!.followUs,
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
@@ -439,7 +464,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _buildSocialIcon(
                 FontAwesomeIcons.facebook,
                 const Color(0xFF1877F2),
-                'Facebook',
+                AppLocalizations.of(context)!.facebook,
                 () => _launchUrl(
                   'https://www.facebook.com/profile.php?id=61572639047021',
                 ),
@@ -447,20 +472,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _buildSocialIcon(
                 FontAwesomeIcons.instagram,
                 const Color(0xFFE4405F),
-                'Instagram',
+                AppLocalizations.of(context)!.instagram,
                 () =>
                     _launchUrl('https://www.instagram.com/verlaberinyuyndey/'),
               ),
               _buildSocialIcon(
                 FontAwesomeIcons.youtube,
                 const Color(0xFFFF0000),
-                'YouTube',
+                AppLocalizations.of(context)!.youtube,
                 () => _launchUrl('https://www.youtube.com/@VerlaBerinyuy'),
               ),
               _buildSocialIcon(
                 FontAwesomeIcons.linkedinIn,
                 const Color(0xFF0A66C2),
-                'LinkedIn',
+                AppLocalizations.of(context)!.linkedin,
                 () => _launchUrl(
                   'https://www.linkedin.com/in/verla-berinyuy-15b1262a5/',
                 ),
@@ -519,12 +544,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
+        title: Text(AppLocalizations.of(context)!.logoutConfirmTitle),
+        content: Text(AppLocalizations.of(context)!.logoutConfirmMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () {
@@ -532,10 +557,97 @@ class _ProfileScreenState extends State<ProfileScreen> {
               context.read<AuthViewModel>().signOut();
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Logout'),
+            child: Text(AppLocalizations.of(context)!.logout),
           ),
         ],
       ),
+    );
+  }
+
+  void _showLanguagePicker(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        final l10n = AppLocalizations.of(context)!;
+        final localeViewModel = context.watch<LocaleViewModel>();
+        final currentLocale = localeViewModel.locale;
+
+        return SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.only(
+                top: 24,
+                left: 16,
+                right: 16,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    l10n.selectLanguage,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A4D8C),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  _buildLanguageOption(
+                    context,
+                    title: l10n.english,
+                    flag: '🇺🇸',
+                    isSelected: currentLocale.languageCode == 'en',
+                    onTap: () {
+                      localeViewModel.setLocale(const Locale('en'));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  const Divider(),
+                  _buildLanguageOption(
+                    context,
+                    title: l10n.french,
+                    flag: '🇫🇷',
+                    isSelected: currentLocale.languageCode == 'fr',
+                    onTap: () {
+                      localeViewModel.setLocale(const Locale('fr'));
+                      Navigator.pop(context);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLanguageOption(
+    BuildContext context, {
+    required String title,
+    required String flag,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      leading: Text(flag, style: const TextStyle(fontSize: 24)),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          color: isSelected ? const Color(0xFF1A4D8C) : Colors.black87,
+        ),
+      ),
+      trailing: isSelected
+          ? const Icon(Icons.check_circle, color: Color(0xFF1A4D8C))
+          : null,
+      onTap: onTap,
     );
   }
 }

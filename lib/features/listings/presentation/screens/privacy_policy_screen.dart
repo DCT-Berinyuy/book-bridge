@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
@@ -8,7 +9,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Privacy Policy'),
+        title: Text(AppLocalizations.of(context)!.privacyPolicyTitle),
         backgroundColor: const Color(0xFF1A4D8C),
         foregroundColor: Colors.white,
         leading: IconButton(
@@ -21,46 +22,46 @@ class PrivacyPolicyScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSectionTitle('1. Introduction'),
+            _buildSectionTitle(AppLocalizations.of(context)!.privacyIntroTitle),
             _buildSectionContent(
-              'Welcome to BookBridge. We value your privacy and are committed to protecting your personal data. This privacy policy will inform you about how we look after your personal data when you visit our application and tell you about your privacy rights.',
+              AppLocalizations.of(context)!.privacyIntroContent,
             ),
             const SizedBox(height: 20),
-            _buildSectionTitle('2. Data We Collect'),
+            _buildSectionTitle(
+              AppLocalizations.of(context)!.privacyCollectTitle,
+            ),
             _buildSectionContent(
-              'We may collect, use, store and transfer different kinds of personal data about you which we have grouped together as follows:\n\n'
-              '• Identity Data: Name, username or similar identifier.\n'
-              '• Contact Data: Email address and telephone numbers (including WhatsApp).\n'
-              '• Technical Data: IP address, login data, browser type and version, time zone setting and location.\n'
-              '• Profile Data: Your username, password, listings made by you, your interests, and favorites.',
+              AppLocalizations.of(context)!.privacyCollectContent,
             ),
             const SizedBox(height: 20),
-            _buildSectionTitle('3. How We Use Your Data'),
+            _buildSectionTitle(AppLocalizations.of(context)!.privacyUseTitle),
             _buildSectionContent(
-              'We only use your personal data when the law allows us to. Most commonly, we will use your personal data in the following circumstances:\n\n'
-              '• To register you as a new user.\n'
-              '• To facilitate the peer-to-peer marketplace (connecting buyers and sellers).\n'
-              '• To improve our application, services, and user experience.\n'
-              '• To manage our relationship with you.',
+              AppLocalizations.of(context)!.privacyUseContent,
             ),
             const SizedBox(height: 20),
-            _buildSectionTitle('4. Data Sharing'),
+            _buildSectionTitle(
+              AppLocalizations.of(context)!.privacySharingTitle,
+            ),
             _buildSectionContent(
-              'When you list a book, your contact information (like your WhatsApp number) will be shared with potential buyers to facilitate the transaction. We do not sell your personal data to third parties for marketing purposes.',
+              AppLocalizations.of(context)!.privacySharingContent,
             ),
             const SizedBox(height: 20),
-            _buildSectionTitle('5. Data Security'),
+            _buildSectionTitle(
+              AppLocalizations.of(context)!.privacySecurityTitle,
+            ),
             _buildSectionContent(
-              'We have put in place appropriate security measures to prevent your personal data from being accidentally lost, used or accessed in an unauthorized way, altered or disclosed.',
+              AppLocalizations.of(context)!.privacySecurityContent,
             ),
             const SizedBox(height: 20),
-            _buildSectionTitle('6. Your Rights'),
+            _buildSectionTitle(
+              AppLocalizations.of(context)!.privacyRightsTitle,
+            ),
             _buildSectionContent(
-              'You have the right to request access to, correction of, or erasure of your personal data. You can manage most of your data directly through your profile settings in the application.',
+              AppLocalizations.of(context)!.privacyRightsContent,
             ),
             const SizedBox(height: 40),
             Text(
-              'Last updated: February 2026',
+              AppLocalizations.of(context)!.lastUpdated('February 2026'),
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 color: Colors.grey[600],

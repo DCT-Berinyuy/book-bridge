@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FeedbackScreen extends StatefulWidget {
   const FeedbackScreen({super.key});
@@ -25,7 +26,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     final content = _feedbackController.text.trim();
     if (content.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter your feedback')),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.pleaseEnterFeedback),
+        ),
       );
       return;
     }
@@ -43,8 +46,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Thank you for your feedback!'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.feedbackSuccess),
             backgroundColor: Colors.green,
           ),
         );
@@ -54,7 +57,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to send feedback: $e'),
+            content: Text(
+              AppLocalizations.of(context)!.feedbackError(e.toString()),
+            ),
             backgroundColor: Colors.red,
           ),
         );
@@ -70,7 +75,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Send Feedback'),
+        title: Text(AppLocalizations.of(context)!.sendFeedback),
         backgroundColor: const Color(0xFF1A4D8C),
         foregroundColor: Colors.white,
       ),
@@ -79,9 +84,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              'We value your input!',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.weValueInput,
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF1A4D8C),
@@ -89,7 +94,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Tell us what you like about BookBridge or what we can improve. Your feedback helps us build a better platform for everyone.',
+              AppLocalizations.of(context)!.feedbackSubtitle,
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey[600],
@@ -101,7 +106,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               controller: _feedbackController,
               maxLines: 8,
               decoration: InputDecoration(
-                hintText: 'Type your feedback here...',
+                hintText: AppLocalizations.of(context)!.feedbackHint,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Colors.grey[300]!),
@@ -138,9 +143,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
                     )
-                  : const Text(
-                      'Submit Feedback',
-                      style: TextStyle(
+                  : Text(
+                      AppLocalizations.of(context)!.submitFeedback,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 0.5,
@@ -149,7 +154,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             ),
             const SizedBox(height: 24),
             Text(
-              'By submitting, you agree that your feedback may be used to improve our services.',
+              AppLocalizations.of(context)!.feedbackAggrement,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 12, color: Colors.grey[500]),
             ),

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 
 import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -28,7 +29,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Favourites'),
+        title: Text(AppLocalizations.of(context)!.myFavorites),
         backgroundColor: const Color(0xFF1A4D8C),
         foregroundColor: Colors.white,
       ),
@@ -45,7 +46,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 children: [
                   const Icon(Icons.error_outline, size: 64, color: Colors.red),
                   const SizedBox(height: 16),
-                  Text(favoritesViewModel.errorMessage ?? 'An error occurred'),
+                  Text(
+                    favoritesViewModel.errorMessage ??
+                        AppLocalizations.of(context)!.anErrorOccurred,
+                  ),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
@@ -54,7 +58,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                         favoritesViewModel.loadFavorites(userId);
                       }
                     },
-                    child: const Text('Retry'),
+                    child: Text(AppLocalizations.of(context)!.retry),
                   ),
                 ],
               ),
@@ -74,13 +78,16 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     color: Colors.grey[300],
                   ),
                   const SizedBox(height: 24),
-                  const Text(
-                    'No favorites yet',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  Text(
+                    AppLocalizations.of(context)!.noFavoritesYet,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Books you heart will appear here.',
+                    AppLocalizations.of(context)!.favoritesEmptySubtitle,
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 32),
@@ -94,7 +101,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                         vertical: 12,
                       ),
                     ),
-                    child: const Text('Explore Books'),
+                    child: Text(AppLocalizations.of(context)!.exploreBooks),
                   ),
                 ],
               ),
@@ -185,7 +192,9 @@ class _FavoriteListingCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${listing.priceFcfa} FCFA',
+                    AppLocalizations.of(
+                      context,
+                    )!.priceFormat(listing.priceFcfa),
                     style: const TextStyle(
                       color: Color(0xFF1A4D8C),
                       fontWeight: FontWeight.bold,

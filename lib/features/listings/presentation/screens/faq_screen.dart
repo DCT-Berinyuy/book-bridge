@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 class FaqScreen extends StatelessWidget {
@@ -8,7 +9,7 @@ class FaqScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Frequently Asked Questions'),
+        title: Text(AppLocalizations.of(context)!.faqTitle),
         backgroundColor: const Color(0xFF1A4D8C),
         foregroundColor: Colors.white,
         leading: IconButton(
@@ -19,55 +20,59 @@ class FaqScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          _buildCategoryHeader('General'),
-          _buildFaqItem(
-            'What is BookBridge?',
-            'BookBridge is a peer-to-peer marketplace designed specifically for students in Cameroon to buy and sell used physical books at affordable prices.',
+          _buildCategoryHeader(
+            AppLocalizations.of(context)!.faqGeneralCategory,
           ),
           _buildFaqItem(
-            'How do I create an account?',
-            'You can sign up using your email address or quickly sign in with your Google account. After signing in, you\'ll need to complete your profile with a few details like your locality and WhatsApp number.',
-          ),
-
-          const SizedBox(height: 24),
-          _buildCategoryHeader('Buying Books'),
-          _buildFaqItem(
-            'How do I buy a book?',
-            'Browse the listings on the Home screen or use the search bar. When you find a book you like, tap on it to see details, then use the "Contact Seller" button to message them via WhatsApp to arrange the purchase.',
+            AppLocalizations.of(context)!.faqWhatIsBookBridgeQ,
+            AppLocalizations.of(context)!.faqWhatIsBookBridgeA,
           ),
           _buildFaqItem(
-            'How do I pay for a book?',
-            'Most transactions happen directly between the buyer and seller. You can pay in cash during a physical meeting or via Mobile Money if both parties agree. Always verify the book\'s condition before paying.',
-          ),
-          _buildFaqItem(
-            'Can I see books near me?',
-            'Yes! The "Your nearby books" section on the Home screen uses your location to show books available in your immediate vicinity, sorted by distance.',
+            AppLocalizations.of(context)!.faqCreateAccountQ,
+            AppLocalizations.of(context)!.faqCreateAccountA,
           ),
 
           const SizedBox(height: 24),
-          _buildCategoryHeader('Selling Books'),
+          _buildCategoryHeader(AppLocalizations.of(context)!.faqBuyingCategory),
           _buildFaqItem(
-            'How do I list a book for sale?',
-            'Tap the "Sell" button in the bottom navigation bar. Upload a clear photo of the book, enter the title, author, price, and condition, then submit the listing.',
+            AppLocalizations.of(context)!.faqHowToBuyQ,
+            AppLocalizations.of(context)!.faqHowToBuyA,
           ),
           _buildFaqItem(
-            'Is there a fee for selling?',
-            'Currently, listing books on BookBridge is free for individual students. We want to make it as easy as possible for you to recycle your educational resources.',
+            AppLocalizations.of(context)!.faqHowToPayQ,
+            AppLocalizations.of(context)!.faqHowToPayA,
           ),
           _buildFaqItem(
-            'What is "Buy-Back Eligible"?',
-            'Some listings from verified bookshops or the platform itself may be eligible for buy-back. This means you can sell the book back to the source at a pre-determined price once you\'re finished with it.',
+            AppLocalizations.of(context)!.faqNearbyBooksQ,
+            AppLocalizations.of(context)!.faqNearbyBooksA,
           ),
 
           const SizedBox(height: 24),
-          _buildCategoryHeader('Safety & Trust'),
-          _buildFaqItem(
-            'How do I know a seller is trustworthy?',
-            'Check for the "Verified" badge on listings. For individual students, we encourage meeting in safe, public locations like your school campus or a busy library to complete transactions.',
+          _buildCategoryHeader(
+            AppLocalizations.of(context)!.faqSellingCategory,
           ),
           _buildFaqItem(
-            'What should I do if there\'s a problem?',
-            'If you encounter any issues with a transaction or another user, please use the "Feedback" or "Contact Us" options in your profile to report it to our team.',
+            AppLocalizations.of(context)!.faqHowToListQ,
+            AppLocalizations.of(context)!.faqHowToListA,
+          ),
+          _buildFaqItem(
+            AppLocalizations.of(context)!.faqSellingFeesQ,
+            AppLocalizations.of(context)!.faqSellingFeesA,
+          ),
+          _buildFaqItem(
+            AppLocalizations.of(context)!.faqBuyBackEligibleQ,
+            AppLocalizations.of(context)!.faqBuyBackEligibleA,
+          ),
+
+          const SizedBox(height: 24),
+          _buildCategoryHeader(AppLocalizations.of(context)!.faqSafetyCategory),
+          _buildFaqItem(
+            AppLocalizations.of(context)!.faqTrustworthySellerQ,
+            AppLocalizations.of(context)!.faqTrustworthySellerA,
+          ),
+          _buildFaqItem(
+            AppLocalizations.of(context)!.faqProblemQ,
+            AppLocalizations.of(context)!.faqProblemA,
           ),
           const SizedBox(height: 48),
         ],

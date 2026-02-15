@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Screen for displaying user notifications.
 class NotificationsScreen extends StatefulWidget {
@@ -28,7 +29,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: Text(AppLocalizations.of(context)!.notifications),
         centerTitle: true,
         actions: [
           Consumer<NotificationsViewModel>(
@@ -36,7 +37,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               if (viewModel.unreadCount > 0) {
                 return IconButton(
                   icon: const Icon(Icons.done_all),
-                  tooltip: 'Mark all as read',
+                  tooltip: AppLocalizations.of(context)!.markAllAsRead,
                   onPressed: () {
                     viewModel.markAllAsRead();
                   },
@@ -56,7 +57,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           if (viewModel.errorMessage != null) {
             return Center(
               child: Text(
-                'Error: ${viewModel.errorMessage}',
+                AppLocalizations.of(
+                  context,
+                )!.errorWithDetails(viewModel.errorMessage!),
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             );
@@ -78,7 +81,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'No Notifications Yet',
+                      AppLocalizations.of(context)!.noNotificationsYet,
                       style: GoogleFonts.lato(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -86,7 +89,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'You\'ll see alerts about your listings, messages, and activity here.',
+                      AppLocalizations.of(context)!.notificationsEmptySubtitle,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,

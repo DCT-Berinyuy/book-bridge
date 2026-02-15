@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -17,7 +18,7 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('About BookBridge'),
+        title: Text(AppLocalizations.of(context)!.aboutBookBridge),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -71,16 +72,14 @@ class AboutScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Version 1.1.0',
+              AppLocalizations.of(context)!.version('1.1.0'),
               style: TextStyle(fontSize: 14, color: Colors.grey[600]),
             ),
             const SizedBox(height: 32),
 
             // Description
             Text(
-              'BookBridge is a peer-to-peer marketplace designed for students in Cameroon. '
-              'Our mission is to make educational resources accessible and affordable by connecting '
-              'students who want to sell their used books with those who need them.',
+              AppLocalizations.of(context)!.aboutDescription,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
@@ -94,8 +93,8 @@ class AboutScreen extends StatelessWidget {
             _buildLinkTile(
               context,
               icon: Icons.code,
-              title: 'Project Source Code',
-              subtitle: 'View on GitHub',
+              title: AppLocalizations.of(context)!.projectSourceCode,
+              subtitle: AppLocalizations.of(context)!.viewOnGitHub,
               onTap: () =>
                   _launchUrl('https://github.com/DCT-Berinyuy/book-bridge'),
             ),
@@ -103,8 +102,8 @@ class AboutScreen extends StatelessWidget {
             _buildLinkTile(
               context,
               icon: Icons.language,
-              title: 'Official Website',
-              subtitle: 'Visit our web platform',
+              title: AppLocalizations.of(context)!.officialWebsite,
+              subtitle: AppLocalizations.of(context)!.visitWebPlatform,
               onTap: () => _launchUrl('https://book-bridge-three.vercel.app/'),
             ),
             const SizedBox(height: 16),
@@ -112,13 +111,17 @@ class AboutScreen extends StatelessWidget {
               context,
               icon: Icons.person,
               title: 'Mr.DCT',
-              subtitle: 'Connect with the Author',
+              subtitle: AppLocalizations.of(
+                context,
+              )!.connectWithAuthor('Mr.DCT'),
               onTap: () => _launchUrl('https://linktr.ee/DeepCodeThinking'),
             ),
 
             const SizedBox(height: 48),
             Text(
-              '© ${DateTime.now().year} DCT-Berinyuy. All rights reserved.',
+              AppLocalizations.of(
+                context,
+              )!.copyright(DateTime.now().year.toString()),
               style: TextStyle(fontSize: 12, color: Colors.grey[500]),
             ),
           ],

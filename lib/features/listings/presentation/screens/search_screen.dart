@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
@@ -63,9 +64,9 @@ class _SearchScreenState extends State<SearchScreen> {
                         children: [
                           const Icon(Icons.menu_book, color: Colors.white),
                           const SizedBox(width: 8),
-                          const Text(
-                            'BookBridge',
-                            style: TextStyle(
+                          Text(
+                            AppLocalizations.of(context)!.appTitle,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
@@ -90,7 +91,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           style: const TextStyle(color: Colors.black),
                           cursorColor: Colors.black,
                           decoration: InputDecoration(
-                            hintText: 'Search title, author, or ISBN...',
+                            hintText: AppLocalizations.of(context)!.searchHint,
                             hintStyle: const TextStyle(color: Colors.grey),
                             prefixIcon: const Icon(
                               Icons.search,
@@ -141,8 +142,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       (viewModel.searchState == SearchState.success &&
                           _searchController.text.isEmpty)) ...[
                     // Academic Categories
-                    const Text(
-                      'Academic Categories',
+                    Text(
+                      AppLocalizations.of(context)!.academicCategories,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
@@ -150,7 +151,11 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     const SizedBox(height: 16),
                     if (viewModel.categories.isEmpty)
-                      const Center(child: Text('No categories available'))
+                      Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.noCategoriesAvailable,
+                        ),
+                      )
                     else
                       GridView.builder(
                         shrinkWrap: true,
@@ -179,8 +184,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Recent Searches',
+                          Text(
+                            AppLocalizations.of(context)!.recentSearches,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
@@ -190,8 +195,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             onPressed: () {
                               viewModel.clearRecentSearches();
                             },
-                            child: const Text(
-                              'Clear All',
+                            child: Text(
+                              AppLocalizations.of(context)!.clearAll,
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
@@ -278,7 +283,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Text(
-                          viewModel.errorMessage ?? 'An error occurred',
+                          viewModel.errorMessage ??
+                              AppLocalizations.of(context)!.anErrorOccurred,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.error,
                           ),
@@ -305,7 +311,9 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              'No results found for "${_searchController.text}"',
+                              AppLocalizations.of(
+                                context,
+                              )!.noResultsFoundFor(_searchController.text),
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
@@ -322,7 +330,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       children: [
                         const SizedBox(height: 24),
                         Text(
-                          '${viewModel.searchResults.length} result${viewModel.searchResults.length != 1 ? 's' : ''} found',
+                          AppLocalizations.of(
+                            context,
+                          )!.resultsFoundCount(viewModel.searchResults.length),
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                         const SizedBox(height: 12),
@@ -455,7 +465,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${listing.priceFcfa} FCFA',
+                    AppLocalizations.of(
+                      context,
+                    )!.priceFormat(listing.priceFcfa),
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,
@@ -472,7 +484,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
-                          listing.sellerLocality ?? 'Cameroon',
+                          listing.sellerLocality ??
+                              AppLocalizations.of(context)!.cameroon,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -542,7 +555,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      category.name,
+                      _getLocalizedCategory(context, category.name),
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -565,5 +578,37 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
     );
+  }
+
+  String _getLocalizedCategory(BuildContext context, String categoryName) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (categoryName) {
+      case 'Textbooks':
+        return l10n.categoryTextbooks;
+      case 'Fiction':
+        return l10n.categoryFiction;
+      case 'Science':
+        return l10n.categoryScience;
+      case 'History':
+        return l10n.categoryHistory;
+      case 'GCE':
+        return l10n.categoryGCE;
+      case 'Business':
+        return l10n.categoryBusiness;
+      case 'Technology':
+        return l10n.categoryTechnology;
+      case 'Arts':
+        return l10n.categoryArts;
+      case 'Language':
+        return l10n.categoryLanguage;
+      case 'Mathematics':
+        return l10n.categoryMathematics;
+      case 'Engineering':
+        return l10n.categoryEngineering;
+      case 'Medicine':
+        return l10n.categoryMedicine;
+      default:
+        return categoryName;
+    }
   }
 }

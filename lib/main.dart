@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:book_bridge/core/theme/app_theme.dart';
@@ -13,6 +14,7 @@ import 'package:book_bridge/features/listings/presentation/viewmodels/search_vie
 import 'package:book_bridge/features/notifications/presentation/viewmodels/notifications_viewmodel.dart';
 import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
 import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
+import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
 import 'config/app_config.dart';
 
 void main() async {
@@ -68,13 +70,23 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<FavoritesViewModel>(
           create: (_) => di.getIt<FavoritesViewModel>(),
         ),
+        ChangeNotifierProvider<LocaleViewModel>(
+          create: (_) => LocaleViewModel(),
+        ),
       ],
-      child: MaterialApp.router(
-        title: 'BookBridge: Social Venture',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        routerConfig: appRouter,
+      child: Consumer<LocaleViewModel>(
+        builder: (context, localeViewModel, _) {
+          return MaterialApp.router(
+            title: 'BookBridge: Social Venture',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            routerConfig: appRouter,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: localeViewModel.locale,
+          );
+        },
       ),
     );
   }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Screen for Google users to provide missing profile information.
 class CompleteProfileScreen extends StatefulWidget {
@@ -36,7 +38,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Complete Your Profile'),
+        title: Text(AppLocalizations.of(context)!.completeYourProfile),
         automaticallyImplyLeading: false, // User must complete profile
         actions: [
           IconButton(
@@ -54,27 +56,30 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    'Just one more step!',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  Text(
+                    AppLocalizations.of(context)!.justOneMoreStep,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'To start buying and selling, we need a few more details to help other students find you.',
-                    style: TextStyle(color: Colors.grey),
+                  Text(
+                    AppLocalizations.of(context)!.completeProfileSubtitle,
+                    style: const TextStyle(color: Colors.grey),
                   ),
                   const SizedBox(height: 32),
 
                   // Locality
-                  const Text(
-                    'Locality / Neighborhood',
-                    style: TextStyle(fontWeight: FontWeight.w500),
+                  Text(
+                    AppLocalizations.of(context)!.localityNeighborhood,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _localityController,
                     decoration: InputDecoration(
-                      hintText: 'e.g. Molyko, Buea',
+                      hintText: AppLocalizations.of(context)!.localityHint,
                       filled: true,
                       fillColor: Colors.grey.shade100,
                       border: OutlineInputBorder(
@@ -83,23 +88,25 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       ),
                     ),
                     validator: (value) {
-                      if (value?.isEmpty ?? true) return 'Locality is required';
+                      if (value?.isEmpty ?? true) {
+                        return AppLocalizations.of(context)!.localityRequired;
+                      }
                       return null;
                     },
                   ),
                   const SizedBox(height: 24),
 
                   // WhatsApp
-                  const Text(
-                    'WhatsApp Number',
-                    style: TextStyle(fontWeight: FontWeight.w500),
+                  Text(
+                    AppLocalizations.of(context)!.whatsappNumber,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _whatsappController,
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
-                      hintText: 'e.g. 677...',
+                      hintText: AppLocalizations.of(context)!.whatsappHint,
                       filled: true,
                       fillColor: Colors.grey.shade100,
                       border: OutlineInputBorder(
@@ -108,9 +115,11 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       ),
                     ),
                     validator: (value) {
-                      if (value?.isEmpty ?? true) return 'Number is required';
+                      if (value?.isEmpty ?? true) {
+                        return AppLocalizations.of(context)!.numberRequired;
+                      }
                       if (!RegExp(r'^\d{9}$').hasMatch(value!)) {
-                        return 'Enter a valid 9-digit number';
+                        return AppLocalizations.of(context)!.enterValidNumber;
                       }
                       return null;
                     },
@@ -138,9 +147,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                                   'CompleteProfileScreen: Current User: ${user?.id}',
                                 );
                                 if (user != null) {
-                                  final messenger = ScaffoldMessenger.of(
-                                    context,
-                                  );
+                                    final messenger = ScaffoldMessenger.of(context);
+                                    final profileUpdateFailedText = AppLocalizations.of(context)!.profileUpdateFailed;
                                   await profileViewModel.updateUser(
                                     fullName: user.fullName,
                                     locality: _localityController.text.trim(),
@@ -158,7 +166,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                                         SnackBar(
                                           content: Text(
                                             profileViewModel.errorMessage ??
-                                                'Failed to update profile',
+                                                profileUpdateFailedText,
                                           ),
                                           backgroundColor: Colors.red,
                                         ),
@@ -169,6 +177,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                                       'CompleteProfileScreen: Update successful, refreshing Auth user...',
                                     );
                                     await authViewModel.refreshUser();
+                                    if (context.mounted) {
+                                      GoRouter.of(context).go('/home');
+                                    }
                                   }
                                 } else {
                                   debugPrint(
@@ -190,9 +201,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       ),
                       child: profileViewModel.isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text(
-                              'Complete Setup',
-                              style: TextStyle(
+                          : Text(
+                              AppLocalizations.of(context)!.completeSetup,
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),

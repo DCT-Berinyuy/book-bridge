@@ -1,6 +1,7 @@
 import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
 import 'package:book_bridge/core/constants/categories.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -13,14 +14,14 @@ class CategoriesScreen extends StatelessWidget {
     const categories = appCategories;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Categories')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.categories)),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 20, 24, 8),
             child: Text(
-              'What is your interest?',
+              AppLocalizations.of(context)!.whatIsYourInterest,
               style: GoogleFonts.montserrat(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -79,7 +80,7 @@ class CategoriesScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          name,
+                          _getLocalizedCategory(context, name),
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -96,5 +97,37 @@ class CategoriesScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _getLocalizedCategory(BuildContext context, String categoryName) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (categoryName) {
+      case 'Textbooks':
+        return l10n.categoryTextbooks;
+      case 'Fiction':
+        return l10n.categoryFiction;
+      case 'Science':
+        return l10n.categoryScience;
+      case 'History':
+        return l10n.categoryHistory;
+      case 'GCE':
+        return l10n.categoryGCE;
+      case 'Business':
+        return l10n.categoryBusiness;
+      case 'Technology':
+        return l10n.categoryTechnology;
+      case 'Arts':
+        return l10n.categoryArts;
+      case 'Language':
+        return l10n.categoryLanguage;
+      case 'Mathematics':
+        return l10n.categoryMathematics;
+      case 'Engineering':
+        return l10n.categoryEngineering;
+      case 'Medicine':
+        return l10n.categoryMedicine;
+      default:
+        return categoryName;
+    }
   }
 }

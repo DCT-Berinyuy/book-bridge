@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -60,7 +61,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ..showSnackBar(
           SnackBar(
             content: Text(
-              profileViewModel.errorMessage ?? 'Failed to update profile.',
+              profileViewModel.errorMessage ??
+                  AppLocalizations.of(context)!.profileUpdateFailed,
             ),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
@@ -71,7 +73,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: const Text('Profile updated successfully!'),
+            content: Text(AppLocalizations.of(context)!.profileUpdatedSuccess),
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
         );
@@ -101,7 +103,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Profile')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.editProfile)),
       body: Consumer<ProfileViewModel>(
         builder: (context, profileViewModel, child) {
           return SingleChildScrollView(
@@ -212,10 +214,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   TextFormField(
                     controller: _fullNameController,
                     enabled: !profileViewModel.isLoading,
-                    decoration: const InputDecoration(labelText: 'Full Name'),
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.fullName,
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your full name';
+                        return AppLocalizations.of(context)!.enterFullName;
                       }
                       return null;
                     },
@@ -224,16 +228,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   TextFormField(
                     controller: _localityController,
                     enabled: !profileViewModel.isLoading,
-                    decoration: const InputDecoration(
-                      labelText: 'Locality / Neighborhood',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(
+                        context,
+                      )!.localityNeighborhood,
                     ),
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _whatsappController,
                     enabled: !profileViewModel.isLoading,
-                    decoration: const InputDecoration(
-                      labelText: 'WhatsApp Number',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.whatsappNumber,
                     ),
                     keyboardType: TextInputType.phone,
                   ),
@@ -259,7 +265,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               color: Colors.white,
                             ),
                           )
-                        : const Text('Save Changes'),
+                        : Text(AppLocalizations.of(context)!.saveChanges),
                   ),
                 ],
               ),

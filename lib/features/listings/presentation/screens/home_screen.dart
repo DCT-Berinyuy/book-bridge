@@ -6,8 +6,10 @@ import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel
 import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 import 'package:book_bridge/core/constants/categories.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -90,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
           viewModel.nearbyListings,
           viewModel.currentPosition,
         ),
-        _buildSectionHeader('Categories'),
+        _buildSectionHeader(AppLocalizations.of(context)!.categories),
         _buildCategoriesSection(),
         if (viewModel.homeState == HomeState.error &&
             viewModel.filteredListings.isEmpty)
@@ -106,12 +108,12 @@ class _HomeScreenState extends State<HomeScreen> {
         else ...[
           // Featured listings logic
           if (viewModel.filteredListings.any((l) => l.isFeatured)) ...[
-            _buildSectionHeader('Featured Books'),
+            _buildSectionHeader(AppLocalizations.of(context)!.featuredBooks),
             _buildFeaturedListings(
               viewModel.filteredListings.where((l) => l.isFeatured).toList(),
             ),
           ],
-          _buildSectionHeader('Recently Added'),
+          _buildSectionHeader(AppLocalizations.of(context)!.recentlyAdded),
           _buildListingsGrid(
             viewModel.filteredListings.where((l) => !l.isFeatured).toList(),
             viewModel,
@@ -141,12 +143,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 24),
           Text(
-            'Oops! Something Went Wrong',
+            AppLocalizations.of(context)!.somethingWentWrong,
             style: GoogleFonts.lato(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
-            viewModel.errorMessage ?? 'Please check your connection.',
+            viewModel.errorMessage ??
+                AppLocalizations.of(context)!.checkConnection,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -159,13 +162,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ElevatedButton.icon(
                 onPressed: viewModel.refreshListings,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Try Again'),
+                label: Text(AppLocalizations.of(context)!.tryAgain),
               ),
               if (viewModel.selectedCategory != null) ...[
                 const SizedBox(width: 12),
                 OutlinedButton(
                   onPressed: viewModel.clearCategoryFilter,
-                  child: const Text('Back to Home'),
+                  child: Text(AppLocalizations.of(context)!.backToHome),
                 ),
               ],
             ],
@@ -186,15 +189,17 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 24),
           Text(
             isFiltered
-                ? 'No Books in ${viewModel.selectedCategory}'
-                : 'No Books Found',
+                ? AppLocalizations.of(
+                    context,
+                  )!.noBooksIn(viewModel.selectedCategory!)
+                : AppLocalizations.of(context)!.noBooksFound,
             style: GoogleFonts.lato(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
             isFiltered
-                ? 'Try another category or clear the filter.'
-                : 'Be the first to list a book in your area!',
+                ? AppLocalizations.of(context)!.tryAnotherCategory
+                : AppLocalizations.of(context)!.firstListingPrompt,
             textAlign: TextAlign.center,
             style: const TextStyle(color: Colors.grey),
           ),
@@ -203,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton.icon(
               onPressed: viewModel.clearCategoryFilter,
               icon: const Icon(Icons.home_rounded),
-              label: const Text('Back to Home'),
+              label: Text(AppLocalizations.of(context)!.backToHome),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
@@ -248,18 +253,52 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(width: 12),
-              Text(
-                'BookBridge',
-                style: theme.appBarTheme.titleTextStyle?.copyWith(fontSize: 20),
+              Consumer<LocaleViewModel>(
+                builder: (context, localeViewModel, _) {
+                  final isEnglish = localeViewModel.locale.languageCode == 'en';
+                  return GestureDetector(
+                    onTap: () => localeViewModel.toggleLocale(),
+                    child: Container(
+                      height: 32,
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        isEnglish ? '🇺🇸 EN' : '🇫🇷 FR',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
               const Spacer(),
               NotificationIcon(color: theme.appBarTheme.foregroundColor),
-              IconButton(
-                icon: Icon(
-                  Icons.person_outline_rounded,
-                  color: theme.appBarTheme.foregroundColor,
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: (theme.appBarTheme.foregroundColor ?? Colors.white)
+                      .withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                onPressed: () => context.push('/profile'),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.person_outline_rounded,
+                    color: theme.appBarTheme.foregroundColor,
+                    size: 18,
+                  ),
+                  onPressed: () => context.push('/profile'),
+                  constraints: const BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                ),
               ),
             ],
           ),
@@ -282,11 +321,12 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
             child: Consumer<HomeViewModel>(
               builder: (context, viewModel, _) {
+                final l10n = AppLocalizations.of(context)!;
                 return TextField(
                   controller: _searchController,
                   onChanged: (value) => viewModel.setSearchQuery(value),
                   decoration: InputDecoration(
-                    hintText: 'Search by title or author...',
+                    hintText: l10n.searchHint,
                     hintStyle: TextStyle(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
@@ -353,7 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Your nearby books',
+                  AppLocalizations.of(context)!.yourNearbyBooks,
                   style: GoogleFonts.lato(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -511,7 +551,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         children: [
                           Text(
-                            'NEARBY',
+                            AppLocalizations.of(context)!.nearby,
                             style: GoogleFonts.montserrat(
                               color: Colors.white,
                               fontSize: 20,
@@ -529,7 +569,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Discover books in your community',
+                        AppLocalizations.of(context)!.discoverBooks,
                         style: GoogleFonts.inter(
                           color: Colors.white.withValues(alpha: 0.85),
                           fontSize: 11,
@@ -577,7 +617,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           child: Text(
-                            'Explore Now',
+                            AppLocalizations.of(context)!.exploreNow,
                             style: GoogleFonts.montserrat(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -706,7 +746,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         children: [
                           Text(
-                            'DONATE',
+                            AppLocalizations.of(context)!.donate,
                             style: GoogleFonts.montserrat(
                               color: Colors.white,
                               fontSize: 20,
@@ -724,7 +764,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Give books, create impact',
+                        AppLocalizations.of(context)!.giveBooks,
                         style: GoogleFonts.inter(
                           color: Colors.white.withValues(alpha: 0.85),
                           fontSize: 11,
@@ -762,7 +802,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           child: Text(
-                            'Give Now',
+                            AppLocalizations.of(context)!.giveNow,
                             style: GoogleFonts.montserrat(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -843,8 +883,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCategoriesSection() {
     final categories = [
-      const Category(
-        name: 'All',
+      Category(
+        name: AppLocalizations.of(context)!.all,
         icon: Icons.grid_view_rounded,
         color: Colors.grey,
       ),
@@ -864,13 +904,13 @@ class _HomeScreenState extends State<HomeScreen> {
             final icon = category.icon;
             final color = category.color;
 
-            final isSelected = name == 'All'
+            final isSelected = name == AppLocalizations.of(context)!.all
                 ? context.watch<HomeViewModel>().selectedCategory == null
                 : context.watch<HomeViewModel>().selectedCategory == name;
 
             return GestureDetector(
               onTap: () {
-                if (name == 'All') {
+                if (name == AppLocalizations.of(context)!.all) {
                   context.read<HomeViewModel>().clearCategoryFilter();
                 } else {
                   context.read<HomeViewModel>().setSelectedCategory(name);
@@ -901,7 +941,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      name,
+                      _getLocalizedCategory(context, name),
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -971,6 +1011,41 @@ class _HomeScreenState extends State<HomeScreen> {
         }, childCount: listings.length),
       ),
     );
+  }
+
+  String _getLocalizedCategory(BuildContext context, String? categoryName) {
+    if (categoryName == null) return '';
+    final l10n = AppLocalizations.of(context)!;
+    if (categoryName == l10n.all) return categoryName;
+
+    switch (categoryName) {
+      case 'Textbooks':
+        return l10n.categoryTextbooks;
+      case 'Fiction':
+        return l10n.categoryFiction;
+      case 'Science':
+        return l10n.categoryScience;
+      case 'History':
+        return l10n.categoryHistory;
+      case 'GCE':
+        return l10n.categoryGCE;
+      case 'Business':
+        return l10n.categoryBusiness;
+      case 'Technology':
+        return l10n.categoryTechnology;
+      case 'Arts':
+        return l10n.categoryArts;
+      case 'Language':
+        return l10n.categoryLanguage;
+      case 'Mathematics':
+        return l10n.categoryMathematics;
+      case 'Engineering':
+        return l10n.categoryEngineering;
+      case 'Medicine':
+        return l10n.categoryMedicine;
+      default:
+        return categoryName;
+    }
   }
 }
 
@@ -1047,7 +1122,7 @@ class _ListingCard extends StatelessWidget {
               top: 8,
               left: 8,
               child: listing.sellerType != 'individual'
-                  ? _buildVerifiedBadge()
+                  ? _buildVerifiedBadge(context)
                   : Container(),
             ),
             if (currentPosition != null &&
@@ -1128,20 +1203,20 @@ class _ListingCard extends StatelessWidget {
     );
   }
 
-  Widget _buildVerifiedBadge() {
+  Widget _buildVerifiedBadge(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.black.withAlpha(153),
+        color: Colors.black.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Icon(Icons.verified, size: 12, color: Colors.white),
-          SizedBox(width: 4),
+          const Icon(Icons.verified, size: 12, color: Colors.white),
+          const SizedBox(width: 4),
           Text(
-            'VERIFIED',
-            style: TextStyle(
+            AppLocalizations.of(context)!.verified,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 10,
               fontWeight: FontWeight.bold,
@@ -1166,7 +1241,7 @@ class _ListingCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            listing.author,
+            _getLocalizedCategory(context, listing.category),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
@@ -1180,7 +1255,7 @@ class _ListingCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '${listing.priceFcfa} FCFA',
+                AppLocalizations.of(context)!.priceFormat(listing.priceFcfa),
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.bold,
@@ -1214,36 +1289,69 @@ class _ListingCard extends StatelessWidget {
       return '${(distanceInMeters / 1000).toStringAsFixed(1)} km';
     }
   }
+}
 
-  Widget _buildConditionIndicator(BuildContext context, String condition) {
-    Color color;
-    switch (condition) {
-      case 'new':
-        color = Colors.green;
-        break;
-      case 'like_new':
-        color = Colors.lightGreen;
-        break;
-      case 'good':
-        color = Colors.blue;
-        break;
-      case 'fair':
-        color = Colors.orange;
-        break;
-      default:
-        color = Colors.red;
-    }
-    return Container(
-      width: 10,
-      height: 10,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outline,
-          width: 1,
-        ),
-      ),
-    );
+String _getLocalizedCategory(BuildContext context, String? category) {
+  if (category == null) return '';
+  final l10n = AppLocalizations.of(context)!;
+  switch (category) {
+    case 'Textbooks':
+      return l10n.categoryTextbooks;
+    case 'Fiction':
+      return l10n.categoryFiction;
+    case 'Science':
+      return l10n.categoryScience;
+    case 'History':
+      return l10n.categoryHistory;
+    case 'GCE':
+      return l10n.categoryGCE;
+    case 'Business':
+      return l10n.categoryBusiness;
+    case 'Technology':
+      return l10n.categoryTechnology;
+    case 'Arts':
+      return l10n.categoryArts;
+    case 'Language':
+      return l10n.categoryLanguage;
+    case 'Mathematics':
+      return l10n.categoryMathematics;
+    case 'Engineering':
+      return l10n.categoryEngineering;
+    case 'Medicine':
+      return l10n.categoryMedicine;
+    default:
+      return category;
   }
+}
+
+Widget _buildConditionIndicator(BuildContext context, String condition) {
+  Color color;
+  switch (condition) {
+    case 'new':
+      color = Colors.green;
+      break;
+    case 'like_new':
+      color = Colors.lightGreen;
+      break;
+    case 'good':
+      color = Colors.blue;
+      break;
+    case 'fair':
+      color = Colors.orange;
+      break;
+    default:
+      color = Colors.red;
+  }
+  return Container(
+    width: 10,
+    height: 10,
+    decoration: BoxDecoration(
+      color: color,
+      shape: BoxShape.circle,
+      border: Border.all(
+        color: Theme.of(context).colorScheme.outline,
+        width: 1,
+      ),
+    ),
+  );
 }

@@ -1,6 +1,7 @@
 import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PaymentBottomSheet extends StatefulWidget {
   final int amount;
@@ -54,7 +55,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Total: ${widget.amount} FCFA',
+                AppLocalizations.of(context)!.totalLabel(widget.amount),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -69,15 +70,19 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                   child: TextFormField(
                     controller: _phoneController,
                     keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(
-                      labelText: 'Phone Number (6xx...)',
-                      hintText: 'e.g. 677777777',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.phoneNumberLabel,
+                      hintText: AppLocalizations.of(context)!.phoneNumberHint,
                       prefixText: '+237 ',
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) return 'Required';
-                      if (value.length < 9) return 'Invalid number';
+                      if (value == null || value.isEmpty) {
+                        return AppLocalizations.of(context)!.fieldRequired;
+                      }
+                      if (value.length < 9) {
+                        return AppLocalizations.of(context)!.invalidNumber;
+                      }
                       return null;
                     },
                   ),
@@ -96,13 +101,13 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  child: const Text('Pay Now'),
+                  child: Text(AppLocalizations.of(context)!.payNow),
                 ),
               ] else if (viewModel.state == PaymentState.processing) ...[
                 const Center(child: CircularProgressIndicator()),
                 const SizedBox(height: 16),
-                const Text(
-                  'Initiating transaction...',
+                Text(
+                  AppLocalizations.of(context)!.initiatingTransaction,
                   textAlign: TextAlign.center,
                 ),
               ] else if (viewModel.state == PaymentState.pendingUser) ...[
@@ -112,15 +117,15 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                   color: Colors.blue,
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Please confirm the payment request on your phone!',
+                Text(
+                  AppLocalizations.of(context)!.confirmPaymentPrompt,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 24),
                 OutlinedButton(
                   onPressed: () => viewModel.checkStatus(),
-                  child: const Text('I have paid'),
+                  child: Text(AppLocalizations.of(context)!.iHavePaid),
                 ),
               ] else if (viewModel.state == PaymentState.success) ...[
                 const Icon(
@@ -129,10 +134,13 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                   color: Colors.green,
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Payment Successful!',
+                Text(
+                  AppLocalizations.of(context)!.paymentSuccessful,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
@@ -140,20 +148,21 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                     widget.onSuccess();
                     Navigator.pop(context);
                   },
-                  child: const Text('Continue'),
+                  child: Text(AppLocalizations.of(context)!.continueButton),
                 ),
               ] else if (viewModel.state == PaymentState.failure) ...[
                 const Icon(Icons.error_outline, size: 64, color: Colors.red),
                 const SizedBox(height: 16),
                 Text(
-                  viewModel.errorMessage ?? 'An error occurred',
+                  viewModel.errorMessage ??
+                      AppLocalizations.of(context)!.unknownError,
                   textAlign: TextAlign.center,
                   style: const TextStyle(color: Colors.red),
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: () => viewModel.reset(),
-                  child: const Text('Try Again'),
+                  child: Text(AppLocalizations.of(context)!.tryAgain),
                 ),
               ],
               const SizedBox(height: 24),
