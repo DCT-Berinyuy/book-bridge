@@ -1012,7 +1012,7 @@ class _HomeScreenState extends State<HomeScreen> {
       sliver: SliverGrid(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.65,
+          childAspectRatio: 0.72,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
         ),
@@ -1253,14 +1253,25 @@ class _ListingCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: GoogleFonts.lato(fontWeight: FontWeight.bold, fontSize: 14),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 1),
+          Text(
+            listing.author,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 11,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+          const SizedBox(height: 2),
           Text(
             _getLocalizedCategory(context, listing.category),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
-              fontSize: 12,
+              fontSize: 11,
             ),
           ),
           const SizedBox(height: 4),
