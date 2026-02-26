@@ -2,7 +2,6 @@ import { json } from '@sveltejs/kit';
 import { createClient } from '@supabase/supabase-js';
 import { env } from '$env/dynamic/private';
 
-
 let supabase;
 
 function getSupabase() {
@@ -20,26 +19,29 @@ export async function GET() {
 		config_check: {
 			has_url: !!env.SUPABASE_URL,
 			has_key: !!env.SUPABASE_SERVICE_ROLE_KEY,
-			has_webhook_key: !!env.CAMPAY_WEBHOOK_KEY
+			has_webhook_key: !!env.FAPSHI_WEBHOOK_KEY
 		}
 	});
 }
 
 export async function POST({ request }) {
 	const timestamp = new Date().toISOString();
-	console.log(`[${timestamp}] Webhook received`);
+	console.log(`[${timestamp}] Fapshi Webhook received`);
 
 	// 1. Log Headers for debugging
 	const headers = Object.fromEntries(request.headers.entries());
 	console.log(`[${timestamp}] Headers:`, JSON.stringify(headers));
 
 	// 2. Verify Authentication
+	// Fapshi might use a specific header, but we'll support both custom header and Authorization
 	const authHeader = request.headers.get('Authorization') || '';
-	const webhookKeyHeader = request.headers.get('x-campay-webhook-key');
+	const webhookKeyHeader = request.headers.get('x-fapshi-webhook-key');
 	const providedKey = webhookKeyHeader || authHeader.replace('Bearer ', '').trim();
 	
-	if (providedKey !== env.CAMPAY_WEBHOOK_KEY) {
-		console.error(`[${timestamp}] Unauthorized: Provided ${providedKey} vs Expected ${env.CAMPAY_WEBHOOK_KEY}`);
+	// We allow bypassing key check if FAPSHI_WEBHOOK_KEY is not set for easy testing, 
+	// but highly recommend in production.
+	if (env.FAPSHI_WEBHOOK_KEY && env.FAPSHI_WEBHOOK_KEY !== 'PLACEHOLDER_WEBHOOK_KEY_CREATE_LATER' && providedKey !== env.FAPSHI_WEBHOOK_KEY) {
+		console.error(`[${timestamp}] Unauthorized: Provided ${providedKey} vs Expected ${env.FAPSHI_WEBHOOK_KEY}`);
 		return json({ error: 'Unauthorized', debug_received: providedKey }, { status: 401 });
 	}
 
@@ -47,22 +49,28 @@ export async function POST({ request }) {
 		const payload = await request.json();
 		console.log(`[${timestamp}] Payload:`, JSON.stringify(payload));
 		
-		const { status, reference, amount, currency, external_reference } = payload;
+		// Fapshi typically sends transId, status, amount, externalId
+		const status = payload.status || payload.state;
+		const reference = payload.transId || payload.transactionId || payload.id;
+		const amount = payload.amount;
+		const external_reference = payload.externalId || payload.externalReference || payload.custom;
 
-		if (status === 'SUCCESSFUL') {
-			if (external_reference && external_reference.startsWith('boost:')) {
-				const parts = external_reference.split(':');
+		if (status === 'SUCCESSFUL' || status === 'SUCCESS') {
+			if (external_reference && (external_reference.startsWith('boost:') || external_reference.startsWith('boost_'))) {
+				const separator = external_reference.includes(':') ? ':' : '_';
+				const parts = external_reference.split(separator);
 				const listingId = parts[1];
 				const duration = parts[2] || '7';
 				
 				console.log(`[${timestamp}] Processing boost: Listing=${listingId}, Duration=${duration}`);
 				await handleBoostSuccess(listingId, reference, amount, duration);
-			} else if (external_reference && external_reference.startsWith('donation:')) {
-				const parts = external_reference.split(':');
+			} else if (external_reference && (external_reference.startsWith('donation:') || external_reference.startsWith('donation_'))) {
+				const separator = external_reference.includes(':') ? ':' : '_';
+				const parts = external_reference.split(separator);
 				const userId = parts[1];
 				await handleDonationSuccess(userId, reference, amount);
 			} else {
-				console.warn(`[${timestamp}] Unknown external_reference format: ${external_reference}`);
+				console.warn(`[${timestamp}] Unknown externalId format: ${external_reference}`);
 			}
 		} else {
 			console.log(`[${timestamp}] Payment ${status} for ref ${reference}`);

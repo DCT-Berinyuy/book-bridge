@@ -26,6 +26,7 @@ class PaymentViewModel extends ChangeNotifier {
     required int amount,
     required String phoneNumber,
     required String externalReference,
+    required String medium,
   }) async {
     _state = PaymentState.processing;
     _errorMessage = null;
@@ -35,6 +36,7 @@ class PaymentViewModel extends ChangeNotifier {
       amount: amount,
       phoneNumber: phoneNumber,
       externalReference: externalReference,
+      medium: medium,
     );
 
     result.fold(

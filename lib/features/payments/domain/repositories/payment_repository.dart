@@ -8,6 +8,7 @@ abstract class PaymentRepository {
     required int amount,
     required String phoneNumber,
     required String externalReference,
+    required String medium,
   });
 
   /// Checks the status of a transaction.

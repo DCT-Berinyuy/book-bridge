@@ -147,8 +147,13 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                                   'CompleteProfileScreen: Current User: ${user?.id}',
                                 );
                                 if (user != null) {
-                                    final messenger = ScaffoldMessenger.of(context);
-                                    final profileUpdateFailedText = AppLocalizations.of(context)!.profileUpdateFailed;
+                                  final messenger = ScaffoldMessenger.of(
+                                    context,
+                                  );
+                                  final profileUpdateFailedText =
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.profileUpdateFailed;
                                   await profileViewModel.updateUser(
                                     fullName: user.fullName,
                                     locality: _localityController.text.trim(),

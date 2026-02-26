@@ -12,11 +12,13 @@ class CollectPaymentUseCase {
     required int amount,
     required String phoneNumber,
     required String externalReference,
+    required String medium,
   }) {
     return _repository.collect(
       amount: amount,
       phoneNumber: phoneNumber,
       externalReference: externalReference,
+      medium: medium,
     );
   }
 }

@@ -283,7 +283,7 @@
   "termsResponsibilitiesTitle": "3. User Responsibilities",
   "termsResponsibilitiesContent": "You must provide accurate information when creating an account and listing books. You are prohibited from posting content that is illegal, offensive, or infringing on the rights of others.",
   "termsPaymentsTitle": "4. Payments",
-  "termsPaymentsContent": "Payments for books are generally handled in cash upon delivery or via direct mobile money transfer between the buyer and seller. BookBridge may offer integrated payment solutions (like CamPay) for specific services or donations.",
+  "termsPaymentsContent": "Payments for books are generally handled in cash upon delivery or via direct mobile money transfer between the buyer and seller. BookBridge may offer integrated payment solutions (like Fapshi) for specific services or donations.",
   "termsLiabilityTitle": "5. Limitation of Liability",
   "termsLiabilityContent": "BookBridge is provided \"as is\" without any warranties. We are not liable for any disputes, losses, or damages arising from your use of the application or transactions with other users.",
   "termsChangesTitle": "6. Changes to Terms",
@@ -349,5 +349,9 @@
   "language": "Language",
   "selectLanguage": "Select Language",
   "english": "English",
-  "french": "French"
+  "french": "French",
+  "boostListing": "Boost Listing",
+  "boostListingDesc": "Boost your listing to the top for 7 days",
+  "boostListingSuccess": "Listing boosted successfully! It will be prioritized in searches.",
+  "boostListingPrice": "Boost Price: 500 FCFA"
 }

@@ -31,7 +31,7 @@ import 'package:book_bridge/features/notifications/data/datasources/supabase_not
 import 'package:book_bridge/features/notifications/data/repositories/notifications_repository_impl.dart';
 import 'package:book_bridge/features/notifications/domain/repositories/notifications_repository.dart';
 import 'package:book_bridge/features/notifications/presentation/viewmodels/notifications_viewmodel.dart';
-import 'package:book_bridge/features/payments/data/datasources/campay_data_source.dart';
+import 'package:book_bridge/features/payments/data/datasources/fapshi_data_source.dart';
 import 'package:book_bridge/features/payments/data/repositories/payment_repository_impl.dart';
 import 'package:book_bridge/features/payments/domain/repositories/payment_repository.dart';
 import 'package:book_bridge/features/payments/domain/usecases/collect_payment_usecase.dart';
@@ -212,17 +212,16 @@ Future<void> setupDependencyInjection() async {
   );
 
   // Payments Feature
-  getIt.registerLazySingleton<CamPayDataSource>(
-    () => CamPayDataSource(
-      appId: AppConfig.campayAppId,
-      appUsername: AppConfig.campayAppUsername,
-      appPassword: AppConfig.campayAppPassword,
-      baseUrl: AppConfig.campayBaseUrl,
+  getIt.registerLazySingleton<FapshiDataSource>(
+    () => FapshiDataSource(
+      apiUser: AppConfig.fapshiApiUser,
+      apiKey: AppConfig.fapshiApiKey,
+      baseUrl: AppConfig.fapshiBaseUrl,
     ),
   );
 
   getIt.registerLazySingleton<PaymentRepository>(
-    () => PaymentRepositoryImpl(getIt<CamPayDataSource>()),
+    () => PaymentRepositoryImpl(getIt<FapshiDataSource>()),
   );
 
   getIt.registerLazySingleton<CollectPaymentUseCase>(

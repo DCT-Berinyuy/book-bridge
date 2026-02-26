@@ -280,7 +280,7 @@
   "termsResponsibilitiesTitle": "3. Responsabilités de l'utilisateur",
   "termsResponsibilitiesContent": "Vous devez fournir des informations exactes lors de la création d'un compte et de la mise en vente de livres. Il vous est interdit de publier du contenu illégal, offensant ou portant atteinte aux droits d'autrui.",
   "termsPaymentsTitle": "4. Paiements",
-  "termsPaymentsContent": "Les paiements pour les livres sont généralement gérés en espèces à la livraison ou via un transfert direct d'argent mobile entre l'acheteur et le vendeur. BookBridge peut proposer des solutions de paiement intégrées (comme CamPay) pour des services spécifiques ou des dons.",
+  "termsPaymentsContent": "Les paiements pour les livres sont généralement gérés en espèces à la livraison ou via un transfert direct d'argent mobile entre l'acheteur et le vendeur. BookBridge peut proposer des solutions de paiement intégrées (comme Fapshi) pour des services spécifiques ou des dons.",
   "termsLiabilityTitle": "5. Limitation de responsabilité",
   "termsLiabilityContent": "BookBridge est fourni « tel quel » sans aucune garantie. Nous ne sommes pas responsables des litiges, pertes ou dommages découlant de votre utilisation de l'application ou des transactions avec d'autres utilisateurs.",
   "termsChangesTitle": "6. Modifications des conditions",
@@ -346,5 +346,9 @@
   "language": "Langue",
   "selectLanguage": "Choisir la langue",
   "english": "Anglais",
-  "french": "Français"
+  "french": "Français",
+  "boostListing": "Booster l'annonce",
+  "boostListingDesc": "Boostez votre annonce en tête de liste pendant 7 jours",
+  "boostListingSuccess": "Annonce boostée avec succès ! Elle sera priorisée dans les recherches.",
+  "boostListingPrice": "Prix du Boost : 500 FCFA"
 }

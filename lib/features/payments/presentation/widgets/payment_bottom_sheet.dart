@@ -31,6 +31,22 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     super.dispose();
   }
 
+  String _getMedium(String phone) {
+    // Cameroon Mobile Money Prefixes:
+    // MTN: 67, 68, 650, 651, 652, 653, 654
+    // Orange: 69, 655, 656, 657, 658, 659
+    if (phone.startsWith('67') || phone.startsWith('68')) return 'mobile money';
+    if (phone.startsWith('69')) return 'orange money';
+    if (phone.startsWith('65')) {
+      if (phone.length >= 3) {
+        final thirdDigit = int.tryParse(phone[2]) ?? 0;
+        if (thirdDigit <= 4) return 'mobile money';
+        return 'orange money';
+      }
+    }
+    return 'mobile money'; // Default to mobile money
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<PaymentViewModel>(
@@ -93,8 +109,9 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                     if (_formKey.currentState!.validate()) {
                       viewModel.collectPayment(
                         amount: widget.amount,
-                        phoneNumber: '237${_phoneController.text}',
+                        phoneNumber: _phoneController.text,
                         externalReference: widget.externalReference,
+                        medium: _getMedium(_phoneController.text),
                       );
                     }
                   },

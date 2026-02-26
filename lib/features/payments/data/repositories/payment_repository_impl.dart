@@ -1,11 +1,11 @@
 import 'package:book_bridge/core/error/exceptions.dart';
 import 'package:book_bridge/core/error/failures.dart';
-import 'package:book_bridge/features/payments/data/datasources/campay_data_source.dart';
+import 'package:book_bridge/features/payments/data/datasources/fapshi_data_source.dart';
 import 'package:book_bridge/features/payments/domain/repositories/payment_repository.dart';
 import 'package:dartz/dartz.dart';
 
 class PaymentRepositoryImpl implements PaymentRepository {
-  final CamPayDataSource _dataSource;
+  final FapshiDataSource _dataSource;
 
   PaymentRepositoryImpl(this._dataSource);
 
@@ -14,21 +14,23 @@ class PaymentRepositoryImpl implements PaymentRepository {
     required int amount,
     required String phoneNumber,
     required String externalReference,
+    required String medium,
   }) async {
     try {
-      final result = await _dataSource.collect(
+      final response = await _dataSource.directPay(
         amount: amount,
-        phoneNumber: phoneNumber,
-        externalReference: externalReference,
+        phone: phoneNumber,
+        externalId: externalReference,
+        medium: medium,
       );
 
-      // CamPay returns reference in the response body
-      final reference = result['reference'] as String?;
-      if (reference != null) {
-        return Right(reference);
+      // Fapshi returns transId in the response body
+      final transId = response['transId'] as String?;
+      if (transId != null) {
+        return Right(transId);
       } else {
         return const Left(
-          ServerFailure(message: 'No reference returned from CamPay'),
+          ServerFailure(message: 'No transaction ID returned from Fapshi'),
         );
       }
     } on ServerException catch (e) {
@@ -41,14 +43,14 @@ class PaymentRepositoryImpl implements PaymentRepository {
   @override
   Future<Either<Failure, String>> getTransactionStatus(String reference) async {
     try {
-      final result = await _dataSource.getTransactionStatus(reference);
+      final result = await _dataSource.paymentStatus(reference);
       final status = result['status'] as String?;
 
       if (status != null) {
         return Right(status);
       } else {
         return const Left(
-          ServerFailure(message: 'No status returned from CamPay'),
+          ServerFailure(message: 'No status returned from Fapshi'),
         );
       }
     } on ServerException catch (e) {

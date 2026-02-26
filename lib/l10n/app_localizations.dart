@@ -62,7 +62,8 @@ import 'app_localizations_fr.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -70,7 +71,8 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -82,17 +84,18 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('fr')
+    Locale('fr'),
   ];
 
   /// The title of the application
@@ -1718,7 +1721,7 @@ abstract class AppLocalizations {
   /// No description provided for @termsPaymentsContent.
   ///
   /// In en, this message translates to:
-  /// **'Payments for books are generally handled in cash upon delivery or via direct mobile money transfer between the buyer and seller. BookBridge may offer integrated payment solutions (like CamPay) for specific services or donations.'**
+  /// **'Payments for books are generally handled in cash upon delivery or via direct mobile money transfer between the buyer and seller. BookBridge may offer integrated payment solutions (like Fapshi) for specific services or donations.'**
   String get termsPaymentsContent;
 
   /// No description provided for @termsLiabilityTitle.
@@ -2002,9 +2005,34 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'French'**
   String get french;
+
+  /// No description provided for @boostListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Boost Listing'**
+  String get boostListing;
+
+  /// No description provided for @boostListingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Boost your listing to the top for 7 days'**
+  String get boostListingDesc;
+
+  /// No description provided for @boostListingSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing boosted successfully! It will be prioritized in searches.'**
+  String get boostListingSuccess;
+
+  /// No description provided for @boostListingPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Boost Price: 500 FCFA'**
+  String get boostListingPrice;
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -2013,25 +2041,26 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'fr'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['en', 'fr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en': return AppLocalizationsEn();
-    case 'fr': return AppLocalizationsFr();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'fr':
+      return AppLocalizationsFr();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
+    'that was used.',
   );
 }

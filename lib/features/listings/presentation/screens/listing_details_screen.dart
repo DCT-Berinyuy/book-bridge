@@ -8,6 +8,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/listing_details_viewmodel.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
+import 'package:book_bridge/features/payments/presentation/widgets/payment_bottom_sheet.dart';
+import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
+import 'package:book_bridge/injection_container.dart';
+import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 
 /// Listing details screen showing comprehensive information about a book.
 ///
@@ -755,6 +759,37 @@ ${l10n.shareTextDownload}
     );
   }
 
+  void _showBoostBottomSheet(BuildContext context, Listing listing) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: ChangeNotifierProvider(
+          create: (_) => getIt<PaymentViewModel>(),
+          child: PaymentBottomSheet(
+            amount: 500, // 500 FCFA for 7 days
+            title: AppLocalizations.of(context)!.boostListing,
+            externalReference: 'boost_${listing.id}_7',
+            onSuccess: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    AppLocalizations.of(context)!.boostListingSuccess,
+                  ),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget? _buildBottomBar(ListingDetailsViewModel viewModel) {
     final listing = viewModel.listing;
     if (listing == null) return null;
@@ -776,54 +811,101 @@ ${l10n.shareTextDownload}
           ),
         ],
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: double.infinity,
-            height: 56,
-            child: ElevatedButton.icon(
-              onPressed: () => _contactSeller(listing.sellerWhatsapp ?? ''),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF25D366), // WhatsApp Green
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 20),
-              label: Text(
-                AppLocalizations.of(context)!.contactSellerWhatsApp,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          TextButton(
-            onPressed: () => _callSeller(listing.sellerWhatsapp ?? ''),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      child: Consumer<AuthViewModel>(
+        builder: (context, authVM, child) {
+          final isOwner = authVM.currentUser?.id == listing.sellerId;
+
+          if (isOwner) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.call,
-                  size: 16,
-                  color: Color(0xFF9DB9A6), // Light gray
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton.icon(
+                    onPressed: () => _showBoostBottomSheet(context, listing),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(
+                        0xFFF39C12,
+                      ), // Warning/Boost Orange
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    icon: const Icon(Icons.rocket_launch, size: 20),
+                    label: Text(
+                      AppLocalizations.of(context)!.boostListing,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(height: 8),
                 Text(
-                  AppLocalizations.of(context)!.callSeller,
+                  AppLocalizations.of(context)!.boostListingDesc,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
-            ),
-          ),
-        ],
+            );
+          }
+
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton.icon(
+                  onPressed: () => _contactSeller(listing.sellerWhatsapp ?? ''),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF25D366), // WhatsApp Green
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 20),
+                  label: Text(
+                    AppLocalizations.of(context)!.contactSellerWhatsApp,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () => _callSeller(listing.sellerWhatsapp ?? ''),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.call,
+                      size: 16,
+                      color: Color(0xFF9DB9A6), // Light gray
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      AppLocalizations.of(context)!.callSeller,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

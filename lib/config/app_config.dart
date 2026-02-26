@@ -14,21 +14,17 @@ class AppConfig {
     defaultValue: '',
   );
 
-  // CamPay configuration
-  static const String campayAppId = String.fromEnvironment(
-    'CAMPAY_APP_ID',
+  // Fapshi configuration
+  static const String fapshiApiUser = String.fromEnvironment(
+    'FAPSHI_API_USER',
     defaultValue: '',
   );
-  static const String campayAppUsername = String.fromEnvironment(
-    'CAMPAY_APP_USERNAME',
+  static const String fapshiApiKey = String.fromEnvironment(
+    'FAPSHI_API_KEY',
     defaultValue: '',
   );
-  static const String campayAppPassword = String.fromEnvironment(
-    'CAMPAY_APP_PASSWORD',
-    defaultValue: '',
-  );
-  static const String campayBaseUrl = String.fromEnvironment(
-    'CAMPAY_BASE_URL',
-    defaultValue: 'https://demo.campay.net/api',
+  static const String fapshiBaseUrl = String.fromEnvironment(
+    'FAPSHI_BASE_URL',
+    defaultValue: 'https://sandbox.fapshi.com',
   );
 }
