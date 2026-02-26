@@ -66,7 +66,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Left Side
+              // Left Side: Home & Categories
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -79,9 +79,9 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
                       isSelected: currentIndex == 0,
                     ),
                     _buildNavItem(
-                      icon: Icons.library_books_outlined,
-                      selectedIcon: Icons.library_books,
-                      label: 'MyBooks',
+                      icon: Icons.grid_view_outlined,
+                      selectedIcon: Icons.grid_view_rounded,
+                      label: 'Category',
                       index: 1,
                       isSelected: currentIndex == 1,
                     ),
@@ -111,15 +111,15 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
                 ),
               ),
 
-              // Right Side
+              // Right Side: Chats & Profile
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _buildNavItem(
-                      icon: Icons.grid_view_outlined,
-                      selectedIcon: Icons.grid_view_rounded,
-                      label: 'Category',
+                      icon: Icons.chat_bubble_outline,
+                      selectedIcon: Icons.chat_bubble,
+                      label: 'Chats',
                       index: 3,
                       isSelected: currentIndex == 3,
                     ),

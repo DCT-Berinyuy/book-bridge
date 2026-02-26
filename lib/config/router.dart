@@ -20,7 +20,6 @@ import 'package:book_bridge/features/listings/presentation/screens/terms_conditi
 import 'package:book_bridge/features/listings/presentation/screens/faq_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/feedback_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/contact_us_screen.dart';
-
 import 'package:book_bridge/features/listings/presentation/screens/about_screen.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/injection_container.dart' as di;
@@ -107,12 +106,13 @@ final appRouter = GoRouter(
     ),
 
     // Main Shell Route (with Bottom Navigation)
+    // Branch order: Home (0), Categories (1), Sell (2), Chat (3), Profile (4)
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return ScaffoldWithNavBar(navigationShell: navigationShell);
       },
       branches: [
-        // Home Branch
+        // Home Branch (index 0)
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -123,18 +123,18 @@ final appRouter = GoRouter(
           ],
         ),
 
-        // MyBooks Branch
+        // Categories Branch (index 1)
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/my-books',
-              name: 'my-books',
-              builder: (context, state) => const MyBooksScreen(),
+              path: '/categories',
+              name: 'categories',
+              builder: (context, state) => const CategoriesScreen(),
             ),
           ],
         ),
 
-        // Sell Branch
+        // Sell Branch (index 2) — triggered via FAB, kept as branch
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -146,18 +146,18 @@ final appRouter = GoRouter(
           ],
         ),
 
-        // Categories Branch
+        // Chat Branch (index 3) — placeholder until Phase 2
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/categories',
-              name: 'categories',
-              builder: (context, state) => const CategoriesScreen(),
+              path: '/chats',
+              name: 'chats',
+              builder: (context, state) => const _ChatPlaceholderScreen(),
             ),
           ],
         ),
 
-        // Profile Branch
+        // Profile Branch (index 4)
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -178,6 +178,13 @@ final appRouter = GoRouter(
         final listingId = state.pathParameters['id']!;
         return ListingDetailsScreen(listingId: listingId);
       },
+    ),
+
+    // My Books Route (Full Screen, outside shell — accessible from Profile)
+    GoRoute(
+      path: '/my-books',
+      name: 'my-books',
+      builder: (context, state) => const MyBooksScreen(),
     ),
 
     // Edit Profile Route (Full Screen, outside shell)
@@ -256,6 +263,52 @@ class SplashScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             const CircularProgressIndicator(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Placeholder screen for Chats tab — will be replaced in Phase 2
+/// when the full in-app chat feature is implemented.
+class _ChatPlaceholderScreen extends StatelessWidget {
+  const _ChatPlaceholderScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Scaffold(
+      appBar: AppBar(title: const Text('Chats'), centerTitle: true),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.chat_bubble_outline,
+              size: 80,
+              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'In-App Chat — Coming Soon!',
+              style: theme.textTheme.titleLarge?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Text(
+                'Soon you\'ll be able to message sellers directly here.',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant.withValues(
+                    alpha: 0.8,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
