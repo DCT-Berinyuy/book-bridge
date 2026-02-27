@@ -1430,6 +1430,12 @@ abstract class AppLocalizations {
   /// **'© {year} DCT-Berinyuy. All rights reserved.'**
   String copyright(Object year);
 
+  /// No description provided for @boosted.
+  ///
+  /// In en, this message translates to:
+  /// **'Boosted'**
+  String get boosted;
+
   /// No description provided for @notifications.
   ///
   /// In en, this message translates to:

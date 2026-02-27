@@ -668,32 +668,34 @@ ${l10n.shareTextDownload}
     );
   }
 
-  void _showBoostBottomSheet(BuildContext context, Listing listing) {
+  void _showBoostBottomSheet(
+    BuildContext context,
+    Listing listing,
+    ListingDetailsViewModel viewModel,
+  ) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: ChangeNotifierProvider(
-          create: (_) => getIt<PaymentViewModel>(),
-          child: PaymentBottomSheet(
-            amount: 500, // 500 FCFA for 7 days
-            title: AppLocalizations.of(context)!.boostListing,
-            externalReference: 'boost_${listing.id}_7',
-            onSuccess: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    AppLocalizations.of(context)!.boostListingSuccess,
-                  ),
-                  backgroundColor: Colors.green,
+      builder: (context) => ChangeNotifierProvider(
+        create: (_) => getIt<PaymentViewModel>(),
+        child: PaymentBottomSheet(
+          amount: 500, // 500 FCFA for 7 days
+          title: AppLocalizations.of(context)!.boostListing,
+          externalReference: 'boost_${listing.id}_7',
+          onSuccess: () {
+            // Refresh details to show boosted status
+            viewModel.loadListingDetails(listing.id);
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  AppLocalizations.of(context)!.boostListingSuccess,
                 ),
-              );
-            },
-          ),
+                backgroundColor: Colors.green,
+              ),
+            );
+          },
         ),
       ),
     );
@@ -732,7 +734,8 @@ ${l10n.shareTextDownload}
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton.icon(
-                    onPressed: () => _showBoostBottomSheet(context, listing),
+                    onPressed: () =>
+                        _showBoostBottomSheet(context, listing, viewModel),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(
                         0xFFF39C12,

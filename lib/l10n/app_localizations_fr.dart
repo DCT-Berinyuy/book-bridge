@@ -1064,6 +1064,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get boostListingPrice => 'Prix du Boost : 500 FCFA';
 
   @override
+  String get boosted => 'Boosté';
+
+  @override
   String get messageSeller => 'Contacter le vendeur';
 
   @override

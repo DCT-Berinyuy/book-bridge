@@ -1135,9 +1135,16 @@ class _ListingCard extends StatelessWidget {
             Positioned(
               top: 8,
               left: 8,
-              child: listing.sellerType != 'individual'
-                  ? _buildVerifiedBadge(context)
-                  : Container(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (listing.isBoosted) _buildBoostedBadge(context),
+                  if (listing.isBoosted && listing.sellerType != 'individual')
+                    const SizedBox(height: 4),
+                  if (listing.sellerType != 'individual')
+                    _buildVerifiedBadge(context),
+                ],
+              ),
             ),
             if (currentPosition != null &&
                 listing.latitude != null &&
@@ -1213,6 +1220,41 @@ class _ListingCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildBoostedBadge(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFFD700), Color(0xFFFFA500)], // Gold to Orange
+        ),
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.2),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.bolt, size: 12, color: Colors.white),
+          const SizedBox(width: 4),
+          Text(
+            AppLocalizations.of(context)!.boosted.toUpperCase(),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 9,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
       ),
     );
   }
