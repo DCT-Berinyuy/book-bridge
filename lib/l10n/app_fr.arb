@@ -350,5 +350,13 @@
   "boostListing": "Booster l'annonce",
   "boostListingDesc": "Boostez votre annonce en tête de liste pendant 7 jours",
   "boostListingSuccess": "Annonce boostée avec succès ! Elle sera priorisée dans les recherches.",
-  "boostListingPrice": "Prix du Boost : 500 FCFA"
+  "boostListingPrice": "Prix du Boost : 500 FCFA",
+  "messageSeller": "Contacter le vendeur",
+  "chatsTitle": "Discussions",
+  "noConversations": "Aucune discussion pour le moment",
+  "startConversationPrompt": "Envoyez un message à un vendeur pour commencer une discussion.",
+  "typeMessage": "Écrivez un message...",
+  "sayHello": "Dites bonjour ! Commencez la discussion.",
+  "buyNow": "Acheter maintenant",
+  "payNow": "Payer maintenant"
 }

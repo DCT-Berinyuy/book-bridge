@@ -22,6 +22,9 @@ import 'package:book_bridge/features/listings/presentation/screens/feedback_scre
 import 'package:book_bridge/features/listings/presentation/screens/contact_us_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/about_screen.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/features/chat/presentation/screens/chat_list_screen.dart';
+import 'package:book_bridge/features/chat/presentation/screens/chat_screen.dart';
+import 'package:book_bridge/features/chat/presentation/viewmodels/chat_viewmodel.dart';
 import 'package:book_bridge/injection_container.dart' as di;
 
 /// App router configuration using go_router.
@@ -146,13 +149,16 @@ final appRouter = GoRouter(
           ],
         ),
 
-        // Chat Branch (index 3) — placeholder until Phase 2
+        // Chat Branch (index 3) — real-time chat list
         StatefulShellBranch(
           routes: [
             GoRoute(
               path: '/chats',
               name: 'chats',
-              builder: (context, state) => const _ChatPlaceholderScreen(),
+              builder: (context, state) => ChangeNotifierProvider(
+                create: (_) => di.getIt<ChatViewModel>(),
+                child: const ChatListScreen(),
+              ),
             ),
           ],
         ),
@@ -185,6 +191,26 @@ final appRouter = GoRouter(
       path: '/my-books',
       name: 'my-books',
       builder: (context, state) => const MyBooksScreen(),
+    ),
+
+    // Chat Thread Route (Full Screen, outside shell)
+    GoRoute(
+      path: '/chat/:listingId',
+      name: 'chat',
+      builder: (context, state) {
+        final listingId = state.pathParameters['listingId']!;
+        final extra = state.extra as Map<String, dynamic>? ?? {};
+        return ChangeNotifierProvider(
+          create: (_) => di.getIt<ChatViewModel>(),
+          child: ChatScreen(
+            listingId: listingId,
+            otherUserId: extra['otherUserId'] as String? ?? '',
+            otherUserName: extra['otherUserName'] as String? ?? 'Seller',
+            listingTitle: extra['listingTitle'] as String? ?? '',
+            listingPrice: extra['listingPrice'] as int?,
+          ),
+        );
+      },
     ),
 
     // Edit Profile Route (Full Screen, outside shell)
@@ -263,52 +289,6 @@ class SplashScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             const CircularProgressIndicator(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Placeholder screen for Chats tab — will be replaced in Phase 2
-/// when the full in-app chat feature is implemented.
-class _ChatPlaceholderScreen extends StatelessWidget {
-  const _ChatPlaceholderScreen();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(title: const Text('Chats'), centerTitle: true),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.chat_bubble_outline,
-              size: 80,
-              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'In-App Chat — Coming Soon!',
-              style: theme.textTheme.titleLarge?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: Text(
-                'Soon you\'ll be able to message sellers directly here.',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant.withValues(
-                    alpha: 0.8,
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),

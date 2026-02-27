@@ -1050,4 +1050,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get boostListingPrice => 'Boost Price: 500 FCFA';
+
+  @override
+  String get messageSeller => 'Message Seller';
+
+  @override
+  String get chatsTitle => 'Chats';
+
+  @override
+  String get noConversations => 'No conversations yet';
+
+  @override
+  String get startConversationPrompt =>
+      'Message a seller from any listing to start a conversation.';
+
+  @override
+  String get typeMessage => 'Type a message...';
+
+  @override
+  String get sayHello => 'Say hello! Start the conversation.';
+
+  @override
+  String get buyNow => 'Buy Now';
 }

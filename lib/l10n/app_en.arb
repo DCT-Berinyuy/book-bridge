@@ -353,5 +353,13 @@
   "boostListing": "Boost Listing",
   "boostListingDesc": "Boost your listing to the top for 7 days",
   "boostListingSuccess": "Listing boosted successfully! It will be prioritized in searches.",
-  "boostListingPrice": "Boost Price: 500 FCFA"
+  "boostListingPrice": "Boost Price: 500 FCFA",
+  "messageSeller": "Message Seller",
+  "chatsTitle": "Chats",
+  "noConversations": "No conversations yet",
+  "startConversationPrompt": "Message a seller from any listing to start a conversation.",
+  "typeMessage": "Type a message...",
+  "sayHello": "Say hello! Start the conversation.",
+  "buyNow": "Buy Now",
+  "payNow": "Pay Now"
 }

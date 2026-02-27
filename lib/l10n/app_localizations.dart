@@ -2029,6 +2029,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Boost Price: 500 FCFA'**
   String get boostListingPrice;
+
+  /// No description provided for @messageSeller.
+  ///
+  /// In en, this message translates to:
+  /// **'Message Seller'**
+  String get messageSeller;
+
+  /// No description provided for @chatsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chats'**
+  String get chatsTitle;
+
+  /// No description provided for @noConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations yet'**
+  String get noConversations;
+
+  /// No description provided for @startConversationPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Message a seller from any listing to start a conversation.'**
+  String get startConversationPrompt;
+
+  /// No description provided for @typeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Type a message...'**
+  String get typeMessage;
+
+  /// No description provided for @sayHello.
+  ///
+  /// In en, this message translates to:
+  /// **'Say hello! Start the conversation.'**
+  String get sayHello;
+
+  /// No description provided for @buyNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Now'**
+  String get buyNow;
 }
 
 class _AppLocalizationsDelegate

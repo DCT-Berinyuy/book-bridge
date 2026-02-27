@@ -1062,4 +1062,26 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get boostListingPrice => 'Prix du Boost : 500 FCFA';
+
+  @override
+  String get messageSeller => 'Contacter le vendeur';
+
+  @override
+  String get chatsTitle => 'Discussions';
+
+  @override
+  String get noConversations => 'Aucune discussion pour le moment';
+
+  @override
+  String get startConversationPrompt =>
+      'Envoyez un message à un vendeur pour commencer une discussion.';
+
+  @override
+  String get typeMessage => 'Écrivez un message...';
+
+  @override
+  String get sayHello => 'Dites bonjour ! Commencez la discussion.';
+
+  @override
+  String get buyNow => 'Acheter maintenant';
 }

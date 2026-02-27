@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:book_bridge/features/chat/presentation/viewmodels/chat_viewmodel.dart';
 import 'package:book_bridge/features/notifications/presentation/viewmodels/notifications_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,13 +15,29 @@ class ScaffoldWithNavBar extends StatefulWidget {
 }
 
 class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
+  Timer? _badgeRefreshTimer;
+
   @override
   void initState() {
     super.initState();
     // Initialize notifications globally
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<NotificationsViewModel>().subscribeToNotifications();
+      // Initial load of conversations for the badge count
+      context.read<ChatViewModel>().refreshConversationsSilently();
     });
+    // Refresh unread badge count every 30 seconds
+    _badgeRefreshTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+      if (mounted) {
+        context.read<ChatViewModel>().refreshConversationsSilently();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _badgeRefreshTimer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -122,6 +140,9 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
                       label: 'Chats',
                       index: 3,
                       isSelected: currentIndex == 3,
+                      badgeCount: context
+                          .watch<ChatViewModel>()
+                          .totalUnreadCount,
                     ),
                     _buildNavItem(
                       icon: Icons.person_outline,
@@ -146,6 +167,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
     required String label,
     required int index,
     required bool isSelected,
+    int badgeCount = 0,
   }) {
     final theme = Theme.of(context);
     final color = isSelected
@@ -160,7 +182,41 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(isSelected ? selectedIcon : icon, color: color),
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Icon(isSelected ? selectedIcon : icon, color: color),
+                if (badgeCount > 0)
+                  Positioned(
+                    top: -4,
+                    right: -6,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      constraints: const BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: theme.colorScheme.surface,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Text(
+                        badgeCount > 99 ? '99+' : '$badgeCount',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
             Text(
               label,
               style: TextStyle(

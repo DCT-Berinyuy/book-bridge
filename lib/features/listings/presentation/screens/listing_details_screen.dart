@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/listing_details_viewmodel.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
@@ -58,95 +56,6 @@ ${l10n.shareTextDownload}
 ''';
 
     await Share.share(shareText);
-  }
-
-  Future<void> _contactSeller(String whatsappNumber) async {
-    if (whatsappNumber.isEmpty) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.whatsappNotAvailable),
-          ),
-        );
-      }
-      return;
-    }
-
-    // WhatsApp (wa.me) links require the full international format without the '+' prefix.
-    // Most users in Cameroon enter their 9-digit number. We ensure the country code (237) is present.
-    String cleanNumber = whatsappNumber.replaceAll(RegExp(r'\D'), '');
-
-    if (cleanNumber.length == 9) {
-      cleanNumber = '237$cleanNumber';
-    }
-
-    debugPrint('ListingDetailsScreen: Original WhatsApp: $whatsappNumber');
-    debugPrint('ListingDetailsScreen: Cleaned WhatsApp: $cleanNumber');
-
-    final message = AppLocalizations.of(context)!.whatsappDefaultMessage;
-    final whatsappUrl =
-        'https://wa.me/$cleanNumber?text=${Uri.encodeComponent(message)}';
-
-    try {
-      if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
-        await launchUrl(
-          Uri.parse(whatsappUrl),
-          mode: LaunchMode.externalApplication,
-        );
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(AppLocalizations.of(context)!.whatsappLaunchError),
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
-      }
-    }
-  }
-
-  Future<void> _callSeller(String phoneNumber) async {
-    if (phoneNumber.isEmpty) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.phoneNotAvailable),
-          ),
-        );
-      }
-      return;
-    }
-
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber.replaceAll(RegExp(r'[^\d+]'), ''),
-    );
-
-    try {
-      if (await canLaunchUrl(launchUri)) {
-        await launchUrl(launchUri);
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(AppLocalizations.of(context)!.dialerLaunchError),
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
-      }
-    }
   }
 
   @override
@@ -863,17 +772,36 @@ ${l10n.shareTextDownload}
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton.icon(
-                  onPressed: () => _contactSeller(listing.sellerWhatsapp ?? ''),
+                  onPressed: () {
+                    // Check if authenticated
+                    if (authVM.currentUser == null) {
+                      context.push('/sign-in');
+                      return;
+                    }
+
+                    // Navigate to chat thread
+                    context.push(
+                      '/chat/${listing.id}',
+                      extra: {
+                        'otherUserId': listing.sellerId,
+                        'otherUserName':
+                            listing.sellerName ??
+                            AppLocalizations.of(context)!.unknownSeller,
+                        'listingTitle': listing.title,
+                        'listingPrice': listing.priceFcfa,
+                      },
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF25D366), // WhatsApp Green
+                    backgroundColor: const Color(0xFF1A4D8C),
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 20),
+                  icon: const Icon(Icons.chat_bubble_outline, size: 20),
                   label: Text(
-                    AppLocalizations.of(context)!.contactSellerWhatsApp,
+                    AppLocalizations.of(context)!.messageSeller,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -881,28 +809,63 @@ ${l10n.shareTextDownload}
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-              TextButton(
-                onPressed: () => _callSeller(listing.sellerWhatsapp ?? ''),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.call,
-                      size: 16,
-                      color: Color(0xFF9DB9A6), // Light gray
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      AppLocalizations.of(context)!.callSeller,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+              if (listing.status == 'available' &&
+                  authVM.currentUser != null) ...[
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      final buyerId = authVM.currentUser!.id;
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (_) => ChangeNotifierProvider(
+                          create: (_) => getIt<PaymentViewModel>(),
+                          child: PaymentBottomSheet(
+                            amount: listing.priceFcfa,
+                            title: AppLocalizations.of(context)!.buyNow,
+                            externalReference:
+                                'purchase_${listing.id}_$buyerId',
+                            onSuccess: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.paymentSuccessful,
+                                  ),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFF1A4D8C),
+                      side: const BorderSide(
+                        color: Color(0xFF1A4D8C),
+                        width: 1.5,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                  ],
+                    icon: const Icon(Icons.shopping_bag_outlined, size: 20),
+                    label: Text(
+                      AppLocalizations.of(context)!.buyNow,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ],
           );
         },

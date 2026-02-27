@@ -44,6 +44,10 @@ import 'package:book_bridge/features/favorites/domain/usecases/get_favorites_use
 import 'package:book_bridge/features/favorites/domain/usecases/toggle_favorite_usecase.dart';
 import 'package:book_bridge/features/favorites/domain/usecases/is_favorite_usecase.dart';
 import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
+import 'package:book_bridge/features/chat/data/datasources/supabase_chat_data_source.dart';
+import 'package:book_bridge/features/chat/data/repositories/chat_repository_impl.dart';
+import 'package:book_bridge/features/chat/domain/repositories/chat_repository.dart';
+import 'package:book_bridge/features/chat/presentation/viewmodels/chat_viewmodel.dart';
 import 'package:book_bridge/config/app_config.dart';
 
 /// Service locator for dependency injection.
@@ -232,7 +236,7 @@ Future<void> setupDependencyInjection() async {
     () => GetPaymentStatusUseCase(repository: getIt<PaymentRepository>()),
   );
 
-  getIt.registerLazySingleton<PaymentViewModel>(
+  getIt.registerFactory<PaymentViewModel>(
     () => PaymentViewModel(
       collectPaymentUseCase: getIt<CollectPaymentUseCase>(),
       getPaymentStatusUseCase: getIt<GetPaymentStatusUseCase>(),
@@ -268,5 +272,18 @@ Future<void> setupDependencyInjection() async {
       toggleFavoriteUseCase: getIt<ToggleFavoriteUseCase>(),
       isFavoriteUseCase: getIt<IsFavoriteUseCase>(),
     ),
+  );
+
+  // Chat Feature
+  getIt.registerLazySingleton<SupabaseChatDataSource>(
+    () => SupabaseChatDataSource(supabaseClient: getIt<SupabaseClient>()),
+  );
+
+  getIt.registerLazySingleton<ChatRepository>(
+    () => ChatRepositoryImpl(dataSource: getIt<SupabaseChatDataSource>()),
+  );
+
+  getIt.registerFactory<ChatViewModel>(
+    () => ChatViewModel(repository: getIt<ChatRepository>()),
   );
 }
