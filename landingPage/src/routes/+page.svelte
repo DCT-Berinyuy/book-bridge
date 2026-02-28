@@ -500,7 +500,7 @@
     width: 300px;
     height: 600px;
     background: #111;
-    border-radius: 40px;
+    border-radius: 25px;
     padding: 12px;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
     position: relative;
@@ -518,14 +518,16 @@
     width: 100%;
     height: 100%;
     background: white;
-    border-radius: 30px;
+    border-radius: 15px;
     overflow: hidden;
   }
 
   .app-screen {
+    background-color: var(--scholar-blue);
+    padding-top: 4px;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: 102%;
+    object-fit: fill;
   }
 
   .float-card {
