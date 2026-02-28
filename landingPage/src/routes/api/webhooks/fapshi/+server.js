@@ -32,22 +32,32 @@ export async function POST({ request }) {
 	const headers = Object.fromEntries(request.headers.entries());
 	console.log(`[${timestamp}] Headers:`, JSON.stringify(headers));
 
-	// 2. Verify Authentication
-	// Fapshi might use a specific header, but we'll support both custom header and Authorization
-	const authHeader = request.headers.get('Authorization') || '';
-	const webhookKeyHeader = request.headers.get('x-fapshi-webhook-key');
-	const providedKey = webhookKeyHeader || authHeader.replace('Bearer ', '').trim();
+	// 2. Verify Authentication from Fapshi
+	// According to docs, Fapshi sends 'apiuser' and 'apikey' in the headers
+	const providedApiUser = request.headers.get('apiuser');
+	const providedApiKey = request.headers.get('apikey');
 	
-	// We allow bypassing key check if FAPSHI_WEBHOOK_KEY is not set for easy testing, 
-	// but highly recommend in production.
-	if (env.FAPSHI_WEBHOOK_KEY && env.FAPSHI_WEBHOOK_KEY !== 'PLACEHOLDER_WEBHOOK_KEY_CREATE_LATER' && providedKey !== env.FAPSHI_WEBHOOK_KEY) {
-		console.error(`[${timestamp}] Unauthorized: Provided ${providedKey} vs Expected ${env.FAPSHI_WEBHOOK_KEY}`);
-		return json({ error: 'Unauthorized', debug_received: providedKey }, { status: 401 });
+	const expectedApiUser = env.FAPSHI_API_USER;
+	const expectedApiKey = env.FAPSHI_API_KEY;
+
+	if (expectedApiUser && expectedApiKey) {
+		if (providedApiUser !== expectedApiUser || providedApiKey !== expectedApiKey) {
+			console.error(`[${timestamp}] Unauthorized: Invalid apiuser or apikey`);
+			return json({ error: 'Unauthorized', debug: 'Invalid credentials' }, { status: 401 });
+		}
+	} else {
+		console.warn(`[${timestamp}] WARNING: Fapshi API credentials not configured in environment. Webhook is running insecurely!`);
 	}
 
 	try {
-		const payload = await request.json();
-		console.log(`[${timestamp}] Payload:`, JSON.stringify(payload));
+		let payload = await request.json();
+		console.log(`[${timestamp}] Raw Payload:`, JSON.stringify(payload));
+		
+		// The Fapshi documentation specifies that the payload is sent as an array of objects
+		if (Array.isArray(payload) && payload.length > 0) {
+			payload = payload[0];
+			console.log(`[${timestamp}] Extracted Payload Object:`, JSON.stringify(payload));
+		}
 		
 		// Fapshi typically sends transId, status, amount, externalId
 		const status = payload.status || payload.state;
