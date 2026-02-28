@@ -363,5 +363,8 @@
   "typeMessage": "Type a message...",
   "sayHello": "Say hello! Start the conversation.",
   "buyNow": "Buy Now",
-  "payNow": "Pay Now"
+  "payNow": "Pay Now",
+  "supportBookBridge": "Support BookBridge ☕",
+  "selectDonationAmount": "Select Donation Amount",
+  "donationThanks": "Thank you for your support!"
 }

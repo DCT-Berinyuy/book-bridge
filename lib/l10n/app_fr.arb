@@ -359,6 +359,9 @@
   "startConversationPrompt": "Envoyez un message à un vendeur pour commencer une discussion.",
   "typeMessage": "Écrivez un message...",
   "sayHello": "Dites bonjour ! Commencez la discussion.",
-  "buyNow": "Acheter maintenant",
-  "payNow": "Payer maintenant"
+  "buyNow": "Acheter",
+  "payNow": "Payer",
+  "supportBookBridge": "Soutenir BookBridge ☕",
+  "selectDonationAmount": "Choisissez le montant",
+  "donationThanks": "Merci pour votre soutien !"
 }

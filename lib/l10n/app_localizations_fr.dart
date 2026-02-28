@@ -958,7 +958,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get invalidNumber => 'Numéro invalide';
 
   @override
-  String get payNow => 'Payer maintenant';
+  String get payNow => 'Payer';
 
   @override
   String get initiatingTransaction => 'Initiation de la transaction...';
@@ -1030,5 +1030,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sayHello => 'Dites bonjour ! Commencez la discussion.';
 
   @override
-  String get buyNow => 'Acheter maintenant';
+  String get buyNow => 'Acheter';
+
+  @override
+  String get supportBookBridge => 'Soutenir BookBridge ☕';
+
+  @override
+  String get selectDonationAmount => 'Choisissez le montant';
+
+  @override
+  String get donationThanks => 'Merci pour votre soutien !';
 }

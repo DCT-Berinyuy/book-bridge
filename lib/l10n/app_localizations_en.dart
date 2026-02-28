@@ -1031,4 +1031,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get buyNow => 'Buy Now';
+
+  @override
+  String get supportBookBridge => 'Support BookBridge ☕';
+
+  @override
+  String get selectDonationAmount => 'Select Donation Amount';
+
+  @override
+  String get donationThanks => 'Thank you for your support!';
 }

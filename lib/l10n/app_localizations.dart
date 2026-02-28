@@ -2080,6 +2080,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Buy Now'**
   String get buyNow;
+
+  /// No description provided for @supportBookBridge.
+  ///
+  /// In en, this message translates to:
+  /// **'Support BookBridge ☕'**
+  String get supportBookBridge;
+
+  /// No description provided for @selectDonationAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Donation Amount'**
+  String get selectDonationAmount;
+
+  /// No description provided for @donationThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for your support!'**
+  String get donationThanks;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

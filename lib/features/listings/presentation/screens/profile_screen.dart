@@ -9,6 +9,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:book_bridge/l10n/app_localizations.dart';
+import 'package:book_bridge/features/payments/presentation/widgets/payment_bottom_sheet.dart';
 
 /// User profile screen displaying user information and their listings.
 ///
@@ -101,6 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 _buildHeader(context, user),
                 _buildStatsSection(context, profileViewModel),
+                _buildDonationCard(context, user),
                 const Divider(height: 1),
                 _buildMenuSection(
                   context,
@@ -648,6 +650,140 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ? const Icon(Icons.check_circle, color: Color(0xFF1A4D8C))
           : null,
       onTap: onTap,
+    );
+  }
+
+  Widget _buildDonationCard(BuildContext context, user) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Card(
+        elevation: 0,
+        color: const Color(0xFFF0F7FF),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: const BorderSide(color: Color(0xFF1A4D8C), width: 1),
+        ),
+        child: InkWell(
+          onTap: () => _showDonationAmountPicker(context, user),
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF1A4D8C),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.coffee, color: Colors.white),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.supportBookBridge,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1A4D8C),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        AppLocalizations.of(context)!.supportDescription,
+                        style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.chevron_right, color: Color(0xFF1A4D8C)),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showDonationAmountPicker(BuildContext context, user) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.selectDonationAmount,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildAmountButton(context, 100, user),
+                    _buildAmountButton(context, 500, user),
+                    _buildAmountButton(context, 1000, user),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildAmountButton(BuildContext context, int amount, user) {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.pop(context); // close amount picker
+
+        final userId = user?.id ?? 'anonymous';
+        final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) => PaymentBottomSheet(
+            amount: amount,
+            title: AppLocalizations.of(context)!.supportBookBridge,
+            externalReference: 'donation_${userId}_$timestamp',
+            onSuccess: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(AppLocalizations.of(context)!.donationThanks),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            },
+          ),
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF1A4D8C),
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      child: Text(
+        '$amount',
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
     );
   }
 }
