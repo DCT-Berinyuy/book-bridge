@@ -1143,6 +1143,10 @@ class _ListingCard extends StatelessWidget {
                     const SizedBox(height: 4),
                   if (listing.sellerType != 'individual')
                     _buildVerifiedBadge(context),
+                  if (listing.status == 'sold') ...[
+                    const SizedBox(height: 4),
+                    _buildSoldBadge(context),
+                  ],
                 ],
               ),
             ),
@@ -1247,6 +1251,32 @@ class _ListingCard extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             AppLocalizations.of(context)!.boosted.toUpperCase(),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 9,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSoldBadge(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.error,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.check_circle, size: 12, color: Colors.white),
+          const SizedBox(width: 4),
+          Text(
+            AppLocalizations.of(context)!.sold.toUpperCase(),
             style: const TextStyle(
               color: Colors.white,
               fontSize: 9,

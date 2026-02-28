@@ -69,6 +69,14 @@ export async function POST({ request }) {
 				const parts = external_reference.split(separator);
 				const userId = parts[1];
 				await handleDonationSuccess(userId, reference, amount);
+			} else if (external_reference && (external_reference.startsWith('purchase:') || external_reference.startsWith('purchase_'))) {
+				const separator = external_reference.includes(':') ? ':' : '_';
+				const parts = external_reference.split(separator);
+				const listingId = parts[1];
+				const buyerId = parts[2];
+				
+				console.log(`[${timestamp}] Processing purchase: Listing=${listingId}, Buyer=${buyerId}`);
+				await handlePurchaseSuccess(listingId, buyerId, reference, amount);
 			} else {
 				console.warn(`[${timestamp}] Unknown externalId format: ${external_reference}`);
 			}
@@ -161,4 +169,75 @@ async function handleDonationSuccess(userId, reference, amount) {
 		console.error('Donation record error:', error);
 		throw error;
 	}
+}
+
+async function handlePurchaseSuccess(listingId, buyerId, reference, amount) {
+	console.log(`Processing purchase for listing ${listingId} by buyer ${buyerId}`);
+	
+	// 1. Get the seller_id from the listing
+	const supabase = getSupabase();
+	if (!supabase) throw new Error('Supabase client not initialized');
+
+	const { data: listing, error: fetchError } = await supabase
+		.from('listings')
+		.select('seller_id')
+		.eq('id', listingId)
+		.single();
+
+	if (fetchError || !listing) {
+		console.error('Error fetching listing for purchase:', fetchError);
+		throw new Error('Listing not found');
+	}
+
+	const sellerId = listing.seller_id;
+
+	// 2. Update listing status to 'sold'
+	const { error: listingError } = await supabase
+		.from('listings')
+		.update({
+			status: 'sold'
+		})
+		.eq('id', listingId);
+
+	if (listingError) {
+		console.error('Error marking listing as sold:', listingError);
+		throw listingError;
+	}
+
+	// 3. Upsert transaction record
+	const { error: paymentError } = await supabase
+		.from('transactions')
+		.upsert({
+			payment_reference: reference,
+			listing_id: listingId,
+			buyer_id: buyerId,
+			seller_id: sellerId,
+			amount: parseInt(amount),
+			status: 'successful',
+			created_at: new Date().toISOString()
+		}, { onConflict: 'payment_reference' });
+    
+    if (paymentError) {
+		console.error('Error recording purchase transaction:', paymentError);
+		throw paymentError;
+	}
+
+	// 4. Send an automated message to start the conversation
+	const { error: messageError } = await supabase
+		.from('messages')
+		.insert({
+			listing_id: listingId,
+			sender_id: buyerId,
+			receiver_id: sellerId,
+			content: `Hello! I just purchased this book via BookBridge. When can we meet to complete the exchange?`,
+			is_read: false,
+			created_at: new Date().toISOString()
+		});
+
+	if (messageError) {
+		console.error('Error creating automated purchase message:', messageError);
+		// Not throwing here so the purchase still succeeds even if the message fails
+	}
+	
+	console.log(`Successfully processed purchase of listing ${listingId} by user ${buyerId}`);
 }

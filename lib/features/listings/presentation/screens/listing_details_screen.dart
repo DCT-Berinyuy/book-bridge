@@ -775,36 +775,47 @@ ${l10n.shareTextDownload}
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    // Check if authenticated
-                    if (authVM.currentUser == null) {
-                      context.push('/sign-in');
-                      return;
-                    }
+                  onPressed: listing.status == 'available'
+                      ? () {
+                          // Check if authenticated
+                          if (authVM.currentUser == null) {
+                            context.push('/sign-in');
+                            return;
+                          }
 
-                    // Navigate to chat thread
-                    context.push(
-                      '/chat/${listing.id}',
-                      extra: {
-                        'otherUserId': listing.sellerId,
-                        'otherUserName':
-                            listing.sellerName ??
-                            AppLocalizations.of(context)!.unknownSeller,
-                        'listingTitle': listing.title,
-                        'listingPrice': listing.priceFcfa,
-                      },
-                    );
-                  },
+                          // Navigate to chat thread
+                          context.push(
+                            '/chat/${listing.id}',
+                            extra: {
+                              'otherUserId': listing.sellerId,
+                              'otherUserName':
+                                  listing.sellerName ??
+                                  AppLocalizations.of(context)!.unknownSeller,
+                              'listingTitle': listing.title,
+                              'listingPrice': listing.priceFcfa,
+                            },
+                          );
+                        }
+                      : null, // Disable if sold
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1A4D8C),
+                    backgroundColor: listing.status == 'available'
+                        ? const Color(0xFF1A4D8C)
+                        : Colors.grey, // Grey color for sold state
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  icon: const Icon(Icons.chat_bubble_outline, size: 20),
+                  icon: Icon(
+                    listing.status == 'available'
+                        ? Icons.chat_bubble_outline
+                        : Icons.check_circle_outline,
+                    size: 20,
+                  ),
                   label: Text(
-                    AppLocalizations.of(context)!.messageSeller,
+                    listing.status == 'available'
+                        ? AppLocalizations.of(context)!.messageSeller
+                        : AppLocalizations.of(context)!.sold.toUpperCase(),
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
