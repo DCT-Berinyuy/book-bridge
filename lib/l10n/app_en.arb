@@ -26,6 +26,7 @@
   "all": "All",
   "verified": "VERIFIED",
   "sold": "SOLD",
+  "boosted": "BOOSTED",
   "signInTitle": "Welcome back!",
   "signInSubtitle": "Sign in to continue",
   "signUpTitle": "Join BookBridge",

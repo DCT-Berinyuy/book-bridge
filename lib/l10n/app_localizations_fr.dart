@@ -81,6 +81,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sold => 'VENDU';
 
   @override
+  String get boosted => 'BOOSTÉ';
+
+  @override
   String get signInTitle => 'Bon retour !';
 
   @override

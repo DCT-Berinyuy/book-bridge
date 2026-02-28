@@ -322,6 +322,20 @@ ${l10n.shareTextDownload}
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            if (listing.status == 'sold' || listing.isBoosted)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: [
+                                    if (listing.isBoosted)
+                                      _buildBoostedBadge(context),
+                                    if (listing.status == 'sold')
+                                      _buildSoldBadge(context),
+                                  ],
+                                ),
+                              ),
                             Text(
                               listing.title,
                               style: const TextStyle(
@@ -883,6 +897,74 @@ ${l10n.shareTextDownload}
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildBoostedBadge(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFFD700), Color(0xFFFFA500)], // Gold to Orange
+        ),
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.bolt, size: 14, color: Colors.white),
+          const SizedBox(width: 4),
+          Text(
+            AppLocalizations.of(context)!.boosted.toUpperCase(),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSoldBadge(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.error,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.check_circle, size: 14, color: Colors.white),
+          const SizedBox(width: 4),
+          Text(
+            AppLocalizations.of(context)!.sold.toUpperCase(),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
       ),
     );
   }

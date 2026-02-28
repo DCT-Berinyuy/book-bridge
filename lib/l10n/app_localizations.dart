@@ -239,6 +239,12 @@ abstract class AppLocalizations {
   /// **'SOLD'**
   String get sold;
 
+  /// No description provided for @boosted.
+  ///
+  /// In en, this message translates to:
+  /// **'BOOSTED'**
+  String get boosted;
+
   /// No description provided for @signInTitle.
   ///
   /// In en, this message translates to:
