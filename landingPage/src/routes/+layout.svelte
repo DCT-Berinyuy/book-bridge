@@ -2,7 +2,7 @@
   import "../app.css";
   import { Menu, X, Github, Download } from "lucide-svelte";
   import logo from "$lib/assets/logo.png";
-  import { onMount } from "svelte";
+  import { APP_DOWNLOAD_LINK } from "$lib/links";
 
   let { children } = $props();
   let isMenuOpen = $state(false);
@@ -31,7 +31,7 @@
         <a href="#features">Features</a>
         <a href="#app">App</a>
         <a
-          href="https://github.com/DCT-Berinyuy/book-bridge/releases"
+          href={APP_DOWNLOAD_LINK}
           target="_blank"
           rel="noopener noreferrer"
           class="btn-primary"
@@ -58,7 +58,7 @@
         <a href="#features" onclick={toggleMenu}>Features</a>
         <a href="#app" onclick={toggleMenu}>Mobile App</a>
         <a
-          href="https://github.com/DCT-Berinyuy/book-bridge/releases"
+          href={APP_DOWNLOAD_LINK}
           target="_blank"
           rel="noopener noreferrer"
           class="btn-primary"

@@ -17,6 +17,7 @@
   } from "lucide-svelte";
   import { onMount } from "svelte";
   import screenshot from "$lib/assets/screenshot.png";
+  import { APP_DOWNLOAD_LINK } from "$lib/links";
 
   // Tab state for "How it Works"
   let activeTab = $state("buyer");
@@ -49,7 +50,7 @@
 
         <div class="hero-actions">
           <a
-            href="https://github.com/DCT-Berinyuy/book-bridge/releases"
+            href={APP_DOWNLOAD_LINK}
             target="_blank"
             rel="noopener noreferrer"
             class="btn-primary-lg"
@@ -275,7 +276,7 @@
         </p>
         <div class="store-buttons">
           <a
-            href="https://github.com/DCT-Berinyuy/book-bridge/releases"
+            href={APP_DOWNLOAD_LINK}
             target="_blank"
             rel="noopener noreferrer"
             class="store-btn android"
