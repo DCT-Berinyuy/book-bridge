@@ -21,20 +21,22 @@ class FapshiDataSource {
     required String medium,
   }) async {
     try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/direct-pay'),
-        headers: {
-          'Content-Type': 'application/json',
-          'apiuser': apiUser,
-          'apikey': apiKey,
-        },
-        body: jsonEncode({
-          'amount': amount,
-          'phone': phone,
-          'externalId': externalId,
-          'medium': medium,
-        }),
-      );
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/direct-pay'),
+            headers: {
+              'Content-Type': 'application/json',
+              'apiuser': apiUser,
+              'apikey': apiKey,
+            },
+            body: jsonEncode({
+              'amount': amount,
+              'phone': phone,
+              'externalId': externalId,
+              'medium': medium,
+            }),
+          )
+          .timeout(const Duration(seconds: 120));
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return jsonDecode(response.body);

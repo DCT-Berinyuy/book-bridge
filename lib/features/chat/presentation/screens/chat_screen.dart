@@ -116,7 +116,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       amount: widget.listingPrice!,
                       title: AppLocalizations.of(context)!.payNow,
                       externalReference:
-                          'purchase_${widget.listingId}_${widget.otherUserId}',
+                          'purchase_${widget.listingId}_${widget.otherUserId}_${DateTime.now().millisecondsSinceEpoch}',
                       onSuccess: () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

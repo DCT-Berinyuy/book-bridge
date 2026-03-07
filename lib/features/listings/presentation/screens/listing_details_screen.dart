@@ -696,7 +696,8 @@ ${l10n.shareTextDownload}
         child: PaymentBottomSheet(
           amount: 500, // 500 FCFA for 7 days
           title: AppLocalizations.of(context)!.boostListing,
-          externalReference: 'boost_${listing.id}_7',
+          externalReference:
+              'boost_${listing.id}_7_${DateTime.now().millisecondsSinceEpoch}',
           onSuccess: () {
             // Refresh details to show boosted status
             viewModel.loadListingDetails(listing.id);
@@ -856,7 +857,7 @@ ${l10n.shareTextDownload}
                             amount: listing.priceFcfa,
                             title: AppLocalizations.of(context)!.buyNow,
                             externalReference:
-                                'purchase_${listing.id}_$buyerId',
+                                'purchase_${listing.id}_${buyerId}_${DateTime.now().millisecondsSinceEpoch}',
                             onSuccess: () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(

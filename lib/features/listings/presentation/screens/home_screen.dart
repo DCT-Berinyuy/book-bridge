@@ -11,7 +11,9 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:book_bridge/features/payments/presentation/widgets/payment_bottom_sheet.dart';
+import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
+import 'package:book_bridge/injection_container.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,13 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   final PageController _pageController = PageController();
   int _currentPromoPage = 0;
-
-  Future<void> _launchUrl(String urlString) async {
-    final Uri url = Uri.parse(urlString);
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      throw Exception('Could not launch $url');
-    }
-  }
 
   @override
   void initState() {
@@ -472,7 +467,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: _buildDonationCard(),
+                  child: _buildDonationCard(context),
                 ),
               ],
             ),
@@ -692,7 +687,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildDonationCard() {
+  Widget _buildDonationCard(BuildContext context) {
+    final authViewModel = context.read<AuthViewModel>();
+    final user = authViewModel.currentUser;
     return Container(
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -797,9 +794,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                         child: ElevatedButton(
-                          onPressed: () => _launchUrl(
-                            'https://checkout.fapshi.com/donation/14943173',
-                          ),
+                          onPressed: () => _showDonationOptions(context, user),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: const Color(0xFFEC4899),
@@ -1060,6 +1055,90 @@ class _HomeScreenState extends State<HomeScreen> {
       default:
         return categoryName;
     }
+  }
+
+  void _showDonationOptions(BuildContext context, user) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          padding: const EdgeInsets.all(24),
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.selectDonationAmount,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildAmountButton(context, 100, user),
+                    _buildAmountButton(context, 500, user),
+                    _buildAmountButton(context, 1000, user),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildAmountButton(BuildContext context, int amount, user) {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.pop(context); // close amount picker
+
+        final userId = user?.id ?? 'anonymous';
+        final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) => ChangeNotifierProvider(
+            create: (_) => getIt<PaymentViewModel>(),
+            child: PaymentBottomSheet(
+              amount: amount,
+              title: AppLocalizations.of(context)!.supportBookBridge,
+              externalReference: 'donation_${userId}_$timestamp',
+              onSuccess: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(AppLocalizations.of(context)!.donationThanks),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF1A4D8C),
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      child: Text(
+        '$amount',
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
+    );
   }
 }
 

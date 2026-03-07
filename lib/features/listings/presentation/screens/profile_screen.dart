@@ -10,6 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:book_bridge/features/payments/presentation/widgets/payment_bottom_sheet.dart';
+import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
+import 'package:book_bridge/injection_container.dart';
 
 /// User profile screen displaying user information and their listings.
 ///
@@ -759,18 +761,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
-          builder: (context) => PaymentBottomSheet(
-            amount: amount,
-            title: AppLocalizations.of(context)!.supportBookBridge,
-            externalReference: 'donation_${userId}_$timestamp',
-            onSuccess: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(AppLocalizations.of(context)!.donationThanks),
-                  backgroundColor: Colors.green,
-                ),
-              );
-            },
+          builder: (context) => ChangeNotifierProvider(
+            create: (_) => getIt<PaymentViewModel>(),
+            child: PaymentBottomSheet(
+              amount: amount,
+              title: AppLocalizations.of(context)!.supportBookBridge,
+              externalReference: 'donation_${userId}_$timestamp',
+              onSuccess: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(AppLocalizations.of(context)!.donationThanks),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              },
+            ),
           ),
         );
       },
