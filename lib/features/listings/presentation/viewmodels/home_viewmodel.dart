@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/listings/domain/usecases/get_listings_usecase.dart';
+import 'package:book_bridge/features/listings/presentation/viewmodels/location_viewmodel.dart';
 
 /// Represents the different states for the home feed.
 enum HomeState { initial, loading, loaded, error }
@@ -11,6 +12,7 @@ enum HomeState { initial, loading, loaded, error }
 /// This ChangeNotifier manages fetching and displaying listings.
 class HomeViewModel extends ChangeNotifier {
   final GetListingsUseCase getListingsUseCase;
+  final LocationViewModel locationViewModel;
 
   // State
   HomeState _homeState = HomeState.initial;
@@ -48,9 +50,12 @@ class HomeViewModel extends ChangeNotifier {
     }).toList();
   }
 
-  /// Returns listings sorted by distance from the current position.
+  /// Returns listings sorted by distance when location is enabled.
+  /// Returns an empty list when location is disabled.
   List<Listing> get nearbyListings {
-    if (_currentPosition == null) return _listings;
+    if (!locationViewModel.locationEnabled || _currentPosition == null) {
+      return [];
+    }
 
     final List<Listing> sortedListings = List.from(_listings);
     sortedListings.sort((a, b) {
@@ -74,9 +79,35 @@ class HomeViewModel extends ChangeNotifier {
     return sortedListings;
   }
 
-  HomeViewModel({required this.getListingsUseCase}) {
+  HomeViewModel({
+    required this.getListingsUseCase,
+    required this.locationViewModel,
+  }) {
     _loadInitialListings();
-    _fetchLocation();
+    if (locationViewModel.locationEnabled) _fetchLocation();
+    // Re-fetch (or clear) location whenever the toggle changes.
+    locationViewModel.addListener(_onLocationPreferenceChanged);
+  }
+
+  void _onLocationPreferenceChanged() {
+    if (locationViewModel.locationEnabled) {
+      _fetchLocation();
+    } else {
+      _currentPosition = null;
+      notifyListeners();
+    }
+  }
+
+  /// Public method to manually refresh GPS (e.g., pull-to-refresh).
+  Future<void> refreshLocation() async {
+    if (!locationViewModel.locationEnabled) return;
+    await _fetchLocation();
+  }
+
+  @override
+  void dispose() {
+    locationViewModel.removeListener(_onLocationPreferenceChanged);
+    super.dispose();
   }
 
   /// Loads the initial set of listings on initialization.
@@ -191,28 +222,23 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Fetches the user's current location.
+  /// Fetches the user's current location (only when location is enabled).
   Future<void> _fetchLocation() async {
+    if (!locationViewModel.locationEnabled) return;
     try {
       bool serviceEnabled;
       LocationPermission permission;
 
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        return;
-      }
+      if (!serviceEnabled) return;
 
       permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          return;
-        }
+        if (permission == LocationPermission.denied) return;
       }
 
-      if (permission == LocationPermission.deniedForever) {
-        return;
-      }
+      if (permission == LocationPermission.deniedForever) return;
 
       _currentPosition = await Geolocator.getCurrentPosition();
       notifyListeners();

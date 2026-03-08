@@ -7,6 +7,7 @@ import 'package:book_bridge/features/listings/domain/repositories/listing_reposi
 import 'package:book_bridge/features/listings/domain/usecases/create_listing_usecase.dart';
 import 'package:book_bridge/features/listings/domain/usecases/update_listing_usecase.dart';
 import 'package:book_bridge/core/error/exceptions.dart';
+import 'package:book_bridge/features/listings/presentation/viewmodels/location_viewmodel.dart';
 
 /// State enum for the Sell screen.
 enum SellState { initial, loading, success, error }
@@ -19,6 +20,7 @@ class SellViewModel extends ChangeNotifier {
   final CreateListingUseCase createListingUseCase;
   final UpdateListingUseCase updateListingUseCase;
   final ListingRepository repository;
+  final LocationViewModel locationViewModel;
 
   SellState _sellState = SellState.initial;
   String? _errorMessage;
@@ -41,6 +43,7 @@ class SellViewModel extends ChangeNotifier {
     required this.createListingUseCase,
     required this.updateListingUseCase,
     required this.repository,
+    required this.locationViewModel,
   });
 
   // Getters
@@ -305,28 +308,23 @@ class SellViewModel extends ChangeNotifier {
     }
   }
 
-  /// Gets the current location of the device.
+  /// Gets the current location (returns null when location is disabled).
   Future<Position?> _getCurrentLocation() async {
+    if (!locationViewModel.locationEnabled) return null;
+
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return null;
-    }
+    if (!serviceEnabled) return null;
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return null;
-      }
+      if (permission == LocationPermission.denied) return null;
     }
 
-    if (permission == LocationPermission.deniedForever) {
-      return null;
-    }
+    if (permission == LocationPermission.deniedForever) return null;
 
     return await Geolocator.getCurrentPosition();
   }

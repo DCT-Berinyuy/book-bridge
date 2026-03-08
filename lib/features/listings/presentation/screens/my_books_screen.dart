@@ -203,7 +203,7 @@ class _MyBookCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       child: InkWell(
-        onTap: () => context.push('/listing/${listing.id}'),
+        onTap: () => context.push('/sell', extra: listing),
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(12),

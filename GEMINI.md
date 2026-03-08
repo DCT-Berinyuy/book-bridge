@@ -51,7 +51,13 @@ Additionally, there is a `landingPage` directory containing a separate web proje
 3.  **Run the App:**
     Use the `--dart-define` flags to pass the environment variables from the `.env` file to the Flutter app.
     ```bash
-    flutter run --dart-define="SUPABASE_URL=$(grep SUPABASE_URL .env | cut -d'=' -f2)" --dart-define="SUPABASE_ANON_KEY=$(grep SUPABASE_ANON_KEY .env | cut -d'=' -f2)" --dart-define="GOOGLE_CLIENT_ID=$(grep GOOGLE_CLIENT_ID .env | cut -d'=' -f2)"
+    flutter run \
+      --dart-define="SUPABASE_URL=$(grep SUPABASE_URL .env | cut -d'=' -f2)" \
+      --dart-define="SUPABASE_ANON_KEY=$(grep SUPABASE_ANON_KEY .env | cut -d'=' -f2)" \
+      --dart-define="GOOGLE_CLIENT_ID=$(grep GOOGLE_CLIENT_ID .env | cut -d'=' -f2)" \
+      --dart-define="FAPSHI_API_USER=$(grep FAPSHI_API_USER .env | cut -d'=' -f2)" \
+      --dart-define="FAPSHI_API_KEY=$(grep FAPSHI_API_KEY .env | cut -d'=' -f2)" \
+      --dart-define="FAPSHI_BASE_URL=$(grep FAPSHI_BASE_URL .env | cut -d'=' -f2)"
     ```
 
 ### SvelteKit Landing Page

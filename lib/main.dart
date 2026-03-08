@@ -15,6 +15,7 @@ import 'package:book_bridge/features/notifications/presentation/viewmodels/notif
 import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
 import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
+import 'package:book_bridge/features/listings/presentation/viewmodels/location_viewmodel.dart';
 import 'package:book_bridge/features/chat/presentation/viewmodels/chat_viewmodel.dart';
 import 'config/app_config.dart';
 
@@ -76,6 +77,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<LocaleViewModel>(
           create: (_) => LocaleViewModel(),
+        ),
+        ChangeNotifierProvider<LocationViewModel>(
+          create: (_) => di.getIt<LocationViewModel>(),
         ),
       ],
       child: Consumer<LocaleViewModel>(

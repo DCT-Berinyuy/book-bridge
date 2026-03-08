@@ -27,6 +27,7 @@ import 'package:book_bridge/features/listings/presentation/viewmodels/listing_de
 import 'package:book_bridge/features/listings/presentation/viewmodels/sell_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
+import 'package:book_bridge/features/listings/presentation/viewmodels/location_viewmodel.dart';
 import 'package:book_bridge/features/notifications/data/datasources/supabase_notifications_data_source.dart';
 import 'package:book_bridge/features/notifications/data/repositories/notifications_repository_impl.dart';
 import 'package:book_bridge/features/notifications/domain/repositories/notifications_repository.dart';
@@ -165,9 +166,16 @@ Future<void> setupDependencyInjection() async {
     UpdateListingUseCase(getIt<ListingRepository>()),
   );
 
+  // Location Preference (must be loaded before ViewModels that depend on it)
+  final locationViewModel = await LocationViewModel.load();
+  getIt.registerSingleton<LocationViewModel>(locationViewModel);
+
   // Listings Feature - Presentation Layer (ViewModels)
   getIt.registerSingleton<HomeViewModel>(
-    HomeViewModel(getListingsUseCase: getIt<GetListingsUseCase>()),
+    HomeViewModel(
+      getListingsUseCase: getIt<GetListingsUseCase>(),
+      locationViewModel: getIt<LocationViewModel>(),
+    ),
   );
 
   getIt.registerSingleton<ListingDetailsViewModel>(
@@ -182,6 +190,7 @@ Future<void> setupDependencyInjection() async {
       createListingUseCase: getIt<CreateListingUseCase>(),
       updateListingUseCase: getIt<UpdateListingUseCase>(),
       repository: getIt<ListingRepository>(),
+      locationViewModel: getIt<LocationViewModel>(),
     ),
   );
 

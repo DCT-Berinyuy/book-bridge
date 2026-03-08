@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
+import 'package:book_bridge/features/listings/presentation/viewmodels/location_viewmodel.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -133,6 +134,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const Divider(height: 1),
                 _buildMenuSection(context, AppLocalizations.of(context)!.more, [
+                  _buildMenuSwitch(
+                    context,
+                    icon: Icons.location_on_outlined,
+                    title:
+                        'Location Services', // We should ideally add this to localization later
+                    value: context.watch<LocationViewModel>().locationEnabled,
+                    onChanged: (val) {
+                      context.read<LocationViewModel>().toggle();
+                    },
+                  ),
                   _buildMenuItem(
                     context,
                     icon: Icons.lock_outline,
@@ -405,6 +416,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Widget _buildMenuSwitch(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+    Color? textColor,
+    bool isLast = false,
+    bool indent = false,
+  }) {
+    return Column(
+      children: [
+        SwitchListTile(
+          secondary: Icon(
+            icon,
+            size: 22,
+            color: textColor ?? Colors.black87.withValues(alpha: 0.8),
+          ),
+          title: Text(
+            title,
+            style: TextStyle(
+              fontSize: 15,
+              color: textColor ?? Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          value: value,
+          onChanged: onChanged,
+          contentPadding: EdgeInsets.only(left: indent ? 40 : 20, right: 20),
+          activeThumbColor: const Color(0xFF1A4D8C),
+        ),
+        if (!isLast)
+          Padding(
+            padding: EdgeInsets.only(left: indent ? 80 : 60),
+            child: Divider(
+              height: 1,
+              color: Colors.grey.withValues(alpha: 0.1),
+            ),
+          ),
+      ],
+    );
+  }
+
   Widget _buildExpandableMenuItem(
     BuildContext context, {
     required IconData icon,
@@ -465,6 +519,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              _buildSocialIcon(
+                FontAwesomeIcons.whatsapp,
+                const Color(0xFF25D366),
+                'Community',
+                () => _launchUrl(
+                  'https://chat.whatsapp.com/H6WZEE86OEoDkb4jjjtOHZ',
+                ),
+              ),
               _buildSocialIcon(
                 FontAwesomeIcons.facebook,
                 const Color(0xFF1877F2),

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
+import 'package:book_bridge/features/auth/presentation/widgets/marketplace_agreement_sheet.dart';
 
 /// Sign Up screen for new user registration.
 ///
@@ -405,22 +406,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             onPressed:
                                 authViewModel.authState == AuthState.loading
                                 ? null
-                                : () {
+                                : () async {
                                     FocusScope.of(context).unfocus();
-                                    if (_formKey.currentState?.validate() ??
-                                        false) {
-                                      authViewModel.signUp(
-                                        email: _emailController.text.trim(),
-                                        password: _passwordController.text
-                                            .trim(),
-                                        fullName: _fullNameController.text
-                                            .trim(),
-                                        locality: _localityController.text
-                                            .trim(),
-                                        whatsappNumber: _whatsappController.text
-                                            .trim(),
-                                      );
+                                    if (!(_formKey.currentState?.validate() ??
+                                        false)) {
+                                      return;
                                     }
+                                    // Show the Marketplace Agreement modal first
+                                    if (!context.mounted) return;
+                                    final agreed =
+                                        await showMarketplaceAgreement(context);
+                                    if (!agreed) return;
+                                    if (!context.mounted) return;
+                                    authViewModel.signUp(
+                                      email: _emailController.text.trim(),
+                                      password: _passwordController.text.trim(),
+                                      fullName: _fullNameController.text.trim(),
+                                      locality: _localityController.text.trim(),
+                                      whatsappNumber: _whatsappController.text
+                                          .trim(),
+                                    );
                                   },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(
