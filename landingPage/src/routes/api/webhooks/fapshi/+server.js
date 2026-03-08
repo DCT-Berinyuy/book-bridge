@@ -2,6 +2,7 @@ import { json } from '@sveltejs/kit';
 import { createClient } from '@supabase/supabase-js';
 import { env } from '$env/dynamic/private';
 
+/** @type {import('@supabase/supabase-js').SupabaseClient | undefined} */
 let supabase;
 
 function getSupabase() {
@@ -97,10 +98,17 @@ export async function POST({ request }) {
 		return json({ success: true, processed_at: timestamp });
 	} catch (err) {
 		console.error(`[${timestamp}] Webhook Error:`, err);
-		return json({ error: err.message, stack: err.stack }, { status: 500 });
+		const error = /** @type {Error} */ (err);
+		return json({ error: error.message, stack: error.stack }, { status: 500 });
 	}
 }
 
+/**
+ * @param {string} listingId
+ * @param {string} reference
+ * @param {string|number} amount
+ * @param {string|number} duration
+ */
 async function handleBoostSuccess(listingId, reference, amount, duration) {
 	const expiresAt = new Date();
 	expiresAt.setDate(expiresAt.getDate() + parseInt(duration));
@@ -159,6 +167,11 @@ async function handleBoostSuccess(listingId, reference, amount, duration) {
 	console.log(`Successfully boosted listing ${listingId} for user ${userId}`);
 }
 
+/**
+ * @param {string} userId
+ * @param {string} reference
+ * @param {string|number} amount
+ */
 async function handleDonationSuccess(userId, reference, amount) {
 	console.log(`Processing donation from user ${userId}`);
 	
@@ -181,6 +194,12 @@ async function handleDonationSuccess(userId, reference, amount) {
 	}
 }
 
+/**
+ * @param {string} listingId
+ * @param {string} buyerId
+ * @param {string} reference
+ * @param {string|number} amount
+ */
 async function handlePurchaseSuccess(listingId, buyerId, reference, amount) {
 	console.log(`Processing purchase for listing ${listingId} by buyer ${buyerId}`);
 	
@@ -201,7 +220,14 @@ async function handlePurchaseSuccess(listingId, buyerId, reference, amount) {
 
 	const sellerId = listing.seller_id;
 
-	// 2. Update listing status to 'sold'
+	// 2. Fetch the seller's mobile money (whatsapp) number
+	const { data: profile } = await supabase
+		.from('profiles')
+		.select('whatsapp_number, full_name')
+		.eq('id', sellerId)
+		.single();
+
+	// 3. Update listing status to 'sold'
 	const { error: listingError } = await supabase
 		.from('listings')
 		.update({
@@ -214,7 +240,65 @@ async function handlePurchaseSuccess(listingId, buyerId, reference, amount) {
 		throw listingError;
 	}
 
-	// 3. Upsert transaction record
+	// 4. Calculate Payout (95% to seller, 5% commission)
+	// We parse amount to integer, and calculate 95%. Round down to be safe.
+	const totalAmount = parseInt(amount);
+	const payoutAmount = Math.floor(totalAmount * 0.95);
+	const commissionAmount = totalAmount - payoutAmount;
+
+	// 5. Initiate Payout via Fapshi if seller has a number configured
+	let payoutStatus = 'pending';
+	let payoutReference = null;
+	
+	if (profile && profile.whatsapp_number) {
+		const fapshiPayoutUser = env.FAPSHI_PAYOUT_API_USER;
+		const fapshiPayoutKey = env.FAPSHI_PAYOUT_API_KEY;
+		const payoutExternalId = `payout_${reference}`;
+
+		if (fapshiPayoutUser && fapshiPayoutKey) {
+			try {
+				console.log(`Initiating payout of ${payoutAmount} XAF to ${profile.whatsapp_number} for seller ${sellerId}`);
+				
+				const response = await fetch('https://live.fapshi.com/payout', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'apiuser': fapshiPayoutUser,
+						'apikey': fapshiPayoutKey
+					},
+					body: JSON.stringify({
+						amount: payoutAmount,
+						phone: profile.whatsapp_number,
+						name: profile.full_name || 'BookBridge Seller',
+						externalId: payoutExternalId,
+						message: `BookBridge Book Sale Payout for listing ${listingId}`
+					})
+				});
+
+				const payoutData = await response.json();
+				console.log(`[${new Date().toISOString()}] Payout Response:`, JSON.stringify(payoutData));
+
+				if (response.ok && payoutData.statusCode === 200) {
+					payoutStatus = 'successful';
+					payoutReference = payoutData.transId;
+				} else {
+					console.error('Payout failed with response:', payoutData);
+					payoutStatus = 'failed';
+					// You could extract errorMessage from payoutData if needed
+				}
+			} catch (e) {
+				console.error('Fapshi Payout Request Exception:', e);
+				payoutStatus = 'failed';
+			}
+		} else {
+			console.warn('FAPSHI_PAYOUT_API_USER or FAPSHI_PAYOUT_API_KEY missing from environment. Payout skipped.');
+		}
+	} else {
+		console.warn(`Seller ${sellerId} has no mobile money (whatsapp) number configured. Payout skipped.`);
+		payoutStatus = 'failed';
+	}
+
+	// 6. Upsert transaction record, including payout data
 	const { error: paymentError } = await supabase
 		.from('transactions')
 		.upsert({
@@ -222,8 +306,11 @@ async function handlePurchaseSuccess(listingId, buyerId, reference, amount) {
 			listing_id: listingId,
 			buyer_id: buyerId,
 			seller_id: sellerId,
-			amount: parseInt(amount),
+			amount: totalAmount,
 			status: 'successful',
+			payout_status: payoutStatus,
+			payout_reference: payoutReference,
+			commission_amount: commissionAmount,
 			created_at: new Date().toISOString()
 		}, { onConflict: 'payment_reference' });
     
@@ -232,7 +319,7 @@ async function handlePurchaseSuccess(listingId, buyerId, reference, amount) {
 		throw paymentError;
 	}
 
-	// 4. Send an automated message to start the conversation
+	// 7. Send an automated message to start the conversation
 	const { error: messageError } = await supabase
 		.from('messages')
 		.insert({

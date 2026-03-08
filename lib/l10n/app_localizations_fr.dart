@@ -183,13 +183,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get localityRequired => 'La localité est requise';
 
   @override
-  String get whatsappLabel => 'Numéro WhatsApp';
+  String get whatsappLabel => 'Numéro Mobile Money';
 
   @override
   String get whatsappHint => 'ex. 677...';
 
   @override
-  String get whatsappRequired => 'Le numéro WhatsApp est requis';
+  String get whatsappRequired => 'Le numéro Mobile Money est requis';
 
   @override
   String get whatsappInvalid => 'Entrez un numéro valide à 9 chiffres';
@@ -650,7 +650,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get localityNeighborhood => 'Localité / Quartier';
 
   @override
-  String get whatsappNumber => 'Numéro WhatsApp';
+  String get whatsappNumber => 'Numéro Mobile Money';
 
   @override
   String get saveChanges => 'Enregistrer les modifications';
@@ -801,7 +801,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get privacyCollectTitle => '2. Données que nous collectons';
 
   @override
-  String get privacyCollectContent => 'Nous pouvons collecter, utiliser, stocker et transférer différents types de données personnelles vous concernant, que nous avons regroupées comme suit :\n\n• Données d\'identité : Nom, nom d\'utilisateur ou identifiant similaire.\n• Données de contact : Adresse e-mail et numéros de téléphone (y compris WhatsApp).\n• Données techniques : Adresse IP, données de connexion, type et version du navigateur, fuseau horaire et localisation.\n• Données de profil : Votre nom d\'utilisateur, votre mot de passe, les annonces que vous avez publiées, vos intérêts et vos favoris.';
+  String get privacyCollectContent => 'Nous pouvons collecter, utiliser, stocker et transférer différents types de données personnelles vous concernant, que nous avons regroupées comme suit :\n\n• Données d\'identité : Nom, nom d\'utilisateur ou identifiant similaire.\n• Données de contact : Adresse e-mail et numéros de téléphone.\n• Données techniques : Adresse IP, données de connexion, type et version du navigateur, fuseau horaire et localisation.\n• Données de profil : Votre nom d\'utilisateur, votre mot de passe, les annonces que vous avez publiées, vos intérêts et vos favoris.';
 
   @override
   String get privacyUseTitle => '3. Comment nous utilisons vos données';
@@ -813,7 +813,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get privacySharingTitle => '4. Partage de données';
 
   @override
-  String get privacySharingContent => 'Lorsque vous mettez un livre en vente, vos informations de contact (comme votre numéro WhatsApp) seront partagées avec les acheteurs potentiels pour faciliter la transaction. Nous ne vendons pas vos données personnelles à des tiers à des fins de marketing.';
+  String get privacySharingContent => 'Lorsque vous mettez un livre en vente, vos informations de contact seront partagées avec les acheteurs potentiels pour faciliter la transaction. Nous ne vendons pas vos données personnelles à des tiers à des fins de marketing.';
 
   @override
   String get privacySecurityTitle => '5. Sécurité des données';
@@ -881,7 +881,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get faqCreateAccountQ => 'Comment créer un compte ?';
 
   @override
-  String get faqCreateAccountA => 'Vous pouvez vous inscrire à l\'aide de votre adresse e-mail ou vous connecter rapidement avec votre compte Google. Après vous être connecté, vous devrez compléter votre profil avec quelques détails comme votre localité et votre numéro WhatsApp.';
+  String get faqCreateAccountA => 'Vous pouvez vous inscrire à l\'aide de votre adresse e-mail ou vous connecter rapidement avec votre compte Google. Après vous être connecté, vous devrez compléter votre profil avec quelques détails comme votre localité et votre numéro Mobile Money.';
 
   @override
   String get faqBuyingCategory => 'Acheter des livres';
@@ -890,7 +890,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get faqHowToBuyQ => 'Comment acheter un livre ?';
 
   @override
-  String get faqHowToBuyA => 'Parcourez les annonces sur l\'écran d\'accueil ou utilisez la barre de recherche. Lorsque vous trouvez un livre qui vous plaît, appuyez dessus pour voir les détails, puis utilisez le bouton « Contacter le vendeur » pour lui envoyer un message via WhatsApp afin d\'organiser l\'achat.';
+  String get faqHowToBuyA => 'Parcourez les annonces sur l\'écran d\'accueil ou utilisez la barre de recherche. Lorsque vous trouvez un livre qui vous plaît, appuyez dessus pour voir les détails, puis utilisez le bouton « Contacter le vendeur » pour discuter avec lui afin d\'organiser l\'achat.';
 
   @override
   String get faqHowToPayQ => 'Comment payer un livre ?';

@@ -183,13 +183,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get localityRequired => 'Locality is required';
 
   @override
-  String get whatsappLabel => 'WhatsApp Number';
+  String get whatsappLabel => 'Mobile Money Number';
 
   @override
   String get whatsappHint => 'e.g. 677...';
 
   @override
-  String get whatsappRequired => 'WhatsApp number is required';
+  String get whatsappRequired => 'Mobile Money number is required';
 
   @override
   String get whatsappInvalid => 'Enter a valid 9-digit number';
@@ -650,7 +650,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get localityNeighborhood => 'Locality / Neighborhood';
 
   @override
-  String get whatsappNumber => 'WhatsApp Number';
+  String get whatsappNumber => 'Mobile Money Number';
 
   @override
   String get saveChanges => 'Save Changes';
@@ -801,7 +801,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacyCollectTitle => '2. Data We Collect';
 
   @override
-  String get privacyCollectContent => 'We may collect, use, store and transfer different kinds of personal data about you which we have grouped together as follows:\n\n• Identity Data: Name, username or similar identifier.\n• Contact Data: Email address and telephone numbers (including WhatsApp).\n• Technical Data: IP address, login data, browser type and version, time zone setting and location.\n• Profile Data: Your username, password, listings made by you, your interests, and favorites.';
+  String get privacyCollectContent => 'We may collect, use, store and transfer different kinds of personal data about you which we have grouped together as follows:\n\n• Identity Data: Name, username or similar identifier.\n• Contact Data: Email address and telephone numbers.\n• Technical Data: IP address, login data, browser type and version, time zone setting and location.\n• Profile Data: Your username, password, listings made by you, your interests, and favorites.';
 
   @override
   String get privacyUseTitle => '3. How We Use Your Data';
@@ -813,7 +813,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacySharingTitle => '4. Data Sharing';
 
   @override
-  String get privacySharingContent => 'When you list a book, your contact information (like your WhatsApp number) will be shared with potential buyers to facilitate the transaction. We do not sell your personal data to third parties for marketing purposes.';
+  String get privacySharingContent => 'When you list a book, your contact information will be shared with potential buyers to facilitate the transaction. We do not sell your personal data to third parties for marketing purposes.';
 
   @override
   String get privacySecurityTitle => '5. Data Security';
@@ -881,7 +881,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get faqCreateAccountQ => 'How do I create an account?';
 
   @override
-  String get faqCreateAccountA => 'You can sign up using your email address or quickly sign in with your Google account. After signing in, you\'ll need to complete your profile with a few details like your locality and WhatsApp number.';
+  String get faqCreateAccountA => 'You can sign up using your email address or quickly sign in with your Google account. After signing in, you\'ll need to complete your profile with a few details like your locality and Mobile Money number.';
 
   @override
   String get faqBuyingCategory => 'Buying Books';
@@ -890,7 +890,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get faqHowToBuyQ => 'How do I buy a book?';
 
   @override
-  String get faqHowToBuyA => 'Browse the listings on the Home screen or use the search bar. When you find a book you like, tap on it to see details, then use the \"Contact Seller\" button to message them via WhatsApp to arrange the purchase.';
+  String get faqHowToBuyA => 'Browse the listings on the Home screen or use the search bar. When you find a book you like, tap on it to see details, then use the \"Message Seller\" button to chat with them to arrange the purchase.';
 
   @override
   String get faqHowToPayQ => 'How do I pay for a book?';

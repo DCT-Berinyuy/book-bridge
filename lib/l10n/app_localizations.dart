@@ -446,7 +446,7 @@ abstract class AppLocalizations {
   /// No description provided for @whatsappLabel.
   ///
   /// In en, this message translates to:
-  /// **'WhatsApp Number'**
+  /// **'Mobile Money Number'**
   String get whatsappLabel;
 
   /// No description provided for @whatsappHint.
@@ -458,7 +458,7 @@ abstract class AppLocalizations {
   /// No description provided for @whatsappRequired.
   ///
   /// In en, this message translates to:
-  /// **'WhatsApp number is required'**
+  /// **'Mobile Money number is required'**
   String get whatsappRequired;
 
   /// No description provided for @whatsappInvalid.
@@ -1346,7 +1346,7 @@ abstract class AppLocalizations {
   /// No description provided for @whatsappNumber.
   ///
   /// In en, this message translates to:
-  /// **'WhatsApp Number'**
+  /// **'Mobile Money Number'**
   String get whatsappNumber;
 
   /// No description provided for @saveChanges.
@@ -1628,7 +1628,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyCollectContent.
   ///
   /// In en, this message translates to:
-  /// **'We may collect, use, store and transfer different kinds of personal data about you which we have grouped together as follows:\n\n• Identity Data: Name, username or similar identifier.\n• Contact Data: Email address and telephone numbers (including WhatsApp).\n• Technical Data: IP address, login data, browser type and version, time zone setting and location.\n• Profile Data: Your username, password, listings made by you, your interests, and favorites.'**
+  /// **'We may collect, use, store and transfer different kinds of personal data about you which we have grouped together as follows:\n\n• Identity Data: Name, username or similar identifier.\n• Contact Data: Email address and telephone numbers.\n• Technical Data: IP address, login data, browser type and version, time zone setting and location.\n• Profile Data: Your username, password, listings made by you, your interests, and favorites.'**
   String get privacyCollectContent;
 
   /// No description provided for @privacyUseTitle.
@@ -1652,7 +1652,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacySharingContent.
   ///
   /// In en, this message translates to:
-  /// **'When you list a book, your contact information (like your WhatsApp number) will be shared with potential buyers to facilitate the transaction. We do not sell your personal data to third parties for marketing purposes.'**
+  /// **'When you list a book, your contact information will be shared with potential buyers to facilitate the transaction. We do not sell your personal data to third parties for marketing purposes.'**
   String get privacySharingContent;
 
   /// No description provided for @privacySecurityTitle.
@@ -1784,7 +1784,7 @@ abstract class AppLocalizations {
   /// No description provided for @faqCreateAccountA.
   ///
   /// In en, this message translates to:
-  /// **'You can sign up using your email address or quickly sign in with your Google account. After signing in, you\'ll need to complete your profile with a few details like your locality and WhatsApp number.'**
+  /// **'You can sign up using your email address or quickly sign in with your Google account. After signing in, you\'ll need to complete your profile with a few details like your locality and Mobile Money number.'**
   String get faqCreateAccountA;
 
   /// No description provided for @faqBuyingCategory.
@@ -1802,7 +1802,7 @@ abstract class AppLocalizations {
   /// No description provided for @faqHowToBuyA.
   ///
   /// In en, this message translates to:
-  /// **'Browse the listings on the Home screen or use the search bar. When you find a book you like, tap on it to see details, then use the \"Contact Seller\" button to message them via WhatsApp to arrange the purchase.'**
+  /// **'Browse the listings on the Home screen or use the search bar. When you find a book you like, tap on it to see details, then use the \"Message Seller\" button to chat with them to arrange the purchase.'**
   String get faqHowToBuyA;
 
   /// No description provided for @faqHowToPayQ.
