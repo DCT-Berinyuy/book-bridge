@@ -529,12 +529,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 _buildSocialIcon(
-                  FontAwesomeIcons.facebook,
-                  const Color(0xFF1877F2),
-                  AppLocalizations.of(context)!.facebook,
+                  FontAwesomeIcons.linkedinIn,
+                  const Color(0xFF0A66C2),
+                  AppLocalizations.of(context)!.linkedin,
                   () => _launchUrl(
-                    'https://www.facebook.com/profile.php?id=61572639047021',
+                    'https://www.linkedin.com/in/verla-berinyuy-15b1262a5/',
                   ),
+                ),
+                _buildSocialIcon(
+                  FontAwesomeIcons.youtube,
+                  const Color(0xFFFF0000),
+                  AppLocalizations.of(context)!.youtube,
+                  () => _launchUrl('https://www.youtube.com/@VerlaBerinyuy'),
                 ),
                 _buildSocialIcon(
                   FontAwesomeIcons.instagram,
@@ -545,17 +551,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 _buildSocialIcon(
-                  FontAwesomeIcons.youtube,
-                  const Color(0xFFFF0000),
-                  AppLocalizations.of(context)!.youtube,
-                  () => _launchUrl('https://www.youtube.com/@VerlaBerinyuy'),
-                ),
-                _buildSocialIcon(
-                  FontAwesomeIcons.linkedinIn,
-                  const Color(0xFF0A66C2),
-                  AppLocalizations.of(context)!.linkedin,
+                  FontAwesomeIcons.facebook,
+                  const Color(0xFF1877F2),
+                  AppLocalizations.of(context)!.facebook,
                   () => _launchUrl(
-                    'https://www.linkedin.com/in/verla-berinyuy-15b1262a5/',
+                    'https://www.facebook.com/profile.php?id=61572639047021',
                   ),
                 ),
               ],
