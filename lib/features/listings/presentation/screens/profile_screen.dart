@@ -516,47 +516,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildSocialIcon(
-                FontAwesomeIcons.whatsapp,
-                const Color(0xFF25D366),
-                'Community',
-                () => _launchUrl(
-                  'https://chat.whatsapp.com/H6WZEE86OEoDkb4jjjtOHZ',
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                _buildSocialIcon(
+                  FontAwesomeIcons.whatsapp,
+                  const Color(0xFF25D366),
+                  'Community',
+                  () => _launchUrl(
+                    'https://chat.whatsapp.com/H6WZEE86OEoDkb4jjjtOHZ',
+                  ),
                 ),
-              ),
-              _buildSocialIcon(
-                FontAwesomeIcons.facebook,
-                const Color(0xFF1877F2),
-                AppLocalizations.of(context)!.facebook,
-                () => _launchUrl(
-                  'https://www.facebook.com/profile.php?id=61572639047021',
+                _buildSocialIcon(
+                  FontAwesomeIcons.facebook,
+                  const Color(0xFF1877F2),
+                  AppLocalizations.of(context)!.facebook,
+                  () => _launchUrl(
+                    'https://www.facebook.com/profile.php?id=61572639047021',
+                  ),
                 ),
-              ),
-              _buildSocialIcon(
-                FontAwesomeIcons.instagram,
-                const Color(0xFFE4405F),
-                AppLocalizations.of(context)!.instagram,
-                () =>
-                    _launchUrl('https://www.instagram.com/verlaberinyuyndey/'),
-              ),
-              _buildSocialIcon(
-                FontAwesomeIcons.youtube,
-                const Color(0xFFFF0000),
-                AppLocalizations.of(context)!.youtube,
-                () => _launchUrl('https://www.youtube.com/@VerlaBerinyuy'),
-              ),
-              _buildSocialIcon(
-                FontAwesomeIcons.linkedinIn,
-                const Color(0xFF0A66C2),
-                AppLocalizations.of(context)!.linkedin,
-                () => _launchUrl(
-                  'https://www.linkedin.com/in/verla-berinyuy-15b1262a5/',
+                _buildSocialIcon(
+                  FontAwesomeIcons.instagram,
+                  const Color(0xFFE4405F),
+                  AppLocalizations.of(context)!.instagram,
+                  () => _launchUrl(
+                    'https://www.instagram.com/verlaberinyuyndey/',
+                  ),
                 ),
-              ),
-            ],
+                _buildSocialIcon(
+                  FontAwesomeIcons.youtube,
+                  const Color(0xFFFF0000),
+                  AppLocalizations.of(context)!.youtube,
+                  () => _launchUrl('https://www.youtube.com/@VerlaBerinyuy'),
+                ),
+                _buildSocialIcon(
+                  FontAwesomeIcons.linkedinIn,
+                  const Color(0xFF0A66C2),
+                  AppLocalizations.of(context)!.linkedin,
+                  () => _launchUrl(
+                    'https://www.linkedin.com/in/verla-berinyuy-15b1262a5/',
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
