@@ -365,6 +365,12 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
   /// No description provided for @sendLink.
   ///
   /// In en, this message translates to:
@@ -2098,6 +2104,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Thank you for your support!'**
   String get donationThanks;
+
+  /// No description provided for @transactionHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction History'**
+  String get transactionHistory;
+
+  /// No description provided for @purchases.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchases'**
+  String get purchases;
+
+  /// No description provided for @sales.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales'**
+  String get sales;
+
+  /// No description provided for @noTransactionsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions yet'**
+  String get noTransactionsYet;
+
+  /// No description provided for @transactionsEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your history of bought and sold books will appear here.'**
+  String get transactionsEmptySubtitle;
+
+  /// No description provided for @orderId.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction ID'**
+  String get orderId;
+
+  /// No description provided for @amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get amount;
+
+  /// No description provided for @status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get status;
+
+  /// No description provided for @date.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get date;
+
+  /// No description provided for @leaveReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave a Review'**
+  String get leaveReview;
+
+  /// No description provided for @statusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get statusPending;
+
+  /// No description provided for @statusSuccessful.
+  ///
+  /// In en, this message translates to:
+  /// **'Successful'**
+  String get statusSuccessful;
+
+  /// No description provided for @statusFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get statusFailed;
+
+  /// No description provided for @reviewSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Submitted'**
+  String get reviewSubmitted;
+
+  /// No description provided for @rateYourExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate Your Experience'**
+  String get rateYourExperience;
+
+  /// No description provided for @howWasTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'How was your transaction for'**
+  String get howWasTransaction;
+
+  /// No description provided for @leaveAComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave a comment (optional)...'**
+  String get leaveAComment;
+
+  /// No description provided for @reviewSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Review'**
+  String get reviewSubmit;
+
+  /// No description provided for @reviewLaterHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You can leave a review later from your Transaction History.'**
+  String get reviewLaterHint;
+
+  /// No description provided for @leaveAReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave a Review'**
+  String get leaveAReview;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get darkMode;
+
+  /// No description provided for @systemDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'System Default'**
+  String get systemDefault;
+
+  /// No description provided for @manual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get manual;
+
+  /// No description provided for @locationServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Location Services'**
+  String get locationServices;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

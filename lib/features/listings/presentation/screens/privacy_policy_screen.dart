@@ -7,10 +7,10 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.privacyPolicyTitle),
-        backgroundColor: const Color(0xFF1A4D8C),
+        title: Text(l10n.privacyPolicyTitle),
         foregroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -22,49 +22,29 @@ class PrivacyPolicyScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSectionTitle(AppLocalizations.of(context)!.privacyIntroTitle),
-            _buildSectionContent(
-              AppLocalizations.of(context)!.privacyIntroContent,
-            ),
+            _buildSectionTitle(context, l10n.privacyIntroTitle),
+            _buildSectionContent(l10n.privacyIntroContent),
             const SizedBox(height: 20),
-            _buildSectionTitle(
-              AppLocalizations.of(context)!.privacyCollectTitle,
-            ),
-            _buildSectionContent(
-              AppLocalizations.of(context)!.privacyCollectContent,
-            ),
+            _buildSectionTitle(context, l10n.privacyCollectTitle),
+            _buildSectionContent(l10n.privacyCollectContent),
             const SizedBox(height: 20),
-            _buildSectionTitle(AppLocalizations.of(context)!.privacyUseTitle),
-            _buildSectionContent(
-              AppLocalizations.of(context)!.privacyUseContent,
-            ),
+            _buildSectionTitle(context, l10n.privacyUseTitle),
+            _buildSectionContent(l10n.privacyUseContent),
             const SizedBox(height: 20),
-            _buildSectionTitle(
-              AppLocalizations.of(context)!.privacySharingTitle,
-            ),
-            _buildSectionContent(
-              AppLocalizations.of(context)!.privacySharingContent,
-            ),
+            _buildSectionTitle(context, l10n.privacySharingTitle),
+            _buildSectionContent(l10n.privacySharingContent),
             const SizedBox(height: 20),
-            _buildSectionTitle(
-              AppLocalizations.of(context)!.privacySecurityTitle,
-            ),
-            _buildSectionContent(
-              AppLocalizations.of(context)!.privacySecurityContent,
-            ),
+            _buildSectionTitle(context, l10n.privacySecurityTitle),
+            _buildSectionContent(l10n.privacySecurityContent),
             const SizedBox(height: 20),
-            _buildSectionTitle(
-              AppLocalizations.of(context)!.privacyRightsTitle,
-            ),
-            _buildSectionContent(
-              AppLocalizations.of(context)!.privacyRightsContent,
-            ),
+            _buildSectionTitle(context, l10n.privacyRightsTitle),
+            _buildSectionContent(l10n.privacyRightsContent),
             const SizedBox(height: 40),
             Text(
-              AppLocalizations.of(context)!.lastUpdated('February 2026'),
+              l10n.lastUpdated('February 2026'),
               style: TextStyle(
                 fontStyle: FontStyle.italic,
-                color: Colors.grey[600],
+                color: Theme.of(context).textTheme.bodySmall?.color,
                 fontSize: 12,
               ),
             ),
@@ -74,15 +54,15 @@ class PrivacyPolicyScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: Color(0xFF1A4D8C),
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
     );

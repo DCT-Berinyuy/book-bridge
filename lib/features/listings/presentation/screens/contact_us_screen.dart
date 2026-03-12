@@ -32,7 +32,6 @@ class ContactUsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.contactUs),
-        backgroundColor: const Color(0xFF1A4D8C),
         foregroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -46,10 +45,10 @@ class ContactUsScreen extends StatelessWidget {
           children: [
             Text(
               AppLocalizations.of(context)!.getInTouch,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1A4D8C),
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(height: 12),
@@ -57,7 +56,7 @@ class ContactUsScreen extends StatelessWidget {
               AppLocalizations.of(context)!.contactSubtitle,
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey[600],
+                color: Theme.of(context).textTheme.bodySmall?.color,
                 height: 1.5,
               ),
             ),
@@ -152,7 +151,7 @@ class ContactUsScreen extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                    style: TextStyle(fontSize: 14, color: Theme.of(context).textTheme.bodySmall?.color),
                   ),
                 ],
               ),

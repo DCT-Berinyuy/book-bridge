@@ -11,6 +11,9 @@ class User extends Equatable {
   final String? locality;
   final String? whatsappNumber;
   final String? avatarUrl;
+  final double? rating;
+  final int? reviewCount;
+  final String? fcmToken;
   final DateTime createdAt;
 
   const User({
@@ -20,6 +23,9 @@ class User extends Equatable {
     this.locality,
     this.whatsappNumber,
     this.avatarUrl,
+    this.rating,
+    this.reviewCount,
+    this.fcmToken,
     required this.createdAt,
   });
 
@@ -30,6 +36,9 @@ class User extends Equatable {
     String? locality,
     String? whatsappNumber,
     String? avatarUrl,
+    double? rating,
+    int? reviewCount,
+    String? fcmToken,
     DateTime? createdAt,
   }) {
     return User(
@@ -39,6 +48,9 @@ class User extends Equatable {
       locality: locality ?? this.locality,
       whatsappNumber: whatsappNumber ?? this.whatsappNumber,
       avatarUrl: avatarUrl ?? this.avatarUrl,
+      rating: rating ?? this.rating,
+      reviewCount: reviewCount ?? this.reviewCount,
+      fcmToken: fcmToken ?? this.fcmToken,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -51,6 +63,9 @@ class User extends Equatable {
     locality,
     whatsappNumber,
     avatarUrl,
+    rating,
+    reviewCount,
+    fcmToken,
     createdAt,
   ];
 }

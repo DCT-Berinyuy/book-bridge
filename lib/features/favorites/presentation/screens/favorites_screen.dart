@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
-
 import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
+import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
+import 'package:book_bridge/features/listings/presentation/widgets/listing_card.dart';
 import 'package:book_bridge/l10n/app_localizations.dart';
 
 class FavoritesScreen extends StatefulWidget {
@@ -30,8 +31,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.myFavorites),
-        backgroundColor: const Color(0xFF1A4D8C),
-        foregroundColor: Colors.white,
       ),
       body: Consumer2<FavoritesViewModel, AuthViewModel>(
         builder: (context, favoritesViewModel, authViewModel, child) {
@@ -75,7 +74,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   Icon(
                     Icons.favorite_border,
                     size: 80,
-                    color: Colors.grey[300],
+                    color: Theme.of(context).disabledColor.withValues(alpha: 0.3),
                   ),
                   const SizedBox(height: 24),
                   Text(
@@ -88,14 +87,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   const SizedBox(height: 8),
                   Text(
                     AppLocalizations.of(context)!.favoritesEmptySubtitle,
-                    style: TextStyle(color: Colors.grey[600]),
+                    style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
                   ),
                   const SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: () => context.go('/home'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1A4D8C),
-                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 32,
                         vertical: 12,
@@ -112,15 +109,20 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             padding: const EdgeInsets.all(16),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.7,
+              childAspectRatio: 0.68, // slightly taller to account for more content
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
             ),
             itemCount: favorites.length,
             itemBuilder: (context, index) {
               final listing = favorites[index];
-              // Using a simplified card here since _ListingCard in home_screen.dart might be private
-              return _FavoriteListingCard(listing: listing);
+              final currentPosition =
+                  context.watch<HomeViewModel>().currentPosition;
+
+              return ListingCard(
+                listing: listing,
+                currentPosition: currentPosition,
+              );
             },
           );
         },
@@ -129,83 +131,3 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 }
 
-class _FavoriteListingCard extends StatelessWidget {
-  final dynamic listing;
-
-  const _FavoriteListingCard({required this.listing});
-
-  @override
-  Widget build(BuildContext context) {
-    final userId = context.read<AuthViewModel>().currentUser?.id;
-
-    return GestureDetector(
-      onTap: () => context.push('/listing/${listing.id}'),
-      child: Card(
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                Image.network(
-                  listing.imageUrl,
-                  height: 140,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    height: 140,
-                    color: Colors.grey[200],
-                    child: const Icon(Icons.book, color: Colors.grey),
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: IconButton(
-                    icon: const Icon(Icons.favorite, color: Colors.red),
-                    onPressed: () {
-                      if (userId != null) {
-                        context.read<FavoritesViewModel>().toggleFavorite(
-                          userId,
-                          listing,
-                        );
-                      }
-                    },
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.white.withValues(alpha: 0.8),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    listing.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    AppLocalizations.of(
-                      context,
-                    )!.priceFormat(listing.priceFcfa),
-                    style: const TextStyle(
-                      color: Color(0xFF1A4D8C),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

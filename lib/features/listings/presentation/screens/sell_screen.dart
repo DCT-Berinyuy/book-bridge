@@ -1,3 +1,4 @@
+import 'package:book_bridge/core/theme/app_theme.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:book_bridge/l10n/app_localizations.dart';
@@ -192,6 +193,7 @@ class _SellScreenState extends State<SellScreen> {
       ),
       body: Consumer<SellViewModel>(
         builder: (context, viewModel, child) {
+          final theme = Theme.of(context);
           return SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
             child: Form(
@@ -245,7 +247,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF2D3436), // Ink Black
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -280,7 +282,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF2D3436), // Ink Black
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -315,7 +317,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF2D3436), // Ink Black
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -388,7 +390,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF2D3436), // Ink Black
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -417,7 +419,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF2D3436), // Ink Black
+                      color: Theme.of(context).textTheme.titleLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -480,7 +482,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF2D3436), // Ink Black
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -526,7 +528,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF2D3436), // Ink Black
+                      color: Theme.of(context).textTheme.titleLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -536,7 +538,7 @@ class _SellScreenState extends State<SellScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF2D3436), // Ink Black
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -589,16 +591,17 @@ class _SellScreenState extends State<SellScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF2D3436),
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                       ),
                     ),
                     subtitle: Text(
                       AppLocalizations.of(context)!.buyBackSwitchDesc,
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                      style: TextStyle(fontSize: 12, color: theme.hintColor),
                     ),
                     value: viewModel.isBuyBackEligible,
                     onChanged: viewModel.setIsBuyBackEligible,
-                    activeThumbColor: const Color(0xFF1A4D8C),
+                    activeTrackColor: AppTheme.scholarBlue.withValues(alpha: 0.5),
+                    activeThumbColor: AppTheme.scholarBlue,
                   ),
                   const SizedBox(height: 16),
                   // Stock Count (for non-individuals)
@@ -608,7 +611,7 @@ class _SellScreenState extends State<SellScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF2D3436), // Ink Black
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -678,9 +681,7 @@ class _SellScreenState extends State<SellScreen> {
                               }
                             },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(
-                          0xFF1A4D8C,
-                        ), // Scholar Blue
+                        backgroundColor: AppTheme.scholarBlue,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -735,7 +736,7 @@ class _SellScreenState extends State<SellScreen> {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: const Color(0xFF2D3436).withValues(alpha: 0.7),
+            color: Theme.of(context).textTheme.bodyLarge?.color?.withValues(alpha: 0.7),
           ),
         ),
       ],

@@ -27,6 +27,8 @@ class ListingModel extends Listing {
     super.sellerLocality,
     super.sellerWhatsapp,
     super.sellerAvatarUrl,
+    super.sellerRating,
+    super.sellerReviewCount,
     super.latitude,
     super.longitude,
   });
@@ -69,6 +71,13 @@ class ListingModel extends Listing {
               as String?,
       sellerAvatarUrl:
           (json['profiles'] as Map<String, dynamic>?)?['avatar_url'] as String?,
+      sellerRating:
+          (json['profiles'] as Map<String, dynamic>?)?['rating'] is num
+          ? ((json['profiles'] as Map<String, dynamic>?)?['rating'] as num)
+                .toDouble()
+          : null,
+      sellerReviewCount:
+          (json['profiles'] as Map<String, dynamic>?)?['review_count'] as int?,
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
     );
@@ -125,6 +134,8 @@ class ListingModel extends Listing {
       sellerLocality: listing.sellerLocality,
       sellerWhatsapp: listing.sellerWhatsapp,
       sellerAvatarUrl: listing.sellerAvatarUrl,
+      sellerRating: listing.sellerRating,
+      sellerReviewCount: listing.sellerReviewCount,
       latitude: listing.latitude,
       longitude: listing.longitude,
     );
@@ -153,6 +164,8 @@ class ListingModel extends Listing {
       sellerLocality: sellerLocality,
       sellerWhatsapp: sellerWhatsapp,
       sellerAvatarUrl: sellerAvatarUrl,
+      sellerRating: sellerRating,
+      sellerReviewCount: sellerReviewCount,
       latitude: latitude,
       longitude: longitude,
     );

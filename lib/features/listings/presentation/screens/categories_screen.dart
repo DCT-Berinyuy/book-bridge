@@ -14,7 +14,10 @@ class CategoriesScreen extends StatelessWidget {
     const categories = appCategories;
 
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.categories)),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.categories),
+        foregroundColor: Colors.white,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -25,7 +28,7 @@ class CategoriesScreen extends StatelessWidget {
               style: GoogleFonts.montserrat(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface,
+                color: Theme.of(context).textTheme.titleMedium?.color,
               ),
             ),
           ),
@@ -63,7 +66,7 @@ class CategoriesScreen extends StatelessWidget {
                         ),
                       ],
                       border: Border.all(
-                        color: color.withValues(alpha: 0.3),
+                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                         width: 1,
                       ),
                     ),

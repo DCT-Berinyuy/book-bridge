@@ -144,6 +144,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cancel => 'Annuler';
 
   @override
+  String get close => 'Fermer';
+
+  @override
   String get sendLink => 'Envoyer le lien';
 
   @override
@@ -1039,5 +1042,77 @@ class AppLocalizationsFr extends AppLocalizations {
   String get selectDonationAmount => 'Choisissez le montant';
 
   @override
-  String get donationThanks => 'Merci pour votre soutien !';
+  String get donationThanks => 'Merci pour votre soutien!';
+
+  @override
+  String get transactionHistory => 'Historique des transactions';
+
+  @override
+  String get purchases => 'Achats';
+
+  @override
+  String get sales => 'Ventes';
+
+  @override
+  String get noTransactionsYet => 'Aucune transaction pour le moment';
+
+  @override
+  String get transactionsEmptySubtitle => 'L\'historique de vos livres achetés et vendus apparaîtra ici.';
+
+  @override
+  String get orderId => 'ID de transaction';
+
+  @override
+  String get amount => 'Montant';
+
+  @override
+  String get status => 'Statut';
+
+  @override
+  String get date => 'Date';
+
+  @override
+  String get leaveReview => 'Laisser un avis';
+
+  @override
+  String get statusPending => 'En attente';
+
+  @override
+  String get statusSuccessful => 'Réussi';
+
+  @override
+  String get statusFailed => 'Échoué';
+
+  @override
+  String get reviewSubmitted => 'Avis envoyé';
+
+  @override
+  String get rateYourExperience => 'Évaluez votre expérience';
+
+  @override
+  String get howWasTransaction => 'Comment s\'est passée votre transaction pour';
+
+  @override
+  String get leaveAComment => 'Laissez un commentaire (facultatif)...';
+
+  @override
+  String get reviewSubmit => 'Envoyer l\'avis';
+
+  @override
+  String get reviewLaterHint => 'Vous pourrez laisser un avis plus tard depuis votre historique de transactions.';
+
+  @override
+  String get leaveAReview => 'Laisser un avis';
+
+  @override
+  String get darkMode => 'Mode sombre';
+
+  @override
+  String get systemDefault => 'Par défaut du système';
+
+  @override
+  String get manual => 'Manuel';
+
+  @override
+  String get locationServices => 'Services de localisation';
 }

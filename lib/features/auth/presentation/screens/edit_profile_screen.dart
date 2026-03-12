@@ -123,7 +123,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: const Color(0xFF1A4D8C),
+                              color: Theme.of(context).colorScheme.primary,
                               width: 3,
                             ),
                           ),
@@ -193,7 +193,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           bottom: 0,
                           right: 0,
                           child: CircleAvatar(
-                            backgroundColor: const Color(0xFF1A4D8C),
+                            backgroundColor: Theme.of(context).colorScheme.primary,
                             radius: 18,
                             child: IconButton(
                               icon: const Icon(

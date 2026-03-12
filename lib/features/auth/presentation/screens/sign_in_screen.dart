@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
+import 'package:book_bridge/core/theme/app_theme.dart';
 
 /// Sign In screen for user authentication.
 ///
@@ -132,7 +133,7 @@ class _SignInScreenState extends State<SignInScreen> {
         preferredSize: const Size.fromHeight(60),
         child: SafeArea(
           child: Container(
-            color: const Color(0xFF1A4D8C), // Scholar Blue
+            color: Theme.of(context).colorScheme.primary,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
@@ -149,7 +150,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: Text(
                     AppLocalizations.of(context)!.signInButton,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -173,7 +174,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         child: Text(
                           isEnglish ? '🇺🇸 EN' : '🇫🇷 FR',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -207,19 +208,19 @@ class _SignInScreenState extends State<SignInScreen> {
                       const SizedBox(height: 16),
                       Text(
                         AppLocalizations.of(context)!.appBranding,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF2D3436), // Ink Black
+                          color: AppTheme.inkBlack, // Ink Black
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         AppLocalizations.of(context)!.appTagline,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: Color(0xFF95A5A6),
+                          color: AppTheme.lightGray,
                         ),
                       ),
                     ],
@@ -249,11 +250,11 @@ class _SignInScreenState extends State<SignInScreen> {
                           const SizedBox(width: 12),
                           Text(
                             AppLocalizations.of(context)!.googleSignIn,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xFF2D3436),
-                            ),
+                            style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: AppTheme.inkBlack,
+                          ),
                           ),
                         ],
                       ),
@@ -393,10 +394,10 @@ class _SignInScreenState extends State<SignInScreen> {
                             onPressed: () => _showForgotPasswordDialog(context),
                             child: Text(
                               AppLocalizations.of(context)!.forgotPassword,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                color: Color(0xFF1A4D8C), // Scholar Blue
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           ),
@@ -422,9 +423,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                     }
                                   },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(
-                                0xFF1A4D8C,
-                              ), // Scholar Blue
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -441,7 +441,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   )
                                 : Text(
                                     AppLocalizations.of(context)!.signInButton,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -470,10 +470,10 @@ class _SignInScreenState extends State<SignInScreen> {
                         onPressed: () => context.push('/sign-up'),
                         child: Text(
                           AppLocalizations.of(context)!.signUpButton,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF13EC5B), // Primary green
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                       ),

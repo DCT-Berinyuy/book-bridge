@@ -12,6 +12,9 @@ class UserModel extends User {
     super.locality,
     super.whatsappNumber,
     super.avatarUrl,
+    super.rating,
+    super.reviewCount,
+    super.fcmToken,
     required super.createdAt,
   });
 
@@ -27,6 +30,9 @@ class UserModel extends User {
       locality: json['locality'] as String?,
       whatsappNumber: json['whatsapp_number'] as String?,
       avatarUrl: json['avatar_url'] as String?,
+      rating: json['rating'] is num ? (json['rating'] as num).toDouble() : null,
+      reviewCount: json['review_count'] as int?,
+      fcmToken: json['fcm_token'] as String?,
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'] as String)
           : DateTime.now(),
@@ -44,6 +50,9 @@ class UserModel extends User {
       'locality': locality,
       'whatsapp_number': whatsappNumber,
       'avatar_url': avatarUrl,
+      'rating': rating,
+      'review_count': reviewCount,
+      'fcm_token': fcmToken,
       'created_at': createdAt.toIso8601String(),
     };
   }
@@ -57,6 +66,9 @@ class UserModel extends User {
       locality: user.locality,
       whatsappNumber: user.whatsappNumber,
       avatarUrl: user.avatarUrl,
+      rating: user.rating,
+      reviewCount: user.reviewCount,
+      fcmToken: user.fcmToken,
       createdAt: user.createdAt,
     );
   }
@@ -70,6 +82,9 @@ class UserModel extends User {
       locality: locality,
       whatsappNumber: whatsappNumber,
       avatarUrl: avatarUrl,
+      rating: rating,
+      reviewCount: reviewCount,
+      fcmToken: fcmToken,
       createdAt: createdAt,
     );
   }

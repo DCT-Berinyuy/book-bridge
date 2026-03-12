@@ -135,4 +135,33 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(UnknownFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> updateFcmToken(
+    String userId,
+    String token,
+  ) async {
+    try {
+      await dataSource.updateFcmToken(userId, token);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(UnknownFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> getUserById(String userId) async {
+    try {
+      final userModel = await dataSource.getUserById(userId);
+      return Right(userModel.toEntity());
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } on NotFoundException catch (e) {
+      return Left(NotFoundFailure(message: e.message));
+    } catch (e) {
+      return Left(UnknownFailure(message: e.toString()));
+    }
+  }
 }

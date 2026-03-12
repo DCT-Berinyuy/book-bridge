@@ -31,6 +31,8 @@ class Listing extends Equatable {
   final String? sellerLocality;
   final String? sellerWhatsapp;
   final String? sellerAvatarUrl;
+  final double? sellerRating;
+  final int? sellerReviewCount;
 
   // Location
   final double? latitude;
@@ -59,6 +61,8 @@ class Listing extends Equatable {
     this.sellerLocality,
     this.sellerWhatsapp,
     this.sellerAvatarUrl,
+    this.sellerRating,
+    this.sellerReviewCount,
     this.latitude,
     this.longitude,
   });
@@ -87,6 +91,8 @@ class Listing extends Equatable {
     sellerLocality,
     sellerWhatsapp,
     sellerAvatarUrl,
+    sellerRating,
+    sellerReviewCount,
     latitude,
     longitude,
   ];

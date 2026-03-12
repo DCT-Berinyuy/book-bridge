@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:book_bridge/features/chat/domain/entities/message.dart';
 import 'package:book_bridge/features/chat/presentation/viewmodels/chat_viewmodel.dart';
+import 'package:book_bridge/features/chat/domain/entities/message.dart';
 import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
 import 'package:book_bridge/features/payments/presentation/widgets/payment_bottom_sheet.dart';
-import 'package:book_bridge/injection_container.dart';
 import 'package:book_bridge/l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
+import 'package:book_bridge/core/theme/app_theme.dart';
+import 'package:book_bridge/injection_container.dart';
 
 /// Full-screen real-time chat thread for a specific listing conversation.
 class ChatScreen extends StatefulWidget {
@@ -86,21 +88,27 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1A4D8C),
+        backgroundColor: AppTheme.scholarBlue,
         foregroundColor: Colors.white,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.otherUserName,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            Text(
-              widget.listingTitle,
-              style: const TextStyle(fontSize: 12, color: Colors.white70),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+        title: InkWell(
+          onTap: () => context.push('/seller-profile/${widget.otherUserId}'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.otherUserName,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                widget.listingTitle,
+                style: const TextStyle(fontSize: 12, color: Colors.white70),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
         ),
         actions: [
           if (widget.listingPrice != null)
@@ -285,7 +293,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         )
                       : const Icon(Icons.send_rounded),
                   style: IconButton.styleFrom(
-                    backgroundColor: const Color(0xFF1A4D8C),
+                    backgroundColor: AppTheme.scholarBlue,
                     foregroundColor: Colors.white,
                   ),
                 );
@@ -347,7 +355,7 @@ class _MessageBubble extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: isMe
-              ? const Color(0xFF1A4D8C)
+              ? AppTheme.scholarBlue
               : theme.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),

@@ -1,3 +1,4 @@
+import 'package:book_bridge/core/theme/app_theme.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/location_viewmodel.dart';
+import 'package:book_bridge/core/presentation/viewmodels/theme_viewmodel.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -41,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1A4D8C),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Colors.white,
         title: Text(
           AppLocalizations.of(context)!.account,
@@ -62,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 value: 'edit',
                 child: Row(
                   children: [
-                    Icon(Icons.edit_outlined, size: 20, color: Colors.black87),
+                    Icon(Icons.edit_outlined, size: 20, color: Theme.of(context).iconTheme.color),
                     SizedBox(width: 12),
                     Text(AppLocalizations.of(context)!.editProfile),
                   ],
@@ -127,18 +129,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       context,
                       icon: Icons.book_outlined,
                       title: AppLocalizations.of(context)!.myBooks,
-                      onTap: () => context.go('/my-books'),
+                      onTap: () => context.push('/my-books'),
+                    ),
+                    _buildMenuItem(
+                      context,
+                      icon: Icons.history,
+                      title: AppLocalizations.of(context)!.transactionHistory,
+                      onTap: () => context.push('/transactions'),
                       isLast: true,
                     ),
                   ],
                 ),
                 const Divider(height: 1),
                 _buildMenuSection(context, AppLocalizations.of(context)!.more, [
+                  Consumer<ThemeViewModel>(
+                    builder: (context, themeViewModel, child) {
+                      final l10n = AppLocalizations.of(context)!;
+                      final isDarkMode = themeViewModel.themeMode == ThemeMode.dark ||
+                          (themeViewModel.themeMode == ThemeMode.system &&
+                              MediaQuery.of(context).platformBrightness == Brightness.dark);
+                      return SwitchListTile(
+                        secondary: Icon(
+                          isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        title: Text(l10n.darkMode),
+                        subtitle: Text(
+                          themeViewModel.themeMode == ThemeMode.system
+                              ? l10n.systemDefault
+                              : l10n.manual,
+                        ),
+                        value: isDarkMode,
+                        onChanged: (value) {
+                          themeViewModel.setThemeMode(
+                            value ? ThemeMode.dark : ThemeMode.light,
+                          );
+                        },
+                      );
+                    },
+                  ),
                   _buildMenuSwitch(
                     context,
                     icon: Icons.location_on_outlined,
-                    title:
-                        'Location Services', // We should ideally add this to localization later
+                    title: AppLocalizations.of(context)!.locationServices,
                     value: context.watch<LocationViewModel>().locationEnabled,
                     onChanged: (val) {
                       context.read<LocationViewModel>().toggle();
@@ -233,13 +266,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A4D8C).withValues(alpha: 0.05),
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
       ),
       child: Column(
         children: [
           CircleAvatar(
             radius: 50,
-            backgroundColor: const Color(0xFF1A4D8C),
+            backgroundColor: Theme.of(context).colorScheme.primary,
             backgroundImage:
                 user.avatarUrl != null && user.avatarUrl!.isNotEmpty
                 ? NetworkImage(user.avatarUrl!)
@@ -289,7 +322,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               context,
               vm.userListings.length.toString(),
               AppLocalizations.of(context)!.activeBooks,
-              const Color(0xFF1A4D8C),
+              AppTheme.scholarBlue,
             ),
           ),
           Container(height: 40, width: 1, color: Colors.grey[300]),
@@ -305,7 +338,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               AppLocalizations.of(context)!.totalValue,
-              const Color(0xFF27AE60),
+              AppTheme.growthGreen,
             ),
           ),
         ],
@@ -385,13 +418,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           leading: Icon(
             icon,
             size: 22,
-            color: textColor ?? Colors.black87.withValues(alpha: 0.8),
+            color: textColor ?? Theme.of(context).iconTheme.color?.withValues(alpha: 0.8),
           ),
           title: Text(
             title,
             style: TextStyle(
               fontSize: 15,
-              color: textColor ?? Colors.black87,
+              color: textColor ?? Theme.of(context).textTheme.bodyLarge?.color,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -426,26 +459,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
     bool isLast = false,
     bool indent = false,
   }) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         SwitchListTile(
           secondary: Icon(
             icon,
             size: 22,
-            color: textColor ?? Colors.black87.withValues(alpha: 0.8),
+            color: textColor ?? Theme.of(context).iconTheme.color?.withValues(alpha: 0.8),
           ),
           title: Text(
             title,
             style: TextStyle(
               fontSize: 15,
-              color: textColor ?? Colors.black87,
+              color: textColor ?? theme.textTheme.bodyLarge?.color,
               fontWeight: FontWeight.w500,
             ),
           ),
           value: value,
           onChanged: onChanged,
           contentPadding: EdgeInsets.only(left: indent ? 40 : 20, right: 20),
-          activeThumbColor: const Color(0xFF1A4D8C),
+          activeTrackColor: AppTheme.scholarBlue.withValues(alpha: 0.5),
+          activeThumbColor: AppTheme.scholarBlue,
         ),
         if (!isLast)
           Padding(
@@ -473,13 +508,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             leading: Icon(
               icon,
               size: 22,
-              color: Colors.black87.withValues(alpha: 0.8),
+              color: Theme.of(context).iconTheme.color?.withValues(alpha: 0.8),
             ),
             title: Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 15,
-                color: Colors.black87,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -659,10 +694,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Text(
                     l10n.selectLanguage,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1A4D8C),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -710,11 +745,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title,
         style: TextStyle(
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          color: isSelected ? const Color(0xFF1A4D8C) : Colors.black87,
+          color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.bodyLarge?.color,
         ),
       ),
       trailing: isSelected
-          ? const Icon(Icons.check_circle, color: Color(0xFF1A4D8C))
+          ? Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary)
           : null,
       onTap: onTap,
     );
@@ -725,10 +760,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Card(
         elevation: 0,
-        color: const Color(0xFFF0F7FF),
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: Color(0xFF1A4D8C), width: 1),
+          side: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1),
         ),
         child: InkWell(
           onTap: () => _showDonationAmountPicker(context, user),
@@ -739,8 +774,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF1A4D8C),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(Icons.coffee, color: Colors.white),
@@ -752,10 +787,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Text(
                         AppLocalizations.of(context)!.supportBookBridge,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A4D8C),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -766,7 +801,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
-                const Icon(Icons.chevron_right, color: Color(0xFF1A4D8C)),
+                Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.primary),
               ],
             ),
           ),

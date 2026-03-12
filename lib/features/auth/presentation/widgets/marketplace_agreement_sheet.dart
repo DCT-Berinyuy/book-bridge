@@ -30,7 +30,7 @@ class _MarketplaceAgreementSheetState
 
   @override
   Widget build(BuildContext context) {
-    const primaryBlue = Color(0xFF1A4D8C);
+    final primaryColor = Theme.of(context).colorScheme.primary;
 
     return DraggableScrollableSheet(
       initialChildSize: 0.92,
@@ -65,17 +65,17 @@ class _MarketplaceAgreementSheetState
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: primaryBlue.withValues(alpha: 0.1),
+                        color: primaryColor.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.gavel_rounded,
-                        color: primaryBlue,
+                        color: primaryColor,
                         size: 20,
                       ),
                     ),
                     const SizedBox(width: 12),
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -84,7 +84,7 @@ class _MarketplaceAgreementSheetState
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: primaryBlue,
+                              color: primaryColor,
                             ),
                           ),
                           Text(
@@ -111,12 +111,12 @@ class _MarketplaceAgreementSheetState
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildWelcomeBanner(primaryBlue),
+                      _buildWelcomeBanner(primaryColor),
                       const SizedBox(height: 20),
                       _buildSection(
                         icon: Icons.shopping_bag_outlined,
                         title: '1. How Purchases Work',
-                        color: primaryBlue,
+                        color: primaryColor,
                         content:
                             'BookBridge connects buyers and sellers of used books. When you tap "Buy Now" on a listing, you initiate a secure payment through Fapshi — a trusted Cameroonian mobile payment provider.\n\n'
                             'Payments can be made via MTN Mobile Money or Orange Money. You will receive a prompt on your phone to confirm the payment using your PIN.',
@@ -135,7 +135,7 @@ class _MarketplaceAgreementSheetState
                       _buildSection(
                         icon: Icons.phone_android_rounded,
                         title: '3. Mobile Money Number',
-                        color: primaryBlue,
+                        color: primaryColor,
                         content:
                             'To receive payouts as a seller, you must provide a valid Cameroon Mobile Money number (MTN or Orange) in your profile. This number is used exclusively for sending your earnings.\n\n'
                             'Make sure your number is active and can receive Mobile Money transfers before listing books for sale.',
@@ -143,7 +143,7 @@ class _MarketplaceAgreementSheetState
                       _buildSection(
                         icon: Icons.handshake_outlined,
                         title: '4. Book Exchange & Delivery',
-                        color: primaryBlue,
+                        color: primaryColor,
                         content:
                             'BookBridge facilitates the payment — the physical handover of the book is arranged directly between buyer and seller via in-app chat.\n\n'
                             'Both parties are expected to agree on a safe, convenient meeting point. We recommend public locations on campus or at nearby bookshops.',
@@ -151,7 +151,7 @@ class _MarketplaceAgreementSheetState
                       _buildSection(
                         icon: Icons.verified_user_outlined,
                         title: '5. Buyer & Seller Responsibilities',
-                        color: primaryBlue,
+                        color: primaryColor,
                         content:
                             '• Sellers must ensure book descriptions and condition are accurate.\n'
                             '• Buyers must complete payment before expecting the book.\n'
@@ -172,7 +172,7 @@ class _MarketplaceAgreementSheetState
                       _buildSection(
                         icon: Icons.privacy_tip_outlined,
                         title: '7. Privacy & Data',
-                        color: primaryBlue,
+                        color: primaryColor,
                         content:
                             'By creating an account, you agree that BookBridge may collect and store your name, email, locality, and Mobile Money number to provide the marketplace service.\n\n'
                             'Your contact information is shared with transaction counterparties only when a purchase is initiated. We do not sell your data to third parties.',
@@ -180,7 +180,7 @@ class _MarketplaceAgreementSheetState
                       _buildSection(
                         icon: Icons.support_agent_outlined,
                         title: '8. Dispute Resolution',
-                        color: primaryBlue,
+                        color: primaryColor,
                         content:
                             'If a transaction goes wrong (e.g., book not received, payment not settled), contact BookBridge support via the "Contact Us" section in the app.\n\n'
                             'We will review the case and assist in mediation. However, BookBridge is not liable for losses resulting from in-person exchange disputes.',
@@ -226,10 +226,10 @@ class _MarketplaceAgreementSheetState
                             width: 24,
                             height: 24,
                             decoration: BoxDecoration(
-                              color: _agreed ? primaryBlue : Colors.transparent,
+                              color: _agreed ? primaryColor : Colors.transparent,
                               border: Border.all(
                                 color: _agreed
-                                    ? primaryBlue
+                                    ? primaryColor
                                     : Colors.grey.shade400,
                                 width: 2,
                               ),
@@ -292,7 +292,7 @@ class _MarketplaceAgreementSheetState
                                   ? () => Navigator.of(context).pop(true)
                                   : null,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: primaryBlue,
+                                backgroundColor: primaryColor,
                                 foregroundColor: Colors.white,
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 14,
@@ -332,12 +332,12 @@ class _MarketplaceAgreementSheetState
     );
   }
 
-  Widget _buildWelcomeBanner(Color primaryBlue) {
+  Widget _buildWelcomeBanner(Color primaryColor) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [primaryBlue, primaryBlue.withValues(alpha: 0.75)],
+          colors: [primaryColor, primaryColor.withValues(alpha: 0.75)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

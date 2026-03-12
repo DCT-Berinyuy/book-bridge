@@ -293,4 +293,23 @@ class SupabaseAuthDataSource {
       throw ServerException(message: e.toString());
     }
   }
+
+  /// Updates the FCM token for a user.
+  Future<void> updateFcmToken(String userId, String token) async {
+    try {
+      await supabaseClient
+          .from('profiles')
+          .update({'fcm_token': token})
+          .eq('id', userId);
+    } on PostgrestException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
+
+  /// Retrieves user profile by ID.
+  Future<UserModel> getUserById(String userId) async {
+    return _fetchUserProfile(userId);
+  }
 }

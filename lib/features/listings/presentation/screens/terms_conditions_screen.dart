@@ -7,10 +7,10 @@ class TermsConditionsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.termsAndConditionsTitle),
-        backgroundColor: const Color(0xFF1A4D8C),
+        title: Text(l10n.termsAndConditionsTitle),
         foregroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -22,51 +22,29 @@ class TermsConditionsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSectionTitle(
-              AppLocalizations.of(context)!.termsAcceptanceTitle,
-            ),
-            _buildSectionContent(
-              AppLocalizations.of(context)!.termsAcceptanceContent,
-            ),
+            _buildSectionTitle(context, l10n.termsAcceptanceTitle),
+            _buildSectionContent(l10n.termsAcceptanceContent),
             const SizedBox(height: 20),
-            _buildSectionTitle(
-              AppLocalizations.of(context)!.termsMarketplaceTitle,
-            ),
-            _buildSectionContent(
-              AppLocalizations.of(context)!.termsMarketplaceContent,
-            ),
+            _buildSectionTitle(context, l10n.termsMarketplaceTitle),
+            _buildSectionContent(l10n.termsMarketplaceContent),
             const SizedBox(height: 20),
-            _buildSectionTitle(
-              AppLocalizations.of(context)!.termsResponsibilitiesTitle,
-            ),
-            _buildSectionContent(
-              AppLocalizations.of(context)!.termsResponsibilitiesContent,
-            ),
+            _buildSectionTitle(context, l10n.termsResponsibilitiesTitle),
+            _buildSectionContent(l10n.termsResponsibilitiesContent),
             const SizedBox(height: 20),
-            _buildSectionTitle(
-              AppLocalizations.of(context)!.termsPaymentsTitle,
-            ),
-            _buildSectionContent(
-              AppLocalizations.of(context)!.termsPaymentsContent,
-            ),
+            _buildSectionTitle(context, l10n.termsPaymentsTitle),
+            _buildSectionContent(l10n.termsPaymentsContent),
             const SizedBox(height: 20),
-            _buildSectionTitle(
-              AppLocalizations.of(context)!.termsLiabilityTitle,
-            ),
-            _buildSectionContent(
-              AppLocalizations.of(context)!.termsLiabilityContent,
-            ),
+            _buildSectionTitle(context, l10n.termsLiabilityTitle),
+            _buildSectionContent(l10n.termsLiabilityContent),
             const SizedBox(height: 20),
-            _buildSectionTitle(AppLocalizations.of(context)!.termsChangesTitle),
-            _buildSectionContent(
-              AppLocalizations.of(context)!.termsChangesContent,
-            ),
+            _buildSectionTitle(context, l10n.termsChangesTitle),
+            _buildSectionContent(l10n.termsChangesContent),
             const SizedBox(height: 40),
             Text(
-              AppLocalizations.of(context)!.lastUpdated('February 2026'),
+              l10n.lastUpdated('February 2026'),
               style: TextStyle(
                 fontStyle: FontStyle.italic,
-                color: Colors.grey[600],
+                color: Theme.of(context).textTheme.bodySmall?.color,
                 fontSize: 12,
               ),
             ),
@@ -76,15 +54,15 @@ class TermsConditionsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: Color(0xFF1A4D8C),
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
     );

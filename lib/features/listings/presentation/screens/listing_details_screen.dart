@@ -10,6 +10,8 @@ import 'package:book_bridge/features/payments/presentation/widgets/payment_botto
 import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
 import 'package:book_bridge/injection_container.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/features/reviews/presentation/widgets/seller_rating_badge.dart';
+import 'package:book_bridge/core/theme/app_theme.dart';
 
 /// Listing details screen showing comprehensive information about a book.
 ///
@@ -66,7 +68,7 @@ ${l10n.shareTextDownload}
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(60),
             child: Container(
-              color: const Color(0xFF1A4D8C), // Scholar Blue
+              color: AppTheme.scholarBlue, // Scholar Blue
               child: SafeArea(
                 child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -249,7 +251,7 @@ ${l10n.shareTextDownload}
                           size:
                               MediaQuery.of(context).size.height *
                               0.05, // Responsive size
-                          color: Colors.grey,
+                          color: Theme.of(context).disabledColor,
                         ),
                       ),
               ),
@@ -277,15 +279,15 @@ ${l10n.shareTextDownload}
                       margin: const EdgeInsets.only(bottom: 16),
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF27AE60).withValues(alpha: 0.1),
+                        color: AppTheme.growthGreen.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: const Color(0xFF27AE60).withValues(alpha: 0.3),
+                          color: AppTheme.growthGreen.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.recycling, color: Color(0xFF27AE60)),
+                          Icon(Icons.recycling, color: AppTheme.growthGreen),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
@@ -293,19 +295,19 @@ ${l10n.shareTextDownload}
                               children: [
                                 Text(
                                   AppLocalizations.of(context)!.buyBackEligible,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFF27AE60),
+                                    color: AppTheme.growthGreen,
                                   ),
                                 ),
                                 Text(
                                   AppLocalizations.of(
                                     context,
                                   )!.buyBackDescription,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey,
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                                   ),
                                 ),
                               ],
@@ -346,9 +348,9 @@ ${l10n.shareTextDownload}
                             const SizedBox(height: 4),
                             Text(
                               listing.author,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 18,
-                                color: Color(0xFF95A5A6),
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -364,9 +366,9 @@ ${l10n.shareTextDownload}
                                   : AppLocalizations.of(
                                       context,
                                     )!.sellerTypeAuthorDesc,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 13,
-                                color: Color(0xFF2D3436), // Ink Black
+                                color: Theme.of(context).colorScheme.onSurface, // Ink Black
                                 height: 1.4,
                               ),
                             ),
@@ -380,7 +382,7 @@ ${l10n.shareTextDownload}
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF1A4D8C),
+                            color: AppTheme.scholarBlue,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -411,26 +413,26 @@ ${l10n.shareTextDownload}
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF2994A).withValues(alpha: 0.1),
+                          color: AppTheme.bridgeOrange.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(24),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.payments,
                               size: 20,
-                              color: Color(0xFFF2994A),
+                              color: AppTheme.bridgeOrange,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               AppLocalizations.of(
                                 context,
                               )!.priceFormat(listing.priceFcfa),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
-                                color: Color(0xFFF2994A),
+                                color: AppTheme.bridgeOrange,
                               ),
                             ),
                           ],
@@ -495,10 +497,10 @@ ${l10n.shareTextDownload}
                   // Description / Details
                   Text(
                     AppLocalizations.of(context)!.descriptionLabel,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF9DB9A6), // Light gray
+                      color: Theme.of(context).colorScheme.onSurfaceVariant, // Light gray
                       letterSpacing: 1.5,
                     ),
                   ),
@@ -518,159 +520,177 @@ ${l10n.shareTextDownload}
                   // Seller Section
                   Text(
                     AppLocalizations.of(context)!.sellerInformationLabel,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF9DB9A6), // Light gray
+                      color: Theme.of(context).colorScheme.onSurfaceVariant, // Light gray
                       letterSpacing: 1.5,
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .surfaceContainerHighest
-                          .withValues(alpha: 0.5),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Theme.of(
-                          context,
-                        ).dividerColor.withValues(alpha: 0.2),
+                  InkWell(
+                    onTap: () =>
+                        context.push('/seller-profile/${listing.sellerId}'),
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerHighest
+                            .withValues(alpha: 0.5),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Theme.of(
+                            context,
+                          ).dividerColor.withValues(alpha: 0.2),
+                        ),
                       ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              width: 48,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.primary.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(24),
-                                border: Border.all(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 48,
+                                height: 48,
+                                decoration: BoxDecoration(
                                   color: Theme.of(
                                     context,
-                                  ).colorScheme.primary.withValues(alpha: 0.2),
+                                  ).colorScheme.primary.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(24),
+                                  border: Border.all(
+                                    color: Theme.of(context).colorScheme.primary
+                                        .withValues(alpha: 0.2),
+                                  ),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(24),
+                                  child:
+                                      listing.sellerAvatarUrl != null &&
+                                          listing.sellerAvatarUrl!.isNotEmpty
+                                      ? Image.network(
+                                          listing.sellerAvatarUrl!,
+                                          fit: BoxFit.cover,
+                                          loadingBuilder:
+                                              (
+                                                context,
+                                                child,
+                                                loadingProgress,
+                                              ) {
+                                                if (loadingProgress == null) {
+                                                  return child;
+                                                }
+                                                return const Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                      ),
+                                                );
+                                              },
+                                          errorBuilder:
+                                              (
+                                                context,
+                                                error,
+                                                stackTrace,
+                                              ) => Icon(
+                                                listing.sellerType == 'bookshop'
+                                                    ? Icons.store
+                                                    : listing.sellerType ==
+                                                          'author'
+                                                    ? Icons.history_edu
+                                                    : Icons.person,
+                                                color: AppTheme.scholarBlue,
+                                              ),
+                                        )
+                                      : Icon(
+                                          listing.sellerType == 'bookshop'
+                                              ? Icons.store
+                                              : listing.sellerType == 'author'
+                                              ? Icons.history_edu
+                                              : Icons.person,
+                                          color: AppTheme.scholarBlue,
+                                        ),
                                 ),
                               ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(24),
-                                child:
-                                    listing.sellerAvatarUrl != null &&
-                                        listing.sellerAvatarUrl!.isNotEmpty
-                                    ? Image.network(
-                                        listing.sellerAvatarUrl!,
-                                        fit: BoxFit.cover,
-                                        loadingBuilder:
-                                            (context, child, loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              }
-                                              return const Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                                      strokeWidth: 2,
-                                                    ),
-                                              );
-                                            },
-                                        errorBuilder:
-                                            (
-                                              context,
-                                              error,
-                                              stackTrace,
-                                            ) => Icon(
-                                              listing.sellerType == 'bookshop'
-                                                  ? Icons.store
-                                                  : listing.sellerType ==
-                                                        'author'
-                                                  ? Icons.history_edu
-                                                  : Icons.person,
-                                              color: const Color(0xFF1A4D8C),
-                                            ),
-                                      )
-                                    : Icon(
-                                        listing.sellerType == 'bookshop'
-                                            ? Icons.store
-                                            : listing.sellerType == 'author'
-                                            ? Icons.history_edu
-                                            : Icons.person,
-                                        color: const Color(0xFF1A4D8C),
-                                      ),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    listing.sellerName ??
-                                        AppLocalizations.of(
-                                          context,
-                                        )!.unknownSeller,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.location_on,
-                                        size: 14,
-                                        color: Color(0xFF9DB9A6), // Light gray
-                                      ),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                        listing.sellerLocality ??
-                                            AppLocalizations.of(
-                                              context,
-                                            )!.unknownLocation,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Color(
-                                            0xFF9DB9A6,
-                                          ), // Light gray
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          listing.sellerName ??
+                                              AppLocalizations.of(
+                                                context,
+                                              )!.unknownSeller,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                        if (listing.sellerRating != null) ...[
+                                          const SizedBox(width: 8),
+                                          SellerRatingBadge(
+                                            rating: listing.sellerRating!,
+                                            reviewCount:
+                                                listing.sellerReviewCount ?? 0,
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.location_on,
+                                          size: 14,
+                                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          listing.sellerLocality ??
+                                              AppLocalizations.of(
+                                                context,
+                                              )!.unknownLocation,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Theme.of(context).colorScheme.onSurfaceVariant, // Light gray
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            const Icon(
-                              Icons.verified,
-                              color: Color(0xFF13EC5B), // Primary green
+                              Icon(
+                                Icons.verified,
+                                color: AppTheme.growthGreen, // Primary green
+                              ),
+                            ],
+                          ),
+                          if (listing.sellerType != 'individual') ...[
+                            const SizedBox(height: 16),
+                            const Divider(),
+                            const SizedBox(height: 8),
+                            Text(
+                              listing.sellerType == 'bookshop'
+                                  ? AppLocalizations.of(
+                                      context,
+                                    )!.sellerTypeBookshopPromo
+                                  : AppLocalizations.of(
+                                      context,
+                                    )!.sellerTypeAuthorPromo,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: AppTheme.growthGreen,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ],
-                        ),
-                        if (listing.sellerType != 'individual') ...[
-                          const SizedBox(height: 16),
-                          const Divider(),
-                          const SizedBox(height: 8),
-                          Text(
-                            listing.sellerType == 'bookshop'
-                                ? AppLocalizations.of(
-                                    context,
-                                  )!.sellerTypeBookshopPromo
-                                : AppLocalizations.of(
-                                    context,
-                                  )!.sellerTypeAuthorPromo,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Color(0xFF13EC5B),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
                         ],
-                      ],
+                      ),
                     ),
                   ),
                 ],
@@ -752,9 +772,7 @@ ${l10n.shareTextDownload}
                     onPressed: () =>
                         _showBoostBottomSheet(context, listing, viewModel),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(
-                        0xFFF39C12,
-                      ), // Warning/Boost Orange
+                      backgroundColor: AppTheme.bridgeOrange, // Warning/Boost Orange
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -814,7 +832,7 @@ ${l10n.shareTextDownload}
                       : null, // Disable if sold
                   style: ElevatedButton.styleFrom(
                     backgroundColor: listing.status == 'available'
-                        ? const Color(0xFF1A4D8C)
+                        ? AppTheme.scholarBlue
                         : Colors.grey, // Grey color for sold state
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
@@ -875,11 +893,11 @@ ${l10n.shareTextDownload}
                       );
                     },
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFF1A4D8C),
-                      side: const BorderSide(
-                        color: Color(0xFF1A4D8C),
-                        width: 1.5,
-                      ),
+                        foregroundColor: AppTheme.scholarBlue,
+                        side: const BorderSide(
+                          color: AppTheme.scholarBlue,
+                          width: 1.5,
+                        ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),

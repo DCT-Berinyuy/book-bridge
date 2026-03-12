@@ -40,4 +40,6 @@ abstract class AuthRepository {
   Future<Either<Failure, void>> sendPasswordResetEmail(String email);
   Future<Either<Failure, User>> signInWithGoogle();
   Future<Either<Failure, User>> updateUser(User user);
+  Future<Either<Failure, void>> updateFcmToken(String userId, String token);
+  Future<Either<Failure, User>> getUserById(String userId);
 }

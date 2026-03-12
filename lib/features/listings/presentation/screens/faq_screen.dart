@@ -10,7 +10,6 @@ class FaqScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.faqTitle),
-        backgroundColor: const Color(0xFF1A4D8C),
         foregroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -21,56 +20,68 @@ class FaqScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         children: [
           _buildCategoryHeader(
+            context,
             AppLocalizations.of(context)!.faqGeneralCategory,
           ),
           _buildFaqItem(
+            context,
             AppLocalizations.of(context)!.faqWhatIsBookBridgeQ,
             AppLocalizations.of(context)!.faqWhatIsBookBridgeA,
           ),
           _buildFaqItem(
+            context,
             AppLocalizations.of(context)!.faqCreateAccountQ,
             AppLocalizations.of(context)!.faqCreateAccountA,
           ),
 
           const SizedBox(height: 24),
-          _buildCategoryHeader(AppLocalizations.of(context)!.faqBuyingCategory),
+          _buildCategoryHeader(context, AppLocalizations.of(context)!.faqBuyingCategory),
           _buildFaqItem(
+            context,
             AppLocalizations.of(context)!.faqHowToBuyQ,
             AppLocalizations.of(context)!.faqHowToBuyA,
           ),
           _buildFaqItem(
+            context,
             AppLocalizations.of(context)!.faqHowToPayQ,
             AppLocalizations.of(context)!.faqHowToPayA,
           ),
           _buildFaqItem(
+            context,
             AppLocalizations.of(context)!.faqNearbyBooksQ,
             AppLocalizations.of(context)!.faqNearbyBooksA,
           ),
 
           const SizedBox(height: 24),
           _buildCategoryHeader(
+            context,
             AppLocalizations.of(context)!.faqSellingCategory,
           ),
           _buildFaqItem(
+            context,
             AppLocalizations.of(context)!.faqHowToListQ,
             AppLocalizations.of(context)!.faqHowToListA,
           ),
           _buildFaqItem(
+            context,
             AppLocalizations.of(context)!.faqSellingFeesQ,
             AppLocalizations.of(context)!.faqSellingFeesA,
           ),
           _buildFaqItem(
+            context,
             AppLocalizations.of(context)!.faqBuyBackEligibleQ,
             AppLocalizations.of(context)!.faqBuyBackEligibleA,
           ),
 
           const SizedBox(height: 24),
-          _buildCategoryHeader(AppLocalizations.of(context)!.faqSafetyCategory),
+          _buildCategoryHeader(context, AppLocalizations.of(context)!.faqSafetyCategory),
           _buildFaqItem(
+            context,
             AppLocalizations.of(context)!.faqTrustworthySellerQ,
             AppLocalizations.of(context)!.faqTrustworthySellerA,
           ),
           _buildFaqItem(
+            context,
             AppLocalizations.of(context)!.faqProblemQ,
             AppLocalizations.of(context)!.faqProblemA,
           ),
@@ -80,28 +91,28 @@ class FaqScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryHeader(String title) {
+  Widget _buildCategoryHeader(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0, left: 4.0),
       child: Text(
         title.toUpperCase(),
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.bold,
-          color: Color(0xFF1A4D8C),
+          color: Theme.of(context).colorScheme.primary,
           letterSpacing: 1.2,
         ),
       ),
     );
   }
 
-  Widget _buildFaqItem(String question, String answer) {
+  Widget _buildFaqItem(BuildContext context, String question, String answer) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12.0),
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.grey[200]!),
+        side: BorderSide(color: Theme.of(context).dividerColor),
       ),
       child: ExpansionTile(
         title: Text(
@@ -116,7 +127,7 @@ class FaqScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 15,
               height: 1.5,
-              color: Colors.grey[700],
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
         ],

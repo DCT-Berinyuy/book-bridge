@@ -30,3 +30,8 @@ class UnknownFailure extends Failure {
 class NotAuthenticatedFailure extends Failure {
   const NotAuthenticatedFailure({required super.message});
 }
+
+/// Failure when a resource is not found.
+class NotFoundFailure extends Failure {
+  const NotFoundFailure({required super.message});
+}

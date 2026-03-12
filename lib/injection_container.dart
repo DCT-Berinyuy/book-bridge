@@ -28,10 +28,12 @@ import 'package:book_bridge/features/listings/presentation/viewmodels/sell_viewm
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/location_viewmodel.dart';
+import 'package:book_bridge/features/listings/presentation/viewmodels/seller_profile_viewmodel.dart';
 import 'package:book_bridge/features/notifications/data/datasources/supabase_notifications_data_source.dart';
 import 'package:book_bridge/features/notifications/data/repositories/notifications_repository_impl.dart';
 import 'package:book_bridge/features/notifications/domain/repositories/notifications_repository.dart';
 import 'package:book_bridge/features/notifications/presentation/viewmodels/notifications_viewmodel.dart';
+import 'package:book_bridge/features/notifications/data/services/push_notification_service.dart';
 import 'package:book_bridge/features/payments/data/datasources/fapshi_data_source.dart';
 import 'package:book_bridge/features/payments/data/repositories/payment_repository_impl.dart';
 import 'package:book_bridge/features/payments/domain/repositories/payment_repository.dart';
@@ -49,6 +51,20 @@ import 'package:book_bridge/features/chat/data/datasources/supabase_chat_data_so
 import 'package:book_bridge/features/chat/data/repositories/chat_repository_impl.dart';
 import 'package:book_bridge/features/chat/domain/repositories/chat_repository.dart';
 import 'package:book_bridge/features/chat/presentation/viewmodels/chat_viewmodel.dart';
+import 'package:book_bridge/core/presentation/viewmodels/theme_viewmodel.dart';
+import 'package:book_bridge/features/transactions/data/datasources/supabase_transactions_data_source.dart';
+import 'package:book_bridge/features/transactions/data/repositories/transaction_repository_impl.dart';
+import 'package:book_bridge/features/transactions/domain/repositories/transaction_repository.dart';
+import 'package:book_bridge/features/transactions/domain/usecases/get_user_transactions_usecase.dart';
+import 'package:book_bridge/features/transactions/domain/usecases/get_transaction_by_external_ref_usecase.dart';
+import 'package:book_bridge/features/transactions/presentation/viewmodels/transaction_history_viewmodel.dart';
+import 'package:book_bridge/features/reviews/data/datasources/supabase_reviews_data_source.dart';
+import 'package:book_bridge/features/reviews/data/repositories/review_repository_impl.dart';
+import 'package:book_bridge/features/reviews/domain/repositories/review_repository.dart';
+import 'package:book_bridge/features/reviews/domain/usecases/create_review_usecase.dart';
+import 'package:book_bridge/features/reviews/domain/usecases/get_user_reviews_usecase.dart';
+import 'package:book_bridge/features/reviews/domain/usecases/has_reviewed_usecase.dart';
+import 'package:book_bridge/features/reviews/presentation/viewmodels/review_viewmodel.dart';
 import 'package:book_bridge/config/app_config.dart';
 
 /// Service locator for dependency injection.
@@ -69,6 +85,9 @@ Future<void> setupDependencyInjection() async {
   // Initialize Supabase (must be done before other setup)
   final supabase = Supabase.instance.client;
   getIt.registerSingleton<SupabaseClient>(supabase);
+
+  // Core Presentation
+  getIt.registerLazySingleton<ThemeViewModel>(() => ThemeViewModel());
 
   // Auth Feature - Data Layer
   getIt.registerSingleton<SupabaseAuthDataSource>(
@@ -211,6 +230,14 @@ Future<void> setupDependencyInjection() async {
     ),
   );
 
+  getIt.registerFactory<SellerProfileViewModel>(
+    () => SellerProfileViewModel(
+      authRepository: getIt<AuthRepository>(),
+      listingRepository: getIt<ListingRepository>(),
+      reviewRepository: getIt<ReviewRepository>(),
+    ),
+  );
+
   // Notifications Feature
   getIt.registerSingleton<SupabaseNotificationsDataSource>(
     SupabaseNotificationsDataSource(getIt<SupabaseClient>()),
@@ -222,6 +249,10 @@ Future<void> setupDependencyInjection() async {
 
   getIt.registerLazySingleton<NotificationsViewModel>(
     () => NotificationsViewModel(getIt<NotificationsRepository>()),
+  );
+
+  getIt.registerSingleton<PushNotificationService>(
+    PushNotificationService(getIt<AuthRepository>()),
   );
 
   // Payments Feature
@@ -294,5 +325,61 @@ Future<void> setupDependencyInjection() async {
 
   getIt.registerFactory<ChatViewModel>(
     () => ChatViewModel(repository: getIt<ChatRepository>()),
+  );
+
+  // Transaction History
+  getIt.registerLazySingleton<SupabaseTransactionsDataSource>(
+    () =>
+        SupabaseTransactionsDataSource(supabaseClient: getIt<SupabaseClient>()),
+  );
+
+  getIt.registerLazySingleton<TransactionRepository>(
+    () => TransactionRepositoryImpl(
+      dataSource: getIt<SupabaseTransactionsDataSource>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GetUserTransactionsUseCase>(
+    () => GetUserTransactionsUseCase(getIt<TransactionRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetTransactionByExternalRefUseCase>(
+    () => GetTransactionByExternalRefUseCase(getIt<TransactionRepository>()),
+  );
+
+  getIt.registerFactory<TransactionHistoryViewModel>(
+    () => TransactionHistoryViewModel(
+      useCase: getIt<GetUserTransactionsUseCase>(),
+    ),
+  );
+
+  // Reviews Feature
+  getIt.registerLazySingleton<SupabaseReviewsDataSource>(
+    () => SupabaseReviewsDataSource(getIt<SupabaseClient>()),
+  );
+
+  getIt.registerLazySingleton<ReviewRepository>(
+    () => ReviewRepositoryImpl(getIt<SupabaseReviewsDataSource>()),
+  );
+
+  getIt.registerLazySingleton<CreateReviewUseCase>(
+    () => CreateReviewUseCase(getIt<ReviewRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetUserReviewsUseCase>(
+    () => GetUserReviewsUseCase(getIt<ReviewRepository>()),
+  );
+
+  getIt.registerLazySingleton<HasReviewedUseCase>(
+    () => HasReviewedUseCase(getIt<ReviewRepository>()),
+  );
+
+  getIt.registerFactory<ReviewViewModel>(
+    () => ReviewViewModel(
+      createReviewUseCase: getIt<CreateReviewUseCase>(),
+      hasReviewedUseCase: getIt<HasReviewedUseCase>(),
+      getTransactionByExternalRefUseCase:
+          getIt<GetTransactionByExternalRefUseCase>(),
+    ),
   );
 }

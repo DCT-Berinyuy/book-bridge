@@ -76,7 +76,6 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.sendFeedback),
-        backgroundColor: const Color(0xFF1A4D8C),
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
@@ -86,10 +85,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           children: [
             Text(
               AppLocalizations.of(context)!.weValueInput,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1A4D8C),
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(height: 8),
@@ -97,7 +96,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               AppLocalizations.of(context)!.feedbackSubtitle,
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey[600],
+                color: Theme.of(context).textTheme.bodySmall?.color,
                 height: 1.5,
               ),
             ),
@@ -113,20 +112,19 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(
-                    color: Color(0xFF1A4D8C),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
                     width: 2,
                   ),
                 ),
                 filled: true,
-                fillColor: Colors.grey[50],
+                fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
               ),
             ),
             const SizedBox(height: 32),
             ElevatedButton(
               onPressed: _isSubmitting ? null : _submitFeedback,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF1A4D8C),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
@@ -156,7 +154,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             Text(
               AppLocalizations.of(context)!.feedbackAggrement,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+              style: TextStyle(fontSize: 12, color: Theme.of(context).textTheme.bodySmall?.color),
             ),
           ],
         ),

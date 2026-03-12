@@ -11,12 +11,18 @@ import 'package:book_bridge/features/listings/presentation/viewmodels/listing_de
 import 'package:book_bridge/features/listings/presentation/viewmodels/sell_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
+import 'package:book_bridge/features/listings/presentation/viewmodels/seller_profile_viewmodel.dart';
 import 'package:book_bridge/features/notifications/presentation/viewmodels/notifications_viewmodel.dart';
 import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
 import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/location_viewmodel.dart';
 import 'package:book_bridge/features/chat/presentation/viewmodels/chat_viewmodel.dart';
+import 'package:book_bridge/core/presentation/viewmodels/theme_viewmodel.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:book_bridge/firebase_options.dart' show DefaultFirebaseOptions;
+import 'package:book_bridge/features/notifications/data/services/push_notification_service.dart';
 import 'config/app_config.dart';
 
 void main() async {
@@ -32,8 +38,19 @@ void main() async {
         : const String.fromEnvironment('SUPABASE_ANON_KEY'),
   );
 
+  // Initialize Firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Set up background message handler
+  FirebaseMessaging.onBackgroundMessage(
+    PushNotificationService.onBackgroundMessage,
+  );
+
   // Initialize dependency injection
   await di.setupDependencyInjection();
+
+  // Initialize Push Notification Service
+  await di.getIt<PushNotificationService>().initialize();
 
   runApp(const MyApp());
 }
@@ -81,14 +98,21 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<LocationViewModel>(
           create: (_) => di.getIt<LocationViewModel>(),
         ),
+        ChangeNotifierProvider<SellerProfileViewModel>(
+          create: (_) => di.getIt<SellerProfileViewModel>(),
+        ),
+        ChangeNotifierProvider<ThemeViewModel>( // Added ThemeViewModel
+          create: (_) => di.getIt<ThemeViewModel>(),
+        ),
       ],
-      child: Consumer<LocaleViewModel>(
-        builder: (context, localeViewModel, _) {
+      child: Consumer2<LocaleViewModel, ThemeViewModel>( // Changed to Consumer2
+        builder: (context, localeViewModel, themeViewModel, _) { // Updated builder signature
           return MaterialApp.router(
             title: 'BookBridge: Social Venture',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
+            themeMode: themeViewModel.themeMode, // Added themeMode
             routerConfig: appRouter,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,

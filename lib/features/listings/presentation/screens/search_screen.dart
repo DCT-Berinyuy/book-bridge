@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:book_bridge/core/theme/app_theme.dart';
 import 'package:book_bridge/l10n/app_localizations.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/search_viewmodel.dart';
-import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/core/presentation/widgets/notification_icon.dart';
 import 'package:book_bridge/features/listings/domain/entities/category.dart'
     as entity;
+import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
+import 'package:book_bridge/features/listings/presentation/widgets/listing_card.dart';
 
 /// Search screen for finding book listings.
 ///
@@ -50,7 +51,7 @@ class _SearchScreenState extends State<SearchScreen> {
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(180),
             child: Container(
-              color: const Color(0xFF1A4D8C), // Scholar Blue
+              color: AppTheme.scholarBlue,
               child: SafeArea(
                 child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -200,7 +201,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                color: Color(0xFF9DB9A6), // Light gray
+                                color: AppTheme.lightGray,
                               ),
                             ),
                           ),
@@ -236,7 +237,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   const Icon(
                                     Icons.history,
                                     size: 18,
-                                    color: Color(0xFF9DB9A6),
+                                    color: AppTheme.lightGray,
                                   ),
                                   const SizedBox(width: 12),
                                   Expanded(
@@ -350,10 +351,10 @@ class _SearchScreenState extends State<SearchScreen> {
                           itemCount: viewModel.searchResults.length,
                           itemBuilder: (context, index) {
                             final listing = viewModel.searchResults[index];
-                            return _buildListingCard(
-                              context,
-                              listing,
-                              viewModel,
+                            final homeViewModel = context.watch<HomeViewModel>();
+                            return ListingCard(
+                              listing: listing,
+                              currentPosition: homeViewModel.currentPosition,
                             );
                           },
                         ),
@@ -368,144 +369,6 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildListingCard(
-    BuildContext context,
-    Listing listing,
-    SearchViewModel viewModel,
-  ) {
-    return GestureDetector(
-      onTap: () {
-        context.push('/listing/${listing.id}');
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Image with favorite icon
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(12),
-                  ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 140,
-                    child: listing.imageUrl.isEmpty
-                        ? Center(
-                            child: Icon(
-                              Icons.image_not_supported,
-                              size: 48,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurface.withValues(alpha: 0.3),
-                            ),
-                          )
-                        : Image.network(
-                            listing.imageUrl,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              // Notify view model to remove broken listing
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                viewModel.removeListingById(listing.id);
-                              });
-                              return Container(
-                                color: Colors.grey[200],
-                                child: const Icon(
-                                  Icons.broken_image,
-                                  color: Colors.grey,
-                                ),
-                              );
-                            },
-                          ),
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.4),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Icon(
-                      Icons.favorite_border,
-                      size: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            // Content
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    listing.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    AppLocalizations.of(
-                      context,
-                    )!.priceFormat(listing.priceFcfa),
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.location_on,
-                        size: 14,
-                        color: Color(0xFF9DB9A6), // Light gray
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          listing.sellerLocality ??
-                              AppLocalizations.of(context)!.cameroon,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _buildCategoryItem(
     BuildContext context,

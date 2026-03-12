@@ -73,7 +73,7 @@ class AboutScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               AppLocalizations.of(context)!.version('1.1.0'),
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              style: TextStyle(fontSize: 14, color: Theme.of(context).textTheme.bodySmall?.color),
             ),
             const SizedBox(height: 32),
 
@@ -84,7 +84,7 @@ class AboutScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 height: 1.5,
-                color: Colors.grey[800],
+                color: Theme.of(context).textTheme.bodyLarge?.color,
               ),
             ),
             const SizedBox(height: 48),
@@ -131,7 +131,7 @@ class AboutScreen extends StatelessWidget {
               AppLocalizations.of(
                 context,
               )!.copyright(DateTime.now().year.toString()),
-              style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+              style: TextStyle(fontSize: 12, color: Theme.of(context).textTheme.bodySmall?.color),
             ),
           ],
         ),
@@ -152,7 +152,7 @@ class AboutScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey[300]!),
+          border: Border.all(color: Theme.of(context).dividerColor),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -179,12 +179,12 @@ class AboutScreen extends StatelessWidget {
                   ),
                   Text(
                     subtitle,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    style: TextStyle(fontSize: 12, color: Theme.of(context).textTheme.bodySmall?.color),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+            Icon(Icons.arrow_forward_ios, size: 16, color: Theme.of(context).iconTheme.color),
           ],
         ),
       ),

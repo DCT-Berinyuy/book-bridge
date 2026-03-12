@@ -3,17 +3,18 @@ import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
-import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 import 'package:book_bridge/core/constants/categories.dart';
 import 'package:flutter/material.dart';
 import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:book_bridge/features/listings/presentation/widgets/listing_card.dart';
+import 'package:book_bridge/injection_container.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:book_bridge/features/payments/presentation/widgets/payment_bottom_sheet.dart';
 import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
-import 'package:book_bridge/injection_container.dart';
+import 'package:book_bridge/core/theme/app_theme.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -267,13 +268,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: Colors.white.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         isEnglish ? '🇺🇸 EN' : '🇫🇷 FR',
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: theme.appBarTheme.foregroundColor ?? Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -422,7 +423,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SizedBox(
-            height: 250, // Reduced height
+            height: 230, // Adjusted to match 0.72 aspect ratio (160 / 0.72 + spacing)
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               // Show only first 10 for horizontal scroll
@@ -430,10 +431,10 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               itemBuilder: (context, index) {
                 return SizedBox(
-                  width: 160, // Standard display size
+                  width: 160,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: _ListingCard(
+                    child: ListingCard(
                       listing: listings[index],
                       currentPosition: currentPosition,
                     ),
@@ -476,6 +477,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(2, (index) {
+              final theme = Theme.of(context);
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -483,10 +485,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: _currentPromoPage == index ? 20 : 6,
                 decoration: BoxDecoration(
                   color: _currentPromoPage == index
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(
-                          context,
-                        ).colorScheme.primary.withValues(alpha: 0.2),
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(3),
                 ),
               );
@@ -501,12 +501,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildNearbyCard() {
     return Container(
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color(0xFF1E3A8A), // Deep blue
-            Color(0xFF7C3AED), // Purple
+            Theme.of(context).colorScheme.primary,
+            const Color(0xFF7C3AED), // Keep the purple for the premium feel
           ],
         ),
         borderRadius: BorderRadius.circular(16),
@@ -567,7 +567,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(width: 6),
                           const Icon(
                             Icons.location_on,
-                            color: Color(0xFF10B981),
+                            color: AppTheme.bridgeOrange,
                             size: 18,
                           ),
                         ],
@@ -584,15 +584,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 6),
                       Container(
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF10B981), Color(0xFF059669)],
+                          gradient: LinearGradient(
+                            colors: [AppTheme.growthGreen, Color(0xFF059669)],
                           ),
                           borderRadius: BorderRadius.circular(30),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(
-                                0xFF10B981,
-                              ).withValues(alpha: 0.4),
+                              color: AppTheme.growthGreen.withValues(alpha: 0.4),
                               blurRadius: 8,
                               offset: const Offset(0, 4),
                             ),
@@ -987,7 +985,7 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 200,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: _ListingCard(
+                child: ListingCard(
                   listing: featuredListings[index],
                   currentPosition: context
                       .watch<HomeViewModel>()
@@ -1013,7 +1011,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         delegate: SliverChildBuilderDelegate((context, index) {
           final listing = listings[index];
-          return _ListingCard(
+          return ListingCard(
             listing: listing,
             currentPosition: viewModel.currentPosition,
           );
@@ -1140,394 +1138,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-}
-
-class _ListingCard extends StatelessWidget {
-  final Listing listing;
-  final Position? currentPosition;
-
-  const _ListingCard({required this.listing, this.currentPosition});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => context.push('/listing/${listing.id}'),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(13),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [_buildImage(context), _buildContent(context)],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildImage(BuildContext context) {
-    return Expanded(
-      child: ClipRRect(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Container(
-              color: Theme.of(context).colorScheme.surfaceContainerHighest,
-              child: listing.imageUrl.isNotEmpty
-                  ? Image.network(
-                      listing.imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        // Notify view model to remove broken listing
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (context.mounted) {
-                            context.read<HomeViewModel>().removeListingById(
-                              listing.id,
-                            );
-                          }
-                        });
-                        return const Center(
-                          child: Icon(
-                            Icons.broken_image,
-                            size: 32,
-                            color: Colors.grey,
-                          ),
-                        );
-                      },
-                    )
-                  : const Center(
-                      child: Icon(
-                        Icons.book_rounded,
-                        size: 48,
-                        color: Colors.grey,
-                      ),
-                    ),
-            ),
-            Positioned(
-              top: 8,
-              left: 8,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (listing.isBoosted) _buildBoostedBadge(context),
-                  if (listing.isBoosted && listing.sellerType != 'individual')
-                    const SizedBox(height: 4),
-                  if (listing.sellerType != 'individual')
-                    _buildVerifiedBadge(context),
-                  if (listing.status == 'sold') ...[
-                    const SizedBox(height: 4),
-                    _buildSoldBadge(context),
-                  ],
-                ],
-              ),
-            ),
-            if (currentPosition != null &&
-                listing.latitude != null &&
-                listing.longitude != null)
-              Positioned(
-                bottom: 8,
-                left: 8,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.6),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.location_on,
-                        size: 12,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        _getDistanceString(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Consumer2<FavoritesViewModel, AuthViewModel>(
-                builder: (context, favoritesVM, authVM, _) {
-                  final userId = authVM.currentUser?.id;
-                  final isFavorite = favoritesVM.isListingFavorite(listing.id);
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.8),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      shape: const CircleBorder(),
-                      clipBehavior: Clip.hardEdge,
-                      child: IconButton(
-                        icon: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_border,
-                          color: isFavorite ? Colors.red : Colors.grey[700],
-                          size: 20,
-                        ),
-                        onPressed: () {
-                          if (userId != null) {
-                            favoritesVM.toggleFavorite(userId, listing);
-                          } else {
-                            context.push('/sign-in');
-                          }
-                        },
-                        constraints: const BoxConstraints(),
-                        padding: const EdgeInsets.all(6),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBoostedBadge(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFFFFD700), Color(0xFFFFA500)], // Gold to Orange
-        ),
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.bolt, size: 12, color: Colors.white),
-          const SizedBox(width: 4),
-          Text(
-            AppLocalizations.of(context)!.boosted.toUpperCase(),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 9,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 0.5,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSoldBadge(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.error,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.check_circle, size: 12, color: Colors.white),
-          const SizedBox(width: 4),
-          Text(
-            AppLocalizations.of(context)!.sold.toUpperCase(),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 9,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 0.5,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildVerifiedBadge(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.verified, size: 12, color: Colors.white),
-          const SizedBox(width: 4),
-          Text(
-            AppLocalizations.of(context)!.verified,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildContent(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            listing.title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.lato(fontWeight: FontWeight.bold, fontSize: 14),
-          ),
-          const SizedBox(height: 1),
-          Text(
-            listing.author,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              fontSize: 11,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            _getLocalizedCategory(context, listing.category),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              fontSize: 11,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                AppLocalizations.of(context)!.priceFormat(listing.priceFcfa),
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              _buildConditionIndicator(context, listing.condition),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _getDistanceString() {
-    if (currentPosition == null ||
-        listing.latitude == null ||
-        listing.longitude == null) {
-      return '';
-    }
-    final distanceInMeters = Geolocator.distanceBetween(
-      currentPosition!.latitude,
-      currentPosition!.longitude,
-      listing.latitude!,
-      listing.longitude!,
-    );
-
-    if (distanceInMeters < 1000) {
-      return '${distanceInMeters.toStringAsFixed(0)} m';
-    } else {
-      return '${(distanceInMeters / 1000).toStringAsFixed(1)} km';
-    }
-  }
-}
-
-String _getLocalizedCategory(BuildContext context, String? category) {
-  if (category == null) return '';
-  final l10n = AppLocalizations.of(context)!;
-  switch (category) {
-    case 'Textbooks':
-      return l10n.categoryTextbooks;
-    case 'Fiction':
-      return l10n.categoryFiction;
-    case 'Science':
-      return l10n.categoryScience;
-    case 'History':
-      return l10n.categoryHistory;
-    case 'GCE':
-      return l10n.categoryGCE;
-    case 'Business':
-      return l10n.categoryBusiness;
-    case 'Technology':
-      return l10n.categoryTechnology;
-    case 'Arts':
-      return l10n.categoryArts;
-    case 'Language':
-      return l10n.categoryLanguage;
-    case 'Mathematics':
-      return l10n.categoryMathematics;
-    case 'Engineering':
-      return l10n.categoryEngineering;
-    case 'Medicine':
-      return l10n.categoryMedicine;
-    default:
-      return category;
-  }
-}
-
-Widget _buildConditionIndicator(BuildContext context, String condition) {
-  Color color;
-  switch (condition) {
-    case 'new':
-      color = Colors.green;
-      break;
-    case 'like_new':
-      color = Colors.lightGreen;
-      break;
-    case 'good':
-      color = Colors.blue;
-      break;
-    case 'fair':
-      color = Colors.orange;
-      break;
-    default:
-      color = Colors.red;
-  }
-  return Container(
-    width: 10,
-    height: 10,
-    decoration: BoxDecoration(
-      color: color,
-      shape: BoxShape.circle,
-      border: Border.all(
-        color: Theme.of(context).colorScheme.outline,
-        width: 1,
-      ),
-    ),
-  );
 }

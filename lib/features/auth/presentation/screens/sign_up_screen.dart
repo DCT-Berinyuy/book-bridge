@@ -90,7 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         preferredSize: const Size.fromHeight(60),
         child: SafeArea(
           child: Container(
-            color: const Color(0xFF1A4D8C), // Scholar Blue
+            color: Theme.of(context).colorScheme.primary,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
@@ -107,7 +107,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: Text(
                     AppLocalizations.of(context)!.signUpButton,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
@@ -131,7 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         child: Text(
                           isEnglish ? '🇺🇸 EN' : '🇫🇷 FR',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -428,9 +428,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     );
                                   },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(
-                                0xFF1A4D8C,
-                              ), // Scholar Blue
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -447,7 +446,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   )
                                 : Text(
                                     AppLocalizations.of(context)!.signUpButton,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -466,10 +465,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       // FCFA indicator
                       Text(
                         AppLocalizations.of(context)!.pricesListedIn,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF1A4D8C), // Scholar Blue
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       const SizedBox(height: 24),
@@ -488,10 +487,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             : context.go('/sign-in'),
                         child: Text(
                           AppLocalizations.of(context)!.logInButton,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF13EC5B), // Scholar Blue
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                       ),
@@ -503,9 +502,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: 96,
                         height: 4,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1A4D8C).withValues(
+                          color: Theme.of(context).colorScheme.primary.withValues(
                             alpha: 0.2,
-                          ), // Primary green with opacity
+                          ),
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),

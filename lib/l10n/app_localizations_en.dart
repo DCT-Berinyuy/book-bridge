@@ -144,6 +144,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
+  String get close => 'Close';
+
+  @override
   String get sendLink => 'Send Link';
 
   @override
@@ -1040,4 +1043,76 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get donationThanks => 'Thank you for your support!';
+
+  @override
+  String get transactionHistory => 'Transaction History';
+
+  @override
+  String get purchases => 'Purchases';
+
+  @override
+  String get sales => 'Sales';
+
+  @override
+  String get noTransactionsYet => 'No transactions yet';
+
+  @override
+  String get transactionsEmptySubtitle => 'Your history of bought and sold books will appear here.';
+
+  @override
+  String get orderId => 'Transaction ID';
+
+  @override
+  String get amount => 'Amount';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get date => 'Date';
+
+  @override
+  String get leaveReview => 'Leave a Review';
+
+  @override
+  String get statusPending => 'Pending';
+
+  @override
+  String get statusSuccessful => 'Successful';
+
+  @override
+  String get statusFailed => 'Failed';
+
+  @override
+  String get reviewSubmitted => 'Review Submitted';
+
+  @override
+  String get rateYourExperience => 'Rate Your Experience';
+
+  @override
+  String get howWasTransaction => 'How was your transaction for';
+
+  @override
+  String get leaveAComment => 'Leave a comment (optional)...';
+
+  @override
+  String get reviewSubmit => 'Submit Review';
+
+  @override
+  String get reviewLaterHint => 'You can leave a review later from your Transaction History.';
+
+  @override
+  String get leaveAReview => 'Leave a Review';
+
+  @override
+  String get darkMode => 'Dark Mode';
+
+  @override
+  String get systemDefault => 'System Default';
+
+  @override
+  String get manual => 'Manual';
+
+  @override
+  String get locationServices => 'Location Services';
 }

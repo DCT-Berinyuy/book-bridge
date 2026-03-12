@@ -2,6 +2,10 @@ import 'package:book_bridge/features/payments/presentation/viewmodels/payment_vi
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:book_bridge/l10n/app_localizations.dart';
+import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:book_bridge/features/reviews/presentation/viewmodels/review_viewmodel.dart';
+import 'package:book_bridge/features/reviews/presentation/widgets/review_dialog.dart';
+import 'package:book_bridge/features/transactions/domain/entities/transaction_entity.dart';
 
 class PaymentBottomSheet extends StatefulWidget {
   final int amount;
@@ -169,11 +173,23 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                       ),
                     ),
                     const SizedBox(height: 24),
+                    _ReviewPrompt(
+                      externalReference: widget.externalReference,
+                      onCompleted: () {
+                        widget.onSuccess();
+                        Navigator.pop(context);
+                      },
+                    ),
+                    const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {
                         widget.onSuccess();
                         Navigator.pop(context);
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey[200],
+                        foregroundColor: Colors.black,
+                      ),
                       child: Text(AppLocalizations.of(context)!.continueButton),
                     ),
                   ] else if (viewModel.state == PaymentState.failure) ...[
@@ -202,6 +218,87 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
           ),
         );
       },
+    );
+  }
+}
+
+class _ReviewPrompt extends StatefulWidget {
+  final String externalReference;
+  final VoidCallback onCompleted;
+
+  const _ReviewPrompt({
+    required this.externalReference,
+    required this.onCompleted,
+  });
+
+  @override
+  State<_ReviewPrompt> createState() => _ReviewPromptState();
+}
+
+class _ReviewPromptState extends State<_ReviewPrompt> {
+  TransactionEntity? _transaction;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTransaction();
+  }
+
+  Future<void> _fetchTransaction() async {
+    final reviewViewModel = context.read<ReviewViewModel>();
+    // Wait a bit for Supabase to index the transaction
+    final result = await reviewViewModel.getTransactionByExternalRef(
+      widget.externalReference,
+    );
+
+    if (mounted) {
+      setState(() {
+        _transaction = result.fold((_) => null, (t) => t);
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
+      );
+    }
+
+    if (_transaction == null) {
+      return Text(
+        AppLocalizations.of(context)!.reviewLaterHint,
+        textAlign: TextAlign.center,
+        style: TextStyle(color: Colors.grey[600], fontSize: 13),
+      );
+    }
+
+    return ElevatedButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => ReviewDialog(
+            transactionId: _transaction!.id,
+            listingId: _transaction!.listingId,
+            revieweeId: _transaction!.sellerId,
+            reviewerId: context.read<AuthViewModel>().currentUser!.id,
+            listingTitle: _transaction!.listingTitle,
+          ),
+        ).then((_) {
+          widget.onCompleted();
+        });
+      },
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+      ),
+      child: Text(AppLocalizations.of(context)!.leaveAReview),
     );
   }
 }

@@ -21,10 +21,13 @@ import 'package:book_bridge/features/listings/presentation/screens/faq_screen.da
 import 'package:book_bridge/features/listings/presentation/screens/feedback_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/contact_us_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/about_screen.dart';
+import 'package:book_bridge/features/listings/presentation/screens/seller_profile_screen.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/chat/presentation/screens/chat_list_screen.dart';
 import 'package:book_bridge/features/chat/presentation/screens/chat_screen.dart';
 import 'package:book_bridge/features/chat/presentation/viewmodels/chat_viewmodel.dart';
+import 'package:book_bridge/features/transactions/presentation/screens/transaction_history_screen.dart';
+import 'package:book_bridge/features/transactions/presentation/viewmodels/transaction_history_viewmodel.dart';
 import 'package:book_bridge/injection_container.dart' as di;
 
 /// App router configuration using go_router.
@@ -268,6 +271,27 @@ final appRouter = GoRouter(
       path: '/contact',
       name: 'contact',
       builder: (context, state) => const ContactUsScreen(),
+    ),
+    // Transaction History Route
+    GoRoute(
+      path: '/transactions',
+      name: 'transactions',
+      builder: (context, state) {
+        final userId = di.getIt<AuthViewModel>().currentUser?.id ?? '';
+        return ChangeNotifierProvider(
+          create: (_) => di.getIt<TransactionHistoryViewModel>()..load(userId),
+          child: const TransactionHistoryScreen(),
+        );
+      },
+    ),
+    // Seller Public Profile Route
+    GoRoute(
+      path: '/seller-profile/:userId',
+      name: 'sellerProfile',
+      builder: (context, state) {
+        final userId = state.pathParameters['userId']!;
+        return SellerProfileScreen(userId: userId);
+      },
     ),
   ],
 );
