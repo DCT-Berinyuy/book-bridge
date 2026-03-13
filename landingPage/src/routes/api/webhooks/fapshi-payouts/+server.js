@@ -26,18 +26,8 @@ export async function POST({ request }) {
 	console.log(`[${timestamp}] Fapshi Payouts Webhook received`);
 
 	// 1. Verify Authentication from Fapshi Payouts Dashboard
-	// The new dashboard uses a custom secret header: 'x-wh-secret'
-	const providedSecret = request.headers.get('x-wh-secret');
-	const expectedSecret = env.FAPSHI_PAYOUT_WEBHOOK_SECRET;
-
-	if (expectedSecret) {
-		if (providedSecret !== expectedSecret) {
-			console.error(`[${timestamp}] Unauthorized: Invalid x-wh-secret`);
-			return json({ error: 'Unauthorized' }, { status: 401 });
-		}
-	} else {
-		console.warn(`[${timestamp}] WARNING: FAPSHI_PAYOUT_WEBHOOK_SECRET not configured. Accepting request insecurely!`);
-	}
+	// Note: Authentication disabled as requested. The integration is running
+	// in "Set URL Only" mode without a webhook secret.
 
 	try {
 		let payload = await request.json();
