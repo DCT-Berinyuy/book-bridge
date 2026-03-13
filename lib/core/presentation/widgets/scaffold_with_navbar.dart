@@ -64,6 +64,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
           ],
         ),
         child: FloatingActionButton(
+          heroTag: null, // Disable Hero animation to prevent collisions with other screens
           onPressed: () => context.push('/sell'),
           shape: const CircleBorder(),
           elevation: 0,
