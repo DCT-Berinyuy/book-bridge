@@ -257,7 +257,13 @@ async function handlePurchaseSuccess(listingId, buyerId, reference, amount) {
 
 		if (fapshiPayoutUser && fapshiPayoutKey) {
 			try {
-				console.log(`Initiating payout of ${payoutAmount} XAF to ${profile.whatsapp_number} for seller ${sellerId}`);
+				// Fapshi REQUIRES the phone number to be ONLY local 9-digits (e.g., 6XXXXXXXX) without +237 or spaces.
+				let cleanedPhone = profile.whatsapp_number.replace(/\\D/g, '');
+				if (cleanedPhone.startsWith('237')) {
+					cleanedPhone = cleanedPhone.substring(3);
+				}
+				
+				console.log(`Initiating payout of ${payoutAmount} XAF to ${cleanedPhone} for seller ${sellerId}`);
 				
 				const response = await fetch('https://live.fapshi.com/payout', {
 					method: 'POST',
@@ -268,7 +274,7 @@ async function handlePurchaseSuccess(listingId, buyerId, reference, amount) {
 					},
 					body: JSON.stringify({
 						amount: payoutAmount,
-						phone: profile.whatsapp_number,
+						phone: cleanedPhone,
 						name: profile.full_name || 'BookBridge Seller',
 						externalId: payoutExternalId,
 						message: `BookBridge Book Sale Payout for listing ${listingId}`
