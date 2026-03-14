@@ -1,4 +1,4 @@
-export const APP_DOWNLOAD_LINK = "https://github.com/dct-berinyuy/book-bridge/releases/latest/download/app-release.apk";
+export const APP_DOWNLOAD_LINK = "https://github.com/DCT-Berinyuy/book-bridge/releases/latest/download/app-release.apk";
 export const GITHUB_REPO_LINK = "https://github.com/DCT-Berinyuy/book-bridge";
 export const WHATSAPP_COMMUNITY_LINK = "https://chat.whatsapp.com/H6WZEE86OEoDkb4jjjtOHZ";
 export const LINKEDIN_PROFILE_LINK = "https://www.linkedin.com/in/verla-berinyuy-15b1262a5/";
