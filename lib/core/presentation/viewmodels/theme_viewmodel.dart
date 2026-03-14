@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// ViewModel responsible for managing the application's theme mode.
 class ThemeViewModel extends ChangeNotifier {
-  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode _themeMode = ThemeMode.light;
 
   /// The current theme mode of the application.
   ThemeMode get themeMode => _themeMode;
