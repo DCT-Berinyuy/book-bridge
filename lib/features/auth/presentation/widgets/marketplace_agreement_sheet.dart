@@ -226,7 +226,9 @@ class _MarketplaceAgreementSheetState
                             width: 24,
                             height: 24,
                             decoration: BoxDecoration(
-                              color: _agreed ? primaryColor : Colors.transparent,
+                              color: _agreed
+                                  ? primaryColor
+                                  : Colors.transparent,
                               border: Border.all(
                                 color: _agreed
                                     ? primaryColor

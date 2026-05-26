@@ -600,7 +600,9 @@ class _SellScreenState extends State<SellScreen> {
                     ),
                     value: viewModel.isBuyBackEligible,
                     onChanged: viewModel.setIsBuyBackEligible,
-                    activeTrackColor: AppTheme.scholarBlue.withValues(alpha: 0.5),
+                    activeTrackColor: AppTheme.scholarBlue.withValues(
+                      alpha: 0.5,
+                    ),
                     activeThumbColor: AppTheme.scholarBlue,
                   ),
                   const SizedBox(height: 16),
@@ -736,7 +738,9 @@ class _SellScreenState extends State<SellScreen> {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Theme.of(context).textTheme.bodyLarge?.color?.withValues(alpha: 0.7),
+            color: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.color?.withValues(alpha: 0.7),
           ),
         ),
       ],

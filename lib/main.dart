@@ -101,12 +101,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SellerProfileViewModel>(
           create: (_) => di.getIt<SellerProfileViewModel>(),
         ),
-        ChangeNotifierProvider<ThemeViewModel>( // Added ThemeViewModel
+        ChangeNotifierProvider<ThemeViewModel>(
+          // Added ThemeViewModel
           create: (_) => di.getIt<ThemeViewModel>(),
         ),
       ],
-      child: Consumer2<LocaleViewModel, ThemeViewModel>( // Changed to Consumer2
-        builder: (context, localeViewModel, themeViewModel, _) { // Updated builder signature
+      child: Consumer2<LocaleViewModel, ThemeViewModel>(
+        // Changed to Consumer2
+        builder: (context, localeViewModel, themeViewModel, _) {
+          // Updated builder signature
           return MaterialApp.router(
             title: 'BookBridge: Social Venture',
             debugShowCheckedModeBanner: false,

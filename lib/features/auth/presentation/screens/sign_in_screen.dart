@@ -251,10 +251,10 @@ class _SignInScreenState extends State<SignInScreen> {
                           Text(
                             AppLocalizations.of(context)!.googleSignIn,
                             style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: AppTheme.inkBlack,
-                          ),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: AppTheme.inkBlack,
+                            ),
                           ),
                         ],
                       ),
@@ -423,8 +423,9 @@ class _SignInScreenState extends State<SignInScreen> {
                                     }
                                   },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.primary,
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.primary,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),

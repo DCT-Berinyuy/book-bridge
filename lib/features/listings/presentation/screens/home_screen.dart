@@ -274,7 +274,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Text(
                         isEnglish ? '🇺🇸 EN' : '🇫🇷 FR',
                         style: TextStyle(
-                          color: theme.appBarTheme.foregroundColor ?? Colors.white,
+                          color:
+                              theme.appBarTheme.foregroundColor ?? Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -423,7 +424,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SizedBox(
-            height: 230, // Adjusted to match 0.72 aspect ratio (160 / 0.72 + spacing)
+            height:
+                230, // Adjusted to match 0.72 aspect ratio (160 / 0.72 + spacing)
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               // Show only first 10 for horizontal scroll
@@ -485,8 +487,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: _currentPromoPage == index ? 20 : 6,
                 decoration: BoxDecoration(
                   color: _currentPromoPage == index
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.primary.withValues(alpha: 0.1),
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(3),
                 ),
               );
@@ -590,7 +592,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(30),
                           boxShadow: [
                             BoxShadow(
-                              color: AppTheme.growthGreen.withValues(alpha: 0.4),
+                              color: AppTheme.growthGreen.withValues(
+                                alpha: 0.4,
+                              ),
                               blurRadius: 8,
                               offset: const Offset(0, 4),
                             ),

@@ -29,9 +29,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.myFavorites),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.myFavorites)),
       body: Consumer2<FavoritesViewModel, AuthViewModel>(
         builder: (context, favoritesViewModel, authViewModel, child) {
           if (favoritesViewModel.isLoading) {
@@ -74,7 +72,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   Icon(
                     Icons.favorite_border,
                     size: 80,
-                    color: Theme.of(context).disabledColor.withValues(alpha: 0.3),
+                    color: Theme.of(
+                      context,
+                    ).disabledColor.withValues(alpha: 0.3),
                   ),
                   const SizedBox(height: 24),
                   Text(
@@ -87,7 +87,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   const SizedBox(height: 8),
                   Text(
                     AppLocalizations.of(context)!.favoritesEmptySubtitle,
-                    style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodySmall?.color,
+                    ),
                   ),
                   const SizedBox(height: 32),
                   ElevatedButton(
@@ -109,15 +111,17 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             padding: const EdgeInsets.all(16),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.68, // slightly taller to account for more content
+              childAspectRatio:
+                  0.68, // slightly taller to account for more content
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
             ),
             itemCount: favorites.length,
             itemBuilder: (context, index) {
               final listing = favorites[index];
-              final currentPosition =
-                  context.watch<HomeViewModel>().currentPosition;
+              final currentPosition = context
+                  .watch<HomeViewModel>()
+                  .currentPosition;
 
               return ListingCard(
                 listing: listing,
@@ -130,4 +134,3 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     );
   }
 }
-

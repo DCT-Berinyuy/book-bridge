@@ -16,7 +16,7 @@ import 'package:book_bridge/features/auth/presentation/screens/edit_profile_scre
 import 'package:book_bridge/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:book_bridge/features/favorites/presentation/screens/favorites_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/privacy_policy_screen.dart';
-import 'package:book_bridge/features/listings/presentation/screens/terms_conditions_screen.dart';
+import 'package:book_bridge/features/auth/presentation/screens/terms_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/faq_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/feedback_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/contact_us_screen.dart';
@@ -252,7 +252,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/terms',
       name: 'terms',
-      builder: (context, state) => const TermsConditionsScreen(),
+      builder: (context, state) => const TermsScreen(),
     ),
     // FAQ Route
     GoRoute(

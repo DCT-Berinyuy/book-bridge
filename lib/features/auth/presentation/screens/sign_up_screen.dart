@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/locale_viewmodel.dart';
-import 'package:book_bridge/features/auth/presentation/widgets/marketplace_agreement_sheet.dart';
 
 /// Sign Up screen for new user registration.
 ///
@@ -25,6 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
+  bool _agreeToTerms = false;
 
   // Save reference to avoid accessing context in dispose()
   late AuthViewModel _authViewModel;
@@ -399,6 +399,59 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         const SizedBox(height: 32),
 
+                        // Terms & Conditions Checkbox Row
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Checkbox(
+                              value: _agreeToTerms,
+                              activeColor: Theme.of(
+                                context,
+                              ).colorScheme.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  _agreeToTerms = value ?? false;
+                                });
+                              },
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 12.0),
+                                child: GestureDetector(
+                                  onTap: () => context.push('/terms'),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: 'I agree to the ',
+                                      style: TextStyle(
+                                        color: Colors.grey.shade600,
+                                        fontSize: 13,
+                                        height: 1.4,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: 'Terms & Conditions',
+                                          style: TextStyle(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                        ),
+                                        const TextSpan(
+                                          text: ' and trust guidelines.',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+
                         // Sign Up button
                         SizedBox(
                           height: 56,
@@ -412,12 +465,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         false)) {
                                       return;
                                     }
-                                    // Show the Marketplace Agreement modal first
-                                    if (!context.mounted) return;
-                                    final agreed =
-                                        await showMarketplaceAgreement(context);
-                                    if (!agreed) return;
-                                    if (!context.mounted) return;
+                                    if (!_agreeToTerms) {
+                                      ScaffoldMessenger.of(context)
+                                        ..hideCurrentSnackBar()
+                                        ..showSnackBar(
+                                          SnackBar(
+                                            content: const Text(
+                                              'Please read and agree to the Terms & Conditions before signing up.',
+                                            ),
+                                            backgroundColor: Theme.of(
+                                              context,
+                                            ).colorScheme.error,
+                                          ),
+                                        );
+                                      return;
+                                    }
                                     authViewModel.signUp(
                                       email: _emailController.text.trim(),
                                       password: _passwordController.text.trim(),
@@ -428,8 +490,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     );
                                   },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.primary,
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.primary,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -502,9 +565,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: 96,
                         height: 4,
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary.withValues(
-                            alpha: 0.2,
-                          ),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),

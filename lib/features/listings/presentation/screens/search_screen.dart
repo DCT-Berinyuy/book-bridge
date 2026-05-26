@@ -351,7 +351,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           itemCount: viewModel.searchResults.length,
                           itemBuilder: (context, index) {
                             final listing = viewModel.searchResults[index];
-                            final homeViewModel = context.watch<HomeViewModel>();
+                            final homeViewModel = context
+                                .watch<HomeViewModel>();
                             return ListingCard(
                               listing: listing,
                               currentPosition: homeViewModel.currentPosition,
@@ -368,7 +369,6 @@ class _SearchScreenState extends State<SearchScreen> {
       },
     );
   }
-
 
   Widget _buildCategoryItem(
     BuildContext context,

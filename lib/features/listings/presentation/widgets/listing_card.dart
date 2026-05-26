@@ -137,21 +137,19 @@ class ListingCard extends StatelessWidget {
               ),
             // Top-right: favorite button or extra actions
             if (extraActions != null)
-              Positioned(
-                top: 4,
-                right: 4,
-                child: extraActions!,
-              )
+              Positioned(top: 4, right: 4, child: extraActions!)
             else if (showFavoriteButton &&
-                listing.sellerId != Supabase.instance.client.auth.currentUser?.id)
+                listing.sellerId !=
+                    Supabase.instance.client.auth.currentUser?.id)
               Positioned(
                 top: 8,
                 right: 8,
                 child: Consumer2<FavoritesViewModel, AuthViewModel>(
                   builder: (context, favoritesVM, authVM, _) {
                     final userId = authVM.currentUser?.id;
-                    final isFavorite =
-                        favoritesVM.isListingFavorite(listing.id);
+                    final isFavorite = favoritesVM.isListingFavorite(
+                      listing.id,
+                    );
                     return Container(
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.8),

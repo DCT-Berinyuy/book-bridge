@@ -307,7 +307,9 @@ ${l10n.shareTextDownload}
                                   )!.buyBackDescription,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                   ),
                                 ),
                               ],
@@ -350,7 +352,9 @@ ${l10n.shareTextDownload}
                               listing.author,
                               style: TextStyle(
                                 fontSize: 18,
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -368,7 +372,9 @@ ${l10n.shareTextDownload}
                                     )!.sellerTypeAuthorDesc,
                               style: TextStyle(
                                 fontSize: 13,
-                                color: Theme.of(context).colorScheme.onSurface, // Ink Black
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface, // Ink Black
                                 height: 1.4,
                               ),
                             ),
@@ -500,7 +506,9 @@ ${l10n.shareTextDownload}
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant, // Light gray
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurfaceVariant, // Light gray
                       letterSpacing: 1.5,
                     ),
                   ),
@@ -523,7 +531,9 @@ ${l10n.shareTextDownload}
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant, // Light gray
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurfaceVariant, // Light gray
                       letterSpacing: 1.5,
                     ),
                   ),
@@ -589,19 +599,17 @@ ${l10n.shareTextDownload}
                                                 );
                                               },
                                           errorBuilder:
-                                              (
-                                                context,
-                                                error,
-                                                stackTrace,
-                                              ) => Icon(
-                                                listing.sellerType == 'bookshop'
-                                                    ? Icons.store
-                                                    : listing.sellerType ==
-                                                          'author'
-                                                    ? Icons.history_edu
-                                                    : Icons.person,
-                                                color: AppTheme.scholarBlue,
-                                              ),
+                                              (context, error, stackTrace) =>
+                                                  Icon(
+                                                    listing.sellerType ==
+                                                            'bookshop'
+                                                        ? Icons.store
+                                                        : listing.sellerType ==
+                                                              'author'
+                                                        ? Icons.history_edu
+                                                        : Icons.person,
+                                                    color: AppTheme.scholarBlue,
+                                                  ),
                                         )
                                       : Icon(
                                           listing.sellerType == 'bookshop'
@@ -646,7 +654,9 @@ ${l10n.shareTextDownload}
                                         Icon(
                                           Icons.location_on,
                                           size: 14,
-                                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurfaceVariant,
                                         ),
                                         const SizedBox(width: 4),
                                         Text(
@@ -656,7 +666,9 @@ ${l10n.shareTextDownload}
                                               )!.unknownLocation,
                                           style: TextStyle(
                                             fontSize: 14,
-                                            color: Theme.of(context).colorScheme.onSurfaceVariant, // Light gray
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant, // Light gray
                                           ),
                                         ),
                                       ],
@@ -772,7 +784,8 @@ ${l10n.shareTextDownload}
                     onPressed: () =>
                         _showBoostBottomSheet(context, listing, viewModel),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.bridgeOrange, // Warning/Boost Orange
+                      backgroundColor:
+                          AppTheme.bridgeOrange, // Warning/Boost Orange
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -893,11 +906,11 @@ ${l10n.shareTextDownload}
                       );
                     },
                     style: OutlinedButton.styleFrom(
-                        foregroundColor: AppTheme.scholarBlue,
-                        side: const BorderSide(
-                          color: AppTheme.scholarBlue,
-                          width: 1.5,
-                        ),
+                      foregroundColor: AppTheme.scholarBlue,
+                      side: const BorderSide(
+                        color: AppTheme.scholarBlue,
+                        width: 1.5,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),

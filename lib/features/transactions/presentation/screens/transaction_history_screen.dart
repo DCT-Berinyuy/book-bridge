@@ -90,7 +90,11 @@ class _TransactionList extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.history, size: 64, color: Theme.of(context).disabledColor.withValues(alpha: 0.5)),
+            Icon(
+              Icons.history,
+              size: 64,
+              color: Theme.of(context).disabledColor.withValues(alpha: 0.5),
+            ),
             const SizedBox(height: 16),
             Text(
               l10n.noTransactionsYet,

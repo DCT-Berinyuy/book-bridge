@@ -35,7 +35,10 @@ class FaqScreen extends StatelessWidget {
           ),
 
           const SizedBox(height: 24),
-          _buildCategoryHeader(context, AppLocalizations.of(context)!.faqBuyingCategory),
+          _buildCategoryHeader(
+            context,
+            AppLocalizations.of(context)!.faqBuyingCategory,
+          ),
           _buildFaqItem(
             context,
             AppLocalizations.of(context)!.faqHowToBuyQ,
@@ -74,7 +77,10 @@ class FaqScreen extends StatelessWidget {
           ),
 
           const SizedBox(height: 24),
-          _buildCategoryHeader(context, AppLocalizations.of(context)!.faqSafetyCategory),
+          _buildCategoryHeader(
+            context,
+            AppLocalizations.of(context)!.faqSafetyCategory,
+          ),
           _buildFaqItem(
             context,
             AppLocalizations.of(context)!.faqTrustworthySellerQ,
