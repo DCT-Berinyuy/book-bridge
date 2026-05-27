@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/features/listings/domain/entities/book_condition.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:book_bridge/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 import 'package:book_bridge/l10n/app_localizations.dart';
@@ -349,36 +350,26 @@ class ListingCard extends StatelessWidget {
     );
   }
 
-  Widget _buildConditionBadge(BuildContext context, String condition) {
+  Widget _buildConditionBadge(BuildContext context, BookCondition condition) {
     Color color;
-    String label;
+    final label = condition.localizedLabel(AppLocalizations.of(context)!);
 
-    switch (condition.toLowerCase()) {
-      case 'new':
-        color = Colors.green;
-        label = AppLocalizations.of(context)!.conditionNew;
+    switch (condition) {
+      case BookCondition.brandNew:
+        color = const Color(0xFF27AE60);
         break;
-      case 'excellent':
-      case 'like new':
-      case 'like_new':
-        color = Colors.green;
-        label = AppLocalizations.of(context)!.conditionLikeNew;
+      case BookCondition.likeNew:
+        color = const Color(0xFF1ABC9C);
         break;
-      case 'good':
-        color = Colors.blue;
-        label = AppLocalizations.of(context)!.conditionGood;
+      case BookCondition.good:
+        color = const Color(0xFF1A4D8C);
         break;
-      case 'fair':
-        color = Colors.orange;
-        label = AppLocalizations.of(context)!.conditionFair;
+      case BookCondition.fair:
+        color = const Color(0xFFF2994A);
         break;
-      case 'poor':
-        color = Colors.red;
-        label = AppLocalizations.of(context)!.conditionPoor;
+      case BookCondition.poor:
+        color = const Color(0xFFE74C3C);
         break;
-      default:
-        color = Colors.grey;
-        label = condition;
     }
 
     return Container(

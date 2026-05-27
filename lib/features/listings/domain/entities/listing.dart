@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'book_condition.dart';
 
 /// Represents a book listing in the BookBridge marketplace.
 ///
@@ -9,7 +10,8 @@ class Listing extends Equatable {
   final String title;
   final String author;
   final int priceFcfa;
-  final String condition; // 'excellent', 'good', 'fair', 'poor'
+  final BookCondition condition;
+
   final String imageUrl;
   final String sellerId;
   final String description;

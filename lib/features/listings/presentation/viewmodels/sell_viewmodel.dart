@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/features/listings/domain/entities/book_condition.dart';
 import 'package:book_bridge/features/listings/domain/repositories/listing_repository.dart';
 import 'package:book_bridge/features/listings/domain/usecases/create_listing_usecase.dart';
 import 'package:book_bridge/features/listings/domain/usecases/update_listing_usecase.dart';
@@ -31,7 +32,7 @@ class SellViewModel extends ChangeNotifier {
   String? _title;
   String? _author;
   int? _priceFcfa;
-  String _condition = 'good';
+  BookCondition _condition = BookCondition.good;
   String? _imageUrl;
   String? _description;
   String? _category;
@@ -57,7 +58,7 @@ class SellViewModel extends ChangeNotifier {
   String? get title => _title;
   String? get author => _author;
   int? get priceFcfa => _priceFcfa;
-  String get condition => _condition;
+  BookCondition get condition => _condition;
   String? get imageUrl => _imageUrl;
   String? get description => _description;
   String? get category => _category;
@@ -84,7 +85,7 @@ class SellViewModel extends ChangeNotifier {
   }
 
   /// Updates the condition field.
-  void setCondition(String condition) {
+  void setCondition(BookCondition condition) {
     _condition = condition;
     notifyListeners();
   }
@@ -146,7 +147,7 @@ class SellViewModel extends ChangeNotifier {
     _title = null;
     _author = null;
     _priceFcfa = null;
-    _condition = 'good';
+    _condition = BookCondition.good;
     _imageUrl = null;
     _description = null;
     _category = null;

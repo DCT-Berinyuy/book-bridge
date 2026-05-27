@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:book_bridge/core/error/failures.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/listings/domain/entities/category.dart';
+import 'package:book_bridge/features/listings/domain/entities/book_condition.dart';
 
 /// Abstract repository for listing operations.
 ///
@@ -49,7 +50,7 @@ abstract class ListingRepository {
     required String title,
     required String author,
     required int priceFcfa,
-    required String condition,
+    required BookCondition condition,
     required String imageUrl,
     String? description,
     String? category,
@@ -73,7 +74,7 @@ abstract class ListingRepository {
     String? title,
     String? author,
     int? priceFcfa,
-    String? condition,
+    BookCondition? condition,
     String? imageUrl,
     String? description,
     String? category,

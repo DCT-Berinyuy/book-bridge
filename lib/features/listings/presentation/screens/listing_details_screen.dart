@@ -52,7 +52,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
 ${l10n.shareTextCheckOut}
 📚 ${listing.title} by ${listing.author}
 💰 ${l10n.priceFormat(listing.priceFcfa)}
-🔍 ${l10n.shareTextCondition}: ${_getLocalizedCondition(context, listing.condition)}
+🔍 ${l10n.shareTextCondition}: ${listing.condition.localizedLabel(l10n)}
 
 ${l10n.shareTextDownload}
 ''';
@@ -458,10 +458,9 @@ ${l10n.shareTextDownload}
                           borderRadius: BorderRadius.circular(24),
                         ),
                         child: Text(
-                          _getLocalizedCondition(
-                            context,
-                            listing.condition,
-                          ).toUpperCase(),
+                          listing.condition
+                              .localizedLabel(AppLocalizations.of(context)!)
+                              .toUpperCase(),
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -999,24 +998,6 @@ ${l10n.shareTextDownload}
         ],
       ),
     );
-  }
-
-  String _getLocalizedCondition(BuildContext context, String condition) {
-    final l10n = AppLocalizations.of(context)!;
-    switch (condition.toLowerCase()) {
-      case 'new':
-        return l10n.conditionNew;
-      case 'like_new':
-        return l10n.conditionLikeNew;
-      case 'good':
-        return l10n.conditionGood;
-      case 'fair':
-        return l10n.conditionFair;
-      case 'poor':
-        return l10n.conditionPoor;
-      default:
-        return condition;
-    }
   }
 
   String _getLocalizedSellerType(BuildContext context, String sellerType) {

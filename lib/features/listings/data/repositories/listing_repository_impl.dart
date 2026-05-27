@@ -6,6 +6,7 @@ import 'package:book_bridge/core/error/exceptions.dart';
 import 'package:book_bridge/features/listings/data/datasources/supabase_listings_data_source.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/listings/domain/entities/category.dart';
+import 'package:book_bridge/features/listings/domain/entities/book_condition.dart';
 import 'package:book_bridge/features/listings/domain/repositories/listing_repository.dart';
 
 /// Implementation of the ListingRepository interface using Supabase.
@@ -132,7 +133,7 @@ class ListingRepositoryImpl implements ListingRepository {
     required String title,
     required String author,
     required int priceFcfa,
-    required String condition,
+    required BookCondition condition,
     required String imageUrl,
     String? description,
     String? category,
@@ -185,7 +186,7 @@ class ListingRepositoryImpl implements ListingRepository {
     String? title,
     String? author,
     int? priceFcfa,
-    String? condition,
+    BookCondition? condition,
     String? imageUrl,
     String? description,
     String? category,

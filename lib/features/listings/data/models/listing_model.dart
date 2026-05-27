@@ -1,4 +1,5 @@
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/features/listings/domain/entities/book_condition.dart';
 
 /// Data Transfer Object for Listing.
 ///
@@ -43,7 +44,9 @@ class ListingModel extends Listing {
       title: json['title'] as String? ?? '',
       author: json['author'] as String? ?? '',
       priceFcfa: json['price_fcfa'] as int? ?? 0,
-      condition: json['condition'] as String? ?? 'good',
+      condition: BookCondition.fromValue(
+        json['condition'] as String? ?? 'good',
+      ),
       imageUrl: json['image_url'] as String? ?? '',
       description: json['description'] as String? ?? '',
       sellerId: json['seller_id'] as String? ?? '',
@@ -92,7 +95,7 @@ class ListingModel extends Listing {
       'title': title,
       'author': author,
       'price_fcfa': priceFcfa,
-      'condition': condition,
+      'condition': condition.value,
       'image_url': imageUrl,
       'description': description,
       'seller_id': sellerId,
