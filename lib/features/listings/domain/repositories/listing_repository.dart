@@ -10,6 +10,13 @@ import 'package:book_bridge/features/listings/domain/entities/book_condition.dar
 /// This interface defines the contract for all listing-related
 /// data operations. The actual implementation is in the data layer.
 abstract class ListingRepository {
+  /// Whether the most recent [getListings] call was served from the local
+  /// SQLite cache (i.e., the device was offline or the remote fetch failed).
+  ///
+  /// Consumers (e.g., [HomeViewModel]) can read this after a successful
+  /// [getListings] call to decide whether to surface an [OfflineBanner].
+  bool get isServingFromCache;
+
   /// Fetches all academic categories.
   Future<Either<Failure, List<Category>>> getCategories();
 

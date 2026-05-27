@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/features/listings/domain/repositories/listing_repository.dart';
 import 'package:book_bridge/features/listings/domain/usecases/get_listings_usecase.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/location_viewmodel.dart';
 
@@ -13,6 +14,7 @@ enum HomeState { initial, loading, loaded, error }
 class HomeViewModel extends ChangeNotifier {
   final GetListingsUseCase getListingsUseCase;
   final LocationViewModel locationViewModel;
+  final ListingRepository listingRepository;
 
   // State
   HomeState _homeState = HomeState.initial;
@@ -25,6 +27,7 @@ class HomeViewModel extends ChangeNotifier {
   String _searchQuery = '';
   Position? _currentPosition;
   bool _shouldScrollToResults = false;
+  bool _isOffline = false;
 
   // Getters
   HomeState get homeState => _homeState;
@@ -36,6 +39,10 @@ class HomeViewModel extends ChangeNotifier {
   String? get selectedCategory => _selectedCategory;
   String get searchQuery => _searchQuery;
   bool get shouldScrollToResults => _shouldScrollToResults;
+
+  /// Whether the current listings are being served from the local SQLite
+  /// cache because the device is offline or the remote fetch failed.
+  bool get isOffline => _isOffline;
 
   /// Returns filtered listings based on search query
   List<Listing> get filteredListings {
@@ -82,6 +89,7 @@ class HomeViewModel extends ChangeNotifier {
   HomeViewModel({
     required this.getListingsUseCase,
     required this.locationViewModel,
+    required this.listingRepository,
   }) {
     _loadInitialListings();
     if (locationViewModel.locationEnabled) _fetchLocation();
@@ -136,8 +144,12 @@ class HomeViewModel extends ChangeNotifier {
         _homeState = HomeState.error;
         _errorMessage = failure.message;
         _hasMoreListings = false;
+        _isOffline = false;
       },
       (newListings) {
+        // Update offline state from the repository's cache flag.
+        _isOffline = listingRepository.isServingFromCache;
+
         if (offset == 0) {
           // Initial load or refresh
           _listings = newListings;

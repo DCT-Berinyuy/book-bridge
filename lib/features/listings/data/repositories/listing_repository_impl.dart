@@ -4,19 +4,37 @@ import 'package:dartz/dartz.dart';
 import 'package:book_bridge/core/error/failures.dart';
 import 'package:book_bridge/core/error/exceptions.dart';
 import 'package:book_bridge/features/listings/data/datasources/supabase_listings_data_source.dart';
+import 'package:book_bridge/features/listings/data/datasources/local_listings_datasource.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/listings/domain/entities/category.dart';
 import 'package:book_bridge/features/listings/domain/entities/book_condition.dart';
 import 'package:book_bridge/features/listings/domain/repositories/listing_repository.dart';
 
-/// Implementation of the ListingRepository interface using Supabase.
+/// Implementation of the ListingRepository interface using Supabase with a
+/// local SQLite cache fallback.
 ///
-/// This repository acts as the bridge between the domain and data layers,
-/// coordinating data sources and mapping data between layers.
+/// Cache-aside strategy for [getListings]:
+///   1. Try the remote Supabase data source.
+///   2. On success → write results to SQLite → return data.
+///   3. On any network/server failure → check if SQLite cache is still valid
+///      (within 24-hour TTL).  If valid → serve cached rows.  If not →
+///      propagate the original failure as before.
+///
+/// All other operations (details, search, mutations) remain network-only.
 class ListingRepositoryImpl implements ListingRepository {
   final SupabaseListingsDataSource dataSource;
+  final LocalListingsDataSource localDataSource;
 
-  ListingRepositoryImpl({required this.dataSource});
+  /// Tracks whether the last [getListings] call was served from cache.
+  bool _isServingFromCache = false;
+
+  @override
+  bool get isServingFromCache => _isServingFromCache;
+
+  ListingRepositoryImpl({
+    required this.dataSource,
+    required this.localDataSource,
+  });
 
   @override
   Future<Either<Failure, List<Category>>> getCategories() async {
@@ -65,18 +83,44 @@ class ListingRepositoryImpl implements ListingRepository {
     int offset = 0,
   }) async {
     try {
+      // ── 1. Try remote ──────────────────────────────────────────────────────
       final listingModels = await dataSource.getListings(
         status: status,
         category: category,
         limit: limit,
         offset: offset,
       );
-      final listings = listingModels.map((model) => model.toEntity()).toList();
+
+      // ── 2. Cache every successful page (including pagination) ──────────────
+      await localDataSource.cacheListings(listingModels);
+
+      _isServingFromCache = false;
+      final listings = listingModels.map((m) => m.toEntity()).toList();
       return Right(listings);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(message: e.message));
-    } catch (e) {
-      return Left(UnknownFailure(message: e.toString()));
+    } catch (_) {
+      // ── 3. Network / server failure → try cache ───────────────────────────
+      try {
+        final valid = await localDataSource.isCacheValid(category: category);
+        if (valid) {
+          final cached = await localDataSource.getCachedListings(
+            category: category,
+          );
+          if (cached.isNotEmpty) {
+            _isServingFromCache = true;
+            return Right(cached.map((m) => m.toEntity()).toList());
+          }
+        }
+      } catch (_) {
+        // Cache read itself failed — fall through to original failure below.
+      }
+
+      // ── 4. Cache empty / expired / unreadable → propagate failure ─────────
+      _isServingFromCache = false;
+      return Left(
+        const OfflineCacheFailure(
+          message: 'No internet connection and no cached data available.',
+        ),
+      );
     }
   }
 

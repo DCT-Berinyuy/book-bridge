@@ -34,6 +34,27 @@ class ListingModel extends Listing {
     super.longitude,
   });
 
+  /// Creates a [ListingModel] from a [cached_listings] SQLite row.
+  ///
+  /// Only the columns that exist in the local schema are mapped.
+  /// Seller-join fields are absent from the cache and default to null,
+  /// which is acceptable — cards degrade gracefully when shown offline.
+  factory ListingModel.fromCacheRow(Map<String, dynamic> row) {
+    return ListingModel(
+      id: row['id'] as String,
+      title: row['title'] as String? ?? '',
+      author: row['author'] as String? ?? '',
+      priceFcfa: row['price_fcfa'] as int? ?? 0,
+      condition: BookCondition.fromValue(row['condition'] as String? ?? 'good'),
+      imageUrl: row['image_url'] as String? ?? '',
+      description: row['description'] as String? ?? '',
+      sellerId: row['seller_id'] as String? ?? '',
+      status: row['status'] as String? ?? 'available',
+      category: row['category'] as String?,
+      createdAt: DateTime.now(), // not stored in cache schema
+    );
+  }
+
   /// Creates a ListingModel instance from JSON.
   ///
   /// This factory constructor is typically used when deserializing data

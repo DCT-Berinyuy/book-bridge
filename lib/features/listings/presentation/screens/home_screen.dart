@@ -1,4 +1,5 @@
 import 'package:book_bridge/core/presentation/widgets/notification_icon.dart';
+import 'package:book_bridge/core/presentation/widgets/offline_banner.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
@@ -90,6 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
         _buildSliverAppBar(),
+        if (viewModel.isOffline)
+          const SliverToBoxAdapter(child: OfflineBanner()),
         const SliverToBoxAdapter(child: SizedBox(height: 16)),
         _buildPromoBanners(),
         _buildNearbyBooksSection(

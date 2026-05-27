@@ -11,6 +11,8 @@ import 'package:book_bridge/features/auth/domain/usecases/send_password_reset_em
 import 'package:book_bridge/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/update_user_usecase.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:book_bridge/core/local_db/local_database.dart';
+import 'package:book_bridge/features/listings/data/datasources/local_listings_datasource.dart';
 import 'package:book_bridge/features/listings/data/datasources/supabase_listings_data_source.dart';
 import 'package:book_bridge/features/listings/data/datasources/supabase_storage_data_source.dart';
 import 'package:book_bridge/features/listings/data/repositories/listing_repository_impl.dart';
@@ -152,8 +154,18 @@ Future<void> setupDependencyInjection() async {
     ),
   );
 
+  // Local SQLite Cache setup
+  final localDb = await LocalDatabase.instance.database;
+  final localDataSource = LocalListingsDataSource(database: localDb);
+  await localDataSource.clearExpiredCache(); // Housekeeping on startup
+
+  getIt.registerSingleton<LocalListingsDataSource>(localDataSource);
+
   getIt.registerSingleton<ListingRepository>(
-    ListingRepositoryImpl(dataSource: getIt<SupabaseListingsDataSource>()),
+    ListingRepositoryImpl(
+      dataSource: getIt<SupabaseListingsDataSource>(),
+      localDataSource: getIt<LocalListingsDataSource>(),
+    ),
   );
 
   // Listings Feature - Domain Layer (Use Cases)
@@ -194,6 +206,7 @@ Future<void> setupDependencyInjection() async {
     HomeViewModel(
       getListingsUseCase: getIt<GetListingsUseCase>(),
       locationViewModel: getIt<LocationViewModel>(),
+      listingRepository: getIt<ListingRepository>(),
     ),
   );
 
