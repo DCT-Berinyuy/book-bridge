@@ -2251,6 +2251,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Location Services'**
   String get locationServices;
+
+  /// No description provided for @socialImpactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Social Venture Mission'**
+  String get socialImpactTitle;
+
+  /// No description provided for @booksCirculated.
+  ///
+  /// In en, this message translates to:
+  /// **'Circulated'**
+  String get booksCirculated;
+
+  /// No description provided for @moneySaved.
+  ///
+  /// In en, this message translates to:
+  /// **'FCFA Saved'**
+  String get moneySaved;
+
+  /// No description provided for @co2Saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Tonnes CO2'**
+  String get co2Saved;
 }
 
 class _AppLocalizationsDelegate

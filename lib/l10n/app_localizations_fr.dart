@@ -1177,4 +1177,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get locationServices => 'Services de localisation';
+
+  @override
+  String get socialImpactTitle => 'Mission Sociale';
+
+  @override
+  String get booksCirculated => 'Circulés';
+
+  @override
+  String get moneySaved => 'FCFA Économisés';
+
+  @override
+  String get co2Saved => 'Tonnes CO2';
 }

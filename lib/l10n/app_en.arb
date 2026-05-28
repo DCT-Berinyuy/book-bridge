@@ -391,5 +391,9 @@
   "darkMode": "Dark Mode",
   "systemDefault": "System Default",
   "manual": "Manual",
-  "locationServices": "Location Services"
+  "locationServices": "Location Services",
+  "socialImpactTitle": "Social Venture Mission",
+  "booksCirculated": "Circulated",
+  "moneySaved": "FCFA Saved",
+  "co2Saved": "Tonnes CO2"
 }

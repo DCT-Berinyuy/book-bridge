@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:book_bridge/features/payments/presentation/widgets/payment_bottom_sheet.dart';
 import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
 import 'package:book_bridge/core/theme/app_theme.dart';
+import 'package:book_bridge/features/impact/presentation/widgets/impact_stats_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -95,6 +96,10 @@ class _HomeScreenState extends State<HomeScreen> {
           const SliverToBoxAdapter(child: OfflineBanner()),
         const SliverToBoxAdapter(child: SizedBox(height: 16)),
         _buildPromoBanners(),
+        if (viewModel.platformStats != null)
+          SliverToBoxAdapter(
+            child: ImpactStatsWidget(stats: viewModel.platformStats!),
+          ),
         _buildNearbyBooksSection(
           viewModel.nearbyListings,
           viewModel.currentPosition,

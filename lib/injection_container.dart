@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:book_bridge/features/auth/data/datasources/supabase_auth_data_source.dart';
 import 'package:book_bridge/features/auth/data/repositories/auth_repository_impl.dart';
@@ -67,6 +68,10 @@ import 'package:book_bridge/features/reviews/domain/usecases/create_review_useca
 import 'package:book_bridge/features/reviews/domain/usecases/get_user_reviews_usecase.dart';
 import 'package:book_bridge/features/reviews/domain/usecases/has_reviewed_usecase.dart';
 import 'package:book_bridge/features/reviews/presentation/viewmodels/review_viewmodel.dart';
+import 'package:book_bridge/features/impact/data/datasources/supabase_impact_data_source.dart';
+import 'package:book_bridge/features/impact/data/repositories/impact_repository_impl.dart';
+import 'package:book_bridge/features/impact/domain/repositories/impact_repository.dart';
+import 'package:book_bridge/features/impact/domain/usecases/get_platform_stats_usecase.dart';
 import 'package:book_bridge/config/app_config.dart';
 
 /// Service locator for dependency injection.
@@ -161,6 +166,10 @@ Future<void> setupDependencyInjection() async {
 
   getIt.registerSingleton<LocalListingsDataSource>(localDataSource);
 
+  // Shared Preferences (used by Impact cache)
+  final sharedPreferences = await SharedPreferences.getInstance();
+  getIt.registerSingleton<SharedPreferences>(sharedPreferences);
+
   getIt.registerSingleton<ListingRepository>(
     ListingRepositoryImpl(
       dataSource: getIt<SupabaseListingsDataSource>(),
@@ -201,12 +210,29 @@ Future<void> setupDependencyInjection() async {
   final locationViewModel = await LocationViewModel.load();
   getIt.registerSingleton<LocationViewModel>(locationViewModel);
 
+  // Impact Feature
+  getIt.registerLazySingleton<SupabaseImpactDataSource>(
+    () => SupabaseImpactDataSource(supabaseClient: getIt<SupabaseClient>()),
+  );
+
+  getIt.registerLazySingleton<ImpactRepository>(
+    () => ImpactRepositoryImpl(
+      dataSource: getIt<SupabaseImpactDataSource>(),
+      sharedPreferences: getIt<SharedPreferences>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GetPlatformStatsUseCase>(
+    () => GetPlatformStatsUseCase(repository: getIt<ImpactRepository>()),
+  );
+
   // Listings Feature - Presentation Layer (ViewModels)
   getIt.registerSingleton<HomeViewModel>(
     HomeViewModel(
       getListingsUseCase: getIt<GetListingsUseCase>(),
       locationViewModel: getIt<LocationViewModel>(),
       listingRepository: getIt<ListingRepository>(),
+      getPlatformStatsUseCase: getIt<GetPlatformStatsUseCase>(),
     ),
   );
 
