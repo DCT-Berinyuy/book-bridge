@@ -1214,4 +1214,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get verifiedZone => 'VERIFIED ZONE';
+
+  @override
+  String get notifPaymentConfirmedLabel => 'Payment Confirmed';
+
+  @override
+  String get notifNewInquiryLabel => 'New Message';
+
+  @override
+  String get notifImpactMilestoneLabel => 'Milestone Reached';
+
+  @override
+  String get notifWelcomeLabel => 'Welcome';
+
+  @override
+  String get tapToViewListing => 'Tap to view listing';
 }

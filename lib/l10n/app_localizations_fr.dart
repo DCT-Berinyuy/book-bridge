@@ -1227,4 +1227,19 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get verifiedZone => 'ZONE VÉRIFIÉE';
+
+  @override
+  String get notifPaymentConfirmedLabel => 'Paiement Confirmé';
+
+  @override
+  String get notifNewInquiryLabel => 'Nouveau Message';
+
+  @override
+  String get notifImpactMilestoneLabel => 'Étape Atteinte';
+
+  @override
+  String get notifWelcomeLabel => 'Bienvenue';
+
+  @override
+  String get tapToViewListing => 'Appuyez pour voir l\'annonce';
 }

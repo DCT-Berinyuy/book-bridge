@@ -404,5 +404,10 @@
   "campusMeetupZones": "Zones de Rencontre Vérifiées",
   "campusMeetupZonesDesc": "Emplacements pré-approuvés et très visibles sur votre campus.",
   "openInMaps": "Ouvrir dans Maps",
-  "verifiedZone": "ZONE VÉRIFIÉE"
+  "verifiedZone": "ZONE VÉRIFIÉE",
+  "notifPaymentConfirmedLabel": "Paiement Confirmé",
+  "notifNewInquiryLabel": "Nouveau Message",
+  "notifImpactMilestoneLabel": "Étape Atteinte",
+  "notifWelcomeLabel": "Bienvenue",
+  "tapToViewListing": "Appuyez pour voir l'annonce"
 }

@@ -31,11 +31,14 @@ import 'package:book_bridge/features/transactions/presentation/screens/transacti
 import 'package:book_bridge/features/transactions/presentation/viewmodels/transaction_history_viewmodel.dart';
 import 'package:book_bridge/injection_container.dart' as di;
 
+final routerKey = GlobalKey<NavigatorState>();
+
 /// App router configuration using go_router.
 ///
 /// This configures all routes in the application and handles navigation
 /// logic based on authentication state.
 final appRouter = GoRouter(
+  navigatorKey: routerKey,
   initialLocation: '/',
   redirect: (context, state) {
     final authViewModel = context.read<AuthViewModel>();

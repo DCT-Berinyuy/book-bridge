@@ -407,5 +407,10 @@
   "campusMeetupZones": "Verified Meetup Zones",
   "campusMeetupZonesDesc": "Pre-approved, highly visible locations on your campus.",
   "openInMaps": "Open in Maps",
-  "verifiedZone": "VERIFIED ZONE"
+  "verifiedZone": "VERIFIED ZONE",
+  "notifPaymentConfirmedLabel": "Payment Confirmed",
+  "notifNewInquiryLabel": "New Message",
+  "notifImpactMilestoneLabel": "Milestone Reached",
+  "notifWelcomeLabel": "Welcome",
+  "tapToViewListing": "Tap to view listing"
 }

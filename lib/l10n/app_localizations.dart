@@ -2347,6 +2347,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'VERIFIED ZONE'**
   String get verifiedZone;
+
+  /// No description provided for @notifPaymentConfirmedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Confirmed'**
+  String get notifPaymentConfirmedLabel;
+
+  /// No description provided for @notifNewInquiryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New Message'**
+  String get notifNewInquiryLabel;
+
+  /// No description provided for @notifImpactMilestoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Milestone Reached'**
+  String get notifImpactMilestoneLabel;
+
+  /// No description provided for @notifWelcomeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome'**
+  String get notifWelcomeLabel;
+
+  /// No description provided for @tapToViewListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to view listing'**
+  String get tapToViewListing;
 }
 
 class _AppLocalizationsDelegate
