@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/seller_profile_viewmodel.dart';
 import 'package:book_bridge/features/listings/presentation/widgets/listing_card.dart';
 import 'package:book_bridge/features/reviews/presentation/widgets/seller_rating_badge.dart';
+import 'package:book_bridge/features/reviews/presentation/widgets/seller_trust_card.dart';
 import 'package:book_bridge/l10n/app_localizations.dart';
 
 class SellerProfileScreen extends StatefulWidget {
@@ -68,6 +69,11 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SellerTrustCard(
+                        seller: seller,
+                        reviews: viewModel.reviews,
+                      ),
+                      const SizedBox(height: 16),
                       _buildStatsRow(context, viewModel),
                       const SizedBox(height: 24),
                       Text(

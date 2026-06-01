@@ -13,6 +13,9 @@ class User extends Equatable {
   final String? avatarUrl;
   final double? rating;
   final int? reviewCount;
+  final int completedDealsCount;
+  final int trustScore;
+  final String trustLevel;
   final String? fcmToken;
   final DateTime createdAt;
 
@@ -25,6 +28,9 @@ class User extends Equatable {
     this.avatarUrl,
     this.rating,
     this.reviewCount,
+    this.completedDealsCount = 0,
+    this.trustScore = 50,
+    this.trustLevel = 'Seedling',
     this.fcmToken,
     required this.createdAt,
   });
@@ -38,6 +44,9 @@ class User extends Equatable {
     String? avatarUrl,
     double? rating,
     int? reviewCount,
+    int? completedDealsCount,
+    int? trustScore,
+    String? trustLevel,
     String? fcmToken,
     DateTime? createdAt,
   }) {
@@ -50,6 +59,9 @@ class User extends Equatable {
       avatarUrl: avatarUrl ?? this.avatarUrl,
       rating: rating ?? this.rating,
       reviewCount: reviewCount ?? this.reviewCount,
+      completedDealsCount: completedDealsCount ?? this.completedDealsCount,
+      trustScore: trustScore ?? this.trustScore,
+      trustLevel: trustLevel ?? this.trustLevel,
       fcmToken: fcmToken ?? this.fcmToken,
       createdAt: createdAt ?? this.createdAt,
     );
@@ -65,6 +77,9 @@ class User extends Equatable {
     avatarUrl,
     rating,
     reviewCount,
+    completedDealsCount,
+    trustScore,
+    trustLevel,
     fcmToken,
     createdAt,
   ];
