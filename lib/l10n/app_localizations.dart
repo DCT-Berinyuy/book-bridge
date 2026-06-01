@@ -2275,6 +2275,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tonnes CO2'**
   String get co2Saved;
+
+  /// No description provided for @safetyGuidelinesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety Guidelines'**
+  String get safetyGuidelinesTitle;
+
+  /// No description provided for @safeMeetupLocations.
+  ///
+  /// In en, this message translates to:
+  /// **'Safe Meetup Locations'**
+  String get safeMeetupLocations;
+
+  /// No description provided for @whatToCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'What to Check'**
+  String get whatToCheck;
+
+  /// No description provided for @paymentSafety.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Safety'**
+  String get paymentSafety;
+
+  /// No description provided for @reportIssues.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Issues'**
+  String get reportIssues;
+
+  /// No description provided for @meetupTipsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrange Meetup Safely'**
+  String get meetupTipsTitle;
+
+  /// No description provided for @meetupTipsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Always swap books in public campus areas and inspect before paying.'**
+  String get meetupTipsSubtitle;
+
+  /// No description provided for @viewSafetyGuidelines.
+  ///
+  /// In en, this message translates to:
+  /// **'View Safety Guidelines'**
+  String get viewSafetyGuidelines;
+
+  /// No description provided for @campusMeetupZones.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified Meetup Zones'**
+  String get campusMeetupZones;
+
+  /// No description provided for @campusMeetupZonesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Pre-approved, highly visible locations on your campus.'**
+  String get campusMeetupZonesDesc;
+
+  /// No description provided for @openInMaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in Maps'**
+  String get openInMaps;
+
+  /// No description provided for @verifiedZone.
+  ///
+  /// In en, this message translates to:
+  /// **'VERIFIED ZONE'**
+  String get verifiedZone;
 }
 
 class _AppLocalizationsDelegate

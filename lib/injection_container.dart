@@ -73,6 +73,11 @@ import 'package:book_bridge/features/impact/data/repositories/impact_repository_
 import 'package:book_bridge/features/impact/domain/repositories/impact_repository.dart';
 import 'package:book_bridge/features/impact/domain/usecases/get_platform_stats_usecase.dart';
 import 'package:book_bridge/config/app_config.dart';
+import 'package:book_bridge/features/safety/data/datasources/safety_remote_datasource.dart';
+import 'package:book_bridge/features/safety/data/repositories/safety_repository_impl.dart';
+import 'package:book_bridge/features/safety/domain/repositories/safety_repository.dart';
+import 'package:book_bridge/features/safety/domain/usecases/get_campus_zones_usecase.dart';
+import 'package:book_bridge/features/safety/presentation/viewmodels/safety_viewmodel.dart';
 
 /// Service locator for dependency injection.
 ///
@@ -420,5 +425,24 @@ Future<void> setupDependencyInjection() async {
       getTransactionByExternalRefUseCase:
           getIt<GetTransactionByExternalRefUseCase>(),
     ),
+  );
+
+  // Safety Feature
+  getIt.registerLazySingleton<SafetyRemoteDataSource>(
+    () => SafetyRemoteDataSource(supabaseClient: getIt<SupabaseClient>()),
+  );
+
+  getIt.registerLazySingleton<SafetyRepository>(
+    () =>
+        SafetyRepositoryImpl(remoteDataSource: getIt<SafetyRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<GetCampusZonesUseCase>(
+    () => GetCampusZonesUseCase(getIt<SafetyRepository>()),
+  );
+
+  getIt.registerFactory<SafetyViewModel>(
+    () =>
+        SafetyViewModel(getCampusZonesUseCase: getIt<GetCampusZonesUseCase>()),
   );
 }

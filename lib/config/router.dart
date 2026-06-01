@@ -22,6 +22,7 @@ import 'package:book_bridge/features/listings/presentation/screens/feedback_scre
 import 'package:book_bridge/features/listings/presentation/screens/contact_us_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/about_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/seller_profile_screen.dart';
+import 'package:book_bridge/features/safety/presentation/screens/safety_guidelines_screen.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/chat/presentation/screens/chat_list_screen.dart';
 import 'package:book_bridge/features/chat/presentation/screens/chat_screen.dart';
@@ -292,6 +293,12 @@ final appRouter = GoRouter(
         final userId = state.pathParameters['userId']!;
         return SellerProfileScreen(userId: userId);
       },
+    ),
+    // Safety Guidelines Route
+    GoRoute(
+      path: '/safety',
+      name: 'safety',
+      builder: (context, state) => const SafetyGuidelinesScreen(),
     ),
   ],
 );

@@ -1176,4 +1176,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get co2Saved => 'Tonnes CO2';
+
+  @override
+  String get safetyGuidelinesTitle => 'Safety Guidelines';
+
+  @override
+  String get safeMeetupLocations => 'Safe Meetup Locations';
+
+  @override
+  String get whatToCheck => 'What to Check';
+
+  @override
+  String get paymentSafety => 'Payment Safety';
+
+  @override
+  String get reportIssues => 'Report Issues';
+
+  @override
+  String get meetupTipsTitle => 'Arrange Meetup Safely';
+
+  @override
+  String get meetupTipsSubtitle =>
+      'Always swap books in public campus areas and inspect before paying.';
+
+  @override
+  String get viewSafetyGuidelines => 'View Safety Guidelines';
+
+  @override
+  String get campusMeetupZones => 'Verified Meetup Zones';
+
+  @override
+  String get campusMeetupZonesDesc =>
+      'Pre-approved, highly visible locations on your campus.';
+
+  @override
+  String get openInMaps => 'Open in Maps';
+
+  @override
+  String get verifiedZone => 'VERIFIED ZONE';
 }

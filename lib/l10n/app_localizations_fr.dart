@@ -1189,4 +1189,42 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get co2Saved => 'Tonnes CO2';
+
+  @override
+  String get safetyGuidelinesTitle => 'Directives de Sécurité';
+
+  @override
+  String get safeMeetupLocations => 'Lieux de Rencontre Sécurisés';
+
+  @override
+  String get whatToCheck => 'Ce qu\'il faut Vérifier';
+
+  @override
+  String get paymentSafety => 'Sécurité des Paiements';
+
+  @override
+  String get reportIssues => 'Signaler un Problème';
+
+  @override
+  String get meetupTipsTitle => 'Organiser une Rencontre';
+
+  @override
+  String get meetupTipsSubtitle =>
+      'Échangez toujours vos livres dans des espaces publics et inspectez-les avant de payer.';
+
+  @override
+  String get viewSafetyGuidelines => 'Voir les directives de sécurité';
+
+  @override
+  String get campusMeetupZones => 'Zones de Rencontre Vérifiées';
+
+  @override
+  String get campusMeetupZonesDesc =>
+      'Emplacements pré-approuvés et très visibles sur votre campus.';
+
+  @override
+  String get openInMaps => 'Ouvrir dans Maps';
+
+  @override
+  String get verifiedZone => 'ZONE VÉRIFIÉE';
 }
