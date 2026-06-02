@@ -74,10 +74,7 @@ class SupabaseListingsDataSource {
       var query = supabaseClient
           .from('listings')
           .select('*, profiles:seller_id(*)')
-          .eq('status', status)
-          .or(
-            'expires_at.is.null,expires_at.gt.${DateTime.now().toIso8601String()}',
-          );
+          .eq('status', status);
 
       if (category != null && category.isNotEmpty) {
         query = query.eq('category', category);
