@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:book_bridge/features/auth/domain/repositories/auth_repository.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/favorites/domain/usecases/get_favorites_usecase.dart';
 import 'package:book_bridge/features/favorites/domain/usecases/toggle_favorite_usecase.dart';
@@ -10,12 +12,37 @@ class FavoritesViewModel extends ChangeNotifier {
   final GetFavoritesUseCase getFavoritesUseCase;
   final ToggleFavoriteUseCase toggleFavoriteUseCase;
   final IsFavoriteUseCase isFavoriteUseCase;
+  final AuthRepository authRepository;
+
+  StreamSubscription? _authSubscription;
 
   FavoritesViewModel({
     required this.getFavoritesUseCase,
     required this.toggleFavoriteUseCase,
     required this.isFavoriteUseCase,
-  });
+    required this.authRepository,
+  }) {
+    _listenToAuthChanges();
+  }
+
+  void _listenToAuthChanges() {
+    _authSubscription = authRepository.authStateChanges.listen((user) {
+      if (user != null) {
+        loadFavorites(user.id);
+      } else {
+        _favorites = [];
+        _isFavoriteCache.clear();
+        _state = FavoritesState.initial;
+        notifyListeners();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _authSubscription?.cancel();
+    super.dispose();
+  }
 
   // State
   FavoritesState _state = FavoritesState.initial;

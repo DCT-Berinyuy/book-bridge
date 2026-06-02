@@ -89,6 +89,7 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<FavoritesViewModel>(
           create: (_) => di.getIt<FavoritesViewModel>(),
+          lazy: false,
         ),
         ChangeNotifierProvider<ChatViewModel>(
           create: (_) => di.getIt<ChatViewModel>(),

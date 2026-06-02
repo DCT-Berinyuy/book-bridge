@@ -37,6 +37,13 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
         context.read<ListingDetailsViewModel>().loadListingDetails(
           widget.listingId,
         );
+        final userId = context.read<AuthViewModel>().currentUser?.id;
+        if (userId != null) {
+          context.read<FavoritesViewModel>().checkFavoriteStatus(
+            userId,
+            widget.listingId,
+          );
+        }
       }
     });
   }

@@ -355,6 +355,7 @@ Future<void> setupDependencyInjection() async {
       getFavoritesUseCase: getIt<GetFavoritesUseCase>(),
       toggleFavoriteUseCase: getIt<ToggleFavoriteUseCase>(),
       isFavoriteUseCase: getIt<IsFavoriteUseCase>(),
+      authRepository: getIt<AuthRepository>(),
     ),
   );
 
