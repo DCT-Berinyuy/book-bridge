@@ -10,7 +10,7 @@ class SupabaseFavoritesDataSource {
   Future<List<ListingModel>> getFavorites(String userId) async {
     try {
       final response = await supabaseClient
-          .from('favorites')
+          .from('wishlists')
           .select('*, listings(*, profiles:seller_id(*))')
           .eq('user_id', userId)
           .order('created_at', ascending: false);
@@ -32,7 +32,7 @@ class SupabaseFavoritesDataSource {
     try {
       // Check if already exists
       final checkResponse = await supabaseClient
-          .from('favorites')
+          .from('wishlists')
           .select()
           .eq('user_id', userId)
           .eq('listing_id', listingId)
@@ -41,14 +41,14 @@ class SupabaseFavoritesDataSource {
       if (checkResponse != null) {
         // Delete
         await supabaseClient
-            .from('favorites')
+            .from('wishlists')
             .delete()
             .eq('user_id', userId)
             .eq('listing_id', listingId);
         return false;
       } else {
         // Insert
-        await supabaseClient.from('favorites').insert({
+        await supabaseClient.from('wishlists').insert({
           'user_id': userId,
           'listing_id': listingId,
           'created_at': DateTime.now().toIso8601String(),
@@ -65,7 +65,7 @@ class SupabaseFavoritesDataSource {
   Future<bool> isFavorite(String userId, String listingId) async {
     try {
       final response = await supabaseClient
-          .from('favorites')
+          .from('wishlists')
           .select()
           .eq('user_id', userId)
           .eq('listing_id', listingId)
