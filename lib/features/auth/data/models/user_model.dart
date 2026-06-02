@@ -14,6 +14,9 @@ class UserModel extends User {
     super.avatarUrl,
     super.rating,
     super.reviewCount,
+    super.completedDealsCount = 0,
+    super.trustScore = 50,
+    super.trustLevel = 'Seedling',
     super.fcmToken,
     required super.createdAt,
   });
@@ -32,6 +35,9 @@ class UserModel extends User {
       avatarUrl: json['avatar_url'] as String?,
       rating: json['rating'] is num ? (json['rating'] as num).toDouble() : null,
       reviewCount: json['review_count'] as int?,
+      completedDealsCount: json['completed_deals_count'] as int? ?? 0,
+      trustScore: json['trust_score'] as int? ?? 50,
+      trustLevel: json['trust_level'] as String? ?? 'Seedling',
       fcmToken: json['fcm_token'] as String?,
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'] as String)
@@ -52,6 +58,9 @@ class UserModel extends User {
       'avatar_url': avatarUrl,
       'rating': rating,
       'review_count': reviewCount,
+      'completed_deals_count': completedDealsCount,
+      'trust_score': trustScore,
+      'trust_level': trustLevel,
       'fcm_token': fcmToken,
       'created_at': createdAt.toIso8601String(),
     };
@@ -68,6 +77,9 @@ class UserModel extends User {
       avatarUrl: user.avatarUrl,
       rating: user.rating,
       reviewCount: user.reviewCount,
+      completedDealsCount: user.completedDealsCount,
+      trustScore: user.trustScore,
+      trustLevel: user.trustLevel,
       fcmToken: user.fcmToken,
       createdAt: user.createdAt,
     );
@@ -84,6 +96,9 @@ class UserModel extends User {
       avatarUrl: avatarUrl,
       rating: rating,
       reviewCount: reviewCount,
+      completedDealsCount: completedDealsCount,
+      trustScore: trustScore,
+      trustLevel: trustLevel,
       fcmToken: fcmToken,
       createdAt: createdAt,
     );

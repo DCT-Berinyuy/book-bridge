@@ -19,6 +19,7 @@ import 'package:book_bridge/features/listings/presentation/viewmodels/locale_vie
 import 'package:book_bridge/features/listings/presentation/viewmodels/location_viewmodel.dart';
 import 'package:book_bridge/features/chat/presentation/viewmodels/chat_viewmodel.dart';
 import 'package:book_bridge/core/presentation/viewmodels/theme_viewmodel.dart';
+import 'package:book_bridge/features/safety/presentation/viewmodels/safety_viewmodel.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:book_bridge/firebase_options.dart' show DefaultFirebaseOptions;
@@ -88,6 +89,7 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<FavoritesViewModel>(
           create: (_) => di.getIt<FavoritesViewModel>(),
+          lazy: false,
         ),
         ChangeNotifierProvider<ChatViewModel>(
           create: (_) => di.getIt<ChatViewModel>(),
@@ -101,12 +103,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SellerProfileViewModel>(
           create: (_) => di.getIt<SellerProfileViewModel>(),
         ),
-        ChangeNotifierProvider<ThemeViewModel>( // Added ThemeViewModel
+        ChangeNotifierProvider<ThemeViewModel>(
+          // Added ThemeViewModel
           create: (_) => di.getIt<ThemeViewModel>(),
         ),
+        ChangeNotifierProvider<SafetyViewModel>(
+          create: (_) => di.getIt<SafetyViewModel>(),
+        ),
       ],
-      child: Consumer2<LocaleViewModel, ThemeViewModel>( // Changed to Consumer2
-        builder: (context, localeViewModel, themeViewModel, _) { // Updated builder signature
+      child: Consumer2<LocaleViewModel, ThemeViewModel>(
+        // Changed to Consumer2
+        builder: (context, localeViewModel, themeViewModel, _) {
+          // Updated builder signature
           return MaterialApp.router(
             title: 'BookBridge: Social Venture',
             debugShowCheckedModeBanner: false,

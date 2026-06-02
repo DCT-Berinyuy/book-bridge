@@ -1,4 +1,5 @@
 import 'package:book_bridge/core/presentation/widgets/notification_icon.dart';
+import 'package:book_bridge/core/presentation/widgets/offline_banner.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/home_viewmodel.dart';
@@ -15,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:book_bridge/features/payments/presentation/widgets/payment_bottom_sheet.dart';
 import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
 import 'package:book_bridge/core/theme/app_theme.dart';
+import 'package:book_bridge/features/impact/presentation/widgets/impact_stats_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -90,8 +92,14 @@ class _HomeScreenState extends State<HomeScreen> {
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
         _buildSliverAppBar(),
+        if (viewModel.isOffline)
+          const SliverToBoxAdapter(child: OfflineBanner()),
         const SliverToBoxAdapter(child: SizedBox(height: 16)),
         _buildPromoBanners(),
+        if (viewModel.platformStats != null)
+          SliverToBoxAdapter(
+            child: ImpactStatsWidget(stats: viewModel.platformStats!),
+          ),
         _buildNearbyBooksSection(
           viewModel.nearbyListings,
           viewModel.currentPosition,
@@ -274,7 +282,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Text(
                         isEnglish ? '🇺🇸 EN' : '🇫🇷 FR',
                         style: TextStyle(
-                          color: theme.appBarTheme.foregroundColor ?? Colors.white,
+                          color:
+                              theme.appBarTheme.foregroundColor ?? Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -423,7 +432,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SizedBox(
-            height: 230, // Adjusted to match 0.72 aspect ratio (160 / 0.72 + spacing)
+            height:
+                230, // Adjusted to match 0.72 aspect ratio (160 / 0.72 + spacing)
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               // Show only first 10 for horizontal scroll
@@ -485,8 +495,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: _currentPromoPage == index ? 20 : 6,
                 decoration: BoxDecoration(
                   color: _currentPromoPage == index
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.primary.withValues(alpha: 0.1),
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(3),
                 ),
               );
@@ -590,7 +600,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(30),
                           boxShadow: [
                             BoxShadow(
-                              color: AppTheme.growthGreen.withValues(alpha: 0.4),
+                              color: AppTheme.growthGreen.withValues(
+                                alpha: 0.4,
+                              ),
                               blurRadius: 8,
                               offset: const Offset(0, 4),
                             ),

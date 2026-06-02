@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:book_bridge/core/error/exceptions.dart';
 import 'package:book_bridge/features/listings/data/models/listing_model.dart';
 import 'package:book_bridge/features/listings/data/datasources/supabase_storage_data_source.dart';
+import 'package:book_bridge/features/listings/domain/entities/book_condition.dart';
 
 /// Data source for listing operations using Supabase PostgreSQL and Storage.
 ///
@@ -189,7 +190,7 @@ class SupabaseListingsDataSource {
     required String title,
     required String author,
     required int priceFcfa,
-    required String condition,
+    required BookCondition condition,
     required String imageUrl,
     String? description,
     String? category,
@@ -211,7 +212,7 @@ class SupabaseListingsDataSource {
             'title': title,
             'author': author,
             'price_fcfa': priceFcfa,
-            'condition': condition,
+            'condition': condition.value,
             'image_url': imageUrl,
             'description': description,
             'category': category,
@@ -261,7 +262,7 @@ class SupabaseListingsDataSource {
     String? title,
     String? author,
     int? priceFcfa,
-    String? condition,
+    BookCondition? condition,
     String? imageUrl,
     String? description,
     String? category,
@@ -276,7 +277,7 @@ class SupabaseListingsDataSource {
       if (title != null) updates['title'] = title;
       if (author != null) updates['author'] = author;
       if (priceFcfa != null) updates['price_fcfa'] = priceFcfa;
-      if (condition != null) updates['condition'] = condition;
+      if (condition != null) updates['condition'] = condition.value;
       if (imageUrl != null) updates['image_url'] = imageUrl;
       if (description != null) updates['description'] = description;
       if (category != null) updates['category'] = category;

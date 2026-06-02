@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:book_bridge/features/auth/domain/repositories/auth_repository.dart';
 import 'package:flutter/foundation.dart';
+import 'package:book_bridge/config/router.dart';
 
 /// Service responsible for handling Firebase Push Notifications.
 class PushNotificationService {
@@ -27,6 +28,14 @@ class PushNotificationService {
         print('User granted permission');
       }
 
+      // iOS: Show notification banner even when foregrounded
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+            alert: true,
+            badge: true,
+            sound: true,
+          );
+
       // 2. Setup local notifications for foreground messages
       const AndroidInitializationSettings initializationSettingsAndroid =
           AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -44,11 +53,36 @@ class PushNotificationService {
 
       // 4. Handle background/terminated messages when app is opened via notification
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-        // Handle navigation or other logic here
+        _handleNavigation(message.data);
       });
 
-      // 5. Get and save token if user is logged in
+      // 5. Handle terminated state - app opened via notification tap
+      final initialMessage = await _fcm.getInitialMessage();
+      if (initialMessage != null) {
+        // Delay to let GoRouter initialize before navigation
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _handleNavigation(initialMessage.data);
+        });
+      }
+
+      // 6. Subscribe to milestones broadcast topic
+      await _fcm.subscribeToTopic('bookbridge_milestones');
+
+      // 7. Get and save token if user is logged in
       _setupTokenRefresh();
+    }
+  }
+
+  /// Handles navigation when a notification is tapped.
+  void _handleNavigation(Map<String, dynamic> data) {
+    final type = data['type'] as String? ?? '';
+    final listingId = data['listing_id'] as String?;
+
+    if (listingId != null &&
+        (type == 'payment_confirmed' || type == 'new_inquiry')) {
+      appRouter.push('/listing/$listingId');
+    } else {
+      appRouter.push('/notifications');
     }
   }
 

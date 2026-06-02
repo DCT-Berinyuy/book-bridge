@@ -62,7 +62,8 @@ import 'app_localizations_fr.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -70,7 +71,8 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -82,17 +84,18 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('fr')
+    Locale('fr'),
   ];
 
   /// The title of the application
@@ -2248,9 +2251,136 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Location Services'**
   String get locationServices;
+
+  /// No description provided for @socialImpactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Social Venture Mission'**
+  String get socialImpactTitle;
+
+  /// No description provided for @booksCirculated.
+  ///
+  /// In en, this message translates to:
+  /// **'Circulated'**
+  String get booksCirculated;
+
+  /// No description provided for @moneySaved.
+  ///
+  /// In en, this message translates to:
+  /// **'FCFA Saved'**
+  String get moneySaved;
+
+  /// No description provided for @co2Saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Tonnes CO2'**
+  String get co2Saved;
+
+  /// No description provided for @safetyGuidelinesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety Guidelines'**
+  String get safetyGuidelinesTitle;
+
+  /// No description provided for @safeMeetupLocations.
+  ///
+  /// In en, this message translates to:
+  /// **'Safe Meetup Locations'**
+  String get safeMeetupLocations;
+
+  /// No description provided for @whatToCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'What to Check'**
+  String get whatToCheck;
+
+  /// No description provided for @paymentSafety.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Safety'**
+  String get paymentSafety;
+
+  /// No description provided for @reportIssues.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Issues'**
+  String get reportIssues;
+
+  /// No description provided for @meetupTipsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrange Meetup Safely'**
+  String get meetupTipsTitle;
+
+  /// No description provided for @meetupTipsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Always swap books in public campus areas and inspect before paying.'**
+  String get meetupTipsSubtitle;
+
+  /// No description provided for @viewSafetyGuidelines.
+  ///
+  /// In en, this message translates to:
+  /// **'View Safety Guidelines'**
+  String get viewSafetyGuidelines;
+
+  /// No description provided for @campusMeetupZones.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified Meetup Zones'**
+  String get campusMeetupZones;
+
+  /// No description provided for @campusMeetupZonesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Pre-approved, highly visible locations on your campus.'**
+  String get campusMeetupZonesDesc;
+
+  /// No description provided for @openInMaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in Maps'**
+  String get openInMaps;
+
+  /// No description provided for @verifiedZone.
+  ///
+  /// In en, this message translates to:
+  /// **'VERIFIED ZONE'**
+  String get verifiedZone;
+
+  /// No description provided for @notifPaymentConfirmedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Confirmed'**
+  String get notifPaymentConfirmedLabel;
+
+  /// No description provided for @notifNewInquiryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New Message'**
+  String get notifNewInquiryLabel;
+
+  /// No description provided for @notifImpactMilestoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Milestone Reached'**
+  String get notifImpactMilestoneLabel;
+
+  /// No description provided for @notifWelcomeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome'**
+  String get notifWelcomeLabel;
+
+  /// No description provided for @tapToViewListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to view listing'**
+  String get tapToViewListing;
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -2259,25 +2389,26 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'fr'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['en', 'fr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en': return AppLocalizationsEn();
-    case 'fr': return AppLocalizationsFr();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'fr':
+      return AppLocalizationsFr();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
+    'that was used.',
   );
 }

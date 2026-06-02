@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:book_bridge/l10n/app_localizations.dart';
+import 'package:book_bridge/core/theme/app_theme.dart';
+import 'package:go_router/go_router.dart';
 
 /// Screen for displaying user notifications.
 class NotificationsScreen extends StatefulWidget {
@@ -125,12 +127,11 @@ class _NotificationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isRead = notification.isRead;
+    final typeColor = _getColorForType(notification.type, theme);
 
     return Container(
       decoration: BoxDecoration(
-        color: isRead
-            ? Colors.transparent
-            : theme.colorScheme.primary.withValues(alpha: 0.05),
+        color: isRead ? Colors.transparent : typeColor.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListTile(
@@ -138,10 +139,10 @@ class _NotificationItem extends StatelessWidget {
         leading: CircleAvatar(
           backgroundColor: isRead
               ? theme.disabledColor.withValues(alpha: 0.1)
-              : theme.colorScheme.primary.withValues(alpha: 0.1),
+              : typeColor.withValues(alpha: 0.1),
           child: Icon(
             _getIconForType(notification.type),
-            color: isRead ? theme.disabledColor : theme.colorScheme.primary,
+            color: isRead ? theme.disabledColor : typeColor,
           ),
         ),
         title: Text(
@@ -172,9 +173,12 @@ class _NotificationItem extends StatelessWidget {
           if (!isRead) {
             context.read<NotificationsViewModel>().markAsRead(notification.id);
           }
-          // Handle navigation if data present
-          // final listingId = notification.data?['listing_id'];
-          // if (listingId != null) context.push('/listing/$listingId');
+
+          // Deep-link to listing detail if listingId is present
+          final listingId = notification.data?['listing_id'] as String?;
+          if (listingId != null) {
+            context.push('/listing/$listingId');
+          }
         },
       ),
     );
@@ -182,14 +186,33 @@ class _NotificationItem extends StatelessWidget {
 
   IconData _getIconForType(String type) {
     switch (type) {
+      case 'payment_confirmed':
+        return Icons.payments_rounded;
+      case 'new_inquiry':
+        return Icons.chat_bubble_rounded;
+      case 'new_listing_match':
+        return Icons.saved_search_rounded;
+      case 'impact_milestone':
+        return Icons.emoji_events_rounded;
+      case 'welcome':
+        return Icons.celebration_rounded;
       case 'listing':
-        return Icons.menu_book;
-      case 'message':
-        return Icons.chat_bubble_outline;
-      case 'security':
-        return Icons.security;
+        return Icons.menu_book_rounded;
       default:
-        return Icons.notifications_none;
+        return Icons.notifications_rounded;
+    }
+  }
+
+  Color _getColorForType(String type, ThemeData theme) {
+    switch (type) {
+      case 'payment_confirmed':
+        return AppTheme.growthGreen;
+      case 'new_inquiry':
+        return AppTheme.scholarBlue;
+      case 'impact_milestone':
+        return AppTheme.bridgeOrange;
+      default:
+        return theme.colorScheme.primary;
     }
   }
 }

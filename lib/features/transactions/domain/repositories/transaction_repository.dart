@@ -13,4 +13,13 @@ abstract class TransactionRepository {
   Future<Either<Failure, TransactionEntity>> getTransactionByExternalRef(
     String externalRef,
   );
+
+  /// Confirms receipt of the book by the buyer, triggering escrow release.
+  Future<Either<Failure, Unit>> confirmReceipt(String transactionId);
+
+  /// Disputes the transaction.
+  Future<Either<Failure, Unit>> disputeTransaction(
+    String transactionId,
+    String reason,
+  );
 }

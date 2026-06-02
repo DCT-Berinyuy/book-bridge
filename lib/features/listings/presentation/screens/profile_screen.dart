@@ -15,6 +15,7 @@ import 'package:book_bridge/l10n/app_localizations.dart';
 import 'package:book_bridge/features/payments/presentation/widgets/payment_bottom_sheet.dart';
 import 'package:book_bridge/features/payments/presentation/viewmodels/payment_viewmodel.dart';
 import 'package:book_bridge/injection_container.dart';
+import 'package:book_bridge/features/notifications/presentation/viewmodels/notifications_viewmodel.dart';
 
 /// User profile screen displaying user information and their listings.
 ///
@@ -50,6 +51,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
+          Consumer<NotificationsViewModel>(
+            builder: (context, notifVm, _) {
+              return Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.notifications_outlined),
+                    onPressed: () => context.push('/notifications'),
+                  ),
+                  if (notifVm.unreadCount > 0)
+                    Positioned(
+                      top: 12,
+                      right: 12,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert),
             onSelected: (value) {
@@ -64,7 +91,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 value: 'edit',
                 child: Row(
                   children: [
-                    Icon(Icons.edit_outlined, size: 20, color: Theme.of(context).iconTheme.color),
+                    Icon(
+                      Icons.edit_outlined,
+                      size: 20,
+                      color: Theme.of(context).iconTheme.color,
+                    ),
                     SizedBox(width: 12),
                     Text(AppLocalizations.of(context)!.editProfile),
                   ],
@@ -145,9 +176,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Consumer<ThemeViewModel>(
                     builder: (context, themeViewModel, child) {
                       final l10n = AppLocalizations.of(context)!;
-                      final isDarkMode = themeViewModel.themeMode == ThemeMode.dark ||
+                      final isDarkMode =
+                          themeViewModel.themeMode == ThemeMode.dark ||
                           (themeViewModel.themeMode == ThemeMode.system &&
-                              MediaQuery.of(context).platformBrightness == Brightness.dark);
+                              MediaQuery.of(context).platformBrightness ==
+                                  Brightness.dark);
                       return SwitchListTile(
                         secondary: Icon(
                           isDarkMode ? Icons.dark_mode : Icons.light_mode,
@@ -418,7 +451,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           leading: Icon(
             icon,
             size: 22,
-            color: textColor ?? Theme.of(context).iconTheme.color?.withValues(alpha: 0.8),
+            color:
+                textColor ??
+                Theme.of(context).iconTheme.color?.withValues(alpha: 0.8),
           ),
           title: Text(
             title,
@@ -466,7 +501,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           secondary: Icon(
             icon,
             size: 22,
-            color: textColor ?? Theme.of(context).iconTheme.color?.withValues(alpha: 0.8),
+            color:
+                textColor ??
+                Theme.of(context).iconTheme.color?.withValues(alpha: 0.8),
           ),
           title: Text(
             title,
@@ -745,11 +782,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title,
         style: TextStyle(
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.bodyLarge?.color,
+          color: isSelected
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).textTheme.bodyLarge?.color,
         ),
       ),
       trailing: isSelected
-          ? Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary)
+          ? Icon(
+              Icons.check_circle,
+              color: Theme.of(context).colorScheme.primary,
+            )
           : null,
       onTap: onTap,
     );
@@ -763,7 +805,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1),
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.primary,
+            width: 1,
+          ),
         ),
         child: InkWell(
           onTap: () => _showDonationAmountPicker(context, user),
@@ -801,7 +846,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
-                Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.primary),
+                Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ],
             ),
           ),

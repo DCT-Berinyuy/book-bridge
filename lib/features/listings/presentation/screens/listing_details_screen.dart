@@ -12,6 +12,7 @@ import 'package:book_bridge/injection_container.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/reviews/presentation/widgets/seller_rating_badge.dart';
 import 'package:book_bridge/core/theme/app_theme.dart';
+import 'package:book_bridge/features/safety/presentation/widgets/meetup_tips_card.dart';
 
 /// Listing details screen showing comprehensive information about a book.
 ///
@@ -36,6 +37,13 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
         context.read<ListingDetailsViewModel>().loadListingDetails(
           widget.listingId,
         );
+        final userId = context.read<AuthViewModel>().currentUser?.id;
+        if (userId != null) {
+          context.read<FavoritesViewModel>().checkFavoriteStatus(
+            userId,
+            widget.listingId,
+          );
+        }
       }
     });
   }
@@ -52,7 +60,7 @@ class _ListingDetailsScreenState extends State<ListingDetailsScreen> {
 ${l10n.shareTextCheckOut}
 📚 ${listing.title} by ${listing.author}
 💰 ${l10n.priceFormat(listing.priceFcfa)}
-🔍 ${l10n.shareTextCondition}: ${_getLocalizedCondition(context, listing.condition)}
+🔍 ${l10n.shareTextCondition}: ${listing.condition.localizedLabel(l10n)}
 
 ${l10n.shareTextDownload}
 ''';
@@ -307,7 +315,9 @@ ${l10n.shareTextDownload}
                                   )!.buyBackDescription,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                   ),
                                 ),
                               ],
@@ -350,7 +360,9 @@ ${l10n.shareTextDownload}
                               listing.author,
                               style: TextStyle(
                                 fontSize: 18,
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -368,7 +380,9 @@ ${l10n.shareTextDownload}
                                     )!.sellerTypeAuthorDesc,
                               style: TextStyle(
                                 fontSize: 13,
-                                color: Theme.of(context).colorScheme.onSurface, // Ink Black
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface, // Ink Black
                                 height: 1.4,
                               ),
                             ),
@@ -452,10 +466,9 @@ ${l10n.shareTextDownload}
                           borderRadius: BorderRadius.circular(24),
                         ),
                         child: Text(
-                          _getLocalizedCondition(
-                            context,
-                            listing.condition,
-                          ).toUpperCase(),
+                          listing.condition
+                              .localizedLabel(AppLocalizations.of(context)!)
+                              .toUpperCase(),
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -500,7 +513,9 @@ ${l10n.shareTextDownload}
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant, // Light gray
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurfaceVariant, // Light gray
                       letterSpacing: 1.5,
                     ),
                   ),
@@ -523,7 +538,9 @@ ${l10n.shareTextDownload}
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant, // Light gray
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurfaceVariant, // Light gray
                       letterSpacing: 1.5,
                     ),
                   ),
@@ -589,19 +606,17 @@ ${l10n.shareTextDownload}
                                                 );
                                               },
                                           errorBuilder:
-                                              (
-                                                context,
-                                                error,
-                                                stackTrace,
-                                              ) => Icon(
-                                                listing.sellerType == 'bookshop'
-                                                    ? Icons.store
-                                                    : listing.sellerType ==
-                                                          'author'
-                                                    ? Icons.history_edu
-                                                    : Icons.person,
-                                                color: AppTheme.scholarBlue,
-                                              ),
+                                              (context, error, stackTrace) =>
+                                                  Icon(
+                                                    listing.sellerType ==
+                                                            'bookshop'
+                                                        ? Icons.store
+                                                        : listing.sellerType ==
+                                                              'author'
+                                                        ? Icons.history_edu
+                                                        : Icons.person,
+                                                    color: AppTheme.scholarBlue,
+                                                  ),
                                         )
                                       : Icon(
                                           listing.sellerType == 'bookshop'
@@ -646,7 +661,9 @@ ${l10n.shareTextDownload}
                                         Icon(
                                           Icons.location_on,
                                           size: 14,
-                                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurfaceVariant,
                                         ),
                                         const SizedBox(width: 4),
                                         Text(
@@ -656,7 +673,9 @@ ${l10n.shareTextDownload}
                                               )!.unknownLocation,
                                           style: TextStyle(
                                             fontSize: 14,
-                                            color: Theme.of(context).colorScheme.onSurfaceVariant, // Light gray
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant, // Light gray
                                           ),
                                         ),
                                       ],
@@ -693,6 +712,8 @@ ${l10n.shareTextDownload}
                       ),
                     ),
                   ),
+                  const SizedBox(height: 24),
+                  const MeetupTipsCard(),
                 ],
               ),
             ),
@@ -772,7 +793,8 @@ ${l10n.shareTextDownload}
                     onPressed: () =>
                         _showBoostBottomSheet(context, listing, viewModel),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.bridgeOrange, // Warning/Boost Orange
+                      backgroundColor:
+                          AppTheme.bridgeOrange, // Warning/Boost Orange
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -893,11 +915,11 @@ ${l10n.shareTextDownload}
                       );
                     },
                     style: OutlinedButton.styleFrom(
-                        foregroundColor: AppTheme.scholarBlue,
-                        side: const BorderSide(
-                          color: AppTheme.scholarBlue,
-                          width: 1.5,
-                        ),
+                      foregroundColor: AppTheme.scholarBlue,
+                      side: const BorderSide(
+                        color: AppTheme.scholarBlue,
+                        width: 1.5,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -986,24 +1008,6 @@ ${l10n.shareTextDownload}
         ],
       ),
     );
-  }
-
-  String _getLocalizedCondition(BuildContext context, String condition) {
-    final l10n = AppLocalizations.of(context)!;
-    switch (condition.toLowerCase()) {
-      case 'new':
-        return l10n.conditionNew;
-      case 'like_new':
-        return l10n.conditionLikeNew;
-      case 'good':
-        return l10n.conditionGood;
-      case 'fair':
-        return l10n.conditionFair;
-      case 'poor':
-        return l10n.conditionPoor;
-      default:
-        return condition;
-    }
   }
 
   String _getLocalizedSellerType(BuildContext context, String sellerType) {

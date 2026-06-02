@@ -3,12 +3,20 @@ import 'package:dartz/dartz.dart';
 import 'package:book_bridge/core/error/failures.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/listings/domain/entities/category.dart';
+import 'package:book_bridge/features/listings/domain/entities/book_condition.dart';
 
 /// Abstract repository for listing operations.
 ///
 /// This interface defines the contract for all listing-related
 /// data operations. The actual implementation is in the data layer.
 abstract class ListingRepository {
+  /// Whether the most recent [getListings] call was served from the local
+  /// SQLite cache (i.e., the device was offline or the remote fetch failed).
+  ///
+  /// Consumers (e.g., [HomeViewModel]) can read this after a successful
+  /// [getListings] call to decide whether to surface an [OfflineBanner].
+  bool get isServingFromCache;
+
   /// Fetches all academic categories.
   Future<Either<Failure, List<Category>>> getCategories();
 
@@ -49,7 +57,7 @@ abstract class ListingRepository {
     required String title,
     required String author,
     required int priceFcfa,
-    required String condition,
+    required BookCondition condition,
     required String imageUrl,
     String? description,
     String? category,
@@ -73,7 +81,7 @@ abstract class ListingRepository {
     String? title,
     String? author,
     int? priceFcfa,
-    String? condition,
+    BookCondition? condition,
     String? imageUrl,
     String? description,
     String? category,

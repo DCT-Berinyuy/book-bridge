@@ -11,7 +11,7 @@ class SupabaseTransactionsDataSource {
       final response = await supabaseClient
           .from('transactions')
           .select(
-            'id, listing_id, buyer_id, seller_id, amount, status, external_ref, created_at, '
+            'id, listing_id, buyer_id, seller_id, amount, status, external_ref:payment_reference, created_at, '
             'listings(title, image_url)',
           )
           .eq('buyer_id', userId)
@@ -28,7 +28,7 @@ class SupabaseTransactionsDataSource {
       final response = await supabaseClient
           .from('transactions')
           .select(
-            'id, listing_id, buyer_id, seller_id, amount, status, external_ref, created_at, '
+            'id, listing_id, buyer_id, seller_id, amount, status, external_ref:payment_reference, created_at, '
             'listings(title, image_url)',
           )
           .eq('seller_id', userId)
@@ -47,15 +47,51 @@ class SupabaseTransactionsDataSource {
       final response = await supabaseClient
           .from('transactions')
           .select(
-            'id, listing_id, buyer_id, seller_id, amount, status, external_ref, created_at, '
+            'id, listing_id, buyer_id, seller_id, amount, status, external_ref:payment_reference, created_at, '
             'listings(title, image_url)',
           )
-          .eq('external_ref', externalRef)
+          .eq('payment_reference', externalRef)
           .single();
 
       return _fromJson(response);
     } catch (e) {
       throw ServerException(message: 'Failed to fetch transaction: $e');
+    }
+  }
+
+  Future<void> confirmReceipt(String transactionId) async {
+    try {
+      final response = await supabaseClient.functions.invoke(
+        'process-escrow',
+        body: {'action': 'release', 'transaction_id': transactionId},
+      );
+      if (response.status != 200) {
+        throw ServerException(
+          message: 'Failed to confirm receipt: ${response.data}',
+        );
+      }
+    } catch (e) {
+      throw ServerException(message: 'Failed to confirm receipt: $e');
+    }
+  }
+
+  Future<void> disputeTransaction(String transactionId, String reason) async {
+    try {
+      final response = await supabaseClient.functions.invoke(
+        'process-escrow',
+        body: {
+          'action': 'dispute',
+          'transaction_id': transactionId,
+          'dispute_reason': reason,
+        },
+      );
+      if (response.status != 200) {
+        throw ServerException(
+          message: 'Failed to dispute transaction: ${response.data}',
+        );
+      }
+    } catch (e) {
+      throw ServerException(message: 'Failed to dispute transaction: $e');
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:book_bridge/core/error/failures.dart';
 import 'package:book_bridge/core/usecases/usecase.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/features/listings/domain/entities/book_condition.dart';
 import 'package:book_bridge/features/listings/domain/repositories/listing_repository.dart';
 
 /// Use case for updating an existing listing.
@@ -36,7 +37,7 @@ class UpdateListingParams extends Equatable {
   final String? title;
   final String? author;
   final int? priceFcfa;
-  final String? condition;
+  final BookCondition? condition;
   final String? imageUrl;
   final String? description;
   final String? category;

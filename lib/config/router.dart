@@ -16,12 +16,13 @@ import 'package:book_bridge/features/auth/presentation/screens/edit_profile_scre
 import 'package:book_bridge/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:book_bridge/features/favorites/presentation/screens/favorites_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/privacy_policy_screen.dart';
-import 'package:book_bridge/features/listings/presentation/screens/terms_conditions_screen.dart';
+import 'package:book_bridge/features/auth/presentation/screens/terms_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/faq_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/feedback_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/contact_us_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/about_screen.dart';
 import 'package:book_bridge/features/listings/presentation/screens/seller_profile_screen.dart';
+import 'package:book_bridge/features/safety/presentation/screens/safety_guidelines_screen.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
 import 'package:book_bridge/features/chat/presentation/screens/chat_list_screen.dart';
 import 'package:book_bridge/features/chat/presentation/screens/chat_screen.dart';
@@ -30,11 +31,14 @@ import 'package:book_bridge/features/transactions/presentation/screens/transacti
 import 'package:book_bridge/features/transactions/presentation/viewmodels/transaction_history_viewmodel.dart';
 import 'package:book_bridge/injection_container.dart' as di;
 
+final routerKey = GlobalKey<NavigatorState>();
+
 /// App router configuration using go_router.
 ///
 /// This configures all routes in the application and handles navigation
 /// logic based on authentication state.
 final appRouter = GoRouter(
+  navigatorKey: routerKey,
   initialLocation: '/',
   redirect: (context, state) {
     final authViewModel = context.read<AuthViewModel>();
@@ -252,7 +256,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/terms',
       name: 'terms',
-      builder: (context, state) => const TermsConditionsScreen(),
+      builder: (context, state) => const TermsScreen(),
     ),
     // FAQ Route
     GoRoute(
@@ -292,6 +296,12 @@ final appRouter = GoRouter(
         final userId = state.pathParameters['userId']!;
         return SellerProfileScreen(userId: userId);
       },
+    ),
+    // Safety Guidelines Route
+    GoRoute(
+      path: '/safety',
+      name: 'safety',
+      builder: (context, state) => const SafetyGuidelinesScreen(),
     ),
   ],
 );

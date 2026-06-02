@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/sell_viewmodel.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/features/listings/domain/entities/book_condition.dart';
 import 'package:book_bridge/core/constants/categories.dart';
 
 /// Screen for creating and selling a new book listing.
@@ -430,37 +431,37 @@ class _SellScreenState extends State<SellScreen> {
                       border: Border.all(color: Theme.of(context).dividerColor),
                     ),
                     child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
+                      child: DropdownButton<BookCondition>(
                         value: viewModel.condition,
                         isExpanded: true,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         items: [
                           DropdownMenuItem(
-                            value: 'new',
+                            value: BookCondition.brandNew,
                             child: Text(
                               AppLocalizations.of(context)!.conditionNew,
                             ),
                           ),
                           DropdownMenuItem(
-                            value: 'like_new',
+                            value: BookCondition.likeNew,
                             child: Text(
                               AppLocalizations.of(context)!.conditionLikeNew,
                             ),
                           ),
                           DropdownMenuItem(
-                            value: 'good',
+                            value: BookCondition.good,
                             child: Text(
                               AppLocalizations.of(context)!.conditionGood,
                             ),
                           ),
                           DropdownMenuItem(
-                            value: 'fair',
+                            value: BookCondition.fair,
                             child: Text(
                               AppLocalizations.of(context)!.conditionFair,
                             ),
                           ),
                           DropdownMenuItem(
-                            value: 'poor',
+                            value: BookCondition.poor,
                             child: Text(
                               AppLocalizations.of(context)!.conditionPoor,
                             ),
@@ -600,7 +601,9 @@ class _SellScreenState extends State<SellScreen> {
                     ),
                     value: viewModel.isBuyBackEligible,
                     onChanged: viewModel.setIsBuyBackEligible,
-                    activeTrackColor: AppTheme.scholarBlue.withValues(alpha: 0.5),
+                    activeTrackColor: AppTheme.scholarBlue.withValues(
+                      alpha: 0.5,
+                    ),
                     activeThumbColor: AppTheme.scholarBlue,
                   ),
                   const SizedBox(height: 16),
@@ -736,7 +739,9 @@ class _SellScreenState extends State<SellScreen> {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Theme.of(context).textTheme.bodyLarge?.color?.withValues(alpha: 0.7),
+            color: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.color?.withValues(alpha: 0.7),
           ),
         ),
       ],

@@ -35,3 +35,13 @@ class NotAuthenticatedFailure extends Failure {
 class NotFoundFailure extends Failure {
   const NotFoundFailure({required super.message});
 }
+
+/// Failure when the device is offline but valid cached data was served.
+///
+/// Returned by [ListingRepositoryImpl] when network access fails yet the
+/// local SQLite cache still contains valid (within TTL) listings.
+/// This is a soft failure — the caller received data and should show
+/// the [OfflineBanner] rather than a full error state.
+class OfflineCacheFailure extends Failure {
+  const OfflineCacheFailure({required super.message});
+}

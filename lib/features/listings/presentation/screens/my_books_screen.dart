@@ -303,4 +303,3 @@ class _MyBooksScreenState extends State<MyBooksScreen> {
     );
   }
 }
-

@@ -118,7 +118,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   ),
                 ),
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                fillColor: Theme.of(
+                  context,
+                ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
               ),
             ),
             const SizedBox(height: 32),
@@ -154,7 +156,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             Text(
               AppLocalizations.of(context)!.feedbackAggrement,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: Theme.of(context).textTheme.bodySmall?.color),
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).textTheme.bodySmall?.color,
+              ),
             ),
           ],
         ),

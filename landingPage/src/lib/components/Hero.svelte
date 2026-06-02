@@ -250,10 +250,10 @@
 
   .app-screen {
     background-color: var(--scholar-blue);
-    padding-top: 4px;
     width: 100%;
-    height: 102%;
-    object-fit: fill;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   .float-card {

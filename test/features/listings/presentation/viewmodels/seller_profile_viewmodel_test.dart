@@ -2,6 +2,7 @@ import 'package:book_bridge/core/error/failures.dart';
 import 'package:book_bridge/features/auth/domain/entities/user.dart';
 import 'package:book_bridge/features/auth/domain/repositories/auth_repository.dart';
 import 'package:book_bridge/features/listings/domain/entities/listing.dart';
+import 'package:book_bridge/features/listings/domain/entities/book_condition.dart';
 import 'package:book_bridge/features/listings/domain/repositories/listing_repository.dart';
 import 'package:book_bridge/features/listings/presentation/viewmodels/seller_profile_viewmodel.dart';
 import 'package:book_bridge/features/reviews/domain/repositories/review_repository.dart';
@@ -48,7 +49,7 @@ void main() {
       author: 'Author 1',
       description: 'Desc 1',
       priceFcfa: 1000,
-      condition: 'good',
+      condition: BookCondition.good,
       category: 'Academic',
       status: 'available',
       imageUrl: '',

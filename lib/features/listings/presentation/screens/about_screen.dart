@@ -73,7 +73,10 @@ class AboutScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               AppLocalizations.of(context)!.version('1.1.0'),
-              style: TextStyle(fontSize: 14, color: Theme.of(context).textTheme.bodySmall?.color),
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).textTheme.bodySmall?.color,
+              ),
             ),
             const SizedBox(height: 32),
 
@@ -131,7 +134,10 @@ class AboutScreen extends StatelessWidget {
               AppLocalizations.of(
                 context,
               )!.copyright(DateTime.now().year.toString()),
-              style: TextStyle(fontSize: 12, color: Theme.of(context).textTheme.bodySmall?.color),
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).textTheme.bodySmall?.color,
+              ),
             ),
           ],
         ),
@@ -179,12 +185,19 @@ class AboutScreen extends StatelessWidget {
                   ),
                   Text(
                     subtitle,
-                    style: TextStyle(fontSize: 12, color: Theme.of(context).textTheme.bodySmall?.color),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).textTheme.bodySmall?.color,
+                    ),
                   ),
                 ],
               ),
             ),
-            Icon(Icons.arrow_forward_ios, size: 16, color: Theme.of(context).iconTheme.color),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: Theme.of(context).iconTheme.color,
+            ),
           ],
         ),
       ),

@@ -193,7 +193,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           bottom: 0,
                           right: 0,
                           child: CircleAvatar(
-                            backgroundColor: Theme.of(context).colorScheme.primary,
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
                             radius: 18,
                             child: IconButton(
                               icon: const Icon(

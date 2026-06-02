@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:book_bridge/features/auth/data/datasources/supabase_auth_data_source.dart';
 import 'package:book_bridge/features/auth/data/repositories/auth_repository_impl.dart';
@@ -11,6 +12,8 @@ import 'package:book_bridge/features/auth/domain/usecases/send_password_reset_em
 import 'package:book_bridge/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
 import 'package:book_bridge/features/auth/domain/usecases/update_user_usecase.dart';
 import 'package:book_bridge/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:book_bridge/core/local_db/local_database.dart';
+import 'package:book_bridge/features/listings/data/datasources/local_listings_datasource.dart';
 import 'package:book_bridge/features/listings/data/datasources/supabase_listings_data_source.dart';
 import 'package:book_bridge/features/listings/data/datasources/supabase_storage_data_source.dart';
 import 'package:book_bridge/features/listings/data/repositories/listing_repository_impl.dart';
@@ -65,7 +68,16 @@ import 'package:book_bridge/features/reviews/domain/usecases/create_review_useca
 import 'package:book_bridge/features/reviews/domain/usecases/get_user_reviews_usecase.dart';
 import 'package:book_bridge/features/reviews/domain/usecases/has_reviewed_usecase.dart';
 import 'package:book_bridge/features/reviews/presentation/viewmodels/review_viewmodel.dart';
+import 'package:book_bridge/features/impact/data/datasources/supabase_impact_data_source.dart';
+import 'package:book_bridge/features/impact/data/repositories/impact_repository_impl.dart';
+import 'package:book_bridge/features/impact/domain/repositories/impact_repository.dart';
+import 'package:book_bridge/features/impact/domain/usecases/get_platform_stats_usecase.dart';
 import 'package:book_bridge/config/app_config.dart';
+import 'package:book_bridge/features/safety/data/datasources/safety_remote_datasource.dart';
+import 'package:book_bridge/features/safety/data/repositories/safety_repository_impl.dart';
+import 'package:book_bridge/features/safety/domain/repositories/safety_repository.dart';
+import 'package:book_bridge/features/safety/domain/usecases/get_campus_zones_usecase.dart';
+import 'package:book_bridge/features/safety/presentation/viewmodels/safety_viewmodel.dart';
 
 /// Service locator for dependency injection.
 ///
@@ -152,8 +164,22 @@ Future<void> setupDependencyInjection() async {
     ),
   );
 
+  // Local SQLite Cache setup
+  final localDb = await LocalDatabase.instance.database;
+  final localDataSource = LocalListingsDataSource(database: localDb);
+  await localDataSource.clearExpiredCache(); // Housekeeping on startup
+
+  getIt.registerSingleton<LocalListingsDataSource>(localDataSource);
+
+  // Shared Preferences (used by Impact cache)
+  final sharedPreferences = await SharedPreferences.getInstance();
+  getIt.registerSingleton<SharedPreferences>(sharedPreferences);
+
   getIt.registerSingleton<ListingRepository>(
-    ListingRepositoryImpl(dataSource: getIt<SupabaseListingsDataSource>()),
+    ListingRepositoryImpl(
+      dataSource: getIt<SupabaseListingsDataSource>(),
+      localDataSource: getIt<LocalListingsDataSource>(),
+    ),
   );
 
   // Listings Feature - Domain Layer (Use Cases)
@@ -189,11 +215,29 @@ Future<void> setupDependencyInjection() async {
   final locationViewModel = await LocationViewModel.load();
   getIt.registerSingleton<LocationViewModel>(locationViewModel);
 
+  // Impact Feature
+  getIt.registerLazySingleton<SupabaseImpactDataSource>(
+    () => SupabaseImpactDataSource(supabaseClient: getIt<SupabaseClient>()),
+  );
+
+  getIt.registerLazySingleton<ImpactRepository>(
+    () => ImpactRepositoryImpl(
+      dataSource: getIt<SupabaseImpactDataSource>(),
+      sharedPreferences: getIt<SharedPreferences>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GetPlatformStatsUseCase>(
+    () => GetPlatformStatsUseCase(repository: getIt<ImpactRepository>()),
+  );
+
   // Listings Feature - Presentation Layer (ViewModels)
   getIt.registerSingleton<HomeViewModel>(
     HomeViewModel(
       getListingsUseCase: getIt<GetListingsUseCase>(),
       locationViewModel: getIt<LocationViewModel>(),
+      listingRepository: getIt<ListingRepository>(),
+      getPlatformStatsUseCase: getIt<GetPlatformStatsUseCase>(),
     ),
   );
 
@@ -311,6 +355,7 @@ Future<void> setupDependencyInjection() async {
       getFavoritesUseCase: getIt<GetFavoritesUseCase>(),
       toggleFavoriteUseCase: getIt<ToggleFavoriteUseCase>(),
       isFavoriteUseCase: getIt<IsFavoriteUseCase>(),
+      authRepository: getIt<AuthRepository>(),
     ),
   );
 
@@ -350,6 +395,7 @@ Future<void> setupDependencyInjection() async {
   getIt.registerFactory<TransactionHistoryViewModel>(
     () => TransactionHistoryViewModel(
       useCase: getIt<GetUserTransactionsUseCase>(),
+      repository: getIt<TransactionRepository>(),
     ),
   );
 
@@ -381,5 +427,24 @@ Future<void> setupDependencyInjection() async {
       getTransactionByExternalRefUseCase:
           getIt<GetTransactionByExternalRefUseCase>(),
     ),
+  );
+
+  // Safety Feature
+  getIt.registerLazySingleton<SafetyRemoteDataSource>(
+    () => SafetyRemoteDataSource(supabaseClient: getIt<SupabaseClient>()),
+  );
+
+  getIt.registerLazySingleton<SafetyRepository>(
+    () =>
+        SafetyRepositoryImpl(remoteDataSource: getIt<SafetyRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<GetCampusZonesUseCase>(
+    () => GetCampusZonesUseCase(getIt<SafetyRepository>()),
+  );
+
+  getIt.registerFactory<SafetyViewModel>(
+    () =>
+        SafetyViewModel(getCampusZonesUseCase: getIt<GetCampusZonesUseCase>()),
   );
 }
