@@ -50,4 +50,31 @@ class TransactionRepositoryImpl implements TransactionRepository {
       return Left(ServerFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, Unit>> confirmReceipt(String transactionId) async {
+    try {
+      await dataSource.confirmReceipt(transactionId);
+      return const Right(unit);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> disputeTransaction(
+    String transactionId,
+    String reason,
+  ) async {
+    try {
+      await dataSource.disputeTransaction(transactionId, reason);
+      return const Right(unit);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
 }

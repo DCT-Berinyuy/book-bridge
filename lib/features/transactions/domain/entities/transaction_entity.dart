@@ -9,7 +9,7 @@ class TransactionEntity extends Equatable {
   final String buyerId;
   final String sellerId;
   final int amountFcfa;
-  final String status; // 'pending', 'successful', 'failed'
+  final String status; // 'pending', 'successful', 'failed', 'held', 'disputed'
   final String externalRef;
   final DateTime createdAt;
 

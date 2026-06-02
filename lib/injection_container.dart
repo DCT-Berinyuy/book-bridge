@@ -395,6 +395,7 @@ Future<void> setupDependencyInjection() async {
   getIt.registerFactory<TransactionHistoryViewModel>(
     () => TransactionHistoryViewModel(
       useCase: getIt<GetUserTransactionsUseCase>(),
+      repository: getIt<TransactionRepository>(),
     ),
   );
 
