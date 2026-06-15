@@ -185,3 +185,9 @@ dist-ssr/
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Agentic / CLI tools
+.agents/
+.antigravitycli/
+.codewhale/
+skills-lock.json

@@ -132,7 +132,7 @@ export async function POST({ request }) {
  */
 async function handleBoostSuccess(listingId, reference, amount, duration) {
 	const expiresAt = new Date();
-	expiresAt.setDate(expiresAt.getDate() + parseInt(duration));
+	expiresAt.setDate(expiresAt.getDate() + parseInt(String(duration)));
 
 	console.log(`Processing boost for listing ${listingId}`);
 
@@ -174,8 +174,8 @@ async function handleBoostSuccess(listingId, reference, amount, duration) {
 			payment_reference: reference,
 			listing_id: listingId,
 			user_id: userId,
-			amount: parseInt(amount),
-			duration_days: parseInt(duration),
+			amount: parseInt(String(amount)),
+			duration_days: parseInt(String(duration)),
 			status: 'successful',
 			created_at: new Date().toISOString()
 		}, { onConflict: 'payment_reference' });
@@ -204,7 +204,7 @@ async function handleDonationSuccess(userId, reference, amount) {
 		.upsert({
 			payment_reference: reference,
 			user_id: userId === 'anonymous' ? null : userId,
-			amount: parseInt(amount),
+			amount: parseInt(String(amount)),
 			status: 'successful',
 			created_at: new Date().toISOString()
 		}, { onConflict: 'payment_reference' });
@@ -263,7 +263,7 @@ async function handlePurchaseSuccess(listingId, buyerId, reference, amount) {
 
 	// 4. Calculate Payout (95% to seller, 5% commission)
 	// We parse amount to integer, and calculate 95%. Round down to be safe.
-	const totalAmount = parseInt(amount);
+	const totalAmount = parseInt(String(amount));
 	const payoutAmount = Math.floor(totalAmount * 0.95);
 	const commissionAmount = totalAmount - payoutAmount;
 
@@ -436,7 +436,7 @@ async function handlePurchasePending(listingId, buyerId, reference, amount) {
 	const sellerId = listing.seller_id;
 
 	// 2. Calculate Payout / Commission (95% to seller, 5% commission)
-	const totalAmount = parseInt(amount);
+	const totalAmount = parseInt(String(amount));
 	const payoutAmount = Math.floor(totalAmount * 0.95);
 	const commissionAmount = totalAmount - payoutAmount;
 

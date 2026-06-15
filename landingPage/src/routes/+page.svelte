@@ -3,6 +3,7 @@
   import TrustBar from "$lib/components/TrustBar.svelte";
   import HowItWorks from "$lib/components/HowItWorks.svelte";
   import Features from "$lib/components/Features.svelte";
+  import Founder from "$lib/components/Founder.svelte";
   import AppShowcase from "$lib/components/AppShowcase.svelte";
 </script>
 
@@ -11,6 +12,7 @@
   <TrustBar />
   <HowItWorks />
   <Features />
+  <Founder />
   <AppShowcase />
 </div>
 
