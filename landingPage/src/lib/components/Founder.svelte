@@ -30,7 +30,7 @@
 
       <div class="founder-info">
         <div class="founder-header">
-          <h3>VERLA BERINYUY</h3>
+          <h3>VERLA BERINYUY NDEY</h3>
           <span class="title">Founder & Lead Developer</span>
         </div>
 
@@ -42,10 +42,13 @@
 
         <div class="founder-bio">
           <p>
-            My name is <strong>Verla Berinyuy</strong> — I go by <strong>Mr. DCT</strong>, which stands for <em>Deep Code Thinking</em>. I'm a cybersecurity and software engineering student at ICT University, a self-taught full-stack developer, and the founder of BookBridge.
+            My name is <strong>Verla Berinyuy Ndey</strong> — I go by <strong>Mr. DCT</strong> (which stands for <em>Deep Code Thinking</em>). I'm a cybersecurity and software engineering student at ICT University, a self-taught full-stack developer, and the founder of BookBridge.
           </p>
           <p>
-            I designed BookBridge to address a critical friction point on university campuses: the exorbitant price and poor accessibility of academic textbooks. By building a safe, campus-centric marketplace powered by secure escrow payments, BookBridge aims to alleviate learning poverty, save students money, and support a community-driven circular economy.
+            This mission is deeply personal. After passing my O-Level and A-Level GCE Exams in high school, I found myself with stacks of unused textbooks and pamphlets, but no way to find the students who needed them. Every year, over 2 million students in Cameroon need textbooks they cannot afford — while other students have those exact books sitting unused on their shelves. The solution exists, but what was missing was <strong>trust</strong>.
+          </p>
+          <p>
+            I built BookBridge specifically for Cameroonian students to solve this. Equipped with secure mobile money escrow payments, verified seller ratings, and real-time social impact tracking, BookBridge is live at version 1.5.0 on GitHub, with over 50+ real students already actively using the platform.
           </p>
         </div>
 
