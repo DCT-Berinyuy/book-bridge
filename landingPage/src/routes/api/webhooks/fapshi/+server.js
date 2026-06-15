@@ -91,6 +91,27 @@ export async function POST({ request }) {
 			} else {
 				console.warn(`[${timestamp}] Unknown externalId format: ${external_reference}`);
 			}
+		} else if (status === 'CREATED' || status === 'PENDING' || status === 'pending_payment') {
+			if (external_reference && (external_reference.startsWith('purchase:') || external_reference.startsWith('purchase_'))) {
+				const separator = external_reference.includes(':') ? ':' : '_';
+				const parts = external_reference.split(separator);
+				const listingId = parts[1];
+				const buyerId = parts[2];
+				
+				console.log(`[${timestamp}] Processing pending purchase: Listing=${listingId}, Buyer=${buyerId}`);
+				await handlePurchasePending(listingId, buyerId, reference, amount);
+			}
+		} else if (status === 'FAILED' || status === 'EXPIRED') {
+			if (external_reference && (external_reference.startsWith('purchase:') || external_reference.startsWith('purchase_'))) {
+				console.log(`[${timestamp}] Processing failed purchase: Ref=${reference}`);
+				const supabase = getSupabase();
+				if (supabase) {
+					await supabase
+						.from('transactions')
+						.update({ status: 'failed' })
+						.eq('payment_reference', reference);
+				}
+			}
 		} else {
 			console.log(`[${timestamp}] Payment ${status} for ref ${reference}`);
 		}
@@ -386,4 +407,59 @@ async function handlePurchaseSuccess(listingId, buyerId, reference, amount) {
 	}
 	
 	console.log(`Successfully processed purchase of listing ${listingId} by user ${buyerId}`);
+}
+
+/**
+ * @param {string} listingId
+ * @param {string} buyerId
+ * @param {string} reference
+ * @param {string|number} amount
+ */
+async function handlePurchasePending(listingId, buyerId, reference, amount) {
+	console.log(`Processing pending purchase for listing ${listingId} by buyer ${buyerId}`);
+	
+	const supabase = getSupabase();
+	if (!supabase) throw new Error('Supabase client not initialized');
+
+	// 1. Get the seller_id from the listing
+	const { data: listing, error: fetchError } = await supabase
+		.from('listings')
+		.select('seller_id')
+		.eq('id', listingId)
+		.single();
+
+	if (fetchError || !listing) {
+		console.error('Error fetching listing for pending purchase:', fetchError);
+		throw new Error('Listing not found');
+	}
+
+	const sellerId = listing.seller_id;
+
+	// 2. Calculate Payout / Commission (95% to seller, 5% commission)
+	const totalAmount = parseInt(amount);
+	const payoutAmount = Math.floor(totalAmount * 0.95);
+	const commissionAmount = totalAmount - payoutAmount;
+
+	// 3. Upsert transaction with status = 'pending_payment'
+	const { error: paymentError } = await supabase
+		.from('transactions')
+		.upsert({
+			payment_reference: reference,
+			listing_id: listingId,
+			buyer_id: buyerId,
+			seller_id: sellerId,
+			amount: totalAmount,
+			status: 'pending_payment',
+			payout_status: 'pending',
+			payout_reference: null,
+			commission_amount: commissionAmount,
+			created_at: new Date().toISOString()
+		}, { onConflict: 'payment_reference' });
+
+	if (paymentError) {
+		console.error('Error recording pending purchase transaction:', paymentError);
+		throw paymentError;
+	}
+	
+	console.log(`Successfully recorded pending purchase of listing ${listingId} by user ${buyerId}`);
 }

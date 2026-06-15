@@ -2,8 +2,6 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const fapshiPayoutUser = Deno.env.get("FAPSHI_PAYOUT_API_USER")!;
-const fapshiPayoutKey = Deno.env.get("FAPSHI_PAYOUT_API_KEY")!;
 const FAPSHI_PAYOUT_URL = "https://live.fapshi.com/payout";
 
 // ---------------------------------------------------------------------------
@@ -48,11 +46,44 @@ async function executeFapshiPayout(params: {
   sellerName: string;
   externalId: string;
   listingId: string;
+  transactionId: string;
 }): Promise<{ ok: boolean; transId?: string; error?: string }> {
   let cleanedPhone = params.phone.replace(/\D/g, "");
   if (cleanedPhone.startsWith("237")) cleanedPhone = cleanedPhone.slice(3);
 
+  const requestPayload = {
+    amount: params.amount,
+    phone: cleanedPhone,
+    name: params.sellerName,
+    externalId: params.externalId,
+    message: `BookBridge escrow payout for listing ${params.listingId}`,
+  };
+
   let res: Response;
+  let responsePayload: any = null;
+  let statusCode = 0;
+
+  const supabase = adminClient();
+
+  // Retrieve Fapshi payout credentials from database secrets
+  const { data: userRow } = await supabase
+    .from("app_secrets")
+    .select("value")
+    .eq("key", "fapshi_payout_api_user")
+    .single();
+  const { data: keyRow } = await supabase
+    .from("app_secrets")
+    .select("value")
+    .eq("key", "fapshi_payout_api_key")
+    .single();
+
+  const fapshiPayoutUser = userRow?.value;
+  const fapshiPayoutKey = keyRow?.value;
+
+  if (!fapshiPayoutUser || !fapshiPayoutKey) {
+    return { ok: false, error: "Fapshi payout credentials not configured in app_secrets" };
+  }
+
   try {
     res = await fetch(FAPSHI_PAYOUT_URL, {
       method: "POST",
@@ -61,26 +92,35 @@ async function executeFapshiPayout(params: {
         apiuser: fapshiPayoutUser,
         apikey: fapshiPayoutKey,
       },
-      body: JSON.stringify({
-        amount: params.amount,
-        phone: cleanedPhone,
-        name: params.sellerName,
-        externalId: params.externalId,
-        message: `BookBridge escrow payout for listing ${params.listingId}`,
-      }),
+      body: JSON.stringify(requestPayload),
     });
+    statusCode = res.status;
+    responsePayload = await res.json().catch(() => ({}));
   } catch (err) {
+    await supabase.from("fapshi_audit_logs").insert({
+      transaction_id: params.transactionId,
+      endpoint: FAPSHI_PAYOUT_URL,
+      request_payload: requestPayload,
+      response_payload: { error: String(err) },
+      status_code: 500,
+    });
     return { ok: false, error: `Network error: ${String(err)}` };
   }
 
-  const data = await res.json().catch(() => ({}));
+  await supabase.from("fapshi_audit_logs").insert({
+    transaction_id: params.transactionId,
+    endpoint: FAPSHI_PAYOUT_URL,
+    request_payload: requestPayload,
+    response_payload: responsePayload,
+    status_code: statusCode,
+  });
 
-  if (res.ok && data?.statusCode === 200) {
-    return { ok: true, transId: data.transId };
+  if (res.ok && responsePayload?.statusCode === 200) {
+    return { ok: true, transId: responsePayload.transId };
   }
   return {
     ok: false,
-    error: `Fapshi error ${res.status}: ${JSON.stringify(data)}`,
+    error: `Fapshi error ${res.status}: ${JSON.stringify(responsePayload)}`,
   };
 }
 
@@ -127,6 +167,7 @@ async function releaseEscrow(
     sellerName: profile.full_name ?? "BookBridge Seller",
     externalId,
     listingId: tx.listing_id,
+    transactionId: tx.id,
   });
 
   if (!payout.ok) {
