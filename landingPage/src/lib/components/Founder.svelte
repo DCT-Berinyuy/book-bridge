@@ -31,21 +31,21 @@
       <div class="founder-info">
         <div class="founder-header">
           <h3>VERLA BERINYUY</h3>
-          <span class="title">Founder & Lead Software Engineer</span>
+          <span class="title">Founder & Lead Developer</span>
         </div>
 
         <div class="founder-quote">
           <blockquote>
-            "Education should never be limited by the high cost of textbooks. BookBridge is built to bridge this gap for students, enabling resource circularity and mutual support."
+            "Bridging the Textbook Gap. One Student at a Time."
           </blockquote>
         </div>
 
         <div class="founder-bio">
           <p>
-            VERLA BERINYUY, widely recognized by his developer handle <strong>Mr.DCT</strong> (Deep Code Thinking), is a passionate software developer and social innovator based in Cameroon. He designed BookBridge to address a critical friction point on university campuses: the exorbitant price and poor accessibility of reference textbooks.
+            My name is <strong>Verla Berinyuy</strong> — I go by <strong>Mr. DCT</strong>, which stands for <em>Deep Code Thinking</em>. I'm a cybersecurity and software engineering student at ICT University, a self-taught full-stack developer, and the founder of BookBridge.
           </p>
           <p>
-            By designing a safe, campus-centric marketplace powered by secure escrow transactions, he aims to alleviate learning poverty, save students money, and support environmental sustainability through recycling educational resources.
+            I designed BookBridge to address a critical friction point on university campuses: the exorbitant price and poor accessibility of academic textbooks. By building a safe, campus-centric marketplace powered by secure escrow payments, BookBridge aims to alleviate learning poverty, save students money, and support a community-driven circular economy.
           </p>
         </div>
 
