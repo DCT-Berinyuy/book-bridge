@@ -139,6 +139,7 @@ impl FapshiClient {
     }
 
     /// Performs payout via Fapshi and logs to fapshi_audit_logs.
+    #[allow(clippy::too_many_arguments)]
     pub async fn execute_payout(
         &self,
         pool: &PgPool,
