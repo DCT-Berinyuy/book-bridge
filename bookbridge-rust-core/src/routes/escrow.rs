@@ -323,7 +323,7 @@ pub async fn poll_pending_handler(
                     let mut transaction = state.pool.begin().await?;
 
                     if let Err(e) = handle_purchase_success_db(
-                        &mut *transaction,
+                        &mut transaction,
                         listing_id,
                         buyer_id,
                         seller_id,

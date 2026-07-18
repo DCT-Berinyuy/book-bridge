@@ -251,7 +251,7 @@ async fn handle_purchase_success(
     let mut transaction = state.pool.begin().await?;
     
     if let Err(e) = handle_purchase_success_db(
-        &mut *transaction,
+        &mut transaction,
         listing_id,
         buyer_id,
         seller_id,
@@ -360,18 +360,18 @@ pub async fn fapshi_webhook_handler(
         } else {
             tracing::warn!("Unknown externalReference: {}", external_reference);
         }
-    } else if status_upper == "CREATED" || status_upper == "PENDING" || status_upper == "PENDING_PAYMENT" {
-        if external_reference.starts_with("purchase:") || external_reference.starts_with("purchase_") {
-            handle_purchase_pending(&state.pool, &reference, amount, &external_reference).await?;
-        }
-    } else if status_upper == "FAILED" || status_upper == "EXPIRED" {
-        if external_reference.starts_with("purchase:") || external_reference.starts_with("purchase_") {
-            tracing::info!("Marking transaction failed: Ref={}", reference);
-            sqlx::query("UPDATE transactions SET status = 'failed' WHERE payment_reference = $1")
-                .bind(&reference)
-                .execute(&state.pool)
-                .await?;
-        }
+    } else if (status_upper == "CREATED" || status_upper == "PENDING" || status_upper == "PENDING_PAYMENT")
+        && (external_reference.starts_with("purchase:") || external_reference.starts_with("purchase_"))
+    {
+        handle_purchase_pending(&state.pool, &reference, amount, &external_reference).await?;
+    } else if (status_upper == "FAILED" || status_upper == "EXPIRED")
+        && (external_reference.starts_with("purchase:") || external_reference.starts_with("purchase_"))
+    {
+        tracing::info!("Marking transaction failed: Ref={}", reference);
+        sqlx::query("UPDATE transactions SET status = 'failed' WHERE payment_reference = $1")
+            .bind(&reference)
+            .execute(&state.pool)
+            .await?;
     }
 
     Ok((axum::http::StatusCode::OK, Json(serde_json::json!({ "success": true }))))
