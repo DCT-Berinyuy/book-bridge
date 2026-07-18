@@ -144,8 +144,8 @@ impl FapshiClient {
             }
         };
 
-        // Write to fapshi_audit_logs
-        sqlx::query(
+        // Write to fapshi_audit_logs (gracefully catch errors to prevent double-payouts on db connection drops)
+        if let Err(e) = sqlx::query(
             "INSERT INTO fapshi_audit_logs (transaction_id, endpoint, request_payload, response_payload, status_code) VALUES ($1, $2, $3, $4, $5)"
         )
         .bind(tx_id)
@@ -154,7 +154,9 @@ impl FapshiClient {
         .bind(resp_val)
         .bind(status_code as i32)
         .execute(pool)
-        .await?;
+        .await {
+            tracing::error!("Failed to write to fapshi_audit_logs during payout: {:?}", e);
+        }
 
         result
     }
@@ -204,8 +206,8 @@ impl FapshiClient {
             }
         };
 
-        // Write to fapshi_audit_logs for audit trail
-        sqlx::query(
+        // Write to fapshi_audit_logs for audit trail (gracefully log errors)
+        if let Err(e) = sqlx::query(
             "INSERT INTO fapshi_audit_logs (transaction_id, endpoint, request_payload, response_payload, status_code) VALUES ($1, $2, $3, $4, $5)"
         )
         .bind(tx_id)
@@ -214,7 +216,9 @@ impl FapshiClient {
         .bind(resp_val)
         .bind(status_code as i32)
         .execute(pool)
-        .await?;
+        .await {
+            tracing::error!("Failed to write to fapshi_audit_logs during polling: {:?}", e);
+        }
 
         result
     }

@@ -70,17 +70,30 @@ pub async fn release_escrow(
 
     let fapshi = FapshiClient::new(state.fapshi_base_url.clone());
 
-    // 2. Fetch transaction (double-bind bug fixed by binding tx_id only once!)
+    // 2. Fetch transaction and escrow status to ensure both are in 'held' status
     let tx_row = sqlx::query(
-        "SELECT listing_id, seller_id, amount, commission_amount, payment_reference \
-         FROM transactions WHERE id = $1"
+        "SELECT t.listing_id, t.seller_id, t.amount, t.commission_amount, t.payment_reference, \
+         t.status as tx_status, e.status as escrow_status \
+         FROM transactions t \
+         JOIN escrow_transactions e ON t.id = e.transaction_id \
+         WHERE t.id = $1"
     )
     .bind(tx_id)
     .fetch_optional(&state.pool)
     .await?;
 
     let tx = match tx_row {
-        Some(row) => row,
+        Some(row) => {
+            let tx_status: String = row.get("tx_status");
+            let escrow_status: String = row.get("escrow_status");
+            if tx_status != "held" || escrow_status != "held" {
+                return Err(AppError::BadRequest(format!(
+                    "Transaction or Escrow {} is not in 'held' status (tx: {}, escrow: {})",
+                    tx_id, tx_status, escrow_status
+                )));
+            }
+            row
+        }
         None => return Err(AppError::BadRequest(format!("Transaction {} not found", tx_id))),
     };
 

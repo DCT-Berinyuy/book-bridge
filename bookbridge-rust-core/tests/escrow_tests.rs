@@ -35,7 +35,7 @@ async fn test_release_escrow_db_integration() -> Result<(), Box<dyn std::error::
         }
     };
 
-    // Run within a transaction and rollback at the end
+    // Run setup within a transaction
     let mut tx = pool.begin().await?;
 
     let seller_id = Uuid::new_v4();
@@ -81,10 +81,10 @@ async fn test_release_escrow_db_integration() -> Result<(), Box<dyn std::error::
     .execute(&mut *tx)
     .await?;
 
-    // Insert transactions details
+    // Insert transactions details (status must be 'held' to match status check constraint & release rule)
     sqlx::query(
         "INSERT INTO transactions (id, listing_id, buyer_id, seller_id, amount, commission_amount, payment_reference, status) \
-         VALUES ($1, $2, $3, $4, 5000, 250, 'integration_test_ref', 'held')"
+         VALUES ($1, $2, $3, $4, 5000, 250, 'integration_test_ref_99', 'held')"
     )
     .bind(transaction_id)
     .bind(listing_id)
@@ -113,6 +113,9 @@ async fn test_release_escrow_db_integration() -> Result<(), Box<dyn std::error::
     .execute(&mut *tx)
     .await?;
 
+    // Commit the setup transaction so the database pool connections can read it
+    tx.commit().await?;
+
     let state = AppState {
         pool: pool.clone(),
         in_progress_payouts: Arc::new(Mutex::new(HashSet::new())),
@@ -121,6 +124,14 @@ async fn test_release_escrow_db_integration() -> Result<(), Box<dyn std::error::
 
     // Executing the escrow release. In sandbox/offline mode, this will fail at the Fapshi API HTTP network call.
     let result = release_escrow(&state, transaction_id).await;
+
+    // Manual cleanup to leave the database clean
+    let _ = sqlx::query("DELETE FROM app_secrets WHERE key IN ('fapshi_payout_api_user', 'fapshi_payout_api_key')").execute(&pool).await;
+    let _ = sqlx::query("DELETE FROM escrow_transactions WHERE transaction_id = $1").bind(transaction_id).execute(&pool).await;
+    let _ = sqlx::query("DELETE FROM transactions WHERE id = $1").bind(transaction_id).execute(&pool).await;
+    let _ = sqlx::query("DELETE FROM listings WHERE id = $1").bind(listing_id).execute(&pool).await;
+    let _ = sqlx::query("DELETE FROM profiles WHERE id = $1").bind(seller_id).execute(&pool).await;
+    let _ = sqlx::query("DELETE FROM auth.users WHERE id IN ($1, $2)").bind(seller_id).bind(buyer_id).execute(&pool).await;
 
     match result {
         Ok(_) => {
@@ -133,7 +144,6 @@ async fn test_release_escrow_db_integration() -> Result<(), Box<dyn std::error::
         }
     }
 
-    tx.rollback().await?;
     Ok(())
 }
 
@@ -227,10 +237,20 @@ async fn test_poll_pending_db_integration() -> Result<(), Box<dyn std::error::Er
     .execute(&mut *tx)
     .await?;
 
+    // Commit setup transaction so poll_payment_status can read from pool connections
+    tx.commit().await?;
+
     let fapshi = FapshiClient::new("https://sandbox.fapshi.com".to_string());
 
     // Call status checking. Since we use a mock api key and are offline, this will hit connection/Fapshi error.
     let result = fapshi.poll_payment_status(&pool, transaction_id, "poll_test_ref_999").await;
+
+    // Manual cleanup
+    let _ = sqlx::query("DELETE FROM app_secrets WHERE key IN ('fapshi_api_user', 'fapshi_api_key')").execute(&pool).await;
+    let _ = sqlx::query("DELETE FROM transactions WHERE id = $1").bind(transaction_id).execute(&pool).await;
+    let _ = sqlx::query("DELETE FROM listings WHERE id = $1").bind(listing_id).execute(&pool).await;
+    let _ = sqlx::query("DELETE FROM profiles WHERE id = $1").bind(seller_id).execute(&pool).await;
+    let _ = sqlx::query("DELETE FROM auth.users WHERE id IN ($1, $2)").bind(seller_id).bind(buyer_id).execute(&pool).await;
 
     match result {
         Ok(status) => {
@@ -243,6 +263,5 @@ async fn test_poll_pending_db_integration() -> Result<(), Box<dyn std::error::Er
         }
     }
 
-    tx.rollback().await?;
     Ok(())
 }
