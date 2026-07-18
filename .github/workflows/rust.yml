@@ -1,0 +1,44 @@
+name: Rust CI
+
+on:
+  push:
+    branches: [ dev, main ]
+    paths:
+      - 'bookbridge-rust-core/**'
+      - '.github/workflows/rust.yml'
+  pull_request:
+    branches: [ dev, main ]
+    paths:
+      - 'bookbridge-rust-core/**'
+      - '.github/workflows/rust.yml'
+
+jobs:
+  test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        components: clippy, rustfmt
+
+    - name: Rust Cache
+      uses: Swatinem/rust-cache@v2
+      with:
+        workspaces: bookbridge-rust-core
+
+    - name: Cargo Build
+      run: cargo build --verbose
+      working-directory: bookbridge-rust-core
+
+    - name: Cargo Test
+      run: cargo test --verbose
+      working-directory: bookbridge-rust-core
+
+    - name: Cargo Clippy
+      run: cargo clippy -- -D warnings
+      working-directory: bookbridge-rust-core
