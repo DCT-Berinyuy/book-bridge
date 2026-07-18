@@ -36,6 +36,15 @@ pub struct PollResponse {
     pub message: Option<String>,
 }
 
+#[derive(Deserialize, Serialize, Debug)]
+pub struct FapshiSearchItem {
+    #[serde(rename = "transId")]
+    pub trans_id: String,
+    pub status: String,
+    #[serde(rename = "externalId")]
+    pub external_id: Option<String>,
+}
+
 impl FapshiClient {
     pub fn new(base_url: String) -> Self {
         Self {
@@ -77,6 +86,54 @@ impl FapshiClient {
             format!("https://api.fapshi.com/payment-status/{}", reference)
         } else {
             format!("{}/payment-status/{}", self.base_url, reference)
+        }
+    }
+
+    /// Checks if a payout has already been processed successfully on Fapshi by searching by externalId.
+    pub async fn check_existing_payout(
+        &self,
+        pool: &PgPool,
+        external_id: &str,
+    ) -> Result<Option<String>, AppError> {
+        let api_user = Self::get_secret(pool, "fapshi_payout_api_user").await?;
+        let api_key = Self::get_secret(pool, "fapshi_payout_api_key").await?;
+
+        let endpoint = if self.base_url.contains("live.fapshi.com") || self.base_url.contains("api.fapshi.com") {
+            "https://live.fapshi.com/search".to_string()
+        } else {
+            format!("{}/search", self.base_url)
+        };
+
+        let response = self.http.get(&endpoint)
+            .header("apiuser", &api_user)
+            .header("apikey", &api_key)
+            .query(&[("externalId", external_id)])
+            .send()
+            .await;
+
+        match response {
+            Ok(res) => {
+                if res.status().as_u16() == 200 {
+                    let items_res: Result<Vec<FapshiSearchItem>, _> = res.json().await;
+                    if let Ok(items) = items_res {
+                        for item in items {
+                            if let Some(ref ext_id) = item.external_id {
+                                if ext_id == external_id {
+                                    let status_upper = item.status.to_uppercase();
+                                    if status_upper == "SUCCESSFUL" || status_upper == "SUCCESS" {
+                                        return Ok(Some(item.trans_id));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                Ok(None)
+            }
+            Err(_) => {
+                // If Fapshi search fails/timeouts, return None to fallback to payout (gatekeeper handles duplicates)
+                Ok(None)
+            }
         }
     }
 

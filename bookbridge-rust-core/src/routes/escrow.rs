@@ -128,17 +128,31 @@ pub async fn release_escrow(
     let external_id = format!("escrow_payout_{}", payment_reference);
     let seller_name_str = full_name.unwrap_or_else(|| "BookBridge Seller".to_string());
 
-    // 4. Execute payout
-    let trans_id = fapshi.execute_payout(
-        &state.pool,
-        tx_id,
-        payout_amount,
-        &phone,
-        &seller_name_str,
-        &external_id,
-        listing_id,
-    )
-    .await?;
+    // Check if payout was already executed successfully on Fapshi in a previous run
+    let mut trans_id = match fapshi.check_existing_payout(&state.pool, &external_id).await {
+        Ok(Some(tid)) => {
+            tracing::info!("Payout for transaction {} already completed on Fapshi (transId: {}). Skipping payout call.", tx_id, tid);
+            Some(tid)
+        }
+        _ => None,
+    };
+
+    // If not already processed, execute payout
+    if trans_id.is_none() {
+        let tid = fapshi.execute_payout(
+            &state.pool,
+            tx_id,
+            payout_amount,
+            &phone,
+            &seller_name_str,
+            &external_id,
+            listing_id,
+        )
+        .await?;
+        trans_id = Some(tid);
+    }
+
+    let trans_id_str = trans_id.unwrap_or_default();
 
     // 5. Update databases only after payout is verified successful
     let now = Utc::now();
@@ -157,7 +171,7 @@ pub async fn release_escrow(
         "UPDATE transactions SET status = 'successful', payout_status = 'successful', payout_reference = $1 \
          WHERE id = $2"
     )
-    .bind(&trans_id)
+    .bind(&trans_id_str)
     .bind(tx_id)
     .execute(&mut *transaction)
     .await?;
