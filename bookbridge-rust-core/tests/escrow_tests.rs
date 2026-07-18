@@ -19,10 +19,15 @@ fn test_clean_phone() {
 #[tokio::test]
 async fn test_release_escrow_db_integration() -> Result<(), Box<dyn std::error::Error>> {
     let _ = dotenvy::dotenv();
+    
+    // Safety check: only run on explicit local development/test databases.
+    // Invert the skip check to guarantee we NEVER run against production databases like Supabase.
     let db_url = match std::env::var("DATABASE_URL") {
-        Ok(url) if !url.contains("localhost") && !url.contains("dummy") => url,
+        Ok(url) if (url.contains("localhost") || url.contains("127.0.0.1") || url.contains("test") || url.contains("dev"))
+                   && !url.contains("pooler.supabase.com") 
+                   && !url.contains("db.jacnsvcwmhoicuuzmrmr") => url,
         _ => {
-            println!("Skipping DB integration test (no database connection set)");
+            println!("Skipping DB integration test (requires a local/test DATABASE_URL, skipping production settings)");
             return Ok(());
         }
     };
@@ -122,7 +127,7 @@ async fn test_release_escrow_db_integration() -> Result<(), Box<dyn std::error::
         fapshi_base_url: "https://sandbox.fapshi.com".to_string(), // Mock sandbox URL for testing
     };
 
-    // Executing the escrow release. In sandbox/offline mode, this will fail at the Fapshi API HTTP network call.
+    // Executing the escrow release.
     let result = release_escrow(&state, transaction_id).await;
 
     // Manual cleanup to leave the database clean
@@ -133,14 +138,24 @@ async fn test_release_escrow_db_integration() -> Result<(), Box<dyn std::error::
     let _ = sqlx::query("DELETE FROM profiles WHERE id = $1").bind(seller_id).execute(&pool).await;
     let _ = sqlx::query("DELETE FROM auth.users WHERE id IN ($1, $2)").bind(seller_id).bind(buyer_id).execute(&pool).await;
 
+    // Verify database status checks compiled and succeeded by ensuring the execution failed
+    // ONLY at the network boundary (Reqwest error attempting to reach sandbox.fapshi.com)
     match result {
         Ok(_) => {
-            println!("Escrow release completed successfully!");
+            panic!("Expected Fapshi payout network call to fail, but it returned Ok");
         }
-        Err(e) => {
+        Err(bookbridge_rust_core::error::AppError::Reqwest(e)) => {
             let err_str = e.to_string();
-            println!("Escrow release execution reached network call. Result error: {}", err_str);
-            assert!(err_str.contains("Gateway error") || err_str.contains("HTTP client error") || err_str.contains("Fapshi"));
+            println!("Success: Database queries verified successfully up to the network boundary: {}", err_str);
+            assert!(
+                err_str.contains("dns") 
+                || err_str.contains("connect") 
+                || err_str.contains("builder") 
+                || err_str.contains("resolve")
+            );
+        }
+        Err(other) => {
+            panic!("Escrow release failed at database query/state checking stage before network: {:?}", other);
         }
     }
 
@@ -150,10 +165,14 @@ async fn test_release_escrow_db_integration() -> Result<(), Box<dyn std::error::
 #[tokio::test]
 async fn test_poll_pending_db_integration() -> Result<(), Box<dyn std::error::Error>> {
     let _ = dotenvy::dotenv();
+    
+    // Safety check: skip running against production database strings
     let db_url = match std::env::var("DATABASE_URL") {
-        Ok(url) if !url.contains("localhost") && !url.contains("dummy") => url,
+        Ok(url) if (url.contains("localhost") || url.contains("127.0.0.1") || url.contains("test") || url.contains("dev"))
+                   && !url.contains("pooler.supabase.com") 
+                   && !url.contains("db.jacnsvcwmhoicuuzmrmr") => url,
         _ => {
-            println!("Skipping DB poll pending integration test (no database connection set)");
+            println!("Skipping DB poll pending integration test (requires a local/test DATABASE_URL)");
             return Ok(());
         }
     };
@@ -256,10 +275,18 @@ async fn test_poll_pending_db_integration() -> Result<(), Box<dyn std::error::Er
         Ok(status) => {
             println!("Status query completed with state: {}", status);
         }
-        Err(e) => {
+        Err(bookbridge_rust_core::error::AppError::Reqwest(e)) => {
             let err_str = e.to_string();
-            println!("Status query reached network call. Result error: {}", err_str);
-            assert!(err_str.contains("Gateway error") || err_str.contains("HTTP client error") || err_str.contains("Fapshi"));
+            println!("Success: Polling DB setup verified up to the network boundary: {}", err_str);
+            assert!(
+                err_str.contains("dns") 
+                || err_str.contains("connect") 
+                || err_str.contains("builder") 
+                || err_str.contains("resolve")
+            );
+        }
+        Err(other) => {
+            panic!("Polling status check failed during database querying/state validation: {:?}", other);
         }
     }
 

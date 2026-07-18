@@ -36,6 +36,15 @@ pub struct PollResponse {
     pub message: Option<String>,
 }
 
+#[derive(Deserialize, Serialize, Debug)]
+pub struct FapshiSearchItem {
+    #[serde(rename = "transId")]
+    pub trans_id: String,
+    pub status: String,
+    #[serde(rename = "externalId")]
+    pub external_id: Option<String>,
+}
+
 impl FapshiClient {
     pub fn new(base_url: String) -> Self {
         Self {
@@ -77,6 +86,55 @@ impl FapshiClient {
             format!("https://api.fapshi.com/payment-status/{}", reference)
         } else {
             format!("{}/payment-status/{}", self.base_url, reference)
+        }
+    }
+
+    /// Checks if a payout has already been processed successfully on Fapshi by searching by externalId.
+    pub async fn check_existing_payout(
+        &self,
+        pool: &PgPool,
+        external_id: &str,
+    ) -> Result<Option<String>, AppError> {
+        let api_user = Self::get_secret(pool, "fapshi_payout_api_user").await?;
+        let api_key = Self::get_secret(pool, "fapshi_payout_api_key").await?;
+
+        let endpoint = if self.base_url.contains("live.fapshi.com") || self.base_url.contains("api.fapshi.com") {
+            "https://live.fapshi.com/search".to_string()
+        } else {
+            format!("{}/search", self.base_url)
+        };
+
+        let response = self.http.get(&endpoint)
+            .header("apiuser", &api_user)
+            .header("apikey", &api_key)
+            .query(&[("externalId", external_id)])
+            .send()
+            .await;
+
+        match response {
+            Ok(res) => {
+                let status = res.status().as_u16();
+                if status == 200 {
+                    let items: Vec<FapshiSearchItem> = res.json().await?;
+                    for item in items {
+                        if let Some(ref ext_id) = item.external_id {
+                            if ext_id == external_id {
+                                let status_upper = item.status.to_uppercase();
+                                if status_upper == "SUCCESSFUL" || status_upper == "SUCCESS" {
+                                    return Ok(Some(item.trans_id));
+                                }
+                            }
+                        }
+                    }
+                    Ok(None)
+                } else {
+                    let body_text = res.text().await.unwrap_or_else(|_| "No body".to_string());
+                    Err(AppError::Fapshi(format!("Fapshi search returned status {}: {}", status, body_text)))
+                }
+            }
+            Err(e) => {
+                Err(AppError::Reqwest(e))
+            }
         }
     }
 
