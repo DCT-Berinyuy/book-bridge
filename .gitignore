@@ -51,6 +51,8 @@ config/secrets.json
 config/secrets.yaml
 config/secrets.yml
 config/secrets.properties
+Secrets*.toml
+
 
 # Supabase
 supabase/
@@ -191,3 +193,8 @@ dist-ssr/
 .antigravitycli/
 .codewhale/
 skills-lock.json
+
+# Rust compilation artifacts
+target/
+**/target/
+bookbridge-rust-core/target/
