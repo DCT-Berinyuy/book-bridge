@@ -4,6 +4,7 @@ use crate::error::AppError;
 use crate::fapshi::FapshiClient;
 use crate::AppState;
 use sqlx::Row;
+use sqlx::PgConnection;
 use uuid::Uuid;
 use chrono::Utc;
 
@@ -34,6 +35,56 @@ pub struct PollResult {
     pub reference: String,
     pub status: String,
     pub error: Option<String>,
+}
+
+/// Shared helper function to process all database side effects for a successful book purchase.
+/// This includes marking the listing as sold, setting the transaction to 'held', upserting the escrow row,
+/// and creating the initial buyer/seller chat message.
+pub async fn handle_purchase_success_db(
+    conn: &mut PgConnection,
+    listing_id: Uuid,
+    buyer_id: Uuid,
+    seller_id: Uuid,
+    tx_id: Uuid,
+    now: chrono::DateTime<chrono::Utc>,
+) -> Result<(), AppError> {
+    // 1. Update listing status to 'sold'
+    sqlx::query("UPDATE listings SET status = 'sold' WHERE id = $1")
+        .bind(listing_id)
+        .execute(&mut *conn)
+        .await?;
+
+    // 2. Update transaction status to 'held'
+    sqlx::query("UPDATE transactions SET status = 'held' WHERE id = $1")
+        .bind(tx_id)
+        .execute(&mut *conn)
+        .await?;
+
+    // 3. Upsert escrow transaction
+    sqlx::query(
+        "INSERT INTO escrow_transactions (transaction_id, status, created_at, updated_at) \
+         VALUES ($1, 'held', $2, $2) \
+         ON CONFLICT (transaction_id) DO UPDATE SET status = 'held', updated_at = $2"
+    )
+    .bind(tx_id)
+    .bind(now)
+    .execute(&mut *conn)
+    .await?;
+
+    // 4. Insert automated buyer/seller chat message
+    sqlx::query(
+        "INSERT INTO messages (listing_id, sender_id, receiver_id, content, is_read, created_at) \
+         VALUES ($1, $2, $3, $4, false, $5)"
+    )
+    .bind(listing_id)
+    .bind(buyer_id)
+    .bind(seller_id)
+    .bind("Hello! I just purchased this book via BookBridge. When can we meet to complete the exchange?")
+    .bind(now)
+    .execute(&mut *conn)
+    .await?;
+
+    Ok(())
 }
 
 pub async fn release_escrow(
@@ -271,41 +322,24 @@ pub async fn poll_pending_handler(
                     let now = Utc::now();
                     let mut transaction = state.pool.begin().await?;
 
-                    // Update listing status
-                    sqlx::query("UPDATE listings SET status = 'sold' WHERE id = $1")
-                        .bind(listing_id)
-                        .execute(&mut *transaction)
-                        .await?;
-
-                    // Update transaction status
-                    sqlx::query("UPDATE transactions SET status = 'held' WHERE id = $1")
-                        .bind(tx_id)
-                        .execute(&mut *transaction)
-                        .await?;
-
-                    // Upsert escrow transaction
-                    sqlx::query(
-                        "INSERT INTO escrow_transactions (transaction_id, status, created_at, updated_at) \
-                         VALUES ($1, 'held', $2, $2) \
-                         ON CONFLICT (transaction_id) DO UPDATE SET status = 'held', updated_at = $2"
-                    )
-                    .bind(tx_id)
-                    .bind(now)
-                    .execute(&mut *transaction)
-                    .await?;
-
-                    // Insert chat message
-                    sqlx::query(
-                        "INSERT INTO messages (listing_id, sender_id, receiver_id, content, is_read, created_at) \
-                         VALUES ($1, $2, $3, $4, false, $5)"
-                    )
-                    .bind(listing_id)
-                    .bind(buyer_id)
-                    .bind(seller_id)
-                    .bind("Hello! I just purchased this book via BookBridge. When can we meet to complete the exchange?")
-                    .bind(now)
-                    .execute(&mut *transaction)
-                    .await?;
+                    if let Err(e) = handle_purchase_success_db(
+                        &mut *transaction,
+                        listing_id,
+                        buyer_id,
+                        seller_id,
+                        tx_id,
+                        now,
+                    ).await {
+                        tracing::error!("Error writing successful purchase updates to DB during poll: {:?}", e);
+                        transaction.rollback().await?;
+                        results.push(PollResult {
+                            id: tx_id,
+                            reference: reference.clone(),
+                            status: "error".to_string(),
+                            error: Some(e.to_string()),
+                        });
+                        continue;
+                    }
 
                     transaction.commit().await?;
 

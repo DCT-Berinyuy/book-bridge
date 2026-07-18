@@ -10,6 +10,7 @@ use tokio::net::TcpListener;
 use bookbridge_rust_core::config::AppConfig;
 use bookbridge_rust_core::routes::health::health_handler;
 use bookbridge_rust_core::routes::escrow::{process_releases_handler, poll_pending_handler};
+use bookbridge_rust_core::routes::webhook::fapshi_webhook_handler;
 use bookbridge_rust_core::auth::require_internal_auth;
 use bookbridge_rust_core::AppState;
 
@@ -49,10 +50,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         ))
         .with_state(state.clone());
 
-    // 5. Main router (health is unauthenticated)
+    // 5. Main router (health and webhooks are public / custom authenticated)
     let app = Router::new()
         .route("/health", get(health_handler))
-        .nest("/internal", internal_routes);
+        .route("/webhooks/fapshi", post(fapshi_webhook_handler))
+        .nest("/internal", internal_routes)
+        .with_state(state);
 
     // 6. Run Axum server using standard TcpListener
     let addr = format!("0.0.0.0:{}", config.port);
