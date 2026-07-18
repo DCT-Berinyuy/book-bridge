@@ -113,26 +113,27 @@ impl FapshiClient {
 
         match response {
             Ok(res) => {
-                if res.status().as_u16() == 200 {
-                    let items_res: Result<Vec<FapshiSearchItem>, _> = res.json().await;
-                    if let Ok(items) = items_res {
-                        for item in items {
-                            if let Some(ref ext_id) = item.external_id {
-                                if ext_id == external_id {
-                                    let status_upper = item.status.to_uppercase();
-                                    if status_upper == "SUCCESSFUL" || status_upper == "SUCCESS" {
-                                        return Ok(Some(item.trans_id));
-                                    }
+                let status = res.status().as_u16();
+                if status == 200 {
+                    let items: Vec<FapshiSearchItem> = res.json().await?;
+                    for item in items {
+                        if let Some(ref ext_id) = item.external_id {
+                            if ext_id == external_id {
+                                let status_upper = item.status.to_uppercase();
+                                if status_upper == "SUCCESSFUL" || status_upper == "SUCCESS" {
+                                    return Ok(Some(item.trans_id));
                                 }
                             }
                         }
                     }
+                    Ok(None)
+                } else {
+                    let body_text = res.text().await.unwrap_or_else(|_| "No body".to_string());
+                    Err(AppError::Fapshi(format!("Fapshi search returned status {}: {}", status, body_text)))
                 }
-                Ok(None)
             }
-            Err(_) => {
-                // If Fapshi search fails/timeouts, return None to fallback to payout (gatekeeper handles duplicates)
-                Ok(None)
+            Err(e) => {
+                Err(AppError::Reqwest(e))
             }
         }
     }

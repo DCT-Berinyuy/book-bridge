@@ -134,7 +134,11 @@ pub async fn release_escrow(
             tracing::info!("Payout for transaction {} already completed on Fapshi (transId: {}). Skipping payout call.", tx_id, tid);
             Some(tid)
         }
-        _ => None,
+        Ok(None) => None, // Safe to proceed with payout
+        Err(e) => {
+            tracing::error!("Could not verify prior payout status for tx {}: {:?}. Aborting to prevent potential double-payout.", tx_id, e);
+            return Err(e); // Fail closed - let the next cron run retry
+        }
     };
 
     // If not already processed, execute payout
