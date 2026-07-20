@@ -39,26 +39,7 @@ async fn verify_webhook_auth(pool: &PgPool, headers: &HeaderMap) -> Result<(), A
         }
     }
 
-    // B. Check apiuser and apikey fallback headers (legacy compatibility)
-    let provided_api_user = headers.get("apiuser").and_then(|h| h.to_str().ok());
-    let provided_api_key = headers.get("apikey").and_then(|h| h.to_str().ok());
 
-    if let (Some(incoming_user), Some(incoming_key)) = (provided_api_user, provided_api_key) {
-        let expected_user_row: Option<(String,)> = sqlx::query_as("SELECT value FROM app_secrets WHERE key = 'fapshi_api_user'")
-            .fetch_optional(pool)
-            .await?;
-        let expected_key_row: Option<(String,)> = sqlx::query_as("SELECT value FROM app_secrets WHERE key = 'fapshi_api_key'")
-            .fetch_optional(pool)
-            .await?;
-
-        if let (Some(exp_user), Some(exp_key)) = (expected_user_row, expected_key_row) {
-            let user_matches = constant_time_compare(incoming_user.as_bytes(), exp_user.0.as_bytes());
-            let key_matches = constant_time_compare(incoming_key.as_bytes(), exp_key.0.as_bytes());
-            if user_matches && key_matches {
-                return Ok(());
-            }
-        }
-    }
 
 
 
