@@ -25,11 +25,7 @@ pub struct FapshiWebhookPayload {
     pub custom: Option<String>,
 }
 
-async fn verify_webhook_auth(
-    pool: &PgPool,
-    headers: &HeaderMap,
-    trans_id: Option<&str>,
-) -> Result<(), AppError> {
+async fn verify_webhook_auth(pool: &PgPool, headers: &HeaderMap) -> Result<(), AppError> {
     // A. Check x-wh-secret header (dashboard verification key)
     if let Some(wh_secret_header) = headers.get("x-wh-secret").and_then(|h| h.to_str().ok()) {
         let secret_row: Option<(String,)> = sqlx::query_as("SELECT value FROM app_secrets WHERE key = 'fapshi_webhook_secret'")
@@ -64,28 +60,7 @@ async fn verify_webhook_auth(
         }
     }
 
-    // C. Database transaction reference check fallback
-    if let Some(tid) = trans_id {
-        if !tid.trim().is_empty() {
-            let exists_tx: Option<(bool,)> = sqlx::query_as(
-                "SELECT EXISTS( \
-                    SELECT 1 FROM transactions WHERE payment_reference = $1 \
-                    UNION ALL \
-                    SELECT 1 FROM boost_payments WHERE payment_reference = $1 \
-                    UNION ALL \
-                    SELECT 1 FROM donations WHERE payment_reference = $1 \
-                 )"
-            )
-            .bind(tid)
-            .fetch_optional(pool)
-            .await?;
 
-            if let Some((true,)) = exists_tx {
-                tracing::info!("Authorized webhook request based on matching database payment_reference: {}", tid);
-                return Ok(());
-            }
-        }
-    }
 
     let mut headers_debug = std::collections::HashMap::new();
     for (k, v) in headers.iter() {
@@ -357,6 +332,8 @@ pub async fn fapshi_webhook_handler(
     headers: HeaderMap,
     Json(body): Json<serde_json::Value>,
 ) -> Result<impl IntoResponse, AppError> {
+    verify_webhook_auth(&state.pool, &headers).await?;
+
     let payload_val = if let Some(arr) = body.as_array() {
         if arr.is_empty() {
             return Err(AppError::BadRequest("Empty payload array".to_string()));
@@ -370,12 +347,6 @@ pub async fn fapshi_webhook_handler(
 
     let payload: FapshiWebhookPayload = serde_json::from_value(payload_val.clone())
         .map_err(|e| AppError::BadRequest(format!("Failed to parse webhook payload: {}", e)))?;
-
-    let reference = payload.trans_id.as_deref()
-        .or(payload.transaction_id.as_deref())
-        .or(payload.id.as_deref());
-
-    verify_webhook_auth(&state.pool, &headers, reference).await?;
 
     let status = payload.status.or(payload.state).ok_or_else(|| AppError::BadRequest("Missing status/state field".to_string()))?;
     let reference = payload.trans_id.or(payload.transaction_id).or(payload.id).ok_or_else(|| AppError::BadRequest("Missing transId/id reference field".to_string()))?;
