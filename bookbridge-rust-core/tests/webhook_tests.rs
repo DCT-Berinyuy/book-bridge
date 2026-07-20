@@ -86,8 +86,8 @@ async fn test_webhook_integration() -> Result<(), Box<dyn std::error::Error>> {
          ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value"
     )
     .bind("fapshi_webhook_secret").bind("wh_test_key_xyz")
-    .bind("fapshi_payout_api_user").bind("wh_test_payout_user")
-    .bind("fapshi_payout_api_key").bind("wh_test_payout_key")
+    .bind("fapshi_api_user").bind("wh_test_payout_user")
+    .bind("fapshi_api_key").bind("wh_test_payout_key")
     .execute(&mut *tx)
     .await?;
 
@@ -223,7 +223,7 @@ async fn test_webhook_integration() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Manual database cleanup
-    let _ = sqlx::query("DELETE FROM app_secrets WHERE key IN ('fapshi_webhook_secret', 'fapshi_payout_api_user', 'fapshi_payout_api_key')").execute(&pool).await;
+    let _ = sqlx::query("DELETE FROM app_secrets WHERE key IN ('fapshi_webhook_secret', 'fapshi_api_user', 'fapshi_api_key')").execute(&pool).await;
     let _ = sqlx::query("DELETE FROM messages WHERE listing_id = $1").bind(listing_id).execute(&pool).await;
     let _ = sqlx::query("DELETE FROM escrow_transactions WHERE transaction_id = $1").bind(transaction_id).execute(&pool).await;
     let _ = sqlx::query("DELETE FROM transactions WHERE id = $1").bind(transaction_id).execute(&pool).await;

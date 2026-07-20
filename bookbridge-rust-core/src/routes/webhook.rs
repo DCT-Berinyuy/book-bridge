@@ -44,10 +44,10 @@ async fn verify_webhook_auth(pool: &PgPool, headers: &HeaderMap) -> Result<(), A
     let provided_api_key = headers.get("apikey").and_then(|h| h.to_str().ok());
 
     if let (Some(incoming_user), Some(incoming_key)) = (provided_api_user, provided_api_key) {
-        let expected_user_row: Option<(String,)> = sqlx::query_as("SELECT value FROM app_secrets WHERE key = 'fapshi_payout_api_user'")
+        let expected_user_row: Option<(String,)> = sqlx::query_as("SELECT value FROM app_secrets WHERE key = 'fapshi_api_user'")
             .fetch_optional(pool)
             .await?;
-        let expected_key_row: Option<(String,)> = sqlx::query_as("SELECT value FROM app_secrets WHERE key = 'fapshi_payout_api_key'")
+        let expected_key_row: Option<(String,)> = sqlx::query_as("SELECT value FROM app_secrets WHERE key = 'fapshi_api_key'")
             .fetch_optional(pool)
             .await?;
 
