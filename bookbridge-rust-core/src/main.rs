@@ -33,6 +33,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 2. Setup database connection pool
     let pool = PgPool::connect(&config.database_url).await?;
 
+    // Ensure UNIQUE constraint on escrow_transactions(transaction_id) exists
+    if let Err(e) = sqlx::query(
+        "DO $$ \
+         BEGIN \
+             IF NOT EXISTS ( \
+                 SELECT 1 FROM pg_constraint WHERE conname = 'escrow_transactions_transaction_id_key' \
+             ) THEN \
+                 ALTER TABLE public.escrow_transactions ADD CONSTRAINT escrow_transactions_transaction_id_key UNIQUE (transaction_id); \
+             END IF; \
+         END $$;"
+    )
+    .execute(&pool)
+    .await {
+        tracing::warn!("Failed to ensure escrow_transactions unique constraint on startup: {:?}", e);
+    }
+
     // 3. Setup AppState
     let state = AppState {
         pool,

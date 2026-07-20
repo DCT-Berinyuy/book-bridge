@@ -60,13 +60,11 @@ pub async fn handle_purchase_success_db(
         .execute(&mut *conn)
         .await?;
 
-    // 3. Insert escrow transaction if not already exists
+    // 3. Upsert escrow transaction atomically
     sqlx::query(
         "INSERT INTO escrow_transactions (transaction_id, status, created_at, updated_at) \
-         SELECT $1, 'held', $2, $2 \
-         WHERE NOT EXISTS ( \
-             SELECT 1 FROM escrow_transactions WHERE transaction_id = $1 \
-         )"
+         VALUES ($1, 'held', $2, $2) \
+         ON CONFLICT (transaction_id) DO UPDATE SET status = 'held', updated_at = $2"
     )
     .bind(tx_id)
     .bind(now)
