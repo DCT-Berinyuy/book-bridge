@@ -222,8 +222,7 @@ async fn handle_purchase_success(
          VALUES ($1, $2, $3, $4, $5, 'held', 'pending', NULL, $6, $7) \
          ON CONFLICT (payment_reference) \
          DO UPDATE SET \
-             status = 'held', \
-             updated_at = $7 \
+             status = 'held' \
          WHERE transactions.status = 'pending_payment' \
          RETURNING id"
     )
@@ -298,7 +297,7 @@ async fn handle_purchase_pending(
          ) \
          VALUES ($1, $2, $3, $4, $5, 'pending_payment', 'pending', NULL, $6, $7) \
          ON CONFLICT (payment_reference) \
-         DO UPDATE SET status = 'pending_payment', updated_at = $7 \
+         DO UPDATE SET status = 'pending_payment' \
          WHERE transactions.status = 'pending_payment'"
     )
     .bind(reference)
