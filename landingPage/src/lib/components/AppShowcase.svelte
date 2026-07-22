@@ -49,6 +49,8 @@
   /* App Showcase */
   .app-showcase {
     padding: 2rem 0 6rem;
+    background-color: var(--bg-primary);
+    transition: background-color 0.3s ease;
   }
 
   .showcase-box {
@@ -59,10 +61,11 @@
     color: white;
     background-image: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.1) 0%,
-      rgba(255, 255, 255, 0) 50%
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(0, 0, 0, 0.2) 100%
     );
-    box-shadow: 0 20px 40px rgba(26, 77, 140, 0.2);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-subtle);
   }
 
   .showcase-content h2 {
@@ -78,6 +81,7 @@
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+    color: rgba(255, 255, 255, 0.9);
   }
 
   .store-buttons {
@@ -91,58 +95,66 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    background: white;
-    color: var(--charcoal);
+    background: var(--bg-card);
+    color: var(--text-primary);
     padding: 0.8rem 1.8rem;
     border-radius: 12px;
     text-decoration: none;
     transition: all 0.3s ease;
-    border: none;
-    min-width: 220px;
-    text-align: left;
-    cursor: pointer;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
   }
 
-  .store-btn:not(:disabled):hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  }
-
-  .store-btn.android {
-    background: white;
-    color: var(--scholar-blue);
+  .store-btn.android:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
   }
 
   .store-btn.other {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    opacity: 0.7;
     cursor: not-allowed;
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
   }
 
   .btn-text {
     display: flex;
     flex-direction: column;
+    text-align: left;
   }
 
   .btn-text span {
     font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.8;
+    letter-spacing: 0.5px;
   }
 
   .btn-text strong {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    font-weight: 700;
   }
 
   @media (max-width: 768px) {
     .showcase-box {
-      padding: 4rem 2rem;
-      border-radius: 30px;
+      padding: 3rem 1.5rem;
+      border-radius: 24px;
     }
+
     .showcase-content h2 {
       font-size: 2.2rem;
+    }
+
+    .showcase-content p {
+      font-size: 1rem;
+    }
+
+    .store-buttons {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .store-btn {
+      justify-content: center;
     }
   }
 </style>

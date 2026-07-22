@@ -110,9 +110,10 @@
 <style>
   .founder-section {
     padding: 8rem 0;
-    background-color: #fcfdfe;
+    background-color: var(--bg-primary);
     position: relative;
     overflow: hidden;
+    transition: background-color 0.3s ease;
   }
 
   .section-tag {
@@ -121,7 +122,7 @@
     font-weight: 600;
     font-size: 0.9rem;
     padding: 0.3rem 1rem;
-    background-color: rgba(26, 77, 140, 0.08);
+    background-color: var(--scholar-blue-light);
     border-radius: 20px;
     margin-bottom: 1rem;
     text-transform: uppercase;
@@ -136,11 +137,11 @@
   .section-header h2 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    color: var(--charcoal);
+    color: var(--text-primary);
   }
 
   .section-header p {
-    color: #5a6e85;
+    color: var(--text-secondary);
     font-size: 1.1rem;
     max-width: 600px;
     margin: 0 auto;
@@ -153,13 +154,14 @@
     align-items: center;
     max-width: 1100px;
     margin: 0 auto;
-    background: #ffffff;
+    background: var(--bg-card);
     border-radius: 28px;
     padding: 4rem;
-    box-shadow: 0 15px 50px rgba(26, 77, 140, 0.04);
-    border: 1px solid rgba(26, 77, 140, 0.05);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
     position: relative;
     z-index: 2;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
   }
 
   .founder-image-container {
@@ -173,12 +175,12 @@
     position: relative;
     border-radius: 24px;
     overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-md);
     z-index: 2;
     aspect-ratio: 4 / 5;
     width: 100%;
     max-width: 320px;
-    border: 6px solid #ffffff;
+    border: 6px solid var(--bg-card);
   }
 
   .founder-image {
@@ -203,8 +205,8 @@
     font-weight: 700;
     font-size: 0.85rem;
     letter-spacing: 0.5px;
-    box-shadow: 0 10px 25px rgba(26, 77, 140, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
   .decorator-blob-1 {
@@ -244,7 +246,7 @@
   .founder-header h3 {
     font-size: 2rem;
     margin-bottom: 0.3rem;
-    color: var(--charcoal);
+    color: var(--text-primary);
     letter-spacing: -0.5px;
   }
 
@@ -267,13 +269,13 @@
     font-size: 1.15rem;
     line-height: 1.6;
     font-style: italic;
-    color: #4a5568;
+    color: var(--text-primary);
     font-weight: 500;
   }
 
   .founder-bio p {
     font-size: 1.05rem;
-    color: #5a6e85;
+    color: var(--text-secondary);
     line-height: 1.7;
     margin-bottom: 1.2rem;
   }
@@ -284,7 +286,7 @@
 
   .social-links-wrapper {
     margin-top: 2.5rem;
-    border-top: 1px solid #edf2f7;
+    border-top: 1px solid var(--border-color);
     padding-top: 1.5rem;
   }
 
@@ -292,7 +294,7 @@
     display: block;
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--charcoal);
+    color: var(--text-primary);
     margin-bottom: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -310,16 +312,16 @@
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    color: #4a5568;
-    background: #f7fafc;
-    border: 1px solid #e2e8f0;
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .social-btn:hover {
     transform: translateY(-3px);
     color: #ffffff;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
   }
 
   .social-btn.linkedin:hover {

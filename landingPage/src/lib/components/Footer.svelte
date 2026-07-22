@@ -98,38 +98,28 @@
       <div class="link-column">
         <h3>Support</h3>
         <a href="#how-it-works">Help Center</a>
-        <a href="#features">Safety Guidelines</a>
-        <a href="#app">Contact Us</a>
+        <a href="#founder">About Founder</a>
+        <a href={WHATSAPP_COMMUNITY_LINK} target="_blank" rel="noopener noreferrer">Community</a>
       </div>
       <div class="link-column">
         <h3>Legal</h3>
-        <a href="#how-it-works">Privacy Policy</a>
-        <a href="#features">Terms of Service</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
       </div>
     </div>
   </div>
 
-  <div class="footer-bottom">
-    <div class="container">
-      <p>
-        &copy; {new Date().getFullYear()} BookBridge. Built with ❤️ by
-        <a
-          href="https://linktr.ee/DeepCodeThinking"
-          target="_blank"
-          rel="noopener noreferrer"
-          style="color: var(--scholar-blue); font-weight: 600;">Mr.DCT</a
-        >
-      </p>
-    </div>
+  <div class="container footer-bottom">
+    <p>&copy; {new Date().getFullYear()} BookBridge. Built for Cameroonian Students.</p>
   </div>
 </footer>
 
 <style>
-  /* Footer Styles */
   footer {
-    background-color: #f8f9fa;
-    padding: 5rem 0 2rem;
-    border-top: 1px solid #eef1f5;
+    background-color: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    padding: 6rem 0 3rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
   }
 
   .footer-content {
@@ -143,58 +133,52 @@
     display: flex;
     align-items: center;
     gap: 0.8rem;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--scholar-blue);
     font-family: var(--font-header);
-    letter-spacing: -0.5px;
-    text-decoration: none;
+    margin-bottom: 1.5rem;
   }
 
   .bookbridge-logo {
-    height: 32px;
+    height: 36px;
     width: auto;
     border-radius: 8px;
   }
 
   .footer-brand p {
-    margin-top: 1rem;
-    color: #6c757d;
-    max-width: 320px;
+    color: var(--text-secondary);
+    font-size: 1rem;
     line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 380px;
   }
 
   .social-icons {
-    margin-top: 1.5rem;
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem 1rem;
+    gap: 0.8rem;
   }
 
   .social-link {
-    display: flex;
-    flex-direction: column;
+    display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: var(--charcoal);
-    transition: all 0.3s ease;
-    text-decoration: none;
-    min-width: 60px;
-  }
-
-  .social-link span {
-    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    font-size: 0.85rem;
     font-weight: 500;
-    color: #6c757d;
+    transition: all 0.3s ease;
   }
 
   .social-link:hover {
     color: var(--scholar-blue);
-    transform: translateY(-3px);
-  }
-
-  .social-link:hover span {
-    color: var(--scholar-blue);
+    background: var(--scholar-blue-light);
+    border-color: var(--scholar-blue);
+    transform: translateY(-2px);
   }
 
   .footer-links-group {
@@ -204,70 +188,43 @@
   }
 
   .link-column h3 {
-    font-size: 1rem;
+    font-size: 1.1rem;
+    color: var(--text-primary);
     margin-bottom: 1.5rem;
-    color: var(--charcoal);
+    font-family: var(--font-header);
   }
 
   .link-column a {
     display: block;
+    color: var(--text-secondary);
     margin-bottom: 0.8rem;
-    color: #6c757d;
     font-size: 0.95rem;
-    text-decoration: none;
+    transition: all 0.2s ease;
   }
 
   .link-column a:hover {
     color: var(--scholar-blue);
+    transform: translateX(3px);
   }
 
   .footer-bottom {
+    border-top: 1px solid var(--border-color);
     padding-top: 2rem;
-    border-top: 1px solid #e9ecef;
     text-align: center;
-    color: #adb5bd;
+    color: var(--text-secondary);
     font-size: 0.9rem;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     .footer-content {
       grid-template-columns: 1fr;
       gap: 3rem;
     }
-
-    .footer-links-group {
-      grid-template-columns: repeat(2, 1fr);
-    }
   }
 
-  @media (max-width: 400px) {
-    .footer-content {
-      gap: 2rem;
-      margin-bottom: 2rem;
-    }
-
+  @media (max-width: 600px) {
     .footer-links-group {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-
-    .footer-brand p {
-      font-size: 0.9rem;
-    }
-
-    .link-column h3 {
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
-    }
-
-    .link-column a {
-      font-size: 0.85rem;
-      margin-bottom: 0.6rem;
-    }
-
-    .footer-bottom {
-      font-size: 0.85rem;
-      padding-top: 1.5rem;
+      grid-template-columns: 1fr 1fr;
     }
   }
 </style>

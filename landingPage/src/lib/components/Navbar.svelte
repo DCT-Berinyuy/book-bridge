@@ -1,7 +1,8 @@
 <script>
-  import { Menu, X, Github, Download } from "lucide-svelte";
+  import { Menu, X, Github, Download, Sun, Moon } from "lucide-svelte";
   import logo from "$lib/assets/logo.png";
   import { APP_DOWNLOAD_LINK, GITHUB_REPO_LINK } from "$lib/links";
+  import { theme } from "$lib/theme.svelte.js";
 
   let { scrollY = 0 } = $props();
   let isMenuOpen = $state(false);
@@ -25,6 +26,21 @@
       <a href="#how-it-works">How it Works</a>
       <a href="#features">Features</a>
       <a href="#app">App</a>
+
+      <!-- Theme Switcher Button -->
+      <button 
+        class="theme-toggle-btn"
+        onclick={() => theme.toggle()}
+        aria-label="Toggle theme"
+        title={theme.current === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+      >
+        {#if theme.current === 'dark'}
+          <Sun size={20} class="theme-icon sun" />
+        {:else}
+          <Moon size={20} class="theme-icon moon" />
+        {/if}
+      </button>
+
       <a
         href={GITHUB_REPO_LINK}
         target="_blank"
@@ -45,14 +61,28 @@
       </a>
     </div>
 
-    <!-- Mobile Toggle -->
-    <button class="mobile-toggle" onclick={toggleMenu}>
-      {#if isMenuOpen}
-        <X size={24} />
-      {:else}
-        <Menu size={24} />
-      {/if}
-    </button>
+    <!-- Mobile Action Group -->
+    <div class="mobile-actions">
+      <button 
+        class="theme-toggle-btn mobile"
+        onclick={() => theme.toggle()}
+        aria-label="Toggle theme"
+      >
+        {#if theme.current === 'dark'}
+          <Sun size={20} />
+        {:else}
+          <Moon size={20} />
+        {/if}
+      </button>
+
+      <button class="mobile-toggle" onclick={toggleMenu} aria-label="Toggle menu">
+        {#if isMenuOpen}
+          <X size={24} />
+        {:else}
+          <Menu size={24} />
+        {/if}
+      </button>
+    </div>
   </div>
 
   <!-- Mobile Menu -->
@@ -98,11 +128,12 @@
   }
 
   nav.scrolled {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: var(--nav-bg-scrolled);
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     padding: 0.8rem 0;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: var(--shadow-sm);
+    border-bottom: 1px solid var(--border-subtle);
   }
 
   .nav-content {
@@ -145,7 +176,7 @@
   .desktop-links a:not(.btn-primary) {
     font-weight: 500;
     font-size: 0.95rem;
-    color: var(--charcoal);
+    color: var(--text-primary);
     position: relative;
     text-decoration: none;
   }
@@ -154,12 +185,38 @@
     color: var(--scholar-blue);
   }
 
+  /* Theme Toggle Button */
+  .theme-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .theme-toggle-btn:hover {
+    background: var(--scholar-blue-light);
+    color: var(--scholar-blue);
+    transform: rotate(15deg) scale(1.05);
+  }
+
+  .mobile-actions {
+    display: none;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
   /* Mobile Menu Toggle */
   .mobile-toggle {
-    display: none;
     background: transparent;
     border: none;
-    color: var(--charcoal);
+    color: var(--text-primary);
     cursor: pointer;
     z-index: 1001;
   }
@@ -170,7 +227,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: white;
+    background: var(--bg-secondary);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -182,7 +239,7 @@
 
   .mobile-menu a {
     font-size: 1.25rem;
-    color: var(--charcoal);
+    color: var(--text-primary);
     font-weight: 600;
     text-decoration: none;
   }
@@ -190,7 +247,7 @@
   .social-link {
     display: flex;
     align-items: center;
-    color: var(--charcoal);
+    color: var(--text-primary);
     transition: all 0.3s ease;
     text-decoration: none;
   }
@@ -204,8 +261,8 @@
     .desktop-links {
       display: none;
     }
-    .mobile-toggle {
-      display: block;
+    .mobile-actions {
+      display: flex;
     }
   }
 

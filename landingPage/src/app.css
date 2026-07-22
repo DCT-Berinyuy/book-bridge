@@ -1,12 +1,56 @@
 :root {
+  /* Light Theme Colors (Default) */
+  --bg-primary: #f8f9fa;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
   --scholar-blue: #1a4d8c;
+  --scholar-blue-hover: #154075;
+  --scholar-blue-light: rgba(26, 77, 140, 0.08);
   --emerald-green: #2ecc71;
   --paper-white: #f8f9fa;
-  --charcoal: #2c3e50;
-  --light-gray: #9db9a6;
+  --charcoal: #1e293b;
+  --light-gray: #64748b;
+  --border-color: #e2e8f0;
+  --border-subtle: rgba(0, 0, 0, 0.05);
+  --nav-bg-scrolled: rgba(255, 255, 255, 0.85);
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 20px 50px rgba(26, 77, 140, 0.04);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.4);
 
   --font-main: "Inter", system-ui, -apple-system, sans-serif;
   --font-header: "Outfit", var(--font-main);
+}
+
+[data-theme="dark"] {
+  /* Dark Theme Colors */
+  --bg-primary: #0b0f17;
+  --bg-secondary: #111827;
+  --bg-tertiary: #1f293d;
+  --bg-card: #151c2c;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --scholar-blue: #3b82f6;
+  --scholar-blue-hover: #2563eb;
+  --scholar-blue-light: rgba(59, 130, 246, 0.18);
+  --emerald-green: #10b981;
+  --paper-white: #0b0f17;
+  --charcoal: #f8fafc;
+  --light-gray: #94a3b8;
+  --border-color: #1e293b;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --nav-bg-scrolled: rgba(11, 15, 23, 0.85);
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.5);
+  --glass-bg: rgba(21, 28, 44, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -15,11 +59,17 @@
   padding: 0;
 }
 
+html {
+  color-scheme: light dark;
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-main);
-  background-color: var(--paper-white);
-  color: var(--charcoal);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1,
@@ -59,17 +109,17 @@ button {
 }
 
 .btn-primary:hover {
-  background-color: #154075;
+  background-color: var(--scholar-blue-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(26, 77, 140, 0.2);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
 }
 
 .btn-secondary {
   background-color: transparent;
-  color: var(--charcoal);
+  color: var(--text-primary);
   padding: 0.8rem 2rem;
   border-radius: 8px;
-  border: 1px solid var(--light-gray);
+  border: 1px solid var(--border-color);
   font-weight: 600;
 }
 

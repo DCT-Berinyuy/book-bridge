@@ -37,10 +37,10 @@
       <div class="trust-avatars">
         <div class="avatar-group">
           <!-- Placeholders for avatars -->
-          <div class="avatar" style="background-color: #e0e0e0;"></div>
-          <div class="avatar" style="background-color: #d0d0d0;"></div>
-          <div class="avatar" style="background-color: #c0c0c0;"></div>
-          <div class="avatar" style="background-color: #b0b0b0;"></div>
+          <div class="avatar" style="background-color: #3b82f6;"></div>
+          <div class="avatar" style="background-color: #10b981;"></div>
+          <div class="avatar" style="background-color: #8b5cf6;"></div>
+          <div class="avatar" style="background-color: #f59e0b;"></div>
         </div>
         <p>Joined by <strong>2,000+</strong> students</p>
       </div>
@@ -79,12 +79,12 @@
     overflow: hidden;
     background: radial-gradient(
         circle at top right,
-        rgba(46, 204, 113, 0.05),
+        rgba(46, 204, 113, 0.06),
         transparent 40%
       ),
       radial-gradient(
         circle at bottom left,
-        rgba(26, 77, 140, 0.05),
+        rgba(26, 77, 140, 0.08),
         transparent 40%
       );
   }
@@ -105,20 +105,20 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    background-color: white;
-    border: 1px solid #e0e0e0;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 30px;
     font-size: 0.9rem;
     font-weight: 500;
-    color: var(--charcoal);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-sm);
   }
 
   .hero h1 {
     font-size: 4.5rem;
     line-height: 1.1;
     margin-bottom: 1.5rem;
-    color: var(--charcoal);
+    color: var(--text-primary);
   }
 
   .highlight {
@@ -134,14 +134,14 @@
     left: 0;
     width: 100%;
     height: 15px;
-    background-color: rgba(46, 204, 113, 0.2);
+    background-color: rgba(46, 204, 113, 0.25);
     z-index: -1;
     transform: skewX(-10deg);
   }
 
   .hero-sub {
     font-size: 1.25rem;
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 2.5rem;
     max-width: 500px;
     line-height: 1.6;
@@ -165,29 +165,29 @@
     gap: 0.8rem;
     font-size: 1.1rem;
     transition: all 0.3s ease;
-    box-shadow: 0 10px 20px rgba(26, 77, 140, 0.2);
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
   }
 
   .btn-primary-lg:hover {
     transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(26, 77, 140, 0.3);
-    background-color: #154075;
+    box-shadow: 0 15px 30px rgba(59, 130, 246, 0.3);
+    background-color: var(--scholar-blue-hover);
   }
 
   .btn-secondary-lg {
-    background-color: var(--paper-white);
-    color: var(--charcoal);
+    background-color: var(--bg-card);
+    color: var(--text-primary);
     padding: 1rem 2rem;
     border-radius: 12px;
     font-weight: 600;
     text-decoration: none;
     font-size: 1.1rem;
     transition: all 0.3s ease;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
   }
 
   .btn-secondary-lg:hover {
-    background-color: white;
+    background-color: var(--bg-tertiary);
     border-color: var(--scholar-blue);
     color: var(--scholar-blue);
   }
@@ -196,6 +196,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    color: var(--text-secondary);
   }
 
   .avatar-group {
@@ -206,7 +207,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 3px solid white;
+    border: 3px solid var(--bg-primary);
     margin-left: -15px;
   }
 
@@ -228,10 +229,10 @@
     background: #111;
     border-radius: 25px;
     padding: 12px;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
     position: relative;
     z-index: 10;
-    border: 4px solid #333;
+    border: 4px solid #222;
     transform: rotateY(-10deg) rotateX(5deg);
     transition: transform 0.5s ease;
   }
@@ -258,10 +259,11 @@
 
   .float-card {
     position: absolute;
-    background: white;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     padding: 1rem 1.5rem;
     border-radius: 16px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-md);
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -301,7 +303,7 @@
 
   .float-card span {
     font-weight: 600;
-    color: var(--charcoal);
+    color: var(--text-primary);
   }
 
   .float-card .price {
@@ -312,7 +314,7 @@
   .float-card .sub {
     font-weight: 400;
     font-size: 0.85rem;
-    color: #666;
+    color: var(--text-secondary);
     display: block;
   }
 

@@ -112,7 +112,8 @@
   /* How it Works */
   .how-it-works {
     padding: 8rem 0;
-    background-color: white;
+    background-color: var(--bg-secondary);
+    transition: background-color 0.3s ease;
   }
 
   .section-tag {
@@ -121,7 +122,7 @@
     font-weight: 600;
     font-size: 0.9rem;
     padding: 0.3rem 1rem;
-    background-color: rgba(26, 77, 140, 0.1);
+    background-color: var(--scholar-blue-light);
     border-radius: 20px;
     margin-bottom: 1rem;
     text-transform: uppercase;
@@ -136,11 +137,11 @@
   .section-header h2 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    color: var(--charcoal);
+    color: var(--text-primary);
   }
 
   .section-header p {
-    color: var(--light-gray);
+    color: var(--text-secondary);
     font-size: 1.1rem;
     max-width: 600px;
     margin: 0 auto;
@@ -153,11 +154,12 @@
   }
 
   .tabs {
-    background: #f1f3f5;
+    background: var(--bg-tertiary);
     padding: 0.5rem;
     border-radius: 100px;
     display: flex;
     gap: 0.5rem;
+    border: 1px solid var(--border-subtle);
   }
 
   .tab-btn {
@@ -165,7 +167,7 @@
     border-radius: 100px;
     font-size: 1rem;
     font-weight: 600;
-    color: #666;
+    color: var(--text-secondary);
     background: transparent;
     transition: all 0.3s ease;
     border: none;
@@ -173,9 +175,9 @@
   }
 
   .tab-btn.active {
-    background: white;
+    background: var(--bg-card);
     color: var(--scholar-blue);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-sm);
   }
 
   .steps-grid {
@@ -195,24 +197,26 @@
   .step-number {
     font-size: 5rem;
     font-weight: 800;
-    color: #f1f3f5;
+    color: var(--bg-tertiary);
     position: absolute;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
     z-index: 0;
+    opacity: 0.8;
   }
 
   .step-icon {
     width: 80px;
     height: 80px;
-    background: white;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 1.5rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-md);
     position: relative;
     z-index: 1;
     color: var(--scholar-blue);
@@ -223,10 +227,11 @@
     margin-bottom: 1rem;
     position: relative;
     z-index: 1;
+    color: var(--text-primary);
   }
 
   .step-card p {
-    color: #666;
+    color: var(--text-secondary);
     position: relative;
     z-index: 1;
   }
